@@ -10,10 +10,10 @@
           background-color="#22232C"
           text-color="#fff"
           router>
-        <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
+<!--        <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">-->
           <img src="../assets/img/logo.png"  style="width: 20px;height:20px;position: relative;top: 20px;left: 20px">
-          <img src="../assets/img/logotext.png" v-if="!isCollapse"  style="width: 90px;height: 15px;position: relative;top: 20px;left: 30px"/>
-        </el-radio-group>
+          <img src="../assets/img/logotext.png" v-show="!isCollapse"  style="width: 90px;height: 15px;position: absolute;top: 22px;left: 50px"/>
+<!--        </el-radio-group>-->
         <el-menu-item index="myself">
             <i class="el-icon-user"></i>
             <span slot="title">个人信息</span>
