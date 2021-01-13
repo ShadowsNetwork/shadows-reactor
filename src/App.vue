@@ -21,8 +21,13 @@ export default {
 </script>
 
 <style>
-body {
-  background-color: #161A1C;
+#app {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(180deg, #2D1E2B 0%, #171B1D 100%) ;
   margin: 0;
 }
 
