@@ -13,7 +13,7 @@
       <span>{{ $t('compose.Debt') }}：0.0 %</span>
 
       <div class="composeBtn">
-        <span>{{ $t('compose.network') }}：00Gas</span>
+        <span>{{ $t('compose.network') }}：$0 / 90 GWEI</span>
         <button>{{ $t('compose.Start') }}</button>
       </div>
     </div>

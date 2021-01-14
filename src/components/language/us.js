@@ -4,11 +4,11 @@ module.exports = {
         name: 'English'
     },
     slidebar: {
-        Personal: 'Personal',
-        synthesis: 'synthesis',
-        transaction: 'transaction',
-        destroy: 'destroy',
-        reward: 'reward',
+        Personal: 'PERSONAL',
+        synthesis: 'MINT',
+        transaction: 'TRADE',
+        destroy: 'BURN',
+        reward: 'CLAIM',
         Connect: 'Connect wallet'
     },
     pageone: {
@@ -28,46 +28,50 @@ module.exports = {
     },
     myself: {
         title: 'Personal information',
-        MyMortgage: 'My mortgage rate',
-        TargetMortgage: 'Target mortgage rate',
-        Total: 'Total SNK',
-        locked: 'locked',
+        MyMortgage: 'Current Mortgage ratio',
+        TargetMortgage: 'Target Mortgage ratio',
+        Total: 'Total DOS',
+        locked: 'Locked',
+        Staked: 'Staked',
+        NotStaked: 'Not staked',
+        NotEscrowed: 'Not escrowed',
+        Escrowed: 'Escrowed',
         Transferable: 'Transferable'
     },
     compose: {
-        title: 'synthesis',
-        balance: 'balance',
+        title: 'MINT',
+        balance: 'Balance',
         all: 'All',
         Debt: 'Debt ratio',
-        network: 'network fee',
-        Start: 'Start synthesis'
+        network: 'network fees',
+        Start: 'MINT NOW'
     },
     exchange: {
-        title: 'transaction',
-        pay: 'Pay',
+        title: 'TRADE',
+        pay: 'From',
         Available: 'Available',
-        receive: 'receive',
+        receive: 'To',
         estimated: 'estimated',
         Transaction: 'Transaction Fees',
         network: 'network fee',
-        destroy: 'destroy'
+        destroy: 'TRATE NOW'
     },
     destroy: {
-        title: 'destroy',
-        Adjust: 'Adjust to target mortgage rate',
-        Destroy: 'Destroy all',
-        balance: 'balance',
+        title: 'BURN',
+        Adjust: 'Fix your Mortgage Ratio',
+        Destroy: 'BURN MAX',
+        balance: 'Balance',
         Unlockable: 'Unlockable quantity',
         network: 'network fee',
-        destroy: 'destroy'
+        destroy: 'BURN NOW'
     },
     reward: {
-        title: 'reward',
-        Transaction: 'Transaction reward',
-        Synthetic: 'Synthetic reward',
+        title: 'CLAIM',
+        Transaction: 'Trade reward',
+        Synthetic: 'Staking reward',
         remind: 'If you don’t receive it for seven days, the reward will be recycled to the pool. If the mortgage rate is insufficient, you will not be able to get the reward',
-        network: 'network fee',
-        receive: 'receive'
+        network: 'network fees',
+        receive: 'CLAIM NOW'
     }
 
 

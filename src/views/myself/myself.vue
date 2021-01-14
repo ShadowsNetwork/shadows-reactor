@@ -31,15 +31,15 @@
       </div>
       <div class="progress">
         <div class="progressText">
-          <span>{{ $t('myself.locked') }}：0</span>
-          <span>{{ $t('myself.Transferable') }}：0</span>
+          <span>{{ $t('myself.Staked') }}：0</span>
+          <span>{{ $t('myself.NotStaked') }}：0</span>
         </div>
         <el-progress :text-inside="true" color="#FF2C77" :stroke-width="16" :percentage="50" status="exception" ></el-progress>
       </div>
       <div class="progress">
         <div class="progressText">
-          <span>{{ $t('myself.locked') }}：0</span>
-          <span>{{ $t('myself.Transferable') }}：0</span>
+          <span>{{ $t('myself.Escrowed') }}：0</span>
+          <span>{{ $t('myself.NotEscrowed') }}：0</span>
         </div>
         <el-progress :text-inside="true" color="#FF2C77" :stroke-width="16" :percentage="50" status="exception"></el-progress>
       </div>
