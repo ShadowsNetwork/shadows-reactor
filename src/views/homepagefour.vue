@@ -22,7 +22,7 @@ name: "homepagefour",
   width: 600px;
   height: 210px;
   position: absolute;
-  top: calc((100% - 200px) / 2);
+  top: calc((100% - 200px) / 4);
   left: calc((100% - 500px) / 2);
   background-color: rgba(34, 35, 44, 1);
   border-top-right-radius: 10px;

@@ -1,23 +1,24 @@
 <template>
   <div>
     <div class="reward">
-      <span>奖励</span>
+      <span>{{ $t('reward.title') }}</span>
       <div class="center">
         <div class="composeAmount">
-          <span>交易奖励</span>
+          <span>{{ $t('reward.Transaction') }}</span>
           <span>0.00</span>
         </div>
         <div class="composeAmount">
-          <span>合成奖励</span>
+          <span>{{ $t('reward.Synthetic') }}</span>
           <span>0.00</span>
         </div>
       </div>
-      <span style="font-size: 6px;color: #7E7E7E;margin-left: 20px;">七天不领取，奖励将被回收至池子里，抵押率不足将无</span><br>
-      <span style="font-size: 6px;color: #7E7E7E;margin-left: 20px">法获得奖励</span>
+      <div class="remind">
+        <span>{{ $t('reward.remind') }}</span><br>
+      </div>
 
       <div class="composeBtn">
-        <span>网络费用：00Gas</span>
-        <button>领取</button>
+        <span>{{ $t('reward.network') }}：00Gas</span>
+        <button>{{ $t('reward.receive') }}</button>
       </div>
     </div>
   </div>
@@ -77,10 +78,17 @@ name: "reward"
   font-size: 14px;
   margin-left: 150px;
 }
+.remind {
+  width: 289px;
+  height: 80px;
+  margin-left: 20px;
+  font-size: 6px;
+  color: #7E7E7E;
+}
 .composeBtn {
   width: 100%;
   height: 60px;
-  margin-top: 100px;
+  margin-top: 65px;
   display: flex;
   justify-content: center;
 }

@@ -1,12 +1,12 @@
 <template>
   <div class="homepagetwo" @click="click">
     <div class="center">
-      <span>抵押DOS奖励</span>
+      <span>{{ $t('pagetwo.title') }}</span>
       <div class="centertext">
-        <span>DOS抵押人可以获得3种奖励:</span><br>
-        <span>1.交易所手续费奖励</span><br>
-        <span>2.Stakiing奖励</span><br>
-        <span>3.借贷池收益</span>
+        <span>{{ $t('pagetwo.textone') }}:</span><br>
+        <span>1.{{ $t('pagetwo.texttwo') }}</span><br>
+        <span>2.{{ $t('pagetwo.textthree') }}</span><br>
+        <span>3.{{ $t('pagetwo.textfour') }}</span>
       </div>
       <img src="../assets/img/homepagetwo.png"/>
     </div>
@@ -29,7 +29,7 @@ name: "homepagetwo",
   width: 600px;
   height: 210px;
   position: absolute;
-  top: calc((100% - 200px) / 2);
+  top: calc((100% - 200px) / 4);
   left: calc((100% - 500px) / 2);
   background-color: rgba(34, 35, 44, 1);
   border-top-right-radius: 10px;

@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="destory">
-      <span>销毁</span>
-      <button>调整至目标抵押率</button>
-      <button>全部销毁</button>
+      <span>{{ $t('destroy.title') }}</span>
+      <button>{{ $t('destroy.Adjust') }}</button>
+      <button>{{ $t('destroy.Destroy') }}</button>
       <div class="dos">
-        <span>余额：20DOS</span>
+        <span>{{ $t('destroy.balance') }}：20DOS</span>
         <div class="composeAmount">
           <img style="margin-left: 10px" src="../../assets/img/butter.png"/>
           <span>xUSD</span>
@@ -14,7 +14,7 @@
       </div>
 
       <div class="clear">
-        <span>可解锁的数量</span>
+        <span>{{ $t('destroy.Unlockable') }}</span>
         <div class="composeAmount">
           <img style="margin-left: 10px" src="../../assets/img/butter.png"/>
           <span>xUSD</span>
@@ -23,8 +23,8 @@
       </div>
 
       <div class="composeBtn">
-        <span>网络费用：00Gas</span>
-        <button>销毁</button>
+        <span>{{ $t('destroy.network') }}：00Gas</span>
+        <button>{{ $t('destroy.destroy') }}</button>
       </div>
     </div>
   </div>
@@ -61,7 +61,6 @@ name: "destory"
 }
 .destory > button:nth-of-type(1) {
   width: 120px;
-  height: 20px;
   background: #2E313C;
   color: #FFFFFF;
   font-size: 9px;

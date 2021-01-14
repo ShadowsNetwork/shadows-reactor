@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import myself from '@/views/myself/myself'
-import home from "@/components/home/home";
 import compose from "@/views/compose/compose";
 import exchange from "@/views/exchange/exchange";
 import destory from "@/views/destory/destory";
@@ -20,11 +19,6 @@ const routes = [
     redirect: 'homepageone',
   },
 
-  {
-    path: '/home',
-    name: 'home',
-    component: home,
-    children: [
       //  首页1
       {
         path: '/homepageone',
@@ -79,8 +73,6 @@ const routes = [
         name: 'reward',
         component: reward
       }
-    ]
-  }
 ]
 
 const router = new VueRouter({

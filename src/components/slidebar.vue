@@ -11,28 +11,28 @@
           text-color="#fff"
           router>
 <!--        <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">-->
-          <img src="../assets/img/logo.png"  style="width: 20px;height:20px;position: relative;top: 20px;left: 20px">
-          <img src="../assets/img/logotext.png" v-show="!isCollapse"  style="width: 90px;height: 15px;position: absolute;top: 22px;left: 50px"/>
+          <img src="../assets/img/logo.png"  style="width: 20px;height:20px;position: relative;top: 20px;left: 20px" @click="toHome">
+          <img src="../assets/img/logotext.png" v-show="!isCollapse" @click="toHome"  style="width: 90px;height: 15px;position: absolute;top: 22px;left: 50px"/>
 <!--        </el-radio-group>-->
         <el-menu-item index="myself">
             <i class="el-icon-user"></i>
-            <span slot="title">个人信息</span>
+            <span slot="title">{{ $t('slidebar.Personal') }}</span>
         </el-menu-item>
         <el-menu-item index="compose">
           <i class="el-icon-connection"></i>
-          <span slot="title">合成</span>
+          <span slot="title">{{ $t('slidebar.synthesis') }}</span>
         </el-menu-item>
         <el-menu-item index="exchange" >
           <i class="el-icon-set-up"></i>
-          <span slot="title">交易</span>
+          <span slot="title">{{ $t('slidebar.transaction') }}</span>
         </el-menu-item><br><br>
         <el-menu-item index="destory">
           <i class="el-icon-delete"></i>
-          <span slot="title">销毁</span>
+          <span slot="title">{{ $t('slidebar.destroy') }}</span>
         </el-menu-item>
         <el-menu-item index="reward">
           <i class="el-icon-present"></i>
-          <span slot="title">奖励</span>
+          <span slot="title">{{ $t('slidebar.reward') }}</span>
         </el-menu-item>
       </el-menu>
     </el-col>
@@ -55,11 +55,15 @@ name: "slidebar",
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
+    // 鼠标移入移出菜单栏
     onMouseOver() {
       this.isCollapse = false;
     },
     onMouseOut() {
       this.isCollapse = true;
+    },
+    toHome() {
+      this.$router.replace('/homepageone')
     }
   }
 }

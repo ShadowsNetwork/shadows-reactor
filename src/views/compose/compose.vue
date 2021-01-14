@@ -1,20 +1,20 @@
 <template>
   <div>
     <div class="compose">
-      <span>合成</span>
-      <span>余额：20DOS</span>
+      <span>{{ $t('compose.title') }}</span>
+      <span>{{ $t('compose.balance') }}：20DOS</span>
       <div class="composeAmount">
         <img style="margin-left: 10px" src="../../assets/img/butter.png"/>
         <span>xUSD</span>
         <input></input>
-        <button>全部</button>
+        <button>{{ $t('compose.all') }}</button>
       </div>
       <span>Staking：00 DOS</span><br>
-      <span>债务比例：0.0 %</span>
+      <span>{{ $t('compose.Debt') }}：0.0 %</span>
 
       <div class="composeBtn">
-        <span>网络费用：00Gas</span>
-        <button>开始合成</button>
+        <span>{{ $t('compose.network') }}：00Gas</span>
+        <button>{{ $t('compose.Start') }}</button>
       </div>
     </div>
   </div>

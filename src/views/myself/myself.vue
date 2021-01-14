@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="myself">
-      <span>个人信息</span>
+      <span>{{ $t('myself.title') }}</span>
       <div class="oneline">
         <div v-for="(item,index) in myselfMont" :key="index">
           <span>{{ item.name }}</span><br>
@@ -9,33 +9,37 @@
         </div>
       </div>
       <div class="twoline">
-        <div v-for="(item,index) in pledge" :key="index">
-          <span>{{ item.type }}</span><br>
-          <span>{{ item.number }}</span>
+        <div>
+          <span>{{ $t('myself.MyMortgage') }}</span><br>
+          <span>50%</span>
+        </div>
+        <div>
+          <span>{{ $t('myself.TargetMortgage') }}</span><br>
+          <span>50%</span>
         </div>
       </div>
-      <span style="font-size: 12px;color: #979797;margin-left: 2px">总SNK</span>
+      <span style="font-size: 12px;color: #979797;margin-left: 2px">{{ $t('myself.Total') }}</span>
       <span style="margin-left: 20px;font-size: 16px">{{ snk }}</span><br>
       <div class="split"></div>
 
       <div class="progress">
         <div class="progressText">
-          <span>已锁定：0</span>
-          <span>可转账：0</span>
+          <span>{{ $t('myself.locked') }}：0</span>
+          <span>{{ $t('myself.Transferable') }}：0</span>
         </div>
         <el-progress :text-inside="true" color="#FF2C77" :stroke-width="16" :percentage="50" status="exception"></el-progress>
       </div>
       <div class="progress">
         <div class="progressText">
-          <span>已锁定：0</span>
-          <span>可转账：0</span>
+          <span>{{ $t('myself.locked') }}：0</span>
+          <span>{{ $t('myself.Transferable') }}：0</span>
         </div>
         <el-progress :text-inside="true" color="#FF2C77" :stroke-width="16" :percentage="50" status="exception" ></el-progress>
       </div>
       <div class="progress">
         <div class="progressText">
-          <span>已锁定：0</span>
-          <span>可转账：0</span>
+          <span>{{ $t('myself.locked') }}：0</span>
+          <span>{{ $t('myself.Transferable') }}：0</span>
         </div>
         <el-progress :text-inside="true" color="#FF2C77" :stroke-width="16" :percentage="50" status="exception"></el-progress>
       </div>
@@ -65,16 +69,6 @@ export default {
           name: 'xUSD',
           num: '00000000'
         },
-      ],
-      pledge: [
-        {
-          type: '我的抵押率',
-          number: '50%'
-        },
-        {
-          type: '目标抵押率',
-          number: '50%'
-        }
       ],
       snk: '50%'
     }

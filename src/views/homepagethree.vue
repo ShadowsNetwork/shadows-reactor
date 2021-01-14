@@ -1,9 +1,9 @@
 <template>
   <div class="homepagethree" @click.tab="click">
     <div class="center">
-      <span>80%抵押率</span>
+      <span>{{ $t('pagethree.title') }}</span>
       <div class="centertext">
-        <span>所有合成资产都由抵押的DOS来支撑其价值，抵押率最低要求为800%，低于抵押率要求时将无法获得奖励和赎DOS，满足抵押率每周即可领取多种奖励。</span>
+        <span>{{ $t('pagethree.text') }}</span>
       </div>
       <img src="../assets/img/homepagethree.png"/>
     </div>
@@ -26,7 +26,7 @@ export default {
   width: 600px;
   height: 210px;
   position: absolute;
-  top: calc((100% - 200px) / 2);
+  top: calc((100% - 200px) / 4);
   left: calc((100% - 500px) / 2);
   background-color: rgba(34, 35, 44, 1);
   border-top-right-radius: 10px;

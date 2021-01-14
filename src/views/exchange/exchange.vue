@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="exchange">
-      <span>交易</span>
+      <span>{{ $t('exchange.title') }}</span>
       <div class="dos">
-        <span>支付</span>
-        <span>可用：0</span>
+        <span>{{ $t('exchange.pay') }}</span>
+        <span>{{ $t('exchange.Available') }}：0</span>
         <div class="composeAmount">
           <img style="margin-left: 10px" src="../../assets/img/butter.png"/>
           <span>xUSD</span>
@@ -13,19 +13,19 @@
       </div>
       <img class="exchangeimg" src="../../assets/img/exchange.png" />
       <div class="clear">
-        <span>接收</span>
-        <span>估计的</span>
+        <span>{{ $t('exchange.receive') }}</span>
+        <span>{{ $t('exchange.estimated') }}</span>
         <div class="composeAmount">
           <img style="margin-left: 10px" src="../../assets/img/butter.png"/>
           <span>xDOS</span>
           <input></input>
         </div>
-        <span>交易手续费：0.3%</span>
+        <span>{{ $t('exchange.Transaction') }}：0.3%</span>
       </div>
 
       <div class="composeBtn">
-        <span>网络费用：00Gas</span>
-        <button>销毁</button>
+        <span>{{ $t('exchange.network') }}：00Gas</span>
+        <button>{{ $t('exchange.destroy') }}</button>
       </div>
     </div>
   </div>
