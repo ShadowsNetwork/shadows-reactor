@@ -1,0 +1,43 @@
+@import '~antd/dist/antd.css';
+.App {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: radial-gradient(circle 700px at 50% 0%,#2D1E2B 5%, #171B1D 100%) ;
+}
+.ant-menu-dark.ant-menu-inline {
+    width: 180px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    background-color: #1D1B1D;
+}
+.ant-menu-dark.ant-menu-vertical {
+    width: 60px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    background-color: #1D1B1D;
+}
+.ant-menu-dark.ant-menu-inline .ant-menu-item {
+    border-radius: 25px;
+    margin-top: 15px;
+}
+.ant-menu-dark.ant-menu-inline .ant-menu-item:nth-of-type(4) {
+    margin-top: 50px;
+}
+.ant-menu-dark.ant-menu-vertical .ant-menu-item {
+    margin-top: 15px;
+    border-radius: 25px;
+}
+.ant-menu-dark.ant-menu-vertical .ant-menu-item:nth-of-type(4) {
+    margin-top: 50px;
+}
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: #292528;
+}
+.ant-menu-dark .ant-menu-item-selected .ant-menu-item-icon + span, .ant-menu-dark .ant-menu-item-selected .anticon + span {
+    color: #F64B78;
+}
+

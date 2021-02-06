@@ -1,0 +1,38 @@
+.menuLay {
+    width: 100% !important;
+    height: 500px;
+}
+.menuLay > span:nth-of-type(1) {
+    display: block;
+    width: 100%;
+    font-size: 17pt;
+    font-weight: bolder;
+    color: white;
+    opacity: 0.5;
+    text-align: center;
+}
+.menuLay > span:nth-of-type(2) {
+    display: block;
+    width: 100%;
+    font-size: 17pt;
+    color: white;
+    text-align: center;
+    position: relative;
+    top: -15px;
+}
+.menuLay > span:nth-of-type(3) {
+    display: block;
+    width: 100%;
+    padding: 5px 10px;
+    color: #CAC8C9;
+}
+.menuLay > img {
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 30px;
+}
+.mortgage {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
