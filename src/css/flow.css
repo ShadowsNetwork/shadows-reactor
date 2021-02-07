@@ -1,0 +1,82 @@
+.flow {
+    width: 50%;
+    height: 500px;
+    position: absolute;
+    top: calc((100% - 500px) / 2);
+    left: 25%;
+}
+.flow-title {
+    width: 44%;
+    text-align: center;
+    margin-left: 28%;
+}
+.flow-title > span:nth-of-type(1) {
+    display: block;
+    width: 100%;
+    color: #fff;
+    font-size: 17pt;
+}
+.flow-title > span:nth-of-type(2) {
+    display: block;
+    width: 100%;
+    color: #817C81;
+    font-size: 8pt;
+    margin-top: 15px;
+}
+.flow-content {
+    width: 100%;
+    padding: 0 10%;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+.flow-content-main {
+    width: 28%;
+    height: 175pt;
+    float: left;
+    margin-left: 5%;
+    background-color: #1D1B1D;
+    box-shadow: 5px 5px 10px #000;
+}
+.flow-content-main:hover {
+    background-color: #2D282D;
+}
+.flow-content-main > span:nth-of-type(1) {
+    display: block;
+    width: 36pt;
+    height: 36pt;
+    border-radius: 18pt;
+    font-size: 12pt;
+    font-weight: bolder;
+    background-color: #CB395F;
+    color: #1D1B1D;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: calc((100% - 36pt) / 2);
+    margin-top: 30px;
+}
+.flow-content-main > span:nth-of-type(2) {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 12pt;
+    color: #fff;
+    margin-top: 10px;
+}
+.flow-content-main > span:nth-of-type(3) {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 8pt;
+    color: #6C656C;
+    margin-top: 30px;
+}
+.flow-content-main > span:nth-of-type(4) {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 10pt;
+    color: #fff;
+    margin-top: 10px;
+}

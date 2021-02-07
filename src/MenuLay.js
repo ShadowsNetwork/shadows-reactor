@@ -1,17 +1,26 @@
 import React from 'react';
 import { Carousel } from 'antd';
-import './css/MenuLay.css'
-import {
-  RightCircleOutlined
-}from '@ant-design/icons'
-
-
+import './css/menuLay.css'
+import { LeftCircleOutlined,
+  RightCircleOutlined } from '@ant-design/icons'
 
 class MenuLay extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  next=()=> {
+    this.slider.next()
+  }
+  prev=()=> {
+    this.slider.prev();
+  }
   render() {
     return (
       <div className="swiper">
-        <Carousel effect="fade" style={{width:"40%",height:"600px",position: "absolute",top:"calc((100% - 600px) / 2)",left: "30%"}}>
+        <Carousel
+          effect="fade"
+          ref={el => (this.slider = el)}
+          style={{width:"40%",height:"600px",position: "absolute",top:"calc((100% - 600px) / 2)",left: "30%"}}>
           <div className="menuLay">
             <span>Risk Warning</span>
             <span>风险提示</span>
@@ -35,18 +44,19 @@ class MenuLay extends React.Component {
               低于抵押率要求时将无法获得奖励和赎DOS，满足抵押率每周即可领取多种奖励、</span>
             {/*<img src={explainone}/>*/}
           </div>
-          <div>
-            <h3>4</h3>
+          <div className="welcome">
+            <span>WELCOME</span>
+            <span>欢迎使用</span>
+            <span>Shadows Network</span>
+            <span>Shadows是建立在波卡上的去中心化合成资产发行协议、交易协议、贷款协议。
+              这些合成资产的价值由DOS提供抵押担保。</span>
           </div>
         </Carousel>
+        <LeftCircleOutlined onClick={this.prev} style={{fontSize:'40px',color:'#FFFFFF',position:'absolute',bottom:'calc((100% - 580px) / 2)',left:'42%'}}/>
+        <RightCircleOutlined onClick={this.next} style={{fontSize:'40px',color:'#FFFFFF',position:'absolute',bottom:'calc((100% - 580px) / 2)',right:'42%'}}/>
       </div>
     )
   }
 }
-
-ReactDOM.render(
-  <RightCircleOutlined/>,
-  document.getElementsByClassName("swiper")
-)
 
 export default MenuLay

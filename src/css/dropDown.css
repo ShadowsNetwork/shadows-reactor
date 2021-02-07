@@ -1,0 +1,20 @@
+@import '~antd/dist/antd.css';
+
+.ant-dropdown {
+    width: 26%;
+    background: #1D1B1D;
+}
+.ant-dropdown-menu {
+    background-color: #1D1B1D;
+}
+.ant-dropdown-menu-item {
+    color: #B9B1B7;
+}
+.ant-dropdown-menu-item:hover {
+    background-color: #242024;
+    color: #B9B1B7;
+}
+.ant-dropdown-menu-item:active {
+    background-color: #413B41;
+}
+
