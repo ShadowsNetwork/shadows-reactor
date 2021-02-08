@@ -1,6 +1,6 @@
 import React from 'react'
 import '../css/flow.css'
-import {BrowserRouter as Router , Link, Route} from 'react-router-dom'
+import {BrowserRouter as Router , Link, Route, Switch} from 'react-router-dom'
 import FlowStep from "./FlowStep";
 
 class Flow extends React.Component{
@@ -18,6 +18,7 @@ class Flow extends React.Component{
             许多不同的限价订单</span>
         </div>
         <div className="flow-content">
+          <Router>
             <div className="flow-content-main">
                 <span>iBTC</span>
                 <span>iBTC</span>
@@ -36,7 +37,12 @@ class Flow extends React.Component{
               <span>weekly rewards</span>
               <span>8000 DOWS</span>
             </Link>
-            {/*<Route path='/FlowStep' component={FlowStep}/>*/}
+            <Switch>
+              <Route path='/FlowStep'>
+                <FlowStep/>
+              </Route>
+            </Switch>
+          </Router>
         </div>
       </div>
       </div>
