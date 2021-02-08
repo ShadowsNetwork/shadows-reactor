@@ -9,6 +9,7 @@ class Flow extends React.Component{
   }
   render() {
     return(
+      <div className="bg">
       <div className="flow">
         <div className="flow-title">
           <span>流动性</span>
@@ -18,10 +19,10 @@ class Flow extends React.Component{
         </div>
         <div className="flow-content">
             <div className="flow-content-main">
-              <span>iBTC</span>
-              <span>iBTC</span>
-              <span>weekly rewards</span>
-              <span>18000 DOWS</span>
+                <span>iBTC</span>
+                <span>iBTC</span>
+                <span>weekly rewards</span>
+                <span>18000 DOWS</span>
             </div>
             <div className="flow-content-main">
               <span>xETH</span>
@@ -29,13 +30,15 @@ class Flow extends React.Component{
               <span>weekly rewards</span>
               <span>8000 DOWS</span>
             </div>
-            <div className="flow-content-main">
+            <Link to="/FlowStep" className="flow-content-main">
               <span>xETH</span>
               <span>xETH</span>
               <span>weekly rewards</span>
               <span>8000 DOWS</span>
-            </div>
+            </Link>
+            {/*<Route path='/FlowStep' component={FlowStep}/>*/}
         </div>
+      </div>
       </div>
     )
   }

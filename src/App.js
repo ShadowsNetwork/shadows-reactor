@@ -25,7 +25,6 @@ import Error from "./Error";
 import logoURL from "./img/logotext.png"
 import logoImg from "./img/logoImg.png"
 import './css/languageDropDown.css'
-import FlowStep from "./flow/FlowStep";
 
 
 function LogoText() {
@@ -128,7 +127,7 @@ class App extends React.Component {
           <Route path='/Personal' exact component={Personal}/>
           <Route path='/Synthesis' exact component={Synthesis}/>
           <Route path='/Transaction' exact component={Transaction}/>
-          <Route path='/Flow' exact component={Flow}/>
+          <Route path='/Flow' component={Flow}/>
           <Route path='/Destruction' exact component={Destruction}/>
           <Route path='/Reward' exact component={Reward}/>
           <Route path='/Success' exact component={Success}/>

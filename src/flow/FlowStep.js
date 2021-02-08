@@ -1,4 +1,5 @@
 import React from 'react'
+import '../css/flowStep.css'
 
 class FlowStep extends React.Component{
   constructor(props) {
@@ -6,7 +7,8 @@ class FlowStep extends React.Component{
   }
   render() {
     return(
-      <div></div>
+      <div className="flowStep">
+      </div>
     )
   }
 }
