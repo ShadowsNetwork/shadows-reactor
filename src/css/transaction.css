@@ -91,6 +91,7 @@
 }
 .transaction-bottom > button:hover {
     background-color: #EB557C;
+    color: #fff;
 }
 .transaction-bottom > span {
     color: #B9B1B7;

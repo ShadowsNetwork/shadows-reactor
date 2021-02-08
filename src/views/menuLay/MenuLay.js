@@ -1,13 +1,19 @@
 import React from 'react';
 import { Carousel } from 'antd';
-import './css/menuLay.css'
-import { LeftCircleOutlined,
-  RightCircleOutlined } from '@ant-design/icons'
+import '../../css/menuLay.css'
+import {
+  RightOutlined,
+  LeftOutlined,
+   } from '@ant-design/icons'
+import risk from '../../img/risk.png'
+import mortgage from '../../img/mortgage.png'
+import mortgageRate from '../../img/mortgageRate.png'
 
 class MenuLay extends React.Component {
   constructor(props) {
     super(props);
   }
+
   next=()=> {
     this.slider.next()
   }
@@ -28,21 +34,23 @@ class MenuLay extends React.Component {
               接下来，债务将随 着其他合成资产持有人的收益和损失而波动。当有人持有的合成资
               产增值时，那部分收益将按比例来 自于所有DOS持有人的债务。每个持有人都必须付
               清他们的债务才能解锁他们质押的DOS。</span>
-            {/*<img src={explainone}/>*/}
+              <img className="riskOne" src={risk}/>
+              <img className="riskTwo" src={risk}/>
+              <img className="riskThree" src={risk}/>
           </div>
           <div className="menuLay">
             <span>Mortgage DOS reward</span>
             <span>抵押DOS奖励</span>
             <span className="mortgage">DOS抵押人可以获得3种奖励：
               1.交易所手续费奖励；2.Stakling奖励；3.借贷池收益</span>
-            {/*<img src={explainone}/>*/}
+            <img className="mortgageImg" src={mortgage}/>
           </div>
           <div className="menuLay">
             <span>80% mortgage rate</span>
             <span>80%抵押率</span>
             <span>所有合成资产都由抵押的DOS来支撑其价值，抵押率最低要求为80%，
               低于抵押率要求时将无法获得奖励和赎DOS，满足抵押率每周即可领取多种奖励、</span>
-            {/*<img src={explainone}/>*/}
+              <img className="mortgageRate" src={mortgageRate}/>
           </div>
           <div className="welcome">
             <span>WELCOME</span>
@@ -52,8 +60,13 @@ class MenuLay extends React.Component {
               这些合成资产的价值由DOS提供抵押担保。</span>
           </div>
         </Carousel>
-        <LeftCircleOutlined onClick={this.prev} style={{fontSize:'40px',color:'#FFFFFF',position:'absolute',bottom:'calc((100% - 580px) / 2)',left:'42%'}}/>
-        <RightCircleOutlined onClick={this.next} style={{fontSize:'40px',color:'#FFFFFF',position:'absolute',bottom:'calc((100% - 580px) / 2)',right:'42%'}}/>
+        <div onClick={this.prev} className="leftClick">
+          <LeftOutlined style={{fontSize:"22px"}}/>
+        </div>
+        {/*<RightCircleOutlined onClick={this.next} style={{fontSize:'40px',color:'#FFFFFF',position:'absolute',bottom:'calc((100% - 580px) / 2)',right:'42%'}}/>*/}
+        <div onClick={this.prev} className="rightClick">
+          <RightOutlined style={{fontSize:"22px"}}/>
+        </div>
       </div>
     )
   }

@@ -1,5 +1,6 @@
 import React from 'react'
-import './css/error.css'
+import '../css/error.css'
+import {  Button } from 'antd';
 
 class Error extends React.Component{
   constructor(props) {
@@ -14,7 +15,7 @@ class Error extends React.Component{
         <span>Something went wrong...</span>
         <span>Code:4001</span>
         <span>User denied transaction signature</span>
-        <button>OK</button>
+        <Button>OK</Button>
       </div>
     )
   }

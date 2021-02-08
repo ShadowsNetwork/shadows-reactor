@@ -113,6 +113,7 @@
 }
 .destruction-bottom > button:hover {
     background-color: #EB557C;
+    color: #fff;
 }
 .destruction-bottom > span {
     color: #B9B1B7;

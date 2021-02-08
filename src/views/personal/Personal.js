@@ -1,5 +1,5 @@
 import React from 'react'
-import './css/personal.css'
+import '../../css/personal.css'
 import { Progress } from 'antd';
 
 class Personal extends React.Component{

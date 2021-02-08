@@ -1,7 +1,6 @@
 import React from 'react'
-import '../css/flow.css'
-import {BrowserRouter as Router , Link, Route, Switch} from 'react-router-dom'
-import FlowStep from "./FlowStep";
+import '../../css/flow.css'
+import { Link } from 'react-router-dom'
 
 class Flow extends React.Component{
   constructor(props) {
@@ -9,7 +8,6 @@ class Flow extends React.Component{
   }
   render() {
     return(
-      <div className="bg">
       <div className="flow">
         <div className="flow-title">
           <span>流动性</span>
@@ -18,33 +16,25 @@ class Flow extends React.Component{
             许多不同的限价订单</span>
         </div>
         <div className="flow-content">
-          <Router>
-            <div className="flow-content-main">
+            <Link to="/FlowStep" className="flow-content-main">
                 <span>iBTC</span>
                 <span>iBTC</span>
                 <span>weekly rewards</span>
                 <span>18000 DOWS</span>
-            </div>
-            <div className="flow-content-main">
-              <span>xETH</span>
-              <span>xETH</span>
-              <span>weekly rewards</span>
-              <span>8000 DOWS</span>
-            </div>
+            </Link>
             <Link to="/FlowStep" className="flow-content-main">
               <span>xETH</span>
               <span>xETH</span>
               <span>weekly rewards</span>
               <span>8000 DOWS</span>
             </Link>
-            <Switch>
-              <Route path='/FlowStep'>
-                <FlowStep/>
-              </Route>
-            </Switch>
-          </Router>
+            <Link to="/FlowStep" className="flow-content-main">
+              <span>xETH</span>
+              <span>xETH</span>
+              <span>weekly rewards</span>
+              <span>8000 DOWS</span>
+            </Link>
         </div>
-      </div>
       </div>
     )
   }

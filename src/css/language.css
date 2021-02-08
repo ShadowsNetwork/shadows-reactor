@@ -1,0 +1,25 @@
+.language {
+    width: 80pt;
+    height: 25pt;
+    color: #fff;
+    font-size: 9pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 25pt;
+    position: absolute;
+    top: 20px;
+    right: 50px;
+    cursor: pointer;
+}
+.language > div {
+    width: 25px;
+    height: 25px;
+    border-radius: 25px;
+    background-color: #201B1E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    color: #fff;
+}

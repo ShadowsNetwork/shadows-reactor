@@ -1,5 +1,6 @@
 import React from 'react'
-import './css/success.css'
+import '../css/success.css'
+import {  Button } from 'antd';
 
 
 class Success extends React.Component{
@@ -14,7 +15,7 @@ class Success extends React.Component{
         </div>
         <span>Success</span>
         <span>I am successful prompt copy</span>
-        <button>OK</button>
+        <Button>OK</Button>
       </div>
     )
   }

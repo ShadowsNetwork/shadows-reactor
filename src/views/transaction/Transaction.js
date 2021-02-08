@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu, Dropdown, Button, Space } from 'antd';
-import './css/transaction.css'
-import './css/dropDown.css'
+import '../../css/transaction.css'
+import '../../css/dropDown.css'
 
 const menu = (
   <Menu>
@@ -70,7 +70,7 @@ class Transaction extends React.Component{
           </div>
         </div>
         <div className="transaction-bottom">
-          <button>交易</button>
+          <Button>交易</Button>
           <span>网络费用：$0 / 90 GWEI</span>
         </div>
       </div>

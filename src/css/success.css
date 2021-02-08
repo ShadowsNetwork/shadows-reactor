@@ -55,4 +55,5 @@
 }
 .success > button:hover {
     background-color: #EB557C;
+    color: #fff;
 }

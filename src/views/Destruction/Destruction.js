@@ -1,6 +1,6 @@
 import React from 'react'
-import './css/destruction.css'
-import './css/dropDown.css'
+import '../../css/destruction.css'
+import '../../css/dropDown.css'
 import { Menu, Dropdown, Button, Space } from 'antd';
 
 
@@ -72,7 +72,7 @@ class Destruction extends React.Component{
           </div>
         </div>
         <div className="destruction-bottom">
-          <button>销毁</button>
+          <Button>销毁</Button>
           <span>网络费用：$0 / 90 GWEI</span>
         </div>
       </div>

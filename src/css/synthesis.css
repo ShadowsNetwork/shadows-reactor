@@ -94,8 +94,34 @@
 }
 .Synthesis-bottom > button:hover {
     background-color: #EB557C;
+    color: #fff;
 }
-.Synthesis-bottom > span {
+.Synthesis-bottom > span:nth-of-type(1) {
     color: #B9B1B7;
     font-size: 8pt;
+}
+.Synthesis-bottom > span:nth-of-type(2) {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-left: 10px;
+    border-bottom: 1px solid #CB395F;
+    border-left: 1px solid #CB395F;
+    position: relative;
+}
+.Synthesis-bottom > span:nth-of-type(2) > i {
+    width: 6px;
+    height: 6px;
+    display: inline-block;
+    border-bottom: 1px solid #CB395F;
+    border-width: 0 0 1px 1px;
+    transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    vertical-align: baseline;
+    position: absolute;
+    bottom: 3px;
+    left: 0;
 }

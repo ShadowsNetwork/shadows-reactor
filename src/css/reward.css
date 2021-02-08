@@ -78,6 +78,7 @@
 }
 .reward-bottom > button:hover {
     background-color: #EB557C;
+    color: #fff;
 }
 .reward-bottom > span {
     color: #B9B1B7;

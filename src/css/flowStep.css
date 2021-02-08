@@ -1,9 +1,103 @@
 .flowStep {
     width: 50%;
-    height: 500px;
+    height: 300px;
     position: absolute;
-    top: 0;
-    left: 0;
-    background-color: #1EC195;
+    top: calc((100% - 300px) / 2);
+    left: 25%;
+}
+.flowStep-top {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.flowStep-top > span:nth-of-type(1) {
+    display: block;
+    width:35pt;
+    height: 35pt;
+    border-radius: 35pt;
+    background-color: #CB395F;
+    color: #1D1B1D;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12pt;
+    font-weight: bold;
+}
+.flowStep > span:nth-of-type(1) {
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 20px;
+}
+.flowStep > span:nth-of-type(2) {
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #6C656C;
+    font-size: 8pt;
+    margin-top: 20px;
+}
+.flowStep > button {
+    width: 50%;
+    height: 30pt;
+    border: 0;
+    margin-left: 25%;
+    margin-top: 70px;
+    border-radius: 4px;
+    background: #CB395F;
+    color: white;
+}
+.flowStep > button:hover {
+    background-color: #EB557C;
+    color: #fff;
+}
+
+.request {
+    width: 480px;
+    height: 80px;
+    margin-left: calc((100% - 480px) / 2);
+    margin-top: 90px;
+    border-radius: 2px;
+    background-color: #292427;
+    display: flex;
+    align-items: center;
+}
+.loading {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+.requestText {
+    width: 40%;
+}
+.requestText > span:nth-of-type(1) {
+    display: block;
+    width: 100%;
+    color: #9B9498;
+    font-size: 7pt;
+}
+.requestText > span:nth-of-type(2) {
+    display: block;
+    width: 100%;
+    color: #E2D8DE;
+    font-size: 7pt;
+}
+.request > Button {
+    height: 25px;
+    line-height: 0;
+    border: 1px solid white;
+    color: white;
+    background: none;
+    margin-left: 20px;
+}
+.request > Button:hover {
+    color: white;
+    border: 1px solid white;
+    background: none;
 }
 

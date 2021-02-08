@@ -1,6 +1,6 @@
 import React from 'react'
-import './css/reward.css'
-import './css/dropDown.css'
+import '../../css/reward.css'
+import '../../css/dropDown.css'
 import { Menu, Dropdown, Button, Space } from 'antd';
 
 
@@ -37,7 +37,7 @@ class Reward extends React.Component{
           </div>
         </div>
         <div className="reward-bottom">
-          <button>领取</button>
+          <Button>领取</Button>
           <span>网络费用：$0 / 90 GWEI</span>
         </div>
       </div>

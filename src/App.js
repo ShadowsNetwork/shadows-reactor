@@ -13,18 +13,20 @@ import {
   DownCircleFilled
 } from '@ant-design/icons';
 import './App.css';
-import MenuLay from "./MenuLay";
-import Personal from "./Personal"
-import Synthesis from "./Synthesis";
-import Transaction from "./Transaction";
-import Flow from "./flow/Flow"
-import Destruction from "./Destruction";
-import Reward from "./Reward";
-import Success from "./Success";
-import Error from "./Error";
+import MenuLay from "./views/menuLay/MenuLay";
+import Personal from "./views/personal/Personal"
+import Synthesis from "./views/synthesis/Synthesis";
+import Transaction from "./views/transaction/Transaction";
+import Flow from "./views/flow/Flow"
+import FlowStep from "./views/flow/FlowStep";
+import Destruction from "./views/Destruction/Destruction";
+import Reward from "./views/reward/Reward";
+import Success from "./views/Success";
+import Error from "./views/Error";
+import Language from "./views/Language";
 import logoURL from "./img/logotext.png"
 import logoImg from "./img/logoImg.png"
-import './css/languageDropDown.css'
+
 
 
 function LogoText() {
@@ -54,22 +56,7 @@ class LogoSet extends React.Component{
     }
   }
 }
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <span style={{display:"inline-block",width:"15px",height:"15px",borderRadius:"15px",background:"#4444FF"}}/>
-      <span style={{marginLeft:"10px",color:"#B9B1B7",fontSize:"8pt"}}>Chinese</span>
-    </Menu.Item>
-    <Menu.Item>
-      <span style={{display:"inline-block",width:"15px",height:"15px",borderRadius:"15px",background:"#03AF91"}}/>
-      <span style={{marginLeft:"10px",color:"#B9B1B7",fontSize:"8pt"}}>English</span>
-    </Menu.Item>
-    <Menu.Item>
-      <span style={{display:"inline-block",width:"15px",height:"15px",borderRadius:"15px",background:"#D2417E"}}/>
-      <span style={{marginLeft:"10px",color:"#B9B1B7",fontSize:"8pt"}}>French</span>
-    </Menu.Item>
-  </Menu>
-);
+
 
 class App extends React.Component {
   state = {
@@ -132,18 +119,13 @@ class App extends React.Component {
           <Route path='/Reward' exact component={Reward}/>
           <Route path='/Success' exact component={Success}/>
           <Route path='/Error' exact component={Error}/>
+          <Route path='/FlowStep' exact component={FlowStep}/>
         </Router>
-        <Dropdown overlay={menu} placement="bottomLeft" arrow>
-          <div className="language">
-            <GlobalOutlined style={{ fontSize: '16px', color: '#fff' }}/>
-            <span style={{marginLeft:"5px"}}>中/CN</span>
-            <div>v</div>
-          </div>
-        </Dropdown>
         <div className="money">
           <PaperClipOutlined style={{ fontSize: '16px', color: '#fff' }}/>
           <span style={{marginLeft:"5px"}}>链接钱包</span>
         </div>
+        <Language/>
       </div>
     );
   }

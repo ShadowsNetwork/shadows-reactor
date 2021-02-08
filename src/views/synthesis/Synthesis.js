@@ -1,6 +1,6 @@
 import React from 'react'
-import './css/synthesis.css'
-import './css/dropDown.css'
+import '../../css/synthesis.css'
+import '../../css/dropDown.css'
 import { Menu, Dropdown, Button, Space } from 'antd';
 
 
@@ -58,8 +58,11 @@ class Synthesis extends React.Component{
           </div>
         </div>
         <div className="Synthesis-bottom">
-          <button>开始合成</button>
+          <Button>开始合成</Button>
           <span>网络费用：$0 / 90 GWEI</span>
+          <span>
+            <i/>
+          </span>
         </div>
       </div>
     )
