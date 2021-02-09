@@ -30,6 +30,7 @@ class Synthesis extends React.Component{
   }
   render() {
     return(
+      <div className="bg">
       <div className="Synthesis">
         <div className="Synthesis-title">
           <span>合成</span>
@@ -64,6 +65,7 @@ class Synthesis extends React.Component{
             <i/>
           </span>
         </div>
+      </div>
       </div>
     )
   }

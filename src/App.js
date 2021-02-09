@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu,Dropdown, Button} from 'antd';
+import { Menu,Dropdown, Button,Layout } from 'antd';
 import {BrowserRouter as Router , Link, Route} from 'react-router-dom'
 import {
   UserOutlined,
@@ -57,7 +57,7 @@ class LogoSet extends React.Component{
   }
 }
 
-
+const { Header, Footer, Sider, Content } = Layout;
 class App extends React.Component {
   state = {
     collapsed: false,
