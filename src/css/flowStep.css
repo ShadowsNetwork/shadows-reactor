@@ -2,7 +2,7 @@
     width: 50%;
     height: 300px;
     position: absolute;
-    top: calc((100% - 300px) / 2);
+    top: 180px;
     left: 25%;
 }
 .flowStep-top {
@@ -99,5 +99,9 @@
     color: white;
     border: 1px solid white;
     background: none;
+}
+.ant-btn:focus {
+    background: #CB395F;
+    color: white;
 }
 

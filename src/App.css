@@ -1,14 +1,14 @@
 @import '~antd/dist/antd.css';
 .App {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
     background: radial-gradient(circle 700px at 50% 0%,#2D1E2B 5%, #171B1D 100%) ;
 }
 .ant-menu-dark.ant-menu-inline {
-    width: 180px;
+    width: 190px;
     border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
     background-color: #1D1B1D;
@@ -66,6 +66,14 @@
     align-items: center;
     margin-left: 10px;
     color: #fff;
+}
+.money:hover {
+    background-color: #342B31;
+    cursor: pointer;
+}
+.money:active {
+    background-color: #342B31;
+    border: 1px solid #8A8187;
 }
 .money {
     width: 80pt;

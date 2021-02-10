@@ -31,13 +31,15 @@ import logoImg from "./img/logoImg.png"
 
 function LogoText() {
   return (
-    <img src={logoURL} style={{width:"140px",marginTop:"30px",marginBottom:"30px",marginLeft:"20px"}}/>
+    // <img src={logoURL} style={{width:"160px",position:"absolute",top:"40px",left:"20px"}}/>
+    <img src={logoURL} style={{width:"160px",marginTop:"30px",marginBottom:"30px",marginLeft:"20px"}}/>
   )
 }
 
 function LogoImg() {
   return (
-    <img src={logoImg}  style={{width:"30px",marginTop:"20px",marginLeft:"15px",marginBottom:"20px"}}/>
+    // <img src={logoImg}  style={{width:"19.02px",position:"absolute",top:"40px",left:"20px"}}/>
+    <img src={logoImg}  style={{width:"19.02px",marginTop:"30px",marginLeft:"15px",marginBottom:"30px"}}/>
   )
 }
 class LogoSet extends React.Component{

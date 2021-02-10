@@ -135,3 +135,15 @@
     justify-content: center;
     align-items: center;
 }
+.rightClick:hover {
+    background-color: #2C292C;
+}
+.leftClick:hover {
+    background-color: #2C292C;
+}
+.anticon svg:nth-of-type(1):active {
+    color: #E40074;
+}
+.anticon svg:nth-of-type(2):active {
+    color: #E40074;
+}

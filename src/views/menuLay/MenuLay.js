@@ -64,7 +64,7 @@ class MenuLay extends React.Component {
           <LeftOutlined style={{fontSize:"22px"}}/>
         </div>
         {/*<RightCircleOutlined onClick={this.next} style={{fontSize:'40px',color:'#FFFFFF',position:'absolute',bottom:'calc((100% - 580px) / 2)',right:'42%'}}/>*/}
-        <div onClick={this.prev} className="rightClick">
+        <div onClick={this.next} className="rightClick">
           <RightOutlined style={{fontSize:"22px"}}/>
         </div>
       </div>

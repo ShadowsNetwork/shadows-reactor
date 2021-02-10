@@ -2,7 +2,7 @@
     width: 40%;
     height: 500px;
     position: absolute;
-    top: calc((100% - 500px) / 2);
+    top: 180px;
     left: 30%;
 }
 .personal-title > span:nth-of-type(1){

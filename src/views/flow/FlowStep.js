@@ -56,8 +56,8 @@ function FlowStep() {
             </div>
           </div>
           <div className="footer">
-            <Button>Cancel</Button>
-            <Button>Confirm</Button>
+            <button>Cancel</button>
+            <button>Confirm</button>
           </div>
         </Modal>
         <Request/>

@@ -1,7 +1,7 @@
 .transaction {
     width: 26%;
     position: absolute;
-    top: calc((100% - 500px) / 2);
+    top: 180px;
     left: 37%;
 }
 .transaction-title {
@@ -96,4 +96,8 @@
 .transaction-bottom > span {
     color: #B9B1B7;
     font-size: 8pt;
+}
+.ant-btn:focus {
+    background: #CB395F;
+    color: white;
 }

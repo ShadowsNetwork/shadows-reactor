@@ -2,7 +2,7 @@
     width: 20%;
     height: 400px;
     position: absolute;
-    top: calc((100% - 500px) / 2);
+    top: 180px;
     left: 40%;
     text-align: center;
 }
@@ -71,4 +71,8 @@
 .error > button:hover {
     background-color: #EB557C;
     color: #fff;
+}
+.ant-btn:focus {
+    background: #CB395F;
+    color: white;
 }

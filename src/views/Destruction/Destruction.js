@@ -37,8 +37,8 @@ class Destruction extends React.Component{
             债务，使您能转账未托管的SNX</span>
         </div>
         <div className="operation">
-          <button>调整至目标抵押率</button>
-          <button>全部销毁</button>
+          <Button>调整至目标抵押率</Button>
+          <Button>全部销毁</Button>
         </div>
         <div className="destruction-content">
           <div className="destruction-content-title">

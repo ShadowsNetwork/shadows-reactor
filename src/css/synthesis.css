@@ -6,7 +6,7 @@
 .Synthesis {
     width: 26%;
     position: absolute;
-    top: calc((100% - 500px) / 2);
+    top: 180px;
     left: 37%;
 }
 .Synthesis-title {
@@ -129,4 +129,8 @@
     position: absolute;
     bottom: 3px;
     left: 0;
+}
+.ant-btn:focus {
+    background: #CB395F;
+    color: white;
 }

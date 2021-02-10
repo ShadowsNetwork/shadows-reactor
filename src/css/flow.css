@@ -3,7 +3,7 @@
     width: 50%;
     height: 500px;
     position: absolute;
-    top: calc((100% - 500px) / 2);
+    top: 180px;
     left: 25%;
 }
 .flow-title {
@@ -80,5 +80,9 @@
     font-size: 10pt;
     color: #fff;
     margin-top: 10px;
+}
+.ant-btn:focus {
+    background: #CB395F;
+    color: white;
 }
 
