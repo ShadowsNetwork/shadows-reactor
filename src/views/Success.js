@@ -1,17 +1,16 @@
 import React from 'react'
-import '../css/success.css'
-import {  Button } from 'antd';
+import '../styles/success.css'
+import { Button } from 'antd'
 
-
-class Success extends React.Component{
+class Success extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
   render() {
     return (
       <div className="success">
         <div className="hook">
-          <i/>
+          <i />
         </div>
         <span>Success</span>
         <span>I am successful prompt copy</span>
