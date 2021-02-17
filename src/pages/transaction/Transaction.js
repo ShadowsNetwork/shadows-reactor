@@ -30,7 +30,7 @@ const menu = (
         }}
       />
       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        sETC
+        xETC
       </span>
     </Menu.Item>
     <Menu.Item>
@@ -44,7 +44,7 @@ const menu = (
         }}
       />
       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        sUSD
+        xJPY
       </span>
     </Menu.Item>
     <Menu.Item>
@@ -58,7 +58,7 @@ const menu = (
         }}
       />
       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        DOWS
+        xEUR
       </span>
     </Menu.Item>
   </Menu>

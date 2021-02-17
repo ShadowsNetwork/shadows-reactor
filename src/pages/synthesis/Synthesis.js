@@ -30,7 +30,7 @@ import { Menu, Dropdown, Button } from 'antd'
 //         }}
 //       />
 //       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         sETC
+//         xETC
 //       </span>
 //     </Menu.Item>
 //     <Menu.Item>
