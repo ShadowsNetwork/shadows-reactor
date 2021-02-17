@@ -1,0 +1,125 @@
+.me {
+    width: 40%;
+    height: 500px;
+    position: absolute;
+    top: 180px;
+    left: 30%;
+}
+.personal-title > span:nth-of-type(1){
+    display: block;
+    width: 100%;
+    font-size: 17pt;
+    font-weight: bolder;
+    color: white;
+    opacity: 0.3;
+    text-align: center;
+}
+.personal-title > span:nth-of-type(2){
+    display: block;
+    width: 100%;
+    font-size: 17pt;
+    color: white;
+    text-align: center;
+    position: relative;
+    top: -15px;
+}
+.personal-content {
+    width: 100%;
+    height: 150px;
+    margin-top: 25px;
+}
+.usd {
+    width: 100%;
+    height: 70px;
+}
+.usd > div {
+    width: 23%;
+    height: 70px;
+    float: left;
+    margin-left: calc(8% / 5);
+    border: 1px solid #fff;
+    border-radius: 4px;
+    padding-left: 20px;
+}
+.usd > div > span:nth-of-type(1) {
+    width: 100%;
+    display: block;
+    font-size: 8pt;
+    margin-top: 15px;
+    color: #fff;
+}
+.usd > div > span:nth-of-type(2) {
+    display: block;
+    font-size: 9pt;
+    color: #fff;
+}
+.mortgage {
+    width: 100%;
+    height: 70px;
+    text-align: left;
+}
+.mortgage > div {
+    width: 23%;
+    height: 70px;
+    float: left;
+    margin-left: calc(8% / 5);
+    border: 1px solid #fff;
+    border-radius: 4px;
+    margin-top: 10px;
+    padding-left: 20px;
+}
+.mortgage > div > span:nth-of-type(1) {
+    width: 100%;
+    display: block;
+    font-size: 8pt;
+    margin-top: 15px;
+    color: #fff;
+}
+.mortgage > div > span:nth-of-type(2) {
+    display: block;
+    font-size: 9pt;
+    color: #fff;
+}
+.snk {
+    width: 100%;
+    margin-top: 20px;
+    margin-left: calc(8% / 5);
+}
+.snk > span:nth-of-type(1) {
+    font-size: 8pt;
+    color: #B9B1B7;
+}
+.snk > span:nth-of-type(2) {
+    font-size: 12pt;
+    color: #fff;
+    margin-left: 15px;
+}
+.hr {
+    height: 1px;
+    width: 96%;
+    margin-left: calc(8% / 5);
+    margin-top: 5px;
+    background: linear-gradient(to right,#6695FF,#FBDCC3,#39A28B,#FFA3A3);
+}
+.progressBar {
+    width: 96%;
+    height: 40px;
+    margin-top: 10px;
+    margin-left: calc(8% / 5);
+}
+.progressBar-top {
+    width: 100%;
+    position: relative;
+}
+.progressBar-top > span:nth-of-type(1) {
+    color: #B9B1B7;
+    font-size: 8pt;
+    position: absolute;
+    left: 0;
+}
+.progressBar-top > span:nth-of-type(2) {
+    color: #B9B1B7;
+    font-size: 8pt;
+    position: absolute;
+    right: 0;
+}

@@ -1,0 +1,92 @@
+@import "~antd/dist/antd.css";
+.App {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: radial-gradient(circle 700px at 50% 0%, #2d1e2b 5%, #171b1d 100%);
+}
+.ant-menu-dark.ant-menu-inline {
+  width: 190px;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  background-color: #1d1b1d;
+  margin-top: 20px;
+}
+.ant-menu-dark.ant-menu-vertical {
+  width: 60px;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  background-color: #1d1b1d;
+  margin-top: 20px;
+}
+.ant-menu-dark.ant-menu-inline .ant-menu-item {
+  border-radius: 25px;
+  margin-top: 15px;
+}
+.ant-menu-dark.ant-menu-inline .ant-menu-item:nth-of-type(4) {
+  margin-top: 50px;
+}
+.ant-menu-dark.ant-menu-vertical .ant-menu-item {
+  margin-top: 15px;
+  border-radius: 25px;
+}
+.ant-menu-dark.ant-menu-vertical .ant-menu-item:nth-of-type(4) {
+  margin-top: 50px;
+}
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: #292528;
+}
+.ant-menu-dark .ant-menu-item-selected .ant-menu-item-icon + span,
+.ant-menu-dark .ant-menu-item-selected .anticon + span {
+  color: #f64b78;
+}
+.language {
+  width: 80pt;
+  height: 25pt;
+  color: #fff;
+  font-size: 9pt;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25pt;
+  position: absolute;
+  top: 20px;
+  right: 50px;
+  cursor: pointer;
+}
+.language > div {
+  width: 25px;
+  height: 25px;
+  border-radius: 25px;
+  background-color: #201b1e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  color: #fff;
+}
+.money:hover {
+  background-color: #342b31;
+  cursor: pointer;
+}
+.money:active {
+  background-color: #342b31;
+  border: 1px solid #8a8187;
+}
+.money {
+  width: 80pt;
+  height: 25pt;
+  background-color: #201b1e;
+  color: #fff;
+  font-size: 9pt;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25pt;
+  position: absolute;
+  top: 20px;
+  right: 180px;
+}

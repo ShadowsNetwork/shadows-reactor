@@ -1,0 +1,149 @@
+.menuLay {
+    width: 100%;
+    height: 500px;
+    position: relative;
+}
+.menuLay > span:nth-of-type(1) {
+    display: block;
+    width: 100%;
+    font-size: 17pt;
+    font-weight: bolder;
+    color: white;
+    opacity: 0.3;
+    text-align: center;
+}
+.menuLay > span:nth-of-type(2) {
+    display: block;
+    width: 100%;
+    font-size: 17pt;
+    color: white;
+    text-align: center;
+    position: relative;
+    top: -15px;
+}
+.menuLay > span:nth-of-type(3) {
+    display: block;
+    width: 100%;
+    padding: 5px 10px;
+    color: #CAC8C9;
+    text-align: center;
+}
+.mortgage {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.welcome {
+    width: 100%;
+    height: 500px;
+}
+.welcome > span:nth-of-type(1) {
+    display: block;
+    width: 100%;
+    font-size: 36.27pt;
+    font-weight: bolder;
+    color: white;
+    opacity: 0.2;
+    text-align: center;
+}
+.welcome > span:nth-of-type(2) {
+    display: block;
+    width: 100%;
+    font-size: 17pt;
+    color: white;
+    text-align: center;
+    position: relative;
+    top: -32px;
+}
+.welcome > span:nth-of-type(3) {
+    display: block;
+    width: 100%;
+    font-size: 17pt;
+    color: white;
+    text-align: center;
+    position: relative;
+    top: -30px;
+}
+.welcome > span:nth-of-type(4) {
+    display: block;
+    width: 100%;
+    padding: 5px 10px;
+    text-align: center;
+    margin-top: 20px;
+    color: #CAC8C9;
+}
+
+.riskOne {
+    width: 35%;
+    position: absolute;
+    bottom: 20%;
+    left: 11%;
+}
+.riskTwo {
+    width: 32%;
+    position: absolute;
+    bottom: 25%;
+    right: 11%;
+}
+.riskThree {
+    width: 20%;
+    position: absolute;
+    bottom: 45%;
+    right: 43%;
+}
+.mortgageImg {
+    width: 65%;
+    margin-left: 17.5%;
+    margin-top: 20px;
+}
+.mortgageRate {
+    width: 45%;
+    margin-left: 27.5%;
+    margin-top: 30px;
+}
+.ant-carousel .slick-dots li button {
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+}
+.leftClick {
+    width: 32pt;
+    height: 32pt;
+    border-radius: 30px;
+    font-size: 30px;
+    background: #1D1B1D;
+    color: #FFFFFF;
+    position: absolute;
+    bottom: calc((100% - 590px) / 2);
+    left: 42%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.rightClick {
+    width: 32pt;
+    height: 32pt;
+    border-radius: 30px;
+    font-size: 30px;
+    background: #1D1B1D;
+    color: #FFFFFF;
+    position: absolute;
+    bottom: calc((100% - 590px) / 2);
+    right: 42%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.rightClick:hover {
+    background-color: #2C292C;
+}
+.leftClick:hover {
+    background-color: #2C292C;
+}
+.anticon svg:nth-of-type(1):active {
+    color: #E40074;
+}
+.anticon svg:nth-of-type(2):active {
+    color: #E40074;
+}
