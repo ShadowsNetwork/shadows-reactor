@@ -59,7 +59,7 @@ class MenuLay extends React.Component {
             <span>800% mortgage rate</span>
             <span>800%抵押率</span>
             <span>
-              所有合成资产都由抵押的DOWS来支撑其价值，抵押率最低要求为80%，
+              所有合成资产都由抵押的DOWS来支撑其价值，抵押率最低要求为800%，
               低于抵押率要求时将无法获得奖励和赎DOWS，满足抵押率每周即可领取多种奖励、
             </span>
             <img className="mortgageRate" src={mortgageRate} />

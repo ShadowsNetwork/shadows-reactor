@@ -17,41 +17,41 @@ class Personal extends React.Component {
           <div className="usd">
             <div>
               <span>xUSD</span>
-              <span>00000000</span>
+              <span>100000.00</span>
             </div>
             <div>
-              <span>xUSD</span>
-              <span>00000000</span>
+              <span>xEUR</span>
+              <span>100.00</span>
             </div>
             <div>
-              <span>xUSD</span>
-              <span>00000000</span>
+              <span>xJPY</span>
+              <span>100.00</span>
             </div>
             <div>
-              <span>xUSD</span>
-              <span>00000000</span>
+              <span>xAUD</span>
+              <span>100.00</span>
             </div>
           </div>
           <div className="mortgage">
             <div>
               <span>我的抵押率</span>
-              <span>50%</span>
+              <span>810%</span>
             </div>
             <div>
               <span>目标抵押率</span>
-              <span>50%</span>
+              <span>800%</span>
             </div>
           </div>
         </div>
         <div className="snk">
-          <span>总SNK</span>
-          <span>50%</span>
+          <span>总 DOWS</span>
+          <span>150000 DOWS</span>
         </div>
         <div className="hr" />
         <div className="progressBar">
           <div className="progressBar-top">
-            <span>已锁定：0</span>
-            <span>可转账：0</span>
+            <span>已锁定: 150000</span>
+            <span>可转账: 0</span>
           </div>
           <Progress
             percent={50}
@@ -63,8 +63,8 @@ class Personal extends React.Component {
         </div>
         <div className="progressBar">
           <div className="progressBar-top">
-            <span>myself.Staked:0</span>
-            <span>myself.NotStaked：0</span>
+            <span>Staked: 10000</span>
+            <span>NotStaked: 0</span>
           </div>
           <Progress
             percent={50}
@@ -76,8 +76,8 @@ class Personal extends React.Component {
         </div>
         <div className="progressBar">
           <div className="progressBar-top">
-            <span>myself.Staked:0</span>
-            <span>myself.NotStaked：0</span>
+            <span>Staked: 0</span>
+            <span>NotStaked: 0</span>
           </div>
           <Progress
             percent={50}
