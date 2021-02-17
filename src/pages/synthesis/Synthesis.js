@@ -82,7 +82,7 @@ class Synthesis extends React.Component {
           <div className="Synthesis-content">
             <div className="Synthesis-content-title">
               <span>余额：</span>
-              <span>20xUSD</span>
+              <span>20 xUSD</span>
             </div>
             <div className="Synthesis-input">
               {/*<Dropdown overlay={menu} placement="bottomLeft">*/}

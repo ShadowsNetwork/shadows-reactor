@@ -85,7 +85,7 @@ class Destruction extends React.Component {
         <div className="destruction-content">
           <div className="destruction-content-title">
             <span>余额：</span>
-            <span>20xUSD</span>
+            <span>20 xUSD</span>
           </div>
           <div className="destruction-input">
             {/*<Dropdown overlay={menu} placement="bottomLeft">*/}
