@@ -44,7 +44,7 @@ import { Menu, Dropdown, Button } from 'antd'
 //         }}
 //       />
 //       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         sUSD
+//         xUSD
 //       </span>
 //     </Menu.Item>
 //     <Menu.Item>
@@ -58,7 +58,7 @@ import { Menu, Dropdown, Button } from 'antd'
 //         }}
 //       />
 //       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         SNX
+//         DOWS
 //       </span>
 //     </Menu.Item>
 //   </Menu>
@@ -74,8 +74,8 @@ class Destruction extends React.Component {
         <div className="destruction-title">
           <span>销毁</span>
           <span>
-            销毁sUSD来解锁您抵押的SNX。这将增加您的抵押率，并减少您的
-            债务，使您能转账未托管的SNX
+            销毁xUSD来解锁您抵押的DOWS。这将增加您的抵押率，并减少您的
+            债务，使您能转账未托管的DOWS
           </span>
         </div>
         <div className="operation">

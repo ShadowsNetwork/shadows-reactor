@@ -44,7 +44,7 @@ import '../../styles/dropDown.css'
 //         }}
 //       />
 //       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         sUSD
+//         xUSD
 //       </span>
 //     </Menu.Item>
 //     <Menu.Item>
@@ -58,7 +58,7 @@ import '../../styles/dropDown.css'
 //         }}
 //       />
 //       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         SNX
+//         DOWS
 //       </span>
 //     </Menu.Item>
 //   </Menu>
@@ -73,7 +73,7 @@ class Transaction extends React.Component {
         <div className="transaction-title">
           <span>交易</span>
           <span>
-            交易您的合成资产和sUSD。
+            交易您的合成资产和xUSD。
           </span>
         </div>
         <div className="transaction-content">

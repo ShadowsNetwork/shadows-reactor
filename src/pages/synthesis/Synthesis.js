@@ -44,7 +44,7 @@ import { Menu, Dropdown, Button } from 'antd'
 //         }}
 //       />
 //       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         sUSD
+//         xUSD
 //       </span>
 //     </Menu.Item>
 //     <Menu.Item>
@@ -58,7 +58,7 @@ import { Menu, Dropdown, Button } from 'antd'
 //         }}
 //       />
 //       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         SNX
+//         DOWS
 //       </span>
 //     </Menu.Item>
 //   </Menu>
@@ -75,7 +75,7 @@ class Synthesis extends React.Component {
             <span>合成</span>
             <span>
               合成资产满足了我们更多样的需求。对有避险需求的用户而言，相较于美元，
-              他们需要区块链上的稳定币（USDT、dUSD、sUSD等等，属于合成资产），
+              他们需要区块链上的稳定币（USDT、dUSD、xUSD等等，属于合成资产），
               以便于资金流动；
             </span>
           </div>
