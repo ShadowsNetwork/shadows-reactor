@@ -3,66 +3,66 @@ import '../../styles/synthesis.css'
 import '../../styles/dropDown.css'
 import { Menu, Dropdown, Button } from 'antd'
 
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <span
-        style={{
-          display: 'inline-block',
-          width: '15px',
-          height: '15px',
-          borderRadius: '15px',
-          background: '#4444FF',
-        }}
-      />
-      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        xUSD
-      </span>
-    </Menu.Item>
-    <Menu.Item>
-      <span
-        style={{
-          display: 'inline-block',
-          width: '15px',
-          height: '15px',
-          borderRadius: '15px',
-          background: '#03AF91',
-        }}
-      />
-      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        sETC
-      </span>
-    </Menu.Item>
-    <Menu.Item>
-      <span
-        style={{
-          display: 'inline-block',
-          width: '15px',
-          height: '15px',
-          borderRadius: '15px',
-          background: '#D2417E',
-        }}
-      />
-      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        sUSD
-      </span>
-    </Menu.Item>
-    <Menu.Item>
-      <span
-        style={{
-          display: 'inline-block',
-          width: '15px',
-          height: '15px',
-          borderRadius: '15px',
-          background: '#464146',
-        }}
-      />
-      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        SNX
-      </span>
-    </Menu.Item>
-  </Menu>
-)
+// const menu = (
+//   <Menu>
+//     <Menu.Item>
+//       <span
+//         style={{
+//           display: 'inline-block',
+//           width: '15px',
+//           height: '15px',
+//           borderRadius: '15px',
+//           background: '#4444FF',
+//         }}
+//       />
+//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
+//         xUSD
+//       </span>
+//     </Menu.Item>
+//     <Menu.Item>
+//       <span
+//         style={{
+//           display: 'inline-block',
+//           width: '15px',
+//           height: '15px',
+//           borderRadius: '15px',
+//           background: '#03AF91',
+//         }}
+//       />
+//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
+//         sETC
+//       </span>
+//     </Menu.Item>
+//     <Menu.Item>
+//       <span
+//         style={{
+//           display: 'inline-block',
+//           width: '15px',
+//           height: '15px',
+//           borderRadius: '15px',
+//           background: '#D2417E',
+//         }}
+//       />
+//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
+//         sUSD
+//       </span>
+//     </Menu.Item>
+//     <Menu.Item>
+//       <span
+//         style={{
+//           display: 'inline-block',
+//           width: '15px',
+//           height: '15px',
+//           borderRadius: '15px',
+//           background: '#464146',
+//         }}
+//       />
+//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
+//         SNX
+//       </span>
+//     </Menu.Item>
+//   </Menu>
+// )
 class Synthesis extends React.Component {
   constructor(props) {
     super(props)
@@ -82,10 +82,10 @@ class Synthesis extends React.Component {
           <div className="Synthesis-content">
             <div className="Synthesis-content-title">
               <span>余额：</span>
-              <span>20DOS</span>
+              <span>20xUSD</span>
             </div>
             <div className="Synthesis-input">
-              <Dropdown overlay={menu} placement="bottomLeft">
+              {/*<Dropdown overlay={menu} placement="bottomLeft">*/}
                 <Button
                   style={{
                     height: '43px',
@@ -113,7 +113,7 @@ class Synthesis extends React.Component {
                     xUSD
                   </span>
                 </Button>
-              </Dropdown>
+              {/*</Dropdown>*/}
               <input
                 style={{
                   width: '60%',
@@ -132,7 +132,7 @@ class Synthesis extends React.Component {
               </div>
             </div>
             <div className="Synthesis-content-bottom">
-              <span>Staking：00DOS</span>
+              <span>Staking：00DOWS</span>
               <span>债务比例：0.0%</span>
             </div>
           </div>

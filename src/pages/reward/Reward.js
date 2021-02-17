@@ -13,9 +13,7 @@ class Reward extends React.Component {
         <div className="reward-title">
           <span>奖励</span>
           <span>
-            合成资产满足了我们更多样的需求。对有避险需求的用户而言，相较于美元，
-            他们需要区块链上的稳定币（USDT、dUSD、sUSD等等，属于合成资产），
-            以便于资金流动；
+            抵押DOWS铸造合成资产、交易合成资产，每周可获得奖励
           </span>
         </div>
         <div className="reward-content">

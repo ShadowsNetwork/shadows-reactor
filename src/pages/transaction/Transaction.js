@@ -3,66 +3,66 @@ import { Menu, Dropdown, Button } from 'antd'
 import '../../styles/transaction.css'
 import '../../styles/dropDown.css'
 
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <span
-        style={{
-          display: 'inline-block',
-          width: '15px',
-          height: '15px',
-          borderRadius: '15px',
-          background: '#4444FF',
-        }}
-      />
-      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        xUSD
-      </span>
-    </Menu.Item>
-    <Menu.Item>
-      <span
-        style={{
-          display: 'inline-block',
-          width: '15px',
-          height: '15px',
-          borderRadius: '15px',
-          background: '#03AF91',
-        }}
-      />
-      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        sETC
-      </span>
-    </Menu.Item>
-    <Menu.Item>
-      <span
-        style={{
-          display: 'inline-block',
-          width: '15px',
-          height: '15px',
-          borderRadius: '15px',
-          background: '#D2417E',
-        }}
-      />
-      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        sUSD
-      </span>
-    </Menu.Item>
-    <Menu.Item>
-      <span
-        style={{
-          display: 'inline-block',
-          width: '15px',
-          height: '15px',
-          borderRadius: '15px',
-          background: '#464146',
-        }}
-      />
-      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        SNX
-      </span>
-    </Menu.Item>
-  </Menu>
-)
+// const menu = (
+//   <Menu>
+//     <Menu.Item>
+//       <span
+//         style={{
+//           display: 'inline-block',
+//           width: '15px',
+//           height: '15px',
+//           borderRadius: '15px',
+//           background: '#4444FF',
+//         }}
+//       />
+//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
+//         xUSD
+//       </span>
+//     </Menu.Item>
+//     <Menu.Item>
+//       <span
+//         style={{
+//           display: 'inline-block',
+//           width: '15px',
+//           height: '15px',
+//           borderRadius: '15px',
+//           background: '#03AF91',
+//         }}
+//       />
+//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
+//         sETC
+//       </span>
+//     </Menu.Item>
+//     <Menu.Item>
+//       <span
+//         style={{
+//           display: 'inline-block',
+//           width: '15px',
+//           height: '15px',
+//           borderRadius: '15px',
+//           background: '#D2417E',
+//         }}
+//       />
+//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
+//         sUSD
+//       </span>
+//     </Menu.Item>
+//     <Menu.Item>
+//       <span
+//         style={{
+//           display: 'inline-block',
+//           width: '15px',
+//           height: '15px',
+//           borderRadius: '15px',
+//           background: '#464146',
+//         }}
+//       />
+//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
+//         SNX
+//       </span>
+//     </Menu.Item>
+//   </Menu>
+// )
 class Transaction extends React.Component {
   constructor(props) {
     super(props)
@@ -73,7 +73,7 @@ class Transaction extends React.Component {
         <div className="transaction-title">
           <span>交易</span>
           <span>
-            交易您的合成资产和sUSD。使用Kwenta.io dApp来交易所有Synth种类。
+            交易您的合成资产和sUSD。
           </span>
         </div>
         <div className="transaction-content">
@@ -82,7 +82,7 @@ class Transaction extends React.Component {
             <span>可用：0</span>
           </div>
           <div className="transaction-input">
-            <Dropdown overlay={menu} placement="bottomLeft">
+            {/*<Dropdown overlay={menu} placement="bottomLeft">*/}
               <Button
                 style={{
                   height: '43px',
@@ -110,7 +110,7 @@ class Transaction extends React.Component {
                   xUSD
                 </span>
               </Button>
-            </Dropdown>
+            {/*</Dropdown>*/}
             <input
               style={{
                 width: '60%',
@@ -134,7 +134,7 @@ class Transaction extends React.Component {
               <span>估计的</span>
             </div>
             <div className="transaction-input">
-              <Dropdown overlay={menu} placement="bottomLeft">
+              {/*<Dropdown overlay={menu} placement="bottomLeft">*/}
                 <Button
                   style={{
                     height: '43px',
@@ -162,7 +162,7 @@ class Transaction extends React.Component {
                     xUSD
                   </span>
                 </Button>
-              </Dropdown>
+              {/*</Dropdown>*/}
               <input
                 style={{
                   width: '60%',
