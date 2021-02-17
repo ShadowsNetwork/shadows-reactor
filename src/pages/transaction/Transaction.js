@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Dropdown, Button } from 'antd'
+import { Button } from 'antd'
 import '../../styles/transaction.css'
 import '../../styles/dropDown.css'
 
@@ -64,9 +64,6 @@ import '../../styles/dropDown.css'
 //   </Menu>
 // )
 class Transaction extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     return (
       <div className="transaction">
@@ -82,7 +79,59 @@ class Transaction extends React.Component {
             <span>可用：0</span>
           </div>
           <div className="transaction-input">
-            {/*<Dropdown overlay={menu} placement="bottomLeft">*/}
+            {/* <Dropdown overlay={menu} placement="bottomLeft">*/}
+            <Button
+              style={{
+                height: '43px',
+                background: 'none',
+                border: 0,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <div
+                style={{
+                  width: '15px',
+                  height: '15px',
+                  borderRadius: '15px',
+                  background: '#4444FF',
+                }}
+              />
+              <span
+                style={{
+                  marginLeft: '10px',
+                  color: '#B9B1B7',
+                  fontSize: '8pt',
+                }}
+              >
+                  xUSD
+              </span>
+            </Button>
+            {/* </Dropdown>*/}
+            <input
+              style={{
+                width: '60%',
+                height: '43px',
+                background: 'none',
+                border: 0,
+                outline: 'none',
+                color: '#fff',
+              }}
+            />
+            <span
+              className="all"
+              style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}
+            >
+              全部
+            </span>
+          </div>
+          <div className="transaction-content">
+            <div className="transaction-content-title">
+              <span>接收</span>
+              <span>估计的</span>
+            </div>
+            <div className="transaction-input">
+              {/* <Dropdown overlay={menu} placement="bottomLeft">*/}
               <Button
                 style={{
                   height: '43px',
@@ -107,62 +156,10 @@ class Transaction extends React.Component {
                     fontSize: '8pt',
                   }}
                 >
-                  xUSD
+                    xUSD
                 </span>
               </Button>
-            {/*</Dropdown>*/}
-            <input
-              style={{
-                width: '60%',
-                height: '43px',
-                background: 'none',
-                border: 0,
-                outline: 'none',
-                color: '#fff',
-              }}
-            />
-            <span
-              className="all"
-              style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}
-            >
-              全部
-            </span>
-          </div>
-          <div className="transaction-content">
-            <div className="transaction-content-title">
-              <span>接收</span>
-              <span>估计的</span>
-            </div>
-            <div className="transaction-input">
-              {/*<Dropdown overlay={menu} placement="bottomLeft">*/}
-                <Button
-                  style={{
-                    height: '43px',
-                    background: 'none',
-                    border: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '15px',
-                      height: '15px',
-                      borderRadius: '15px',
-                      background: '#4444FF',
-                    }}
-                  />
-                  <span
-                    style={{
-                      marginLeft: '10px',
-                      color: '#B9B1B7',
-                      fontSize: '8pt',
-                    }}
-                  >
-                    xUSD
-                  </span>
-                </Button>
-              {/*</Dropdown>*/}
+              {/* </Dropdown>*/}
               <input
                 style={{
                   width: '60%',
