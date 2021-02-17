@@ -11,9 +11,9 @@
 //
 // export default BasicLayout;
 
-import React from 'react'
-import { Menu } from 'antd'
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
+import React from 'react';
+import { Menu } from 'antd';
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import {
   UserOutlined,
   PartitionOutlined,
@@ -22,22 +22,22 @@ import {
   GiftOutlined,
   UndoOutlined,
   PaperClipOutlined,
-} from '@ant-design/icons'
-import './App.css'
-import MenuLay from '../pages/menuLay/MenuLay'
-import Personal from '../pages/personal/Personal'
-import Synthesis from '../pages/synthesis/Synthesis'
-import Transaction from '../pages/transaction/Transaction'
-import Flow from '../pages/flow/Flow'
-import FlowStep from '../pages/flow/FlowStep'
-import Destruction from '../pages/Destruction/Destruction'
-import Reward from '../pages/reward/Reward'
-import Success from '../pages/Success'
-import Error from '../pages/Error'
-import Language from '../pages/Language'
-import logoURL from '../img/logotext.png'
-import logoImg from '../img/logoImg.png'
-
+} from '@ant-design/icons';
+import './App.css';
+import MenuLay from '../pages/menuLay/MenuLay';
+import Personal from '../pages/personal/Personal';
+import Synthesis from '../pages/synthesis/Synthesis';
+import Transaction from '../pages/transaction/Transaction';
+import Flow from '../pages/flow/Flow';
+import FlowStep from '../pages/flow/FlowStep';
+import Destruction from '../pages/Destruction/Destruction';
+import Reward from '../pages/reward/Reward';
+import Success from '../pages/Success';
+import Error from '../pages/Error';
+import Language from '../pages/Language';
+import logoURL from '../img/logotext.png';
+import logoImg from '../img/logoImg.png';
+import { formatMessage } from 'umi';
 function LogoText() {
   return (
     // <img src={logoURL} style={{width:"160px",position:"absolute",top:"40px",left:"20px"}}/>
@@ -50,7 +50,7 @@ function LogoText() {
         marginLeft: '20px',
       }}
     />
-  )
+  );
 }
 
 function LogoImg() {
@@ -65,17 +65,17 @@ function LogoImg() {
         marginBottom: '30px',
       }}
     />
-  )
+  );
 }
 class LogoSet extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
   render() {
     if (this.props.collapsed) {
-      return <LogoImg />
+      return <LogoImg />;
     } else {
-      return <LogoText />
+      return <LogoText />;
     }
   }
 }
@@ -89,12 +89,12 @@ class BasicLayout extends React.Component {
   openMenu = () => {
     this.setState({
       collapsed: false,
-    })
+    });
   };
   closeMenu = () => {
     this.setState({
       collapsed: true,
-    })
+    });
   };
 
   render() {
@@ -115,7 +115,7 @@ class BasicLayout extends React.Component {
                 <LogoSet collapsed={this.state.collapsed} />
               </Link>
               <Menu.Item key="Personal" icon={<UserOutlined />}>
-                <Link to="/Personal">个人信息</Link>
+                <Link to="/Personal">{formatMessage({ id: 'personal.title' })}</Link>
               </Menu.Item>
               <Menu.Item key="Synthesis" icon={<PartitionOutlined />}>
                 <Link to="/Synthesis">合成</Link>
@@ -151,8 +151,8 @@ class BasicLayout extends React.Component {
         </div>
         <Language />
       </div>
-    )
+    );
   }
 }
 
-export default BasicLayout
+export default BasicLayout;
