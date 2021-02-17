@@ -1,3 +1,16 @@
+// import styles from './index.css';
+//
+// function BasicLayout(props) {
+//   return (
+//     <div className={styles.normal}>
+//       <h1 className={styles.title}>Yay! Welcome to umi!</h1>
+//       {props.children}
+//     </div>
+//   );
+// }
+//
+// export default BasicLayout;
+
 import React from 'react'
 import { Menu } from 'antd'
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
@@ -11,19 +24,19 @@ import {
   PaperClipOutlined,
 } from '@ant-design/icons'
 import './App.css'
-import MenuLay from './views/menuLay/MenuLay'
-import Personal from './views/personal/Personal'
-import Synthesis from './views/synthesis/Synthesis'
-import Transaction from './views/transaction/Transaction'
-import Flow from './views/flow/Flow'
-import FlowStep from './views/flow/FlowStep'
-import Destruction from './views/Destruction/Destruction'
-import Reward from './views/reward/Reward'
-import Success from './views/Success'
-import Error from './views/Error'
-import Language from './views/Language'
-import logoURL from './img/logotext.png'
-import logoImg from './img/logoImg.png'
+import MenuLay from '../pages/menuLay/MenuLay'
+import Personal from '../pages/personal/Personal'
+import Synthesis from '../pages/synthesis/Synthesis'
+import Transaction from '../pages/transaction/Transaction'
+import Flow from '../pages/flow/Flow'
+import FlowStep from '../pages/flow/FlowStep'
+import Destruction from '../pages/Destruction/Destruction'
+import Reward from '../pages/reward/Reward'
+import Success from '../pages/Success'
+import Error from '../pages/Error'
+import Language from '../pages/Language'
+import logoURL from '../img/logotext.png'
+import logoImg from '../img/logoImg.png'
 
 function LogoText() {
   return (
@@ -67,7 +80,7 @@ class LogoSet extends React.Component {
   }
 }
 
-class App extends React.Component {
+class BasicLayout extends React.Component {
   state = {
     collapsed: false,
     logoURL: logoURL,
@@ -142,4 +155,4 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default BasicLayout
