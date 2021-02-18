@@ -1,7 +1,8 @@
-import React from 'react'
-import '../../styles/destruction.css'
-import '../../styles/dropDown.css'
-import { Button } from 'antd'
+import React from 'react';
+import '../../styles/destruction.css';
+import '../../styles/dropDown.css';
+import { Button } from 'antd';
+import { formatMessage } from '../../.umi/plugin-locale/localeExports';
 
 // const menu = (
 //   <Menu>
@@ -69,19 +70,16 @@ class Destruction extends React.Component {
     return (
       <div className="destruction">
         <div className="destruction-title">
-          <span>销毁</span>
-          <span>
-            销毁xUSD来解锁您抵押的DOWS。这将增加您的抵押率，并减少您的
-            债务，使您能转账未托管的DOWS
-          </span>
+          <span>{formatMessage({ id: 'destroy.title' })}</span>
+          <span>{formatMessage({ id: 'destroy.text' })}</span>
         </div>
         <div className="operation">
-          <Button>调整至目标抵押率</Button>
-          <Button>全部销毁</Button>
+          <Button>{formatMessage({ id: 'destroy.adjust' })}</Button>
+          <Button>{formatMessage({ id: 'destroy.all' })}</Button>
         </div>
         <div className="destruction-content">
           <div className="destruction-content-title">
-            <span>余额：</span>
+            <span>{formatMessage({ id: 'balance' })}：</span>
             <span>20 xUSD</span>
           </div>
           <div className="destruction-input">
@@ -110,7 +108,7 @@ class Destruction extends React.Component {
                   fontSize: '8pt',
                 }}
               >
-                  xUSD
+                xUSD
               </span>
             </Button>
             {/* </Dropdown>*/}
@@ -125,16 +123,13 @@ class Destruction extends React.Component {
               }}
               placeholder="0.00"
             />
-            <span
-              className="all"
-              style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}
-            >
-              全部
+            <span className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
+              {formatMessage({ id: 'all' })}
             </span>
           </div>
           <div className="destruction-content">
             <div className="destruction-content-title">
-              <span>可解锁的数量</span>
+              <span>{formatMessage({ id: 'destroy.quantity' })}</span>
             </div>
             <div className="destruction-input">
               {/* <Dropdown overlay={menu} placement="bottomLeft">*/}
@@ -162,7 +157,7 @@ class Destruction extends React.Component {
                     fontSize: '8pt',
                   }}
                 >
-                    DOWS
+                  DOWS
                 </span>
               </Button>
               {/* </Dropdown>*/}
@@ -180,18 +175,18 @@ class Destruction extends React.Component {
                 className="all"
                 style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}
               >
-                全部
+                {formatMessage({ id: 'all' })}
               </span>
             </div>
           </div>
         </div>
         <div className="destruction-bottom">
-          <Button>销毁</Button>
-          <span>网络费用：$0 / 90 GWEI</span>
+          <Button>{formatMessage({ id: 'destroy' })}</Button>
+          <span>{formatMessage({ id: 'networkFee' })}：$0 / 90 GWEI</span>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Destruction
+export default Destruction;

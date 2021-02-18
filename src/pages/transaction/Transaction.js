@@ -1,7 +1,8 @@
-import React from 'react'
-import { Button, Dropdown, Menu } from 'antd'
-import '../../styles/transaction.css'
-import '../../styles/dropDown.css'
+import React from 'react';
+import { Button, Dropdown, Menu } from 'antd';
+import '../../styles/transaction.css';
+import '../../styles/dropDown.css';
+import { formatMessage } from '../../.umi/plugin-locale/localeExports';
 
 const menu = (
   <Menu>
@@ -15,9 +16,7 @@ const menu = (
           background: '#4444FF',
         }}
       />
-      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        xUSD
-      </span>
+      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>xUSD</span>
     </Menu.Item>
     <Menu.Item>
       <span
@@ -29,9 +28,7 @@ const menu = (
           background: '#03AF91',
         }}
       />
-      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        xETC
-      </span>
+      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>xETC</span>
     </Menu.Item>
     <Menu.Item>
       <span
@@ -43,9 +40,7 @@ const menu = (
           background: '#D2417E',
         }}
       />
-      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        xJPY
-      </span>
+      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>xJPY</span>
     </Menu.Item>
     <Menu.Item>
       <span
@@ -57,27 +52,23 @@ const menu = (
           background: '#464146',
         }}
       />
-      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-        xEUR
-      </span>
+      <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>xEUR</span>
     </Menu.Item>
   </Menu>
-)
+);
 
 class Transaction extends React.Component {
   render() {
     return (
       <div className="transaction">
         <div className="transaction-title">
-          <span>交易</span>
-          <span>
-            交易您的合成资产和xUSD。
-          </span>
+          <span>{formatMessage({ id: 'transaction.title' })}</span>
+          <span>{formatMessage({ id: 'transaction.text' })}</span>
         </div>
         <div className="transaction-content">
           <div className="transaction-content-title">
-            <span>支付</span>
-            <span>可用：0</span>
+            <span>{formatMessage({ id: 'transaction.pay' })}</span>
+            <span>{formatMessage({ id: 'transaction.available' })}：0</span>
           </div>
           <div className="transaction-input">
             <Dropdown overlay={menu} placement="bottomLeft">
@@ -119,17 +110,14 @@ class Transaction extends React.Component {
                 color: '#fff',
               }}
             />
-            <span
-              className="all"
-              style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}
-            >
-              全部
+            <span className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
+              {formatMessage({ id: 'all' })}
             </span>
           </div>
           <div className="transaction-content">
             <div className="transaction-content-title">
-              <span>接收</span>
-              <span>估计的</span>
+              <span>{formatMessage({ id: 'transaction.receive' })}</span>
+              <span>{formatMessage({ id: 'transaction.estimated' })}</span>
             </div>
             <div className="transaction-input">
               <Dropdown overlay={menu} placement="bottomLeft">
@@ -175,21 +163,21 @@ class Transaction extends React.Component {
                 className="all"
                 style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}
               >
-                全部
+                {formatMessage({ id: 'all' })}
               </span>
             </div>
           </div>
           <div className="transaction-content-bottom">
-            <span>交易手续费：0.3%</span>
+            <span>{formatMessage({ id: 'transaction.fees' })}：0.3%</span>
           </div>
         </div>
         <div className="transaction-bottom">
-          <Button>交易</Button>
-          <span>网络费用：$0 / 90 GWEI</span>
+          <Button>{formatMessage({ id: 'transaction' })}</Button>
+          <span>{formatMessage({ id: 'networkFee' })}：$0 / 90 GWEI</span>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Transaction
+export default Transaction;

@@ -18,13 +18,13 @@
   },
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
-    "@umijs/preset-react": "1.x",
-    "umi": "^3.3.7",
-    "ethers": "^5.0.31",
     "@ethersproject/providers": "^5.0.2",
     "@ethersproject/units": "^5.0.1",
+    "@umijs/preset-react": "1.x",
     "@web3-react/core": "latest",
-    "@web3-react/injected-connector": "latest"
+    "@web3-react/injected-connector": "latest",
+    "ethers": "^5.0.31",
+    "umi": "^3.3.7"
   },
   "devDependencies": {
     "@types/react": "^16.9.0",
