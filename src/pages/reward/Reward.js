@@ -4,9 +4,6 @@ import '../../styles/dropDown.css'
 import { Button } from 'antd'
 
 class Reward extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     return (
       <div className="reward">

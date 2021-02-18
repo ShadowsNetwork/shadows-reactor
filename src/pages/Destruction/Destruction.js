@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../styles/destruction.css'
 import '../../styles/dropDown.css'
-import { Menu, Dropdown, Button } from 'antd'
+import { Button } from 'antd'
 
 // const menu = (
 //   <Menu>
@@ -65,9 +65,6 @@ import { Menu, Dropdown, Button } from 'antd'
 // )
 
 class Destruction extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     return (
       <div className="destruction">
@@ -88,7 +85,59 @@ class Destruction extends React.Component {
             <span>20 xUSD</span>
           </div>
           <div className="destruction-input">
-            {/*<Dropdown overlay={menu} placement="bottomLeft">*/}
+            {/* <Dropdown overlay={menu} placement="bottomLeft">*/}
+            <Button
+              style={{
+                height: '43px',
+                background: 'none',
+                border: 0,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <div
+                style={{
+                  width: '15px',
+                  height: '15px',
+                  borderRadius: '15px',
+                  background: '#4444FF',
+                }}
+              />
+              <span
+                style={{
+                  marginLeft: '10px',
+                  color: '#B9B1B7',
+                  fontSize: '8pt',
+                }}
+              >
+                  xUSD
+              </span>
+            </Button>
+            {/* </Dropdown>*/}
+            <input
+              style={{
+                width: '60%',
+                height: '43px',
+                background: 'none',
+                border: 0,
+                outline: 'none',
+                color: '#fff',
+              }}
+              placeholder="0.00"
+            />
+            <span
+              className="all"
+              style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}
+            >
+              全部
+            </span>
+          </div>
+          <div className="destruction-content">
+            <div className="destruction-content-title">
+              <span>可解锁的数量</span>
+            </div>
+            <div className="destruction-input">
+              {/* <Dropdown overlay={menu} placement="bottomLeft">*/}
               <Button
                 style={{
                   height: '43px',
@@ -113,62 +162,10 @@ class Destruction extends React.Component {
                     fontSize: '8pt',
                   }}
                 >
-                  xUSD
+                    DOWS
                 </span>
               </Button>
-            {/*</Dropdown>*/}
-            <input
-              style={{
-                width: '60%',
-                height: '43px',
-                background: 'none',
-                border: 0,
-                outline: 'none',
-                color: '#fff',
-              }}
-              placeholder="0.00"
-            />
-            <span
-              className="all"
-              style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}
-            >
-              全部
-            </span>
-          </div>
-          <div className="destruction-content">
-            <div className="destruction-content-title">
-              <span>可解锁的数量</span>
-            </div>
-            <div className="destruction-input">
-              {/*<Dropdown overlay={menu} placement="bottomLeft">*/}
-                <Button
-                  style={{
-                    height: '43px',
-                    background: 'none',
-                    border: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '15px',
-                      height: '15px',
-                      borderRadius: '15px',
-                      background: '#4444FF',
-                    }}
-                  />
-                  <span
-                    style={{
-                      marginLeft: '10px',
-                      color: '#B9B1B7',
-                      fontSize: '8pt',
-                    }}
-                  >
-                    DOWS
-                  </span>
-                </Button>
-              {/*</Dropdown>*/}
+              {/* </Dropdown>*/}
               <input
                 style={{
                   width: '60%',

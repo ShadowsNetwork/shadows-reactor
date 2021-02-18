@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../styles/synthesis.css'
 import '../../styles/dropDown.css'
-import { Menu, Dropdown, Button } from 'antd'
+import { Button } from 'antd'
 
 // const menu = (
 //   <Menu>
@@ -64,9 +64,6 @@ import { Menu, Dropdown, Button } from 'antd'
 //   </Menu>
 // )
 class Synthesis extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     return (
       <div className="bg">
@@ -85,35 +82,35 @@ class Synthesis extends React.Component {
               <span>20 DOWS</span>
             </div>
             <div className="Synthesis-input">
-              {/*<Dropdown overlay={menu} placement="bottomLeft">*/}
-                <Button
+              {/* <Dropdown overlay={menu} placement="bottomLeft">*/}
+              <Button
+                style={{
+                  height: '43px',
+                  background: 'none',
+                  border: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <div
                   style={{
-                    height: '43px',
-                    background: 'none',
-                    border: 0,
-                    display: 'flex',
-                    alignItems: 'center',
+                    width: '15px',
+                    height: '15px',
+                    borderRadius: '15px',
+                    background: '#4444FF',
+                  }}
+                />
+                <span
+                  style={{
+                    marginLeft: '10px',
+                    color: '#B9B1B7',
+                    fontSize: '8pt',
                   }}
                 >
-                  <div
-                    style={{
-                      width: '15px',
-                      height: '15px',
-                      borderRadius: '15px',
-                      background: '#4444FF',
-                    }}
-                  />
-                  <span
-                    style={{
-                      marginLeft: '10px',
-                      color: '#B9B1B7',
-                      fontSize: '8pt',
-                    }}
-                  >
                     xUSD
-                  </span>
-                </Button>
-              {/*</Dropdown>*/}
+                </span>
+              </Button>
+              {/* </Dropdown>*/}
               <input
                 style={{
                   width: '60%',

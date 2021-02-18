@@ -7,10 +7,6 @@ import mortgage from '../../img/mortgage.png'
 import mortgageRate from '../../img/mortgageRate.png'
 
 class MenuLay extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   next = () => {
     this.slider.next()
   };
@@ -42,9 +38,9 @@ class MenuLay extends React.Component {
               自于所有DOWS持有人的债务。每个持有人都必须付
               清他们的债务才能解锁他们质押的DOWS。
             </span>
-            <img className="riskOne" src={risk} />
-            <img className="riskTwo" src={risk} />
-            <img className="riskThree" src={risk} />
+            <img className="riskOne" src={risk}  alt=""/>
+            <img className="riskTwo" src={risk}  alt=""/>
+            <img className="riskThree" src={risk}  alt=""/>
           </div>
           <div className="menuLay">
             <span>Mortgage DOWS reward</span>
@@ -53,7 +49,7 @@ class MenuLay extends React.Component {
               DOWS抵押人可以获得3种奖励：
               1.交易所手续费奖励；2.Stakling奖励；3.借贷池收益
             </span>
-            <img className="mortgageImg" src={mortgage} />
+            <img className="mortgageImg" src={mortgage}  alt=""/>
           </div>
           <div className="menuLay">
             <span>800% mortgage rate</span>
@@ -62,7 +58,7 @@ class MenuLay extends React.Component {
               所有合成资产都由抵押的DOWS来支撑其价值，抵押率最低要求为800%，
               低于抵押率要求时将无法获得奖励和赎DOWS，满足抵押率每周即可领取多种奖励、
             </span>
-            <img className="mortgageRate" src={mortgageRate} />
+            <img className="mortgageRate" src={mortgageRate}  alt=""/>
           </div>
           <div className="welcome">
             <span>WELCOME</span>

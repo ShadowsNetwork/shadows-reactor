@@ -3,9 +3,6 @@ import '../styles/success.css'
 import { Button } from 'antd'
 
 class Success extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     return (
       <div className="success">

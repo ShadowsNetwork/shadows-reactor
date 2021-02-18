@@ -3,9 +3,6 @@ import '../styles/error.css'
 import { Button } from 'antd'
 
 class Error extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     return (
       <div className="error">

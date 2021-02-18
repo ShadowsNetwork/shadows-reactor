@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Dropdown, Button } from 'antd'
+import { Button, Dropdown, Menu } from 'antd'
 import '../../styles/transaction.css'
 import '../../styles/dropDown.css'
 
@@ -63,10 +63,8 @@ const menu = (
     </Menu.Item>
   </Menu>
 )
+
 class Transaction extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     return (
       <div className="transaction">

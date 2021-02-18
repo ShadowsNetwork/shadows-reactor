@@ -3,9 +3,6 @@ import '../../styles/flow.css'
 import { Link } from 'react-router-dom'
 
 class Flow extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     return (
       <div className="flow">
