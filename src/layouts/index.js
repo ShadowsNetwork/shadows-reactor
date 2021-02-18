@@ -15,29 +15,33 @@ import Error from '../pages/Error';
 import Language from '../pages/Language';
 import Wallet from '../components/Wallet';
 import SideBar from '@/layouts/Sidebar';
+import { IntlProvider } from 'react-intl';
+import { getLocale } from 'umi';
 
 function BasicLayout() {
   return (
-    <div className="App">
-      <Router>
-        <SideBar />
-        <Route path="/" exact component={MenuLay} />
-        <Route path="/Personal" exact component={Personal} />
-        <Route path="/Synthesis" exact component={Synthesis} />
-        <Route path="/Transaction" exact component={Transaction} />
-        <Route path="/Flow" component={Flow} />
-        <Route path="/Destruction" exact component={Destruction} />
-        <Route path="/Reward" exact component={Reward} />
-        <Route path="/Success" exact component={Success} />
-        <Route path="/Error" exact component={Error} />
-        <Route path="/FlowStep" exact component={FlowStep} />
-      </Router>
-      <div className="money">
-        <PaperClipOutlined style={{ fontSize: '16px', color: '#fff' }} />
-        <Wallet />
+    <IntlProvider locale={getLocale()}>
+      <div className="App">
+        <Router>
+          <SideBar />
+          <Route path="/" exact component={MenuLay} />
+          <Route path="/Personal" exact component={Personal} />
+          <Route path="/Synthesis" exact component={Synthesis} />
+          <Route path="/Transaction" exact component={Transaction} />
+          <Route path="/Flow" component={Flow} />
+          <Route path="/Destruction" exact component={Destruction} />
+          <Route path="/Reward" exact component={Reward} />
+          <Route path="/Success" exact component={Success} />
+          <Route path="/Error" exact component={Error} />
+          <Route path="/FlowStep" exact component={FlowStep} />
+        </Router>
+        <div className="money">
+          <PaperClipOutlined style={{ fontSize: '16px', color: '#fff' }} />
+          <Wallet />
+        </div>
+        <Language />
       </div>
-      <Language />
-    </div>
+    </IntlProvider>
   );
 }
 
