@@ -1,16 +1,3 @@
-// import styles from './index.css';
-//
-// function BasicLayout(props) {
-//   return (
-//     <div className={styles.normal}>
-//       <h1 className={styles.title}>Yay! Welcome to umi!</h1>
-//       {props.children}
-//     </div>
-//   );
-// }
-//
-// export default BasicLayout;
-
 import React from 'react';
 import { Menu } from 'antd';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
@@ -115,7 +102,7 @@ class BasicLayout extends React.Component {
                 <LogoSet collapsed={this.state.collapsed} />
               </Link>
               <Menu.Item key="Personal" icon={<UserOutlined />}>
-                <Link to="/Personal">{formatMessage({ id: 'personal.title' })}</Link>
+                <Link to="/Personal">{formatMessage({ id: 'menu.person' })}</Link>
               </Menu.Item>
               <Menu.Item key="Synthesis" icon={<PartitionOutlined />}>
                 <Link to="/Synthesis">合成</Link>

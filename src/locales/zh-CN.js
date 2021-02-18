@@ -1,4 +1,3 @@
 export default {
-  'index.start': '开始',
-  'personal.title': '个人信息',
+  'menu.person': '个人信息',
 };
