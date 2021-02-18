@@ -32,24 +32,24 @@ class Personal extends React.Component {
           </div>
           <div className="mortgage">
             <div>
-              <span>我的抵押率</span>
+              <span>{formatMessage({ id: 'person.myRate' })}</span>
               <span>810%</span>
             </div>
             <div>
-              <span>目标抵押率</span>
+              <span>{formatMessage({ id: 'person.targetRate' })}</span>
               <span>800%</span>
             </div>
           </div>
         </div>
         <div className="snk">
-          <span>总 DOWS</span>
+          <span>{formatMessage({ id: 'person.dows' })} DOWS</span>
           <span>150000 DOWS</span>
         </div>
         <div className="hr" />
         <div className="progressBar">
           <div className="progressBar-top">
-            <span>已锁定: 150000</span>
-            <span>可转账: 0</span>
+            <span>{formatMessage({ id: 'person.locked' })}: 150000</span>
+            <span>{formatMessage({ id: 'person.Transferable' })}: 0</span>
           </div>
           <Progress
             percent={50}

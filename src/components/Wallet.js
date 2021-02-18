@@ -6,6 +6,7 @@ import { injected } from '@/web3/connectors';
 import { message, Modal } from 'antd';
 import { formatEther } from '@ethersproject/units';
 import { LoadingOutlined } from '@ant-design/icons';
+import { useIntl } from 'react-intl';
 
 function getLibrary(provider) {
   const library = new Web3Provider(provider);
@@ -88,6 +89,9 @@ function CurrentAccount(props) {
 }
 
 function ConnectToWallet() {
+  const intl = useIntl();
+  const { formatMessage: f } = intl;
+
   const { activate } = useWeb3React();
   return (
     <span
@@ -95,7 +99,7 @@ function ConnectToWallet() {
         activate(injected);
       }}
     >
-      链接钱包
+      {f({ id: 'wallet.connectToWallet' })}
     </span>
   );
 }

@@ -1,7 +1,8 @@
-import React from 'react'
-import '../../styles/synthesis.css'
-import '../../styles/dropDown.css'
-import { Button } from 'antd'
+import React from 'react';
+import '../../styles/synthesis.css';
+import '../../styles/dropDown.css';
+import { Button } from 'antd';
+import { formatMessage } from '../../.umi/plugin-locale/localeExports';
 
 // const menu = (
 //   <Menu>
@@ -69,16 +70,12 @@ class Synthesis extends React.Component {
       <div className="bg">
         <div className="Synthesis">
           <div className="Synthesis-title">
-            <span>合成</span>
-            <span>
-              合成资产满足了我们更多样的需求。对有避险需求的用户而言，相较于美元，
-              他们需要区块链上的稳定币（USDT、dUSD、xUSD等等，属于合成资产），
-              以便于资金流动；
-            </span>
+            <span>{formatMessage({ id: 'synthesis.title' })}</span>
+            <span>{formatMessage({ id: 'synthesis.text' })}</span>
           </div>
           <div className="Synthesis-content">
             <div className="Synthesis-content-title">
-              <span>余额：</span>
+              <span>{formatMessage({ id: 'balance' })}：</span>
               <span>20 DOWS</span>
             </div>
             <div className="Synthesis-input">
@@ -107,7 +104,7 @@ class Synthesis extends React.Component {
                     fontSize: '8pt',
                   }}
                 >
-                    xUSD
+                  xUSD
                 </span>
               </Button>
               {/* </Dropdown>*/}
@@ -121,29 +118,26 @@ class Synthesis extends React.Component {
                   color: '#fff',
                 }}
               />
-              <div
-                className="all"
-                style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}
-              >
-                全部
+              <div className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
+                {formatMessage({ id: 'all' })}
               </div>
             </div>
             <div className="Synthesis-content-bottom">
               <span>Staking：00DOWS</span>
-              <span>债务比例：0.0%</span>
+              <span>{formatMessage({ id: 'synthesis.debtRatio' })}：0.0%</span>
             </div>
           </div>
           <div className="Synthesis-bottom">
-            <Button>开始合成</Button>
-            <span>网络费用：$0 / 90 GWEI</span>
+            <Button>{formatMessage({ id: 'synthesis.start' })}</Button>
+            <span>{formatMessage({ id: 'networkFee' })}：$0 / 90 GWEI</span>
             <span>
               <i />
             </span>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Synthesis
+export default Synthesis;

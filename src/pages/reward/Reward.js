@@ -1,17 +1,16 @@
-import React from 'react'
-import '../../styles/reward.css'
-import '../../styles/dropDown.css'
-import { Button } from 'antd'
+import React from 'react';
+import '../../styles/reward.css';
+import '../../styles/dropDown.css';
+import { Button } from 'antd';
+import { formatMessage } from '../../.umi/plugin-locale/localeExports';
 
 class Reward extends React.Component {
   render() {
     return (
       <div className="reward">
         <div className="reward-title">
-          <span>奖励</span>
-          <span>
-            抵押DOWS铸造合成资产、交易合成资产，每周可获得奖励
-          </span>
+          <span>{formatMessage({ id: 'reward.title' })}</span>
+          <span>{formatMessage({ id: 'reward.text' })}</span>
         </div>
         <div className="reward-content">
           <div className="reward-input">
@@ -31,7 +30,7 @@ class Reward extends React.Component {
                   fontSize: '8pt',
                 }}
               >
-                交易奖励
+                {formatMessage({ id: 'reward.transactionReward' })}
               </span>
             </Button>
             <input
@@ -44,10 +43,7 @@ class Reward extends React.Component {
                 color: '#fff',
               }}
             />
-            <span
-              className="all"
-              style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}
-            >
+            <span className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
               0.00
             </span>
           </div>
@@ -68,7 +64,7 @@ class Reward extends React.Component {
                   fontSize: '8pt',
                 }}
               >
-                合成奖励
+                {formatMessage({ id: 'reward.syntheticReward' })}
               </span>
             </Button>
             <input
@@ -81,26 +77,21 @@ class Reward extends React.Component {
                 color: '#fff',
               }}
             />
-            <span
-              className="all"
-              style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}
-            >
+            <span className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
               0.00
             </span>
           </div>
           <div className="reward-content-bottom">
-            <span>
-              7天不领取，奖励将被回收至池子里，抵押率不足将无法获得奖励
-            </span>
+            <span>{formatMessage({ id: 'reward.bottomText' })}</span>
           </div>
         </div>
         <div className="reward-bottom">
-          <Button>领取</Button>
-          <span>网络费用：$0 / 90 GWEI</span>
+          <Button>{formatMessage({ id: 'reward.receive' })}</Button>
+          <span>{formatMessage({ id: 'reward.networkFee' })}：$0 / 90 GWEI</span>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Reward
+export default Reward;
