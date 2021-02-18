@@ -1,52 +1,53 @@
-import { useWeb3React, Web3ReactProvider } from '@web3-react/core';
-import React, { useEffect, useState } from 'react';
-import { Web3Provider } from '@ethersproject/providers';
-import { useEagerConnect, useInactiveListener } from '@/web3/hooks';
-import { injected } from '@/web3/connectors';
-import { message, Modal } from 'antd';
-import { formatEther } from '@ethersproject/units';
-import { LoadingOutlined } from '@ant-design/icons';
-import { useIntl } from 'react-intl';
+import { useWeb3React, Web3ReactProvider } from '@web3-react/core'
+import React, { useEffect, useState } from 'react'
+import { Web3Provider } from '@ethersproject/providers'
+import { useEagerConnect, useInactiveListener } from '@/web3/hooks'
+import { injected } from '@/web3/connectors'
+import { message, Modal } from 'antd'
+import { formatEther } from '@ethersproject/units'
+import { LoadingOutlined } from '@ant-design/icons'
+import { formatMessage } from 'umi'
 
 function getLibrary(provider) {
-  const library = new Web3Provider(provider);
-  library.pollingInterval = 12000;
-  return library;
+  const library = new Web3Provider(provider)
+  library.pollingInterval = 12000
+  return library
 }
 
 function Balance(props) {
-  const { account, library, chainId } = props.context;
+  const { context } = props
 
-  const [balance, setBalance] = useState();
+  const { account, library, chainId } = context
 
-  const [loading, setLoading] = useState(false);
+  const [balance, setBalance] = useState()
+
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!!account && !!library) {
-      let stale = false;
+    let stale = false
 
-      setLoading(true);
-      library
-        .getBalance(account)
-        .then((balance) => {
-          setLoading(false);
-          if (!stale) {
-            setBalance(balance);
-          }
-        })
-        .catch(() => {
-          setLoading(false);
-          if (!stale) {
-            setBalance(null);
-          }
-        });
+    setLoading(true)
+    library
+      .getBalance(account)
+      .then((res) => {
+        setLoading(false)
+        if (!stale) {
+          setBalance(res)
+        }
+      })
+      .catch(() => {
+        setLoading(false)
+        if (!stale) {
+          setBalance(null)
+        }
+      })
 
-      return () => {
-        stale = true;
-        setBalance(undefined);
-      };
+    return () => {
+      stale = true
+      setBalance(undefined)
     }
-  }, [account, library, chainId]); // ensures refresh if referential identity of library doesn't change across chainIds
+  }, [account, library, chainId])
+  // ensures refresh if referential identity of library doesn't change across chainIds
 
   return (
     <>
@@ -55,26 +56,31 @@ function Balance(props) {
       </span>
       <span>Balance</span>
       <span>{loading && <LoadingOutlined />}</span>
+      {/* eslint-disable-next-line no-nested-ternary */}
       <span>{balance === null ? 'Error' : balance ? `Ξ${formatEther(balance)}` : ''}</span>
     </>
-  );
+  )
 }
 
 function CurrentAccount(props) {
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false)
 
-  const { account } = props.context;
+  const { context } = props
+
+  const { account } = context
 
   const openModal = () => {
     if (!props.context) {
-      message.warning('无法获取钱包信息，请在 MetaMask 中重新链接');
+      message.warning('无法获取钱包信息，请在 MetaMask 中重新链接')
     } else {
-      setModalVisible(true);
+      setModalVisible(true)
     }
-  };
+  }
 
   return (
     <>
+      {/* eslint-disable-next-line max-len */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
       <span onClick={openModal}>{account}</span>
       <Modal
         title="Basic Modal"
@@ -82,44 +88,44 @@ function CurrentAccount(props) {
         onOk={() => setModalVisible(false)}
         onCancel={() => setModalVisible(false)}
       >
-        <Balance context={props.context} />
+        <Balance context={context} />
       </Modal>
     </>
-  );
+  )
 }
 
 function ConnectToWallet() {
-  const intl = useIntl();
-  const { formatMessage: f } = intl;
-
-  const { activate } = useWeb3React();
+  const { activate } = useWeb3React()
   return (
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
     <span
       onClick={() => {
-        activate(injected);
+        activate(injected)
       }}
     >
-      {f({ id: 'wallet.connectToWallet' })}
+      {formatMessage({ id: 'wallet.connectToWallet' })}
     </span>
-  );
+  )
 }
 
 function WalletConsumer() {
   // const { connector, library, chainId, account, activate, deactivate, active, error } = context
-  const context = useWeb3React();
-  const { account } = context;
+  const context = useWeb3React()
+  const { account } = context
 
-  const triedEager = useEagerConnect();
+  const triedEager = useEagerConnect()
 
-  // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
-  useInactiveListener(!triedEager);
+  // handle logic to connect in reaction to certain
+  // events on the injected ethereum provider, if it exists
+  useInactiveListener(!triedEager)
 
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       {!account && <ConnectToWallet />}
       {!!account && <CurrentAccount context={context} />}
     </Web3ReactProvider>
-  );
+  )
 }
 
 function Wallet() {
@@ -127,7 +133,7 @@ function Wallet() {
     <Web3ReactProvider getLibrary={getLibrary}>
       <WalletConsumer />
     </Web3ReactProvider>
-  );
+  )
 }
 
-export default Wallet;
+export default Wallet

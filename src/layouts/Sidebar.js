@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import LogoSet from '@/layouts/LogoSet';
-import { Menu } from 'antd';
+import { Link } from 'react-router-dom'
+import LogoSet from '@/layouts/LogoSet'
+import { Menu } from 'antd'
 import {
   GiftOutlined,
   InteractionOutlined,
@@ -8,21 +8,21 @@ import {
   RestOutlined,
   UndoOutlined,
   UserOutlined,
-} from '@ant-design/icons';
-import React, { useState } from 'react';
-import './App.css';
-import { formatMessage } from '@/.umi/plugin-locale/localeExports';
+} from '@ant-design/icons'
+import React, { useState } from 'react'
+import './App.css'
+import { formatMessage } from 'umi'
 
 function SideBar() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(false)
 
   const openMenu = () => {
-    setCollapsed(false);
-  };
+    setCollapsed(false)
+  }
 
   const closeMenu = () => {
-    setCollapsed(true);
-  };
+    setCollapsed(true)
+  }
 
   return (
     <div className="App">
@@ -60,7 +60,7 @@ function SideBar() {
         </Menu>
       </div>
     </div>
-  );
+  )
 }
 
-export default SideBar;
+export default SideBar

@@ -1,22 +1,22 @@
-import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { PaperClipOutlined } from '@ant-design/icons';
-import './App.css';
-import MenuLay from '../pages/menuLay/MenuLay';
-import Personal from '../pages/personal/Personal';
-import Synthesis from '../pages/synthesis/Synthesis';
-import Transaction from '../pages/transaction/Transaction';
-import Flow from '../pages/flow/Flow';
-import FlowStep from '../pages/flow/FlowStep';
-import Destruction from '../pages/Destruction/Destruction';
-import Reward from '../pages/reward/Reward';
-import Success from '../pages/Success';
-import Error from '../pages/Error';
-import Language from '../pages/Language';
-import Wallet from '../components/Wallet';
-import SideBar from '@/layouts/Sidebar';
-import { IntlProvider } from 'react-intl';
-import { getLocale } from 'umi';
+import React from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { PaperClipOutlined } from '@ant-design/icons'
+import './App.css'
+import SideBar from '@/layouts/Sidebar'
+import { IntlProvider } from 'react-intl'
+import { getLocale } from 'umi'
+import Language from '@/pages/language'
+import MenuLay from '@/pages/menuLay/MenuLay'
+import Personal from '@/pages/personal/Personal'
+import Synthesis from '@/pages/synthesis/Synthesis'
+import Transaction from '@/pages/transaction/Transaction'
+import Flow from '@/pages/flow/Flow'
+import FlowStep from '@/pages/flow/FlowStep'
+import Destruction from '@/pages/Destruction/Destruction'
+import Reward from '@/pages/reward/Reward'
+import Success from '@/pages/Success'
+import Error from '@/pages/Error'
+import Wallet from '@/components/Wallet'
 
 function BasicLayout() {
   return (
@@ -42,7 +42,7 @@ function BasicLayout() {
         <Language />
       </div>
     </IntlProvider>
-  );
+  )
 }
 
-export default BasicLayout;
+export default BasicLayout

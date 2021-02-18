@@ -4,7 +4,6 @@ import React from 'react'
 
 function LogoText() {
   return (
-    // <img src={logoURL} style={{width:"160px",position:"absolute",top:"40px",left:"20px"}}/>
     <img
       src={logoURL}
       style={{
@@ -13,7 +12,8 @@ function LogoText() {
         marginBottom: '30px',
         marginLeft: '20px',
       }}
-      alt='' />
+      alt=""
+    />
   )
 }
 
@@ -27,12 +27,15 @@ function LogoImg() {
         marginLeft: '15px',
         marginBottom: '30px',
       }}
-      alt='' />
+      alt=""
+    />
   )
 }
 
 function LogoSet(props) {
-  return props.collapsed ? <LogoImg /> : <LogoText />
+  // eslint-disable-next-line react/prop-types
+  const { collapsed } = props
+  return collapsed ? <LogoImg /> : <LogoText />
 }
 
 export default LogoSet

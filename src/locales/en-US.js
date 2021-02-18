@@ -34,8 +34,7 @@ export default {
   destroy: 'destroy',
 
   'reward.title': 'Reward',
-  'reward.text':
-    'Mortgage DOWS to cast synthetic assets, trade synthetic assets, and get rewards every week',
+  'reward.text': 'Mortgage DOWS to cast synthetic assets, trade synthetic assets, and get rewards every week',
   'reward.transactionReward': 'Transaction reward',
   'reward.syntheticReward': 'Synthetic reward',
   'reward.bottomText':
@@ -48,4 +47,4 @@ export default {
   all: 'all',
   networkFee: 'network fee',
   linkWallet: 'Link wallet',
-};
+}

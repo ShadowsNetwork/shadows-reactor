@@ -8,9 +8,9 @@ export default {
 
   'synthesis.title': '合成',
   'synthesis.text':
-    '合成资产满足了我们更多样的需求。对有避险需求的用户而言，相较于美元，\n' +
-    '              他们需要区块链上的稳定币（USDT、dUSD、xUSD等等，属于合成资产），\n' +
-    '              以便于资金流动；',
+    '合成资产满足了我们更多样的需求。对有避险需求的用户而言，相较于美元，\n'
+    + '              他们需要区块链上的稳定币（USDT、dUSD、xUSD等等，属于合成资产），\n'
+    + '              以便于资金流动；',
   'synthesis.debtRatio': '债务比例',
   'synthesis.start': '开始合成',
 
@@ -25,14 +25,13 @@ export default {
 
   'fluidity.title': '流动性',
   'fluidity.text':
-    '流动性衡量的是将资产快速且无损失地转换为现金的难易程度。转换越容易，\n' +
-    '            说明资产的流动性越好。在加密货币交易世界中，流动性的一个促进者是存\n' +
-    '            许多不同的限价订单',
+    '流动性衡量的是将资产快速且无损失地转换为现金的难易程度。转换越容易，\n'
+    + '            说明资产的流动性越好。在加密货币交易世界中，流动性的一个促进者是存\n'
+    + '            许多不同的限价订单',
 
   'destroy.title': '销毁',
   'destroy.text':
-    '销毁xUSD来解锁您抵押的DOWS。这将增加您的抵押率，并减少您的\n' +
-    '            债务，使您能转账未托管的DOWS',
+    '销毁xUSD来解锁您抵押的DOWS。这将增加您的抵押率，并减少您的\n' + '            债务，使您能转账未托管的DOWS',
   'destroy.adjust': '调整至目标抵押率',
   'destroy.all': '全部销毁',
   'destroy.quantity': '可解锁的数量',
@@ -51,4 +50,4 @@ export default {
   all: '全部',
   networkFee: '网络费用',
   linkWallet: '链接钱包',
-};
+}

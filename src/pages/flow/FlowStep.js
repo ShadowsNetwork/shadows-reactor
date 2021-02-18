@@ -8,9 +8,7 @@ function Request() {
   return (
     <div className="request">
       <div className="loading">
-        <LoadingOutlined
-          style={{ fontSize: '32px', color: '#fff', marginLeft: '40px' }}
-        />
+        <LoadingOutlined style={{ fontSize: '32px', color: '#fff', marginLeft: '40px' }} />
       </div>
       <div className="requestText">
         <span>Transaction in progress</span>
@@ -43,17 +41,9 @@ function FlowStep() {
         <span>iETH</span>
       </div>
       <span>Uniswap sETH LP Token Rewards</span>
-      <span>
-        First approve Unipool contract to transfer your sETH UNI-V1 tokens for
-        staking
-      </span>
+      <span>First approve Unipool contract to transfer your sETH UNI-V1 tokens for staking</span>
       <Button onClick={showModal}>UNLOCK</Button>
-      <Modal
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer=""
-      >
+      <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer="">
         <div className="modal-title">
           <span>Deposit USDT-ETH SLP Tokens</span>
         </div>
@@ -65,7 +55,9 @@ function FlowStep() {
           </div>
         </div>
         <div className="footer">
+          {/* eslint-disable-next-line react/button-has-type */}
           <button>Cancel</button>
+          {/* eslint-disable-next-line react/button-has-type */}
           <button>Confirm</button>
         </div>
       </Modal>

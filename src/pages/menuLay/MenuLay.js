@@ -7,12 +7,14 @@ import mortgage from '../../img/mortgage.png'
 import mortgageRate from '../../img/mortgageRate.png'
 
 class MenuLay extends React.Component {
-  next = () => {
+  next() {
     this.slider.next()
-  };
-  prev = () => {
+  }
+
+  prev() {
     this.slider.prev()
-  };
+  }
+
   render() {
     return (
       <div className="swiper">
@@ -31,25 +33,21 @@ class MenuLay extends React.Component {
             <span>Risk Warning</span>
             <span>风险提示</span>
             <span>
-              抵押DOWS合成资产时，会产生一笔”债务“，”债务“是他们初始铸造的xUSD数量，
-              接下来，债务将随
-              着其他合成资产持有人的收益和损失而波动。当有人持有的合成资
-              产增值时，那部分收益将按比例来
-              自于所有DOWS持有人的债务。每个持有人都必须付
-              清他们的债务才能解锁他们质押的DOWS。
+              抵押DOWS合成资产时，会产生一笔”债务“，”债务“是他们初始铸造的xUSD数量， 接下来，债务将随
+              着其他合成资产持有人的收益和损失而波动。当有人持有的合成资 产增值时，那部分收益将按比例来
+              自于所有DOWS持有人的债务。每个持有人都必须付 清他们的债务才能解锁他们质押的DOWS。
             </span>
-            <img className="riskOne" src={risk}  alt=""/>
-            <img className="riskTwo" src={risk}  alt=""/>
-            <img className="riskThree" src={risk}  alt=""/>
+            <img className="riskOne" src={risk} alt="" />
+            <img className="riskTwo" src={risk} alt="" />
+            <img className="riskThree" src={risk} alt="" />
           </div>
           <div className="menuLay">
             <span>Mortgage DOWS reward</span>
             <span>抵押DOWS奖励</span>
             <span className="mortgage">
-              DOWS抵押人可以获得3种奖励：
-              1.交易所手续费奖励；2.Stakling奖励；3.借贷池收益
+              DOWS抵押人可以获得3种奖励： 1.交易所手续费奖励；2.Stakling奖励；3.借贷池收益
             </span>
-            <img className="mortgageImg" src={mortgage}  alt=""/>
+            <img className="mortgageImg" src={mortgage} alt="" />
           </div>
           <div className="menuLay">
             <span>800% mortgage rate</span>
@@ -58,7 +56,7 @@ class MenuLay extends React.Component {
               所有合成资产都由抵押的DOWS来支撑其价值，抵押率最低要求为800%，
               低于抵押率要求时将无法获得奖励和赎DOWS，满足抵押率每周即可领取多种奖励、
             </span>
-            <img className="mortgageRate" src={mortgageRate}  alt=""/>
+            <img className="mortgageRate" src={mortgageRate} alt="" />
           </div>
           <div className="welcome">
             <span>WELCOME</span>
@@ -70,10 +68,15 @@ class MenuLay extends React.Component {
             </span>
           </div>
         </Carousel>
+        {/* eslint-disable-next-line max-len */}
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
         <div onClick={this.prev} className="leftClick">
           <LeftOutlined style={{ fontSize: '22px' }} />
         </div>
-        {/* <RightCircleOutlined onClick={this.next} style={{fontSize:'40px',color:'#FFFFFF',position:'absolute',bottom:'calc((100% - 580px) / 2)',right:'42%'}}/>*/}
+        {/* <RightCircleOutlined onClick={this.next} style={{fontSize:'40px',color:'#FFFFFF',
+        position:'absolute',bottom:'calc((100% - 580px) / 2)',right:'42%'}}/> */}
+        {/* eslint-disable-next-line max-len */}
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
         <div onClick={this.next} className="rightClick">
           <RightOutlined style={{ fontSize: '22px' }} />
         </div>
