@@ -1,6 +1,5 @@
 import React from 'react';
-import { Menu } from 'antd';
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { PaperClipOutlined } from '@ant-design/icons';
 import './App.css';
 import MenuLay from '../pages/menuLay/MenuLay';
@@ -35,7 +34,7 @@ function BasicLayout() {
       </Router>
       <div className="money">
         <PaperClipOutlined style={{ fontSize: '16px', color: '#fff' }} />
-        <Wallet>链接钱包</Wallet>
+        <Wallet />
       </div>
       <Language />
     </div>
