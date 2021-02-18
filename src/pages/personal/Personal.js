@@ -1,6 +1,7 @@
-import React from 'react'
-import '../../styles/personal.css'
-import { Progress } from 'antd'
+import React from 'react';
+import '../../styles/personal.css';
+import { Progress } from 'antd';
+import { formatMessage } from 'umi';
 
 class Personal extends React.Component {
   render() {
@@ -8,7 +9,7 @@ class Personal extends React.Component {
       <div className="me">
         <div className="personal-title">
           <span>Personal information</span>
-          <span>个人信息</span>
+          <span>{formatMessage({ id: 'person.title' })}</span>
         </div>
         <div className="personal-content">
           <div className="usd">
@@ -85,8 +86,8 @@ class Personal extends React.Component {
           />
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Personal
+export default Personal;

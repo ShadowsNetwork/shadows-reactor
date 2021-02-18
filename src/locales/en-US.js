@@ -1,3 +1,3 @@
 export default {
-  'menu.person': 'Personal',
+  'person.title': 'Personal information',
 };

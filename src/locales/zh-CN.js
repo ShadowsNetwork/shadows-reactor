@@ -1,3 +1,3 @@
 export default {
-  'menu.person': '个人信息',
+  'person.title': '个人信息',
 };
