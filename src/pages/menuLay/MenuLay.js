@@ -7,11 +7,11 @@ import mortgage from '../../img/mortgage.png'
 import mortgageRate from '../../img/mortgageRate.png'
 
 class MenuLay extends React.Component {
-  next() {
+  next=()=> {
     this.slider.next()
   }
 
-  prev() {
+  prev=()=> {
     this.slider.prev()
   }
 

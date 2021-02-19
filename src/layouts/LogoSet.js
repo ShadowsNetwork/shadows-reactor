@@ -8,9 +8,9 @@ function LogoText() {
       src={logoURL}
       style={{
         width: '160px',
-        marginTop: '30px',
-        marginBottom: '30px',
-        marginLeft: '20px',
+        // marginTop: '30px',
+        // marginBottom: '30px',
+        // marginLeft: '20px',
       }}
       alt=""
     />
@@ -23,9 +23,9 @@ function LogoImg() {
       src={logoImg}
       style={{
         width: '19.02px',
-        marginTop: '30px',
-        marginLeft: '15px',
-        marginBottom: '30px',
+        // marginTop: '30px',
+        // marginLeft: '15px',
+        // marginBottom: '30px',
       }}
       alt=""
     />

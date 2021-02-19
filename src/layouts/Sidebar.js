@@ -36,9 +36,11 @@ function SideBar() {
           onMouseLeave={closeMenu}
           inlineCollapsed={collapsed}
         >
-          <Link to="/">
-            <LogoSet collapsed={collapsed} />
-          </Link>
+          <Menu.Item>
+            <Link to="/">
+              <LogoSet collapsed={collapsed} />
+            </Link>
+          </Menu.Item>
           <Menu.Item key="Personal" icon={<UserOutlined />}>
             <Link to="/Personal">{formatMessage({ id: 'person.title' })}</Link>
           </Menu.Item>

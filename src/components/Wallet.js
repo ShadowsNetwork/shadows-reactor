@@ -81,7 +81,7 @@ function CurrentAccount(props) {
     <>
       {/* eslint-disable-next-line max-len */}
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <span onClick={openModal}>{account}</span>
+      <span style={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}} onClick={openModal}>{account}</span>
       <Modal
         title="Basic Modal"
         visible={isModalVisible}

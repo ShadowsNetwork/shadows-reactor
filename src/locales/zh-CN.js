@@ -44,7 +44,7 @@ export default {
   'reward.bottomText': '7天不领取，奖励将被回收至池子里，抵押率不足将无法获得奖励',
   'reward.receive': '领取',
 
-  'wallet.connectToWallet': '链接到钱包',
+  'wallet.connectToWallet': '链接到钱包速度和加速度',
 
   balance: '余额',
   all: '全部',
