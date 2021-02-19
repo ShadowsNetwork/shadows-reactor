@@ -3,6 +3,7 @@ import '../../styles/destruction.css'
 import '../../styles/dropDown.css'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
+import GasPrice from '@/components/GasPrice'
 
 // const menu = (
 //   <Menu>
@@ -183,11 +184,7 @@ function Destruction() {
       </div>
       <div className="destruction-bottom">
         <Button>{t('destroy.destroyAll')}</Button>
-        <span>
-          {t('destroy.networkPrice')}
-          {/* TODO */}
-          ：$0 / 90 GWEI
-        </span>
+        <GasPrice />
       </div>
     </div>
   )

@@ -30,7 +30,6 @@
     "debtRatio": "债务比例",
     "start": "开始合成",
     "all": "全部",
-    "networkFee": "网络费用",
     "balance": "余额"
   },
 
@@ -45,7 +44,6 @@
     "receive": "接收",
     "estimated": "估计的",
     "fees": "交易手续费",
-    "networkFee": "网络费用",
     "all": "全部"
   },
 
@@ -71,11 +69,18 @@
     "transactionReward": "交易奖励",
     "syntheticReward": "合成奖励",
     "bottomText": "7天不领取，奖励将被回收至池子里，抵押率不足将无法获得奖励",
-    "receive": "领取",
-    "networkFee": "网络费用"
+    "receive": "领取"
   },
 
   "wallet": {
     "connectToWallet": "链接到钱包"
+  },
+
+  "gasPrice": {
+    "networkFee": "网络费用",
+    "edit": "编辑",
+    "fastest": "极速",
+    "fast": "高速",
+    "average": "一般"
   }
 }

@@ -31,7 +31,6 @@
     "debtRatio": "debt ratio",
     "start": "start synthesis",
     "all": "All",
-    "networkFee": "Network Fee",
     "balance": "Balance"
   },
 
@@ -46,7 +45,6 @@
     "receive": "receive",
     "estimated": "estimated",
     "fees": "transaction fees",
-    "networkFee": "Network Fee",
     "all": "All"
   },
 
@@ -73,11 +71,17 @@
     "syntheticReward": "Synthetic reward",
     "bottomText":
     "If you don’t receive it for 7 days, the reward will be recycled to the pool. If the mortgage rate is insufficient, you will not be able to get the reward.",
-    "receive": "receive",
-    "networkFee": "Network Fee"
+    "receive": "receive"
   },
 
   "wallet": {
     "connectToWallet": "Connect To A Wallet"
+  },
+  "gasPrice": {
+    "networkFee": "Network Fee",
+    "edit": "EDIT",
+    "fastest": "fastest",
+    "fast": "fast",
+    "average": "average"
   }
 }

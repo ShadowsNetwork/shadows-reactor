@@ -3,6 +3,7 @@ import '../../styles/reward.css'
 import '../../styles/dropDown.css'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
+import GasPrice from '@/components/GasPrice'
 
 function Reward() {
   const { t } = useTranslation()
@@ -88,10 +89,7 @@ function Reward() {
       </div>
       <div className="reward-bottom">
         <Button>{t('reward.receive')}</Button>
-        <span>
-          {t('reward.networkFee')}
-          ：$0 / 90 GWEI
-        </span>
+        <GasPrice />
       </div>
     </div>
   )

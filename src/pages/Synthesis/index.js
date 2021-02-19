@@ -3,6 +3,7 @@ import '../../styles/synthesis.css'
 import '../../styles/dropDown.css'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
+import GasPrice from '@/components/GasPrice'
 
 // const menu = (
 //   <Menu>
@@ -136,13 +137,7 @@ function Synthesis() {
         </div>
         <div className="Synthesis-bottom">
           <Button>{t('synthesis.start')}</Button>
-          <span>
-            {t('synthesis.networkFee')}
-            ：$0 / 90 GWEI
-          </span>
-          <span>
-            <i />
-          </span>
+          <GasPrice />
         </div>
       </div>
     </div>
