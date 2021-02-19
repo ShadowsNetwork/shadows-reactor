@@ -105,7 +105,11 @@
 .ant-carousel .slick-dots li button {
     width: 5px;
     height: 5px;
+    background-color: white;
     border-radius: 5px;
+}
+.ant-carousel .slick-dots li.slick-active button {
+    background-color: #fff;
 }
 .leftClick {
     width: 32pt;
