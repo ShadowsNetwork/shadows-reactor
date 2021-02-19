@@ -13,7 +13,9 @@ function LanguageSelector() {
   }
 
   const { i18n } = useTranslation()
-  const currentLanguage = SUPPORT_LANGUAGE.filter((lang) => lang.key === i18n.language)[0]
+  const currentLanguage = i18n.language
+    ? SUPPORT_LANGUAGE.filter((lang) => lang.key === i18n.language)[0]
+    : SUPPORT_LANGUAGE[0]
 
   const langMenu = (
     <Menu selectedKeys={[currentLanguage.key]} onClick={changeLanguage}>

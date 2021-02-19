@@ -15,7 +15,7 @@ i18n
   // pass the i18n instance to react-i18next.
   .use(initReactI18next)
   .init({
-    fallbackLng: 'zh-CN',
+    fallbackLng: 'en-US',
     debug: false,
 
     interpolation: {
