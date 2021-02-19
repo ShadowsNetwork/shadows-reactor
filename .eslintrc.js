@@ -12,24 +12,19 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react', 'prettier'],
-  settings: {
-    'import/resolver': {
-      webpack: {
-        config: './webpack.config.js',
-      },
-    },
-  },
   rules: {
     indent: ['error', 2],
     quotes: ['error', 'single'],
     semi: ['error', 'never'],
     'linebreak-style': [0],
+    'import/no-unresolved': [0],
     'no-unused-vars': [
       1,
       {
         argsIgnorePattern: 'res|next|^err',
       },
     ],
+    'no-console': [0],
     'react/jsx-filename-extension': [0],
     'react/prop-types': [0],
   },

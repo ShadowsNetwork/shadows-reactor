@@ -2,11 +2,11 @@ import { useWeb3React, Web3ReactProvider } from '@web3-react/core'
 import React, { useEffect, useState } from 'react'
 import { Web3Provider } from '@ethersproject/providers'
 import { useEagerConnect, useInactiveListener } from '@/web3/hooks'
-import { injected } from '@/web3/connectors'
 import { message, Modal } from 'antd'
 import { formatEther } from '@ethersproject/units'
 import { LoadingOutlined } from '@ant-design/icons'
 import { formatMessage } from 'umi'
+import { injected } from '@/web3/connectors'
 
 function getLibrary(provider) {
   const library = new Web3Provider(provider)

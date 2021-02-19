@@ -17,10 +17,6 @@
     ]
   },
   "dependencies": {
-    "react": "17.x",
-    "react-dom": "17.x",
-    "react-intl": "^5.12.3",
-    "react-router-dom": "^5.2.0",
     "@ant-design/icons": "^4.5.0",
     "@ant-design/pro-layout": "^6.5.0",
     "@ethersproject/providers": "^5.0.2",
@@ -29,7 +25,17 @@
     "@web3-react/core": "latest",
     "@web3-react/injected-connector": "latest",
     "antd": "^4.12.3",
+    "axios": "^0.21.1",
     "ethers": "^5.0.31",
+    "i18next": "^19.8.9",
+    "i18next-browser-languagedetector": "^6.0.1",
+    "i18next-http-backend": "^1.1.0",
+    "react": "17.x",
+    "react-dom": "17.x",
+    "react-i18next": "^11.8.7",
+    "react-intl": "^5.12.3",
+    "react-query": "^3.9.8",
+    "react-router-dom": "^5.2.0",
     "umi": "^3.3.7"
   },
   "devDependencies": {
