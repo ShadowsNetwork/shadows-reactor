@@ -1,4 +1,20 @@
 {
+  "risk": {
+    "title": "Risk Warning",
+    "text": "When pledging DOWS synthetic assets, a \"debt\" is generated. The \"debt\" is the amount of xUSD they initially minted. Next, the debt will fluctuate with the gains and losses of other synthetic asset holders. When the synthetic assets held by someone increase in value, that part of the proceeds will come from the debts of all DOWS holders in proportion. Each holder must pay their debts to unlock their pledged DOWS."
+  },
+  "mortgage": {
+    "title": "Stake DOWS rewards",
+    "text": "DOWS mortgagor can get 3 kinds of rewards: 1. Exchange fee reward; 2. Stakling reward; 3. Loan pool income"
+  },
+  "rate": {
+    "title": "Mortgage rate",
+    "text": "All synthetic assets are supported by the mortgaged DOWS. The minimum mortgage rate is 800%. If the mortgage rate is lower than the requirement, you will not be able to get rewards and redeem DOWS. You can receive multiple rewards every week if the mortgage rate is met."
+  },
+  "welcome": {
+    "title": "Welcome",
+    "text": "Shadows is a decentralized synthetic asset issuance agreement, transaction agreement, and loan agreement built on Polkadot. The value of these synthetic assets is guaranteed by DOWS."
+  },
   "person": {
     "title": "Personal information",
     "myRate": "My mortgage rate",

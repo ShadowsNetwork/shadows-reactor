@@ -90,3 +90,9 @@
   top: 20px;
   right: 180px;
 }
+.money > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 5px;
+}
