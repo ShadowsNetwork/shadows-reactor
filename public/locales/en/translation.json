@@ -1,7 +1,67 @@
 {
+  "person": {
+    "title": "Personal information",
+    "myRate": "My mortgage rate",
+    "targetRate": "Target mortgage rate",
+    "dows": "total",
+    "locked": "locked",
+    "Transferable": "Transferable"
+  },
+
+  "synthesis": {
+    "title": "Synthesis",
+    "text":
+    "Synthetic assets meet our diverse needs. For users with hedging needs, compared with the U.S. dollar, they need stable coins (USDT, dUSD, xUSD, etc., belonging to synthetic assets) on the blockchain to facilitate the flow of funds",
+    "debtRatio": "debt ratio",
+    "start": "start synthesis",
+    "all": "All",
+    "networkFee": "Network Fee",
+    "balance": "Balance"
+  },
+
   "transaction": {
     "networkPrice": {
       "edit": "Edit"
-    }
+    },
+    "title": "Transaction",
+    "text": "Trade your synthetic assets and xUSD.",
+    "pay": "pay",
+    "available": "available",
+    "receive": "receive",
+    "estimated": "estimated",
+    "fees": "transaction fees",
+    "networkFee": "Network Fee",
+    "all": "All"
+  },
+
+  "liquidity": {
+    "title": "Liquidity",
+    "text": "Liquidity measures how easy it is to convert assets into cash quickly and without loss. The easier the conversion, the better the liquidity of the asset. In the world of cryptocurrency trading, one of the promoters of liquidity is the deposit of many different limit orders"
+  },
+
+  "destroy": {
+    "title": "Destroy",
+    "text": "Destroy xUSD to unlock your pledged DOWS. This will increase your mortgage rate and reduce your debt, allowing you to transfer DOWS not in custody",
+    "adjust": "Adjust to target mortgage rate",
+    "destroyAll": "Destroy all",
+    "all": "All",
+    "quantity": "Un-lockable quantity",
+    "balance": "Balance",
+    "networkPrice": "Network Fee"
+  },
+
+  "reward": {
+    "title": "Reward",
+    "text": "Mortgage DOWS to cast synthetic assets, trade synthetic assets, and get rewards every week",
+    "transactionReward": "Transaction reward",
+    "syntheticReward": "Synthetic reward",
+    "bottomText":
+    "If you don’t receive it for 7 days, the reward will be recycled to the pool. If the mortgage rate is insufficient, you will not be able to get the reward.",
+    "receive": "receive",
+    "networkFee": "Network Fee"
+  },
+
+  "wallet": {
+    "connectToWallet": "Connect To A Wallet"
   }
 }

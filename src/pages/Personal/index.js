@@ -1,14 +1,16 @@
 import React from 'react'
 import '../../styles/personal.css'
 import { Progress } from 'antd'
-import { formatMessage } from 'umi'
+import { useTranslation } from 'react-i18next'
 
 function Personal() {
+  const { t } = useTranslation()
+
   return (
     <div className="me">
       <div className="personal-title">
         <span>Personal information</span>
-        <span>{formatMessage({ id: 'person.title' })}</span>
+        <span>{t('person.title')}</span>
       </div>
       <div className="personal-content">
         <div className="usd">
@@ -31,18 +33,18 @@ function Personal() {
         </div>
         <div className="mortgage">
           <div>
-            <span>{formatMessage({ id: 'person.myRate' })}</span>
+            <span>{t('person.myRate')}</span>
             <span>810%</span>
           </div>
           <div>
-            <span>{formatMessage({ id: 'person.targetRate' })}</span>
+            <span>{t('person.targetRate')}</span>
             <span>800%</span>
           </div>
         </div>
       </div>
       <div className="snk">
         <span>
-          {formatMessage({ id: 'person.dows' })}
+          {t('person.dows')}
           {' '}
           DOWS
         </span>
@@ -52,11 +54,11 @@ function Personal() {
       <div className="progressBar">
         <div className="progressBar-top">
           <span>
-            {formatMessage({ id: 'person.locked' })}
+            {t('person.locked')}
             : 150000
           </span>
           <span>
-            {formatMessage({ id: 'person.Transferable' })}
+            {t('person.Transferable')}
             : 0
           </span>
         </div>

@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons'
 import React, { useState } from 'react'
 import './App.css'
-import { formatMessage } from 'umi'
+import { useTranslation } from 'react-i18next'
 
 function SideBar() {
   const [collapsed, setCollapsed] = useState(false)
@@ -23,6 +23,8 @@ function SideBar() {
   const closeMenu = () => {
     setCollapsed(true)
   }
+
+  const { t } = useTranslation()
 
   return (
     <div className="App">
@@ -42,22 +44,22 @@ function SideBar() {
             </Link>
           </Menu.Item>
           <Menu.Item key="Personal" icon={<UserOutlined />}>
-            <Link to="/Personal">{formatMessage({ id: 'person.title' })}</Link>
+            <Link to="/Personal">{t('person.title')}</Link>
           </Menu.Item>
           <Menu.Item key="Synthesis" icon={<PartitionOutlined />}>
-            <Link to="/Synthesis">{formatMessage({ id: 'synthesis.title' })}</Link>
+            <Link to="/Synthesis">{t('synthesis.title')}</Link>
           </Menu.Item>
           <Menu.Item key="Transaction" icon={<InteractionOutlined />}>
-            <Link to="/Transaction">{formatMessage({ id: 'transaction.title' })}</Link>
+            <Link to="/Transaction">{t('transaction.title')}</Link>
           </Menu.Item>
-          <Menu.Item key="Flow" icon={<UndoOutlined />}>
-            <Link to="/Flow">{formatMessage({ id: 'fluidity.title' })}</Link>
+          <Menu.Item key="Liquidity" icon={<UndoOutlined />}>
+            <Link to="/Liquidity">{t('liquidity.title')}</Link>
           </Menu.Item>
           <Menu.Item key="Destruction" icon={<RestOutlined />}>
-            <Link to="/Destruction">{formatMessage({ id: 'destroy.title' })}</Link>
+            <Link to="/Destruction">{t('destroy.title')}</Link>
           </Menu.Item>
           <Menu.Item key="Reward" icon={<GiftOutlined />}>
-            <Link to="/Reward">{formatMessage({ id: 'reward.title' })}</Link>
+            <Link to="/Reward">{t('reward.title')}</Link>
           </Menu.Item>
         </Menu>
       </div>

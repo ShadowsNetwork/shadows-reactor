@@ -1,14 +1,16 @@
 import React from 'react'
 import '../../styles/flow.css'
 import { Link } from 'react-router-dom'
-import { formatMessage } from 'umi'
+import { useTranslation } from 'react-i18next'
 
-function Flow() {
+function Liquidity() {
+  const { t } = useTranslation()
+
   return (
     <div className="flow">
       <div className="flow-title">
-        <span>{formatMessage({ id: 'fluidity.title' })}</span>
-        <span>{formatMessage({ id: 'fluidity.text' })}</span>
+        <span>{t('liquidity.title')}</span>
+        <span>{t('liquidity.text')}</span>
       </div>
       <div className="flow-content">
         <Link to="/FlowStep" className="flow-content-main">
@@ -34,4 +36,4 @@ function Flow() {
   )
 }
 
-export default Flow
+export default Liquidity

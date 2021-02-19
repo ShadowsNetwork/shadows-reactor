@@ -2,7 +2,7 @@ import React from 'react'
 import '../../styles/synthesis.css'
 import '../../styles/dropDown.css'
 import { Button } from 'antd'
-import { formatMessage } from 'umi'
+import { useTranslation } from 'react-i18next'
 
 // const menu = (
 //   <Menu>
@@ -65,17 +65,19 @@ import { formatMessage } from 'umi'
 //   </Menu>
 // )
 function Synthesis() {
+  const { t } = useTranslation()
+
   return (
     <div className="bg">
       <div className="Synthesis">
         <div className="Synthesis-title">
-          <span>{formatMessage({ id: 'synthesis.title' })}</span>
-          <span>{formatMessage({ id: 'synthesis.text' })}</span>
+          <span>{t('synthesis.title')}</span>
+          <span>{t('synthesis.text')}</span>
         </div>
         <div className="Synthesis-content">
           <div className="Synthesis-content-title">
             <span>
-              {formatMessage({ id: 'balance' })}
+              {t('synthesis.balance')}
               ：
             </span>
             <span>20 DOWS</span>
@@ -121,21 +123,21 @@ function Synthesis() {
               }}
             />
             <div className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
-              {formatMessage({ id: 'all' })}
+              {t('synthesis.all')}
             </div>
           </div>
           <div className="Synthesis-content-bottom">
             <span>Staking：00DOWS</span>
             <span>
-              {formatMessage({ id: 'synthesis.debtRatio' })}
+              {t('synthesis.debtRatio')}
               ：0.0%
             </span>
           </div>
         </div>
         <div className="Synthesis-bottom">
-          <Button>{formatMessage({ id: 'synthesis.start' })}</Button>
+          <Button>{t('synthesis.start')}</Button>
           <span>
-            {formatMessage({ id: 'networkFee' })}
+            {t('synthesis.networkFee')}
             ：$0 / 90 GWEI
           </span>
           <span>

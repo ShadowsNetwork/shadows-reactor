@@ -5,8 +5,8 @@ import { useEagerConnect, useInactiveListener } from '@/web3/hooks'
 import { message, Modal } from 'antd'
 import { formatEther } from '@ethersproject/units'
 import { LoadingOutlined } from '@ant-design/icons'
-import { formatMessage } from 'umi'
 import { injected } from '@/web3/connectors'
+import { useTranslation } from 'react-i18next'
 
 function getLibrary(provider) {
   const library = new Web3Provider(provider)
@@ -81,7 +81,12 @@ function CurrentAccount(props) {
     <>
       {/* eslint-disable-next-line max-len */}
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <span style={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}} onClick={openModal}>{account}</span>
+      <span
+        style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+        onClick={openModal}
+      >
+        {account}
+      </span>
       <Modal
         title="Basic Modal"
         visible={isModalVisible}
@@ -96,6 +101,9 @@ function CurrentAccount(props) {
 
 function ConnectToWallet() {
   const { activate } = useWeb3React()
+
+  const { t } = useTranslation()
+
   return (
     // eslint-disable-next-line max-len
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
@@ -104,7 +112,7 @@ function ConnectToWallet() {
         activate(injected)
       }}
     >
-      {formatMessage({ id: 'wallet.connectToWallet' })}
+      {t('wallet.connectToWallet')}
     </span>
   )
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import '../../styles/destruction.css'
 import '../../styles/dropDown.css'
 import { Button } from 'antd'
-import { formatMessage } from 'umi'
+import { useTranslation } from 'react-i18next'
 
 // const menu = (
 //   <Menu>
@@ -66,20 +66,22 @@ import { formatMessage } from 'umi'
 // )
 
 function Destruction() {
+  const { t } = useTranslation()
+
   return (
     <div className="destruction">
       <div className="destruction-title">
-        <span>{formatMessage({ id: 'destroy.title' })}</span>
-        <span>{formatMessage({ id: 'destroy.text' })}</span>
+        <span>{t('destroy.title')}</span>
+        <span>{t('destroy.text')}</span>
       </div>
       <div className="operation">
-        <Button>{formatMessage({ id: 'destroy.adjust' })}</Button>
-        <Button>{formatMessage({ id: 'destroy.all' })}</Button>
+        <Button>{t('destroy.adjust')}</Button>
+        <Button>{t('destroy.all')}</Button>
       </div>
       <div className="destruction-content">
         <div className="destruction-content-title">
           <span>
-            {formatMessage({ id: 'balance' })}
+            {t('destroy.balance')}
             ：
           </span>
           <span>20 xUSD</span>
@@ -126,12 +128,12 @@ function Destruction() {
             placeholder="0.00"
           />
           <span className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
-            {formatMessage({ id: 'all' })}
+            {t('destroy.destroyAll')}
           </span>
         </div>
         <div className="destruction-content">
           <div className="destruction-content-title">
-            <span>{formatMessage({ id: 'destroy.quantity' })}</span>
+            <span>{t('destroy.quantity')}</span>
           </div>
           <div className="destruction-input">
             {/* <Dropdown overlay={menu} placement="bottomLeft"> */}
@@ -174,15 +176,16 @@ function Destruction() {
               }}
             />
             <span className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
-              {formatMessage({ id: 'all' })}
+              {t('destroy.all')}
             </span>
           </div>
         </div>
       </div>
       <div className="destruction-bottom">
-        <Button>{formatMessage({ id: 'destroy' })}</Button>
+        <Button>{t('destroy.destroyAll')}</Button>
         <span>
-          {formatMessage({ id: 'networkFee' })}
+          {t('destroy.networkPrice')}
+          {/* TODO */}
           ：$0 / 90 GWEI
         </span>
       </div>

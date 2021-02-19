@@ -16,7 +16,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'zh-CN',
-    debug: true,
+    debug: false,
 
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
@@ -25,7 +25,7 @@ i18n
     // special options for react-i18next
     // learn more: https://react.i18next.com/components/i18next-instance
     react: {
-      wait: true,
+      useSuspense: true,
     },
   })
 

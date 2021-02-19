@@ -1,7 +1,65 @@
 {
+  "person": {
+    "title": "个人信息",
+    "myRate": "我的抵押率",
+    "targetRate": "目标抵押率",
+    "dows": "总",
+    "locked": "已锁定",
+    "Transferable": "可转账"
+  },
+
+  "synthesis": {
+    "title": "合成",
+    "text": "合成资产满足了我们更多样的需求。对有避险需求的用户而言，相较于美元，\n他们需要区块链上的稳定币（USDT、dUSD、xUSD等等，属于合成资产），\n以便于资金流动；",
+    "debtRatio": "债务比例",
+    "start": "开始合成",
+    "all": "全部",
+    "networkFee": "网络费用",
+    "balance": "余额"
+  },
+
   "transaction": {
     "networkPrice": {
       "edit": "编辑"
-    }
+    },
+    "title": "交易",
+    "text": "交易您的合成资产和xUSD。",
+    "pay": "支付",
+    "available": "可用",
+    "receive": "接收",
+    "estimated": "估计的",
+    "fees": "交易手续费",
+    "networkFee": "网络费用",
+    "all": "全部"
+  },
+
+  "liquidity": {
+    "title": "流动性",
+    "text": "流动性衡量的是将资产快速且无损失地转换为现金的难易程度。转换越容易，\n说明资产的流动性越好。在加密货币交易世界中，流动性的一个促进者是存\n许多不同的限价订单"
+  },
+
+  "destroy": {
+    "title": "销毁",
+    "text": "销毁xUSD来解锁您抵押的DOWS。这将增加您的抵押率，并减少您的\n债务，使您能转账未托管的DOWS",
+    "adjust": "调整至目标抵押率",
+    "destroyAll": "全部摧毁",
+    "all": "所有",
+    "quantity": "可解锁的数量",
+    "balance": "余额",
+    "networkPrice": "网络费用"
+  },
+
+  "reward": {
+    "title": "奖励",
+    "text": "抵押DOWS铸造合成资产、交易合成资产，每周可获得奖励",
+    "transactionReward": "交易奖励",
+    "syntheticReward": "合成奖励",
+    "bottomText": "7天不领取，奖励将被回收至池子里，抵押率不足将无法获得奖励",
+    "receive": "领取",
+    "networkFee": "网络费用"
+  },
+
+  "wallet": {
+    "connectToWallet": "链接到钱包"
   }
 }

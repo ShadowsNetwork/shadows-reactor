@@ -2,14 +2,16 @@ import React from 'react'
 import '../../styles/reward.css'
 import '../../styles/dropDown.css'
 import { Button } from 'antd'
-import { formatMessage } from 'umi'
+import { useTranslation } from 'react-i18next'
 
 function Reward() {
+  const { t } = useTranslation()
+
   return (
     <div className="reward">
       <div className="reward-title">
-        <span>{formatMessage({ id: 'reward.title' })}</span>
-        <span>{formatMessage({ id: 'reward.text' })}</span>
+        <span>{t('reward.title')}</span>
+        <span>{t('reward.text')}</span>
       </div>
       <div className="reward-content">
         <div className="reward-input">
@@ -29,7 +31,7 @@ function Reward() {
                 fontSize: '8pt',
               }}
             >
-              {formatMessage({ id: 'reward.transactionReward' })}
+              {t('reward.transactionReward')}
             </span>
           </Button>
           <input
@@ -63,7 +65,7 @@ function Reward() {
                 fontSize: '8pt',
               }}
             >
-              {formatMessage({ id: 'reward.syntheticReward' })}
+              {t('reward.syntheticReward')}
             </span>
           </Button>
           <input
@@ -81,13 +83,13 @@ function Reward() {
           </span>
         </div>
         <div className="reward-content-bottom">
-          <span>{formatMessage({ id: 'reward.bottomText' })}</span>
+          <span>{t('reward.bottomText')}</span>
         </div>
       </div>
       <div className="reward-bottom">
-        <Button>{formatMessage({ id: 'reward.receive' })}</Button>
+        <Button>{t('reward.receive')}</Button>
         <span>
-          {formatMessage({ id: 'reward.networkFee' })}
+          {t('reward.networkFee')}
           ：$0 / 90 GWEI
         </span>
       </div>

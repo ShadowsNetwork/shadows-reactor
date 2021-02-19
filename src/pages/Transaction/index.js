@@ -2,7 +2,6 @@ import React from 'react'
 import { Button, Dropdown, Menu } from 'antd'
 import '@/styles/transaction.css'
 import '@/styles/dropDown.css'
-import { formatMessage } from 'umi'
 import useEthGasPriceQuery from '@/web3/useEthGasPriceQuery'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { useTranslation } from 'react-i18next'
@@ -63,18 +62,20 @@ const menu = (
 )
 
 function Transaction() {
+  const { t } = useTranslation()
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="transaction">
         <div className="transaction-title">
-          <span>{formatMessage({ id: 'transaction.title' })}</span>
-          <span>{formatMessage({ id: 'transaction.text' })}</span>
+          <span>{t('transaction.title')}</span>
+          <span>{t('transaction.text')}</span>
         </div>
         <div className="transaction-content">
           <div className="transaction-content-title">
-            <span>{formatMessage({ id: 'transaction.pay' })}</span>
+            <span>{t('transaction.pay')}</span>
             <span>
-              {formatMessage({ id: 'transaction.available' })}
+              {t('transaction.available')}
               ：0
             </span>
           </div>
@@ -119,13 +120,13 @@ function Transaction() {
               }}
             />
             <span className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
-              {formatMessage({ id: 'all' })}
+              {t('transaction.all')}
             </span>
           </div>
           <div className="transaction-content">
             <div className="transaction-content-title">
-              <span>{formatMessage({ id: 'transaction.receive' })}</span>
-              <span>{formatMessage({ id: 'transaction.estimated' })}</span>
+              <span>{t('transaction.receive')}</span>
+              <span>{t('transaction.estimated')}</span>
             </div>
             <div className="transaction-input">
               <Dropdown overlay={menu} placement="bottomLeft">
@@ -168,13 +169,13 @@ function Transaction() {
                 }}
               />
               <span className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
-                {formatMessage({ id: 'all' })}
+                {t('transaction.all')}
               </span>
             </div>
           </div>
           <div className="transaction-content-bottom">
             <span>
-              {formatMessage({ id: 'transaction.fees' })}
+              {t('transaction.fees')}
               ：0.3%
             </span>
           </div>
@@ -191,12 +192,13 @@ function NetworkFee() {
 
   const { t } = useTranslation()
   if (data) {
+    // eslint-disable-next-line no-unused-vars
     const { fastest, fast, average } = data
     return (
       <div className="transaction-bottom">
-        <Button>{formatMessage({ id: 'transaction' })}</Button>
+        <Button>{t('transaction.title')}</Button>
         <span>
-          {formatMessage({ id: 'networkFee' })}
+          {t('transaction.networkFee')}
           { `：$0 / ${fast} GWEI` }
         </span>
         <span style={{ marginLeft: '5px' }}>{t('transaction.networkPrice.edit')}</span>
