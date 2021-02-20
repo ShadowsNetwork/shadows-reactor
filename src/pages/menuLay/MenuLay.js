@@ -44,7 +44,7 @@ function MenuLay() {
           <img className="riskThree" src={risk} alt="" />
         </div>
         <div className="menuLay">
-          <span>Mortgage DOWS reward</span>
+          <span>Staking Rewards</span>
           <span>{t('mortgage.title')}</span>
           <span className="mortgage">
             {t('mortgage.text')}
@@ -52,7 +52,7 @@ function MenuLay() {
           <img className="mortgageImg" src={mortgage} alt="" />
         </div>
         <div className="menuLay">
-          <span>800% mortgage rate</span>
+          <span>Collateralization Ratio</span>
           <span>{t('rate.title')}</span>
           <span>
             {t('rate.text')}

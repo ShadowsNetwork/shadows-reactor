@@ -2,8 +2,7 @@ import React from 'react'
 import '../../styles/synthesis.css'
 import '../../styles/dropDown.css'
 import { Button } from 'antd'
-import { useTranslation } from 'react-i18next'
-import GasPrice from '@/components/GasPrice'
+import { formatMessage } from 'umi'
 
 // const menu = (
 //   <Menu>
@@ -66,19 +65,17 @@ import GasPrice from '@/components/GasPrice'
 //   </Menu>
 // )
 function Synthesis() {
-  const { t } = useTranslation()
-
   return (
     <div className="bg">
       <div className="Synthesis">
         <div className="Synthesis-title">
-          <span>{t('synthesis.title')}</span>
-          <span>{t('synthesis.text')}</span>
+          <span>{formatMessage({ id: 'synthesis.title' })}</span>
+          <span>{formatMessage({ id: 'synthesis.text' })}</span>
         </div>
         <div className="Synthesis-content">
           <div className="Synthesis-content-title">
             <span>
-              {t('synthesis.balance')}
+              {formatMessage({ id: 'balance' })}
               ：
             </span>
             <span>20 DOWS</span>
@@ -124,20 +121,26 @@ function Synthesis() {
               }}
             />
             <div className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
-              {t('synthesis.all')}
+              {formatMessage({ id: 'all' })}
             </div>
           </div>
           <div className="Synthesis-content-bottom">
             <span>Staking：00 DOWS</span>
             <span>
-              {t('synthesis.debtRatio')}
+              {formatMessage({ id: 'synthesis.debtRatio' })}
               ：0.0%
             </span>
           </div>
         </div>
         <div className="Synthesis-bottom">
-          <Button>{t('synthesis.start')}</Button>
-          <GasPrice />
+          <Button>{formatMessage({ id: 'synthesis.start' })}</Button>
+          <span>
+            {formatMessage({ id: 'networkFee' })}
+            ：$0 / 90 GWEI
+          </span>
+          <span>
+            <i />
+          </span>
         </div>
       </div>
     </div>

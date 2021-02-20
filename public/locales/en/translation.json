@@ -1,24 +1,24 @@
 {
   "risk": {
     "title": "Risk Warning",
-    "text": "When pledging DOWS synthetic assets, a \"debt\" is generated. The \"debt\" is the amount of xUSD they initially minted. Next, the debt will fluctuate with the gains and losses of other synthetic asset holders. When the synthetic assets held by someone increase in value, that part of the proceeds will come from the debts of all DOWS holders in proportion. Each holder must pay their debts to unlock their pledged DOWS."
+    "text": "When collateralizing DOWS synthetic assets, a \"debt\" is generated. The \"debt\" is the amount of xUSD they initially minted. Next, the debt will fluctuate with the gains and losses of other synthetic asset holders. When the synthetic assets held by someone increase in value, that part of the proceeds will come from the debts of all DOWS holders in proportion. Each holder must pay their debts to unlock their collateralized DOWS."
   },
   "mortgage": {
-    "title": "Stake DOWS rewards",
-    "text": "DOWS mortgagor can get 3 kinds of rewards: 1. Exchange fee reward; 2. Stakling reward; 3. Loan pool income"
+    "title": "Staking Rewards",
+    "text": "Users who stake DOWS can obtain 3 kinds of rewards: 1. Exchange fee reward; 2. Staking reward; 3. Loan pool income"
   },
   "rate": {
-    "title": "Mortgage rate",
-    "text": "All synthetic assets are supported by the mortgaged DOWS. The minimum mortgage rate is 800%. If the mortgage rate is lower than the requirement, you will not be able to get rewards and redeem DOWS. You can receive multiple rewards every week if the mortgage rate is met."
+    "title": "Collateralization Ratio",
+    "text": "All synthetic assets are supported by the collateralized DOWS. The minimum collateralization ratio is 800%. If the collateralization ratio is lower than the requirement, you will not be able to get rewards and redeem DOWS. You can receive multiple rewards every week if the collateralization ratio is met."
   },
   "welcome": {
     "title": "Welcome",
-    "text": "Shadows is a decentralized synthetic asset issuance agreement, transaction agreement, and loan agreement built on Polkadot. The value of these synthetic assets is guaranteed by DOWS."
+    "text": "Shadows is a decentralized synthetic asset issuance protocol, trade protocol, and lending protocol built on Polkadot. The value of these synthetic assets is guaranteed by DOWS."
   },
   "person": {
     "title": "Personal information",
-    "myRate": "My mortgage rate",
-    "targetRate": "Target mortgage rate",
+    "myRate": "My collateralization ratio",
+    "targetRate": "Target collateralization ratio",
     "dows": "total",
     "locked": "locked",
     "Transferable": "Transferable"
@@ -29,7 +29,7 @@
     "text":
     "Synthetic assets meet our diverse needs. For users with hedging needs, compared with the U.S. dollar, they need stable coins (USDT, dUSD, xUSD, etc., belonging to synthetic assets) on the blockchain to facilitate the flow of funds",
     "debtRatio": "debt ratio",
-    "start": "start synthesis",
+    "start": "Start Synthesis",
     "all": "All",
     "balance": "Balance"
   },
@@ -50,14 +50,14 @@
 
   "liquidity": {
     "title": "Liquidity",
-    "text": "Liquidity measures how easy it is to convert assets into cash quickly and without loss. The easier the conversion, the better the liquidity of the asset. In the world of cryptocurrency trading, one of the promoters of liquidity is the deposit of many different limit orders"
+    "text": "Liquidity measures how easy it is to convert assets into cash quickly and without loss. The easier the conversion, the better the liquidity of the asset."
   },
 
   "destroy": {
-    "title": "Destroy",
-    "text": "Destroy xUSD to unlock your pledged DOWS. This will increase your mortgage rate and reduce your debt, allowing you to transfer DOWS not in custody",
-    "adjust": "Adjust to target mortgage rate",
-    "destroyAll": "Destroy all",
+    "title": "Burn",
+    "text": "Burn xUSD to unlock your collateralized DOWS. This will increase your collateralization ratio and reduce your debt, allowing you to transfer DOWS not in custody",
+    "adjust": "Adjust to target collateralization ratio",
+    "destroyAll": "Burn All",
     "all": "All",
     "quantity": "Un-lockable quantity",
     "balance": "Balance",
@@ -66,12 +66,12 @@
 
   "reward": {
     "title": "Reward",
-    "text": "Mortgage DOWS to cast synthetic assets, trade synthetic assets, and get rewards every week",
+    "text": "Stake DOWS to cast synthetic assets, trade synthetic assets, and get rewards every week",
     "transactionReward": "Transaction reward",
     "syntheticReward": "Synthetic reward",
     "bottomText":
-    "If you don’t receive it for 7 days, the reward will be recycled to the pool. If the mortgage rate is insufficient, you will not be able to get the reward.",
-    "receive": "receive"
+    "If you don’t claim it for 7 days, the reward will be recycled to the pool. If the collateralization ratio is insufficient, you will not be able to get the reward.",
+    "receive": "Claim"
   },
 
   "wallet": {
