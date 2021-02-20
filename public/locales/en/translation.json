@@ -83,5 +83,23 @@
     "fastest": "fastest",
     "fast": "fast",
     "average": "average"
+  },
+  "transfer": {
+    "title": "Transfer",
+    "text": "Here is the description for transfer.",
+    "amount": "Amount",
+    "destinationAddress": "Destination Address",
+    "sendNow": "Send Now",
+    "confirmation": {
+      "title": "Please confirm transaction",
+      "text": "To continue, follow the prompts on your Metamask Wallet.",
+      "amount": "Amount",
+      "account": "Destination Account"
+    },
+    "completion": {
+      "title": "Sending in progress!",
+      "text": "Your transaction has been broadcast to the Ethereum network. You may close this window as the transaction will complete in the background.",
+      "txHash": "Transaction Hash"
+    }
   }
 }

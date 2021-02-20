@@ -61,6 +61,9 @@ function SideBar() {
           <Menu.Item key="Reward" icon={<GiftOutlined />}>
             <Link to="/Reward">{t('reward.title')}</Link>
           </Menu.Item>
+          <Menu.Item key="Transfer" icon={<GiftOutlined />}>
+            <Link to="/Transfer">{t('transfer.title')}</Link>
+          </Menu.Item>
         </Menu>
       </div>
     </div>

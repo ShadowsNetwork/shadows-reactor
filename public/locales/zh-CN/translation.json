@@ -82,5 +82,23 @@
     "fastest": "极速",
     "fast": "高速",
     "average": "一般"
+  },
+  "transfer": {
+    "title": "转账",
+    "text": "这里是转账描述这里是转账描述这里是转账描述这里是转账描述",
+    "amount": "数量",
+    "destinationAddress": "收款地址",
+    "sendNow": "开始转账",
+    "confirmation": {
+      "title": "请确认转账",
+      "text": "请按照您 Metamask 钱包上的提示以继续。",
+      "amount": "转账金额",
+      "account": "目标账户"
+    },
+    "completion": {
+      "title": "转账正在进行中",
+      "text": "您的转账已经被广播到以太坊网络。您现在可以关闭这个窗口，转账将在后台完成。",
+      "txHash": "交易哈希值"
+    }
   }
 }

@@ -38,7 +38,9 @@ function PopoverContent(props) {
   )
 }
 
-function GasPrice() {
+function GasPrice(props) {
+  const { onChange } = props
+
   const ethGasPriceQuery = useEthGasPriceQuery()
 
   const { data } = ethGasPriceQuery
@@ -54,6 +56,10 @@ function GasPrice() {
   useEffect(() => {
     if (data) dispatch({ payload: data.fast })
   }, [data])
+
+  useEffect(() => {
+    onChange(state.price)
+  }, [state.price])
 
   return (
     <>

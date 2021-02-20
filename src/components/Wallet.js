@@ -1,53 +1,15 @@
-import { useWeb3React, Web3ReactProvider } from '@web3-react/core'
-import React, { useEffect, useState } from 'react'
-import { Web3Provider } from '@ethersproject/providers'
+import { useWeb3React } from '@web3-react/core'
+import React, { useState } from 'react'
 import { useEagerConnect, useInactiveListener } from '@/web3/hooks'
-import { message, Modal } from 'antd'
+import { Button, message, Modal } from 'antd'
 import { formatEther } from '@ethersproject/units'
 import { LoadingOutlined } from '@ant-design/icons'
 import { injected } from '@/web3/connectors'
 import { useTranslation } from 'react-i18next'
+import useBalanceQuery from '@/web3/useBalanceQuery'
 
-function getLibrary(provider) {
-  const library = new Web3Provider(provider)
-  library.pollingInterval = 12000
-  return library
-}
-
-function Balance(props) {
-  const { context } = props
-
-  const { account, library, chainId } = context
-
-  const [balance, setBalance] = useState()
-
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    let stale = false
-
-    setLoading(true)
-    library
-      .getBalance(account)
-      .then((res) => {
-        setLoading(false)
-        if (!stale) {
-          setBalance(res)
-        }
-      })
-      .catch(() => {
-        setLoading(false)
-        if (!stale) {
-          setBalance(null)
-        }
-      })
-
-    return () => {
-      stale = true
-      setBalance(undefined)
-    }
-  }, [account, library, chainId])
-  // ensures refresh if referential identity of library doesn't change across chainIds
+function Balance() {
+  const { loading, balance } = useBalanceQuery()
 
   return (
     <>
@@ -79,21 +41,20 @@ function CurrentAccount(props) {
 
   return (
     <>
-      {/* eslint-disable-next-line max-len */}
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <span
+      <Button
+        type="text"
         style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
         onClick={openModal}
       >
         {account}
-      </span>
+      </Button>
       <Modal
         title="Basic Modal"
         visible={isModalVisible}
         onOk={() => setModalVisible(false)}
         onCancel={() => setModalVisible(false)}
       >
-        <Balance context={context} />
+        <Balance />
       </Modal>
     </>
   )
@@ -105,19 +66,18 @@ function ConnectToWallet() {
   const { t } = useTranslation()
 
   return (
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-    <span
+    <Button
+      type="text"
       onClick={() => {
         activate(injected)
       }}
     >
       {t('wallet.connectToWallet')}
-    </span>
+    </Button>
   )
 }
 
-function WalletConsumer() {
+function Wallet() {
   // const { connector, library, chainId, account, activate, deactivate, active, error } = context
   const context = useWeb3React()
   const { account } = context
@@ -129,18 +89,10 @@ function WalletConsumer() {
   useInactiveListener(!triedEager)
 
   return (
-    <Web3ReactProvider getLibrary={getLibrary}>
+    <>
       {!account && <ConnectToWallet />}
       {!!account && <CurrentAccount context={context} />}
-    </Web3ReactProvider>
-  )
-}
-
-function Wallet() {
-  return (
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <WalletConsumer />
-    </Web3ReactProvider>
+    </>
   )
 }
 
