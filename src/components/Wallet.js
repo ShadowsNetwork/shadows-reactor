@@ -30,6 +30,10 @@ function CurrentAccount(props) {
   const { context } = props
 
   const { account } = context
+  const accountStr1 = account.substr(1, 5)
+  const accountStr2 = account.substr(-4, 4)
+  console.log(accountStr2)
+  const accountNum = `${accountStr1}...${accountStr2}`
 
   const openModal = () => {
     if (!props.context) {
@@ -43,10 +47,12 @@ function CurrentAccount(props) {
     <>
       <Button
         type="text"
-        style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+        style={{ width: '90px' }}
         onClick={openModal}
       >
-        {account}
+        <span>
+          {accountNum}
+        </span>
       </Button>
       <Modal
         title="Basic Modal"

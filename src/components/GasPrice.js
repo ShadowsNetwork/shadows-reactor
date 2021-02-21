@@ -67,7 +67,7 @@ function GasPrice(props) {
         {t('gasPrice.networkFee')}
         { `：$0 / ${state.price} GWEI` }
       </span>
-      <Popover content={<PopoverContent price={data} dispatch={dispatch} />}>
+      <Popover placement="bottom" content={<PopoverContent price={data} dispatch={dispatch} />}>
         <span style={{ marginLeft: '5px', color: '#8500fe' }}>{t('gasPrice.edit')}</span>
       </Popover>
     </>

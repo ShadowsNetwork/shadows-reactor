@@ -8,6 +8,7 @@ import {
   RestOutlined,
   UndoOutlined,
   UserOutlined,
+  ExportOutlined
 } from '@ant-design/icons'
 import React, { useState } from 'react'
 import './App.css'
@@ -61,7 +62,7 @@ function SideBar() {
           <Menu.Item key="Reward" icon={<GiftOutlined />}>
             <Link to="/Reward">{t('reward.title')}</Link>
           </Menu.Item>
-          <Menu.Item key="Transfer" icon={<GiftOutlined />}>
+          <Menu.Item key="Transfer" icon={<ExportOutlined />}>
             <Link to="/Transfer">{t('transfer.title')}</Link>
           </Menu.Item>
         </Menu>
