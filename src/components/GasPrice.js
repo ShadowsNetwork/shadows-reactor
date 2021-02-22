@@ -58,7 +58,9 @@ function GasPrice(props) {
   }, [data])
 
   useEffect(() => {
-    onChange(state.price)
+    if (onChange) {
+      onChange(state.price)
+    }
   }, [state.price])
 
   return (
