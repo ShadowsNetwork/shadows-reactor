@@ -2,7 +2,7 @@ import React from 'react'
 import { Menu, Dropdown } from 'antd'
 import '@/styles/languageDropDown.css'
 import '@/styles/language.css'
-import { GlobalOutlined } from '@ant-design/icons'
+import { GlobalOutlined, DownOutlined } from '@ant-design/icons'
 import i18next from 'i18next'
 import { SUPPORT_LANGUAGE } from '@/i18n/Language'
 import { useTranslation } from 'react-i18next'
@@ -42,7 +42,9 @@ function LanguageSelector() {
         <span style={{ marginLeft: '5px' }}>
           {currentLanguage.name}
         </span>
-        <div>v</div>
+        <div>
+          <DownOutlined style={{ fontSize: '13px', color: '#fff' }} />
+        </div>
       </div>
     </Dropdown>
   )

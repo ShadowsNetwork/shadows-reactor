@@ -30,7 +30,7 @@ function CurrentAccount(props) {
   const { context } = props
 
   const { account } = context
-  const accountStr1 = account.substr(1, 5)
+  const accountStr1 = account.substr(0, 5)
   const accountStr2 = account.substr(-4, 4)
   console.log(accountStr2)
   const accountNum = `${accountStr1}...${accountStr2}`
@@ -45,15 +45,14 @@ function CurrentAccount(props) {
 
   return (
     <>
-      <Button
-        type="text"
-        style={{ width: '90px' }}
+      <span
+        style={{
+          display: 'block', width: '90px', height: '28px', lineHeight: '28px',
+        }}
         onClick={openModal}
       >
-        <span>
-          {accountNum}
-        </span>
-      </Button>
+        {accountNum}
+      </span>
       <Modal
         title="Basic Modal"
         visible={isModalVisible}

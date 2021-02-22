@@ -1,8 +1,8 @@
 .flowStep {
     width: 50%;
-    height: 300px;
+    height: 30rem;
     position: absolute;
-    top: 100px;
+    top: 10rem;
     left: 25%;
 }
 .flowStep-top {
@@ -12,15 +12,15 @@
 }
 .flowStep-top > span:nth-of-type(1) {
     display: block;
-    width:35pt;
-    height: 35pt;
-    border-radius: 35pt;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 7rem;
     background-color: #CB395F;
     color: #1D1B1D;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 12pt;
+    font-size: 2.4rem;
     font-weight: bold;
 }
 .flowStep > span:nth-of-type(1) {
@@ -28,27 +28,28 @@
     width: 100%;
     text-align: center;
     color: #fff;
-    font-size: 12pt;
+    font-size: 2.4rem;
     font-weight: bold;
-    margin-top: 20px;
+    margin-top: 2rem;
 }
 .flowStep > span:nth-of-type(2) {
     display: block;
     width: 100%;
     text-align: center;
     color: #6C656C;
-    font-size: 8pt;
-    margin-top: 20px;
+    font-size: 1.6rem;
+    margin-top: 2rem;
 }
 .flowStep > button {
-    width: 50%;
-    height: 30pt;
+    width: 70%;
+    height: 5.8rem;
     border: 0;
-    margin-left: 25%;
-    margin-top: 70px;
-    border-radius: 4px;
+    margin-left: 15%;
+    margin-top: 7rem;
+    border-radius: 0.4rem;
     background: #CB395F;
     color: white;
+    font-size: 1.6rem;
 }
 .flowStep > button:hover {
     background-color: #EB557C;
@@ -56,11 +57,11 @@
 }
 
 .request {
-    width: 480px;
-    height: 80px;
-    margin-left: calc((100% - 480px) / 2);
-    margin-top: 90px;
-    border-radius: 2px;
+    width: 70%;
+    height: 8rem;
+    margin-left: 15%;
+    margin-top: 9rem;
+    border-radius: 0.2rem;
     background-color: #292427;
     display: flex;
     align-items: center;
@@ -79,21 +80,21 @@
     display: block;
     width: 100%;
     color: #9B9498;
-    font-size: 7pt;
+    font-size: 1.4rem;
 }
 .requestText > span:nth-of-type(2) {
     display: block;
     width: 100%;
     color: #E2D8DE;
-    font-size: 7pt;
+    font-size: 1.4rem;
 }
 .request > Button {
-    height: 25px;
+    height: 2.5rem;
     line-height: 0;
     border: 1px solid white;
     color: white;
     background: none;
-    margin-left: 20px;
+    margin-left: 2rem;
 }
 .request > Button:hover {
     color: white;

@@ -18,7 +18,7 @@ function Reward() {
         <div className="reward-input">
           <Button
             style={{
-              height: '43px',
+              height: '4.3rem',
               background: 'none',
               border: 0,
               display: 'flex',
@@ -27,9 +27,9 @@ function Reward() {
           >
             <span
               style={{
-                marginLeft: '10px',
+                marginLeft: '1rem',
                 color: '#B9B1B7',
-                fontSize: '8pt',
+                fontSize: '1.6rem',
               }}
             >
               {t('reward.transactionReward')}
@@ -38,21 +38,21 @@ function Reward() {
           <input
             style={{
               width: '60%',
-              height: '43px',
+              height: '4.3rem',
               background: 'none',
               border: 0,
               outline: 'none',
               color: '#fff',
             }}
           />
-          <span className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
+          <span className="all" style={{ position: 'absolute', right: '1.5rem', fontSize: '1.6rem' }}>
             0.00
           </span>
         </div>
         <div className="reward-input">
           <Button
             style={{
-              height: '43px',
+              height: '4.3rem',
               background: 'none',
               border: 0,
               display: 'flex',
@@ -61,9 +61,9 @@ function Reward() {
           >
             <span
               style={{
-                marginLeft: '10px',
+                marginLeft: '1rem',
                 color: '#B9B1B7',
-                fontSize: '8pt',
+                fontSize: '1.6rem',
               }}
             >
               {t('reward.syntheticReward')}
@@ -72,14 +72,14 @@ function Reward() {
           <input
             style={{
               width: '60%',
-              height: '43px',
+              height: '4.3rem',
               background: 'none',
               border: 0,
               outline: 'none',
               color: '#fff',
             }}
           />
-          <span className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
+          <span className="all" style={{ position: 'absolute', right: '1.5rem', fontSize: '1.6rem' }}>
             0.00
           </span>
         </div>

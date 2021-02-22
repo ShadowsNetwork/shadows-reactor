@@ -2,6 +2,7 @@ import useEthGasPriceQuery from '@/web3/useEthGasPriceQuery'
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useReducer } from 'react'
 import { Button, InputNumber, Popover } from 'antd'
+import '../styles/network.css'
 
 function PopoverContent(props) {
   const { t } = useTranslation()
@@ -18,22 +19,19 @@ function PopoverContent(props) {
 
   return (
     <>
-      <Button type="text" onClick={() => handleInputChange(fastest)}>
+      <InputNumber onChange={handleInputChange} style={{ width: '90px' }}  />
+      <Button style={{ display: 'block', marginTop: '15px' }} type="text" onClick={() => handleInputChange(fastest)}>
         <span>{t('gasPrice.fastest')}</span>
-        {': '}
-        <span>{fastest}</span>
+        <span style={{ marginLeft: '38px' }}>{fastest}</span>
       </Button>
-      <Button type="text" onClick={() => handleInputChange(fast)}>
+      <Button style={{ display: 'block', marginTop: '15px' }} type="text" onClick={() => handleInputChange(fast)}>
         <span>{t('gasPrice.fast')}</span>
-        {': '}
-        <span>{fast}</span>
+        <span style={{ marginLeft: '38px' }}>{fast}</span>
       </Button>
-      <Button type="text" onClick={() => handleInputChange(average)}>
+      <Button style={{ display: 'block', marginTop: '15px' }} type="text" onClick={() => handleInputChange(average)}>
         <span>{t('gasPrice.average')}</span>
-        {': '}
-        <span>{average}</span>
+        <span style={{ marginLeft: '38px' }}>{average}</span>
       </Button>
-      <InputNumber onChange={handleInputChange} />
     </>
   )
 }
@@ -69,8 +67,10 @@ function GasPrice(props) {
         {t('gasPrice.networkFee')}
         { `：$0 / ${state.price} GWEI` }
       </span>
-      <Popover placement="bottom" content={<PopoverContent price={data} dispatch={dispatch} />}>
-        <span style={{ marginLeft: '5px', color: '#8500fe' }}>{t('gasPrice.edit')}</span>
+      <Popover placement="rightTop" content={<PopoverContent price={data} dispatch={dispatch} />}>
+        <div className="edit">
+          <div />
+        </div>
       </Popover>
     </>
   )

@@ -91,7 +91,7 @@ function Destruction() {
           {/* <Dropdown overlay={menu} placement="bottomLeft"> */}
           <Button
             style={{
-              height: '43px',
+              height: '4.3rem',
               background: 'none',
               border: 0,
               display: 'flex',
@@ -100,17 +100,17 @@ function Destruction() {
           >
             <div
               style={{
-                width: '15px',
-                height: '15px',
-                borderRadius: '15px',
+                width: '1.5rem',
+                height: '1.5rem',
+                borderRadius: '1.5rem',
                 background: '#4444FF',
               }}
             />
             <span
               style={{
-                marginLeft: '10px',
+                marginLeft: '1rem',
                 color: '#B9B1B7',
-                fontSize: '8pt',
+                fontSize: '1.6rem',
               }}
             >
               xUSD
@@ -120,7 +120,7 @@ function Destruction() {
           <input
             style={{
               width: '60%',
-              height: '43px',
+              height: '4.3rem',
               background: 'none',
               border: 0,
               outline: 'none',
@@ -128,7 +128,7 @@ function Destruction() {
             }}
             placeholder="0.00"
           />
-          <span className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
+          <span className="all" style={{ position: 'absolute', right: '1.5rem', fontSize: '1.6remt' }}>
             {t('destroy.destroyAll')}
           </span>
         </div>
@@ -140,7 +140,7 @@ function Destruction() {
             {/* <Dropdown overlay={menu} placement="bottomLeft"> */}
             <Button
               style={{
-                height: '43px',
+                height: '4.3rem',
                 background: 'none',
                 border: 0,
                 display: 'flex',
@@ -149,17 +149,17 @@ function Destruction() {
             >
               <div
                 style={{
-                  width: '15px',
-                  height: '15px',
-                  borderRadius: '15px',
+                  width: '1.5rem',
+                  height: '1.5rem',
+                  borderRadius: '1.5rem',
                   background: '#4444FF',
                 }}
               />
               <span
                 style={{
-                  marginLeft: '10px',
+                  marginLeft: '1rem',
                   color: '#B9B1B7',
-                  fontSize: '8pt',
+                  fontSize: '1.6rem',
                 }}
               >
                 DOWS
@@ -169,14 +169,14 @@ function Destruction() {
             <input
               style={{
                 width: '60%',
-                height: '43px',
+                height: '4.3rem',
                 background: 'none',
                 border: 0,
                 outline: 'none',
                 color: '#fff',
               }}
             />
-            <span className="all" style={{ position: 'absolute', right: '15px', fontSize: '8pt' }}>
+            <span className="all" style={{ position: 'absolute', right: '1.5rem', fontSize: '1.6rem' }}>
               {t('destroy.all')}
             </span>
           </div>

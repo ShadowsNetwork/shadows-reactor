@@ -26,11 +26,11 @@ function MenuLay() {
         effect="fade"
         ref={(el) => (slider = el)}
         style={{
-          width: '40%',
+          width: '46%',
           height: '600px',
           position: 'absolute',
           top: 'calc((100% - 600px) / 2)',
-          left: '30%',
+          left: '27%',
         }}
       >
         <div className="menuLay">
@@ -44,9 +44,9 @@ function MenuLay() {
           <img className="riskThree" src={risk} alt="" />
         </div>
         <div className="menuLay">
-          <span>Staking Rewards</span>
+          <span>Mortgage DOS reward</span>
           <span>{t('mortgage.title')}</span>
-          <span className="mortgage">
+          <span className="mortgage" style={{ textAlign: 'center' }}>
             {t('mortgage.text')}
           </span>
           <img className="mortgageImg" src={mortgage} alt="" />
