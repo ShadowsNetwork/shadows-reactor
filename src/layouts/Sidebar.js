@@ -53,9 +53,13 @@ function SideBar() {
           <Menu.Item key="Transaction" icon={<InteractionOutlined />}>
             <Link to="/Transaction">{t('transaction.title')}</Link>
           </Menu.Item>
+          {
+            /*
           <Menu.Item key="Liquidity" icon={<UndoOutlined />}>
             <Link to="/Liquidity">{t('liquidity.title')}</Link>
           </Menu.Item>
+          */
+          }
           <Menu.Item key="Destruction" icon={<RestOutlined />}>
             <Link to="/Destruction">{t('destroy.title')}</Link>
           </Menu.Item>
