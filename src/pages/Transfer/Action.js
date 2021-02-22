@@ -12,7 +12,7 @@ import Web3 from 'web3'
 import { injected } from '@/web3/connectors'
 
 const availableCurrentType = [
-  { name: 'ETH', iconColor: '#4444FF' },
+  { name: 'xETH', iconColor: '#4444FF' },
   { name: 'xUSD', iconColor: '#de2c2c' },
   { name: 'xETC', iconColor: '#03AF91' },
   { name: 'xJPY', iconColor: '#D2417E' },

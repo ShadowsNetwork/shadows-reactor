@@ -109,7 +109,7 @@ function Synthesis() {
                   fontSize: '1.6rem',
                 }}
               >
-                xUSD
+                DOWS
               </span>
             </Button>
             {/* </Dropdown> */}

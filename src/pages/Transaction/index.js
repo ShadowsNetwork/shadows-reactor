@@ -150,7 +150,7 @@ function Transaction() {
                     fontSize: '8pt',
                   }}
                 >
-                  xUSD
+                  xEUR
                 </span>
               </Button>
             </Dropdown>
