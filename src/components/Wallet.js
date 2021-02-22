@@ -47,7 +47,7 @@ function CurrentAccount(props) {
     <>
       <span
         style={{
-          display: 'block', width: '90px', height: '28px', lineHeight: '28px',
+          display: 'block', width: '9rem', height: '2.8rem', lineHeight: '2.8rem', fontSize: '1.3rem',
         }}
         onClick={openModal}
       >

@@ -14,8 +14,8 @@ function Request() {
         <span>Transaction in progress</span>
         <span>Settin Uni-V1LP token allowance</span>
       </div>
-      <Button>view</Button>
-      <Button>close</Button>
+      <Button style={{ fontSize: '1.6rem' }}>view</Button>
+      <Button style={{ fontSize: '1.6rem' }}>close</Button>
     </div>
   )
 }
