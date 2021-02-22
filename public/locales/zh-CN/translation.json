@@ -57,7 +57,7 @@
     "text": "销毁xUSD来解锁您抵押的DOWS。这将增加您的抵押率，并减少您的债务，使您能转账未托管的DOWS",
     "adjust": "调整至目标抵押率",
     "destroyAll": "全部销毁",
-    "all": "所有",
+    "all": "全部",
     "quantity": "可解锁的数量",
     "balance": "余额",
     "networkPrice": "网络费用"

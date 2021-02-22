@@ -77,7 +77,7 @@ function Destruction() {
       </div>
       <div className="operation">
         <Button>{t('destroy.adjust')}</Button>
-        <Button>{t('destroy.all')}</Button>
+        <Button>{t('destroy.destroyAll')}</Button>
       </div>
       <div className="destruction-content">
         <div className="destruction-content-title">
@@ -129,7 +129,7 @@ function Destruction() {
             placeholder="0.00"
           />
           <span className="all" style={{ position: 'absolute', right: '1.5rem', fontSize: '1.6remt' }}>
-            {t('destroy.destroyAll')}
+            {t('destroy.all')}
           </span>
         </div>
         <div className="destruction-content">
