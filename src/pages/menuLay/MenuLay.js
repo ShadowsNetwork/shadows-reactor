@@ -44,7 +44,7 @@ function MenuLay() {
           <img className="riskThree" src={risk} alt="" />
         </div>
         <div className="menuLay">
-          <span>Mortgage DOS reward</span>
+          <span>Staking Rewards</span>
           <span>{t('mortgage.title')}</span>
           <span className="mortgage" style={{ textAlign: 'center' }}>
             {t('mortgage.text')}
