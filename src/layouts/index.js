@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 import { PaperClipOutlined } from '@ant-design/icons'
 import './App.css'
 import { IntlProvider } from 'react-intl'
@@ -27,6 +27,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import '@/i18n'
 import { Web3Provider } from '@ethersproject/providers'
 import { Web3ReactProvider } from '@web3-react/core'
+import routers from '@/layouts/routers'
 
 const queryClient = new QueryClient()
 
@@ -45,17 +46,11 @@ function BasicLayout() {
             <div className="App">
               <Router>
                 <SideBar />
-                <Route path="/" exact component={MenuLay} />
-                <Route path="/Personal" exact component={Personal} />
-                <Route path="/Synthesis" exact component={Synthesis} />
-                <Route path="/Transaction" exact component={Transaction} />
-                <Route path="/Liquidity" component={Liquidity} />
-                <Route path="/Destruction" exact component={Destruction} />
-                <Route path="/Reward" exact component={Reward} />
-                <Route path="/Success" exact component={Success} />
-                <Route path="/Error" exact component={Error} />
-                <Route path="/FlowStep" exact component={FlowStep} />
-                <Route path="/Transfer" exact component={Transfer} />
+                {
+                  routers.map((router) => (
+                    <Route path={router.path} exact component={router.component} key={router.key} />
+                  ))
+                }
               </Router>
               <div className="money">
                 <PaperClipOutlined style={{
