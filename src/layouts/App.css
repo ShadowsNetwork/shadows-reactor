@@ -8,7 +8,7 @@ html {
   position: absolute;
   top: 0;
   left: 0;
-  background: radial-gradient(circle 700px at 50% 0%, #2d1e2b 5%, #171b1d 100%);
+  /*background: radial-gradient(circle 700px at 50% 0%, #2d1e2b 5%, #171b1d 100%);*/
 }
 .ant-menu-dark.ant-menu-inline {
   width: 190px;

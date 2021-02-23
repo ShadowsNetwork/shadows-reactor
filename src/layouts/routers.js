@@ -10,6 +10,10 @@ import Success from '@/pages/Success'
 import Error from '@/pages/Error'
 import Transfer from '@/pages/Transfer'
 
+import LiquidityImage from '@/img/background/liquidity.jpg'
+import Map from '@/img/background/map.jpg'
+import Welcome from '@/img/background/welcome.jpg'
+
 import {
   ExportOutlined,
   GiftOutlined,
@@ -36,6 +40,7 @@ const routers = [
     key: 'index',
     component: MenuLay,
     hide: true,
+    backgroundImage: Welcome,
   },
 
   /** 显示的菜单、路由 */
@@ -44,36 +49,42 @@ const routers = [
     key: 'person',
     component: Personal,
     icon: UserOutlined,
+    backgroundImage: Map,
   },
   {
     path: '/Synthesis',
     key: 'synthesis',
     component: Synthesis,
     icon: PartitionOutlined,
+    backgroundImage: Map,
   },
   {
     path: '/Transaction',
     key: 'transaction',
     component: Transaction,
     icon: InteractionOutlined,
+    backgroundImage: Map,
   },
   {
     path: '/Destruction',
     key: 'destroy',
     component: Destruction,
     icon: RestOutlined,
+    backgroundImage: Map,
   },
   {
     path: '/Reward',
     key: 'reward',
     component: Reward,
     icon: GiftOutlined,
+    backgroundImage: Map,
   },
   {
     path: '/Transfer',
     key: 'transfer',
     component: Transfer,
     icon: ExportOutlined,
+    backgroundImage: LiquidityImage,
   },
 
   /** 隐藏的路由 */

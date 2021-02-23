@@ -1,21 +1,9 @@
-import React, { Suspense } from 'react'
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
+import React, { Suspense, useState } from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { PaperClipOutlined } from '@ant-design/icons'
 import './App.css'
 import { IntlProvider } from 'react-intl'
 import { getLocale } from 'umi'
-
-import MenuLay from '@/pages/menuLay/MenuLay'
-import Personal from '@/pages/Personal'
-import Synthesis from '@/pages/Synthesis'
-import Transaction from '@/pages/Transaction'
-import Liquidity from '@/pages/Liquidity'
-import FlowStep from '@/pages/Liquidity/FlowStep'
-import Destruction from '@/pages/Destruction'
-import Reward from '@/pages/Reward'
-import Transfer from '@/pages/Transfer'
-import Success from '@/pages/Success'
-import Error from '@/pages/Error'
 
 import Wallet from '@/components/Wallet'
 import LanguageSelector from '@/components/LanguageSelector'
@@ -38,17 +26,34 @@ function getLibrary(provider) {
 }
 
 function BasicLayout() {
+  const [background, setBackground] = useState()
+
+  const render = (router) => {
+    setBackground(router.backgroundImage)
+    return <router.component />
+  }
+
   return (
     <Suspense fallback={<div />}>
       <QueryClientProvider client={queryClient}>
         <IntlProvider locale={getLocale()}>
           <Web3ReactProvider getLibrary={getLibrary}>
-            <div className="App">
+            <div
+              className="App"
+              style={{
+                backgroundImage: `url(${background})`,
+              }}
+            >
               <Router>
                 <SideBar />
                 {
                   routers.map((router) => (
-                    <Route path={router.path} exact component={router.component} key={router.key} />
+                    <Route
+                      path={router.path}
+                      exact
+                      render={() => render(router)}
+                      key={router.key}
+                    />
                   ))
                 }
               </Router>
