@@ -1,6 +1,5 @@
 .language {
-    width: 80pt;
-    height: 25pt;
+    height: 3rem;
     color: #fff;
     font-size: 9pt;
     display: flex;
@@ -8,7 +7,7 @@
     align-items: center;
     border-radius: 25pt;
     position: absolute;
-    top: 20px;
+    top: 25px;
     right: 50px;
     cursor: pointer;
 }

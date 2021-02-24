@@ -11,19 +11,26 @@ html {
   transition: background-image 0.8s;
 }
 .ant-menu-dark.ant-menu-inline {
-  width: 19rem;
+  width: 20.5rem;
   border-top-right-radius: 25px;
   border-bottom-right-radius: 25px;
   background-color: #1d1b1d;
   margin-top: 20px;
 }
 .ant-menu-dark.ant-menu-vertical {
-  width: 60px;
+  width: 6rem;
   border-top-right-radius: 25px;
   border-bottom-right-radius: 25px;
   border-bottom-left-radius: 25px;
   background-color: #1d1b1d;
   margin-top: 20px;
+}
+.ant-menu-inline-collapsed > .ant-menu-item .ant-menu-item-icon, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .ant-menu-item-icon, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title .ant-menu-item-icon, .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .ant-menu-item-icon, .ant-menu-inline-collapsed > .ant-menu-item .anticon, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .anticon, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title .anticon, .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .anticon {
+    font-size: 1.6rem !important;
+}
+.ant-menu-item .ant-menu-item-icon, .ant-menu-submenu-title .ant-menu-item-icon, .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+    font-size: 1.5rem !important;
+    min-width: 1.4rem !important;
 }
 .ant-menu-item a {
     font-size: 1.6rem;
@@ -35,6 +42,9 @@ html {
 .ant-menu-dark.ant-menu-inline .ant-menu-item:nth-of-type(5) {
   margin-top: 5rem;
 }
+.ant-menu-dark.ant-menu-inline .ant-menu-item:nth-of-type(7) {
+    margin-bottom: 2.3rem;
+}
 .ant-menu-dark.ant-menu-vertical .ant-menu-item {
   margin-top: 1.5rem;
   border-radius: 2.5rem;
@@ -42,37 +52,15 @@ html {
 .ant-menu-dark.ant-menu-vertical .ant-menu-item:nth-of-type(5) {
   margin-top: 5rem;
 }
+.ant-menu-dark.ant-menu-vertical .ant-menu-item:nth-of-type(7) {
+    margin-bottom: 2.3rem;
+}
 .ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background-color: #292528 !important;
 }
 .ant-menu-dark .ant-menu-item-selected .ant-menu-item-icon + span,
 .ant-menu-dark .ant-menu-item-selected .anticon + span {
   color: #f64b78;
-}
-.language {
-  width: 80pt;
-  height: 25pt;
-  color: #fff;
-  font-size: 9pt;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 25pt;
-  position: absolute;
-  top: 2rem;
-  right: 5rem;
-  cursor: pointer;
-}
-.language > div {
-  width: 2.5rem;
-  height: 25px;
-  border-radius: 2.5rem;
-  background-color: #201b1e;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 1rem;
-  color: #fff;
 }
 .money:hover {
   background-color: #342b31;
@@ -83,22 +71,23 @@ html {
   border: 1px solid #8a8187;
 }
 .money {
-  width: 15rem;
-  height: 25pt;
+  height: 3rem;
   background-color: #201b1e;
   color: #fff;
-  font-size: 9pt;
+  font-size: 1.4rem;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 25pt;
   position: absolute;
-  top: 20px;
+  top: 25px;
   right: 180px;
 }
 .money > span {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin-left: 10px;
+    margin-left: 5px;
+    display: inline-block;
+    padding-right: 10px;
 }

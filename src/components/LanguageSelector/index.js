@@ -21,7 +21,7 @@ function LanguageSelector() {
     <Menu selectedKeys={[currentLanguage.key]} onClick={changeLanguage}>
       {SUPPORT_LANGUAGE.map((language) => (
         <Menu.Item key={language.key}>
-          <span role="img" aria-label={language.name} style={{ marginRight: '5px' }}>
+          <span role="img" aria-label={language.name} style={{ marginRight: '5px', fontSize: '1.4rem' }}>
             {language.icon}
           </span>
           {language.name}
@@ -35,15 +35,15 @@ function LanguageSelector() {
       <div className="language">
         <GlobalOutlined
           style={{
-            fontSize: '16px',
+            fontSize: '1.4rem',
             color: '#fff',
           }}
         />
-        <span style={{ marginLeft: '5px' }}>
+        <span style={{ marginLeft: '5px', fontSize: '1.4rem' }}>
           {currentLanguage.name}
         </span>
         <div>
-          <DownOutlined style={{ fontSize: '13px', color: '#fff' }} />
+          <DownOutlined style={{ fontSize: '1.3rem', color: '#fff' }} />
         </div>
       </div>
     </Dropdown>

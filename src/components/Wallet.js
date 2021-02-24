@@ -71,14 +71,7 @@ function ConnectToWallet() {
   const { t } = useTranslation()
 
   return (
-    <Button
-      type="text"
-      onClick={() => {
-        activate(injected)
-      }}
-    >
-      {t('wallet.connectToWallet')}
-    </Button>
+    <span onClick={() => { activate(injected) }}>{t('wallet.connectToWallet')}</span>
   )
 }
 
