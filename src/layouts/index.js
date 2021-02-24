@@ -44,6 +44,7 @@ function BasicLayout() {
                 backgroundImage: `url(${background})`,
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
+                backgroundColor: 'black',
               }}
             >
               <Router>

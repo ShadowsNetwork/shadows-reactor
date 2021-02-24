@@ -1,7 +1,7 @@
 @import '~antd/dist/antd.css';
 
 .ant-dropdown {
-    width: 26%;
+    width: 30%;
     background: #1D1B1D;
 }
 .ant-dropdown-menu {

@@ -79,7 +79,7 @@ function Transaction() {
           <Dropdown overlay={menu} placement="bottomLeft">
             <Button
               style={{
-                height: '4.3rem',
+                height: '6.4rem',
                 background: 'none',
                 border: 0,
                 display: 'flex',
@@ -128,7 +128,7 @@ function Transaction() {
             <Dropdown overlay={menu} placement="bottomLeft">
               <Button
                 style={{
-                  height: '4.3rem',
+                  height: '6.4rem',
                   background: 'none',
                   border: 0,
                   display: 'flex',
