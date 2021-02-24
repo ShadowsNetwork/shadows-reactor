@@ -31,7 +31,7 @@ function LanguageSelector() {
   )
 
   return (
-    <Dropdown overlay={langMenu} placement="bottomLeft" arrow>
+    <Dropdown overlay={langMenu} placement="bottomLeft" arrow overlayStyle={{ width: '80px' }}>
       <div className="language">
         <GlobalOutlined
           style={{
