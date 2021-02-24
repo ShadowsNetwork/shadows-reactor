@@ -25,51 +25,60 @@ function getLibrary(provider) {
   return library
 }
 
-function BasicLayout() {
-  const [background, setBackground] = useState()
+function App() {
+  const { pathname } = window.location
 
-  const render = (router) => {
+  const currentRouter = routers.filter((router) => router.path === pathname)[0]
+
+  const [background, setBackground] = useState(currentRouter.backgroundImage)
+
+  const handleNavItemClicked = (router) => {
     setBackground(router.backgroundImage)
-    return <router.component />
   }
 
+  return (
+    <div
+      className="App"
+      style={{
+        backgroundImage: `url(${background})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: 'black',
+      }}
+    >
+      <SideBar onNavItemClicked={handleNavItemClicked} />
+      {
+        routers.map((router) => (
+          <Route
+            path={router.path}
+            exact
+            component={router.component}
+            key={router.key}
+          />
+        ))
+      }
+      <div className="money">
+        <PaperClipOutlined style={{
+          fontSize: '16px',
+          color: '#fff',
+        }}
+        />
+        <Wallet />
+      </div>
+      <LanguageSelector />
+    </div>
+  )
+}
+
+function Root() {
   return (
     <Suspense fallback={<div />}>
       <QueryClientProvider client={queryClient}>
         <IntlProvider locale={getLocale()}>
           <Web3ReactProvider getLibrary={getLibrary}>
-            <div
-              className="App"
-              style={{
-                backgroundImage: `url(${background})`,
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: 'black',
-              }}
-            >
-              <Router>
-                <SideBar />
-                {
-                  routers.map((router) => (
-                    <Route
-                      path={router.path}
-                      exact
-                      render={() => render(router)}
-                      key={router.key}
-                    />
-                  ))
-                }
-              </Router>
-              <div className="money">
-                <PaperClipOutlined style={{
-                  fontSize: '16px',
-                  color: '#fff',
-                }}
-                />
-                <Wallet />
-              </div>
-              <LanguageSelector />
-            </div>
+            <Router>
+              <App />
+            </Router>
           </Web3ReactProvider>
         </IntlProvider>
       </QueryClientProvider>
@@ -77,4 +86,4 @@ function BasicLayout() {
   )
 }
 
-export default BasicLayout
+export default Root

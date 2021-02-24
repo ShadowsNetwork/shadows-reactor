@@ -6,39 +6,38 @@ import './App.css'
 import { useTranslation } from 'react-i18next'
 import routers, { routerLabelMapper } from '@/layouts/routers'
 
-function SideBar() {
+function SideBar(props) {
   const [collapsed, setCollapsed] = useState(false)
 
-  const openMenu = () => {
-    setCollapsed(false)
-  }
-
-  const closeMenu = () => {
-    setCollapsed(true)
-  }
-
   const { t } = useTranslation()
+
+  const { pathname } = window.location
+
+  const { onNavItemClicked } = props
 
   return (
     <div className="App">
       <div style={{ width: 256 }}>
         <Menu
-          defaultSelectedKeys={['Personal']}
-          defaultOpenKeys={['sub1']}
+          defaultSelectedKeys={[pathname]}
           mode="inline"
           theme="dark"
-          onMouseEnter={openMenu}
-          onMouseLeave={closeMenu}
+          onMouseEnter={() => { setCollapsed(false) }}
+          onMouseLeave={() => { setCollapsed(true) }}
           inlineCollapsed={collapsed}
         >
-          <Menu.Item>
+          <Menu.Item onClick={() => onNavItemClicked(routers[0])}>
             <Link to="/">
               <LogoSet collapsed={collapsed} />
             </Link>
           </Menu.Item>
           {
             routers.filter((router) => router.hide !== true).map((router) => (
-              <Menu.Item key={router.path} icon={<router.icon />}>
+              <Menu.Item
+                key={router.path}
+                icon={<router.icon />}
+                onClick={() => onNavItemClicked(router)}
+              >
                 <Link to={router.path}>
                   { t(routerLabelMapper[router.key].title) }
                 </Link>
