@@ -99,18 +99,21 @@ const routers = [
     key: 'success',
     component: Success,
     hide: true,
+    backgroundImage: Map,
   },
   {
     path: '/Error',
     key: 'error',
     component: Error,
     hide: true,
+    backgroundImage: Map,
   },
   {
     path: '/FlowStep',
     key: 'flowstep',
     component: FlowStep,
     hide: true,
+    backgroundImage: LiquidityImage,
   },
 ]
 

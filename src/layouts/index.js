@@ -42,6 +42,8 @@ function BasicLayout() {
               className="App"
               style={{
                 backgroundImage: `url(${background})`,
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
               }}
             >
               <Router>

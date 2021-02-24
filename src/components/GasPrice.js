@@ -19,7 +19,7 @@ function PopoverContent(props) {
 
   return (
     <>
-      <InputNumber onChange={handleInputChange} style={{ width: '90px' }}  />
+      <InputNumber onChange={handleInputChange} style={{ width: '90px' }} />
       <Button style={{ display: 'block', marginTop: '15px' }} type="text" onClick={() => handleInputChange(fastest)}>
         <span>{t('gasPrice.fastest')}</span>
         <span style={{ marginLeft: '38px' }}>{fastest}</span>

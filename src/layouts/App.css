@@ -8,10 +8,10 @@ html {
   position: absolute;
   top: 0;
   left: 0;
-  /*background: radial-gradient(circle 700px at 50% 0%, #2d1e2b 5%, #171b1d 100%);*/
+  transition: background-image 0.8s;
 }
 .ant-menu-dark.ant-menu-inline {
-  width: 190px;
+  width: 19rem;
   border-top-right-radius: 25px;
   border-bottom-right-radius: 25px;
   background-color: #1d1b1d;
@@ -25,19 +25,22 @@ html {
   background-color: #1d1b1d;
   margin-top: 20px;
 }
+.ant-menu-item a {
+    font-size: 1.6rem;
+}
 .ant-menu-dark.ant-menu-inline .ant-menu-item {
-  border-radius: 25px;
-  margin-top: 15px;
+  border-radius: 2.5rem;
+  margin-top: 1.5rem;
 }
 .ant-menu-dark.ant-menu-inline .ant-menu-item:nth-of-type(5) {
-  margin-top: 50px;
+  margin-top: 5rem;
 }
 .ant-menu-dark.ant-menu-vertical .ant-menu-item {
-  margin-top: 15px;
-  border-radius: 25px;
+  margin-top: 1.5rem;
+  border-radius: 2.5rem;
 }
 .ant-menu-dark.ant-menu-vertical .ant-menu-item:nth-of-type(5) {
-  margin-top: 50px;
+  margin-top: 5rem;
 }
 .ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background-color: #292528 !important;
@@ -56,19 +59,19 @@ html {
   align-items: center;
   border-radius: 25pt;
   position: absolute;
-  top: 20px;
-  right: 50px;
+  top: 2rem;
+  right: 5rem;
   cursor: pointer;
 }
 .language > div {
-  width: 25px;
+  width: 2.5rem;
   height: 25px;
-  border-radius: 25px;
+  border-radius: 2.5rem;
   background-color: #201b1e;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 1rem;
   color: #fff;
 }
 .money:hover {
@@ -80,7 +83,7 @@ html {
   border: 1px solid #8a8187;
 }
 .money {
-  width: 100pt;
+  width: 15rem;
   height: 25pt;
   background-color: #201b1e;
   color: #fff;

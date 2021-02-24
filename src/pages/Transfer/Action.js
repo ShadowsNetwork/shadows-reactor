@@ -162,7 +162,7 @@ function Action(props) {
           <Dropdown overlay={<DropdownMenu onChange={onDropdownMenuChange} />} placement="bottomLeft">
             <Button
               style={{
-                height: '43px',
+                height: '4.3rem',
                 background: 'none',
                 border: 0,
                 display: 'flex',
@@ -176,7 +176,7 @@ function Action(props) {
             onChange={((event) => { setAmount(event.target.value) })}
             style={{
               width: '60%',
-              height: '43px',
+              height: '4.3rem',
               background: 'none',
               border: 0,
               outline: 'none',
@@ -189,7 +189,8 @@ function Action(props) {
             style={{
               position: 'absolute',
               right: '0px',
-              fontSize: '8pt',
+              fontSize: '1.6rem',
+              lineHeight: '0',
             }}
           >
             {t('transaction.all')}
@@ -205,7 +206,7 @@ function Action(props) {
               placeholder="e.g. 0x185f5a"
               style={{
                 width: '100%',
-                height: '43px',
+                height: '4.3rem',
                 background: 'none',
                 border: 0,
                 outline: 'none',
