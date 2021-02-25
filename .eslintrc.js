@@ -27,5 +27,10 @@ module.exports = {
     'no-console': [0],
     'react/jsx-filename-extension': [0],
     'react/prop-types': [0],
+    'arrow-body-style': [0],
+    'no-return-await': [0],
+    'max-len': [0],
+    'arrow-parens': [2, 'as-needed'],
+    'no-param-reassign': [0],
   },
 }

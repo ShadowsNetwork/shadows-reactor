@@ -1,7 +1,7 @@
 import { useWeb3React } from '@web3-react/core'
 import React, { useState } from 'react'
 import { useEagerConnect, useInactiveListener } from '@/web3/hooks'
-import { Button, message, Modal } from 'antd'
+import { message, Modal } from 'antd'
 import { formatEther } from '@ethersproject/units'
 import { LoadingOutlined } from '@ant-design/icons'
 import { injected } from '@/web3/connectors'
@@ -32,7 +32,6 @@ function CurrentAccount(props) {
   const { account } = context
   const accountStr1 = account.substr(0, 5)
   const accountStr2 = account.substr(-4, 4)
-  console.log(accountStr2)
   const accountNum = `${accountStr1}...${accountStr2}`
 
   const openModal = () => {
@@ -45,6 +44,7 @@ function CurrentAccount(props) {
 
   return (
     <>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
       <span
         style={{
           display: 'block', width: '9rem', height: '2.8rem', lineHeight: '2.8rem', fontSize: '1.3rem',
@@ -71,6 +71,7 @@ function ConnectToWallet() {
   const { t } = useTranslation()
 
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
     <span onClick={() => { activate(injected) }}>{t('wallet.connectToWallet')}</span>
   )
 }

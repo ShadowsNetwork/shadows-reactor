@@ -16,6 +16,8 @@ import '@/i18n'
 import { Web3Provider } from '@ethersproject/providers'
 import { Web3ReactProvider } from '@web3-react/core'
 import routers from '@/layouts/routers'
+import { ethers } from 'ethers'
+import { setSigner } from '@/ShadowsJs/dowsJSConnector'
 
 const queryClient = new QueryClient()
 
@@ -28,11 +30,11 @@ function getLibrary(provider) {
 function App() {
   const { pathname } = window.location
 
-  const currentRouter = routers.filter((router) => router.path === pathname)[0]
+  const currentRouter = routers.filter(router => router.path === pathname)[0]
 
   const [background, setBackground] = useState(currentRouter.backgroundImage)
 
-  const handleNavItemClicked = (router) => {
+  const handleNavItemClicked = router => {
     setBackground(router.backgroundImage)
   }
 
@@ -48,7 +50,7 @@ function App() {
     >
       <SideBar onNavItemClicked={handleNavItemClicked} />
       {
-        routers.map((router) => (
+        routers.map(router => (
           <Route
             path={router.path}
             exact
@@ -71,6 +73,9 @@ function App() {
 }
 
 function Root() {
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+  setSigner({ networkId: 42, signer: provider.getSigner() })
+
   return (
     <Suspense fallback={<div />}>
       <QueryClientProvider client={queryClient}>

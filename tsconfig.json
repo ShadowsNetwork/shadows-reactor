@@ -13,11 +13,12 @@
       "@/*": ["src/*"],
       "@@/*": ["src/.umi/*"]
     },
+    "types": [],
     "allowSyntheticDefaultImports": true
   },
   "include": ["mock/**/*", "src/**/*", "config/**/*", ".umirc.ts", "typings.d.ts"],
   "exclude": [
-    "node_modules",
+    "node_modules/**",
     "lib",
     "es",
     "dist",
@@ -26,5 +27,8 @@
     "test",
     "docs",
     "tests"
-  ]
+  ],
+  "linterOptions": {
+    "exclude": ["node_modules/**"]
+  }
 }
