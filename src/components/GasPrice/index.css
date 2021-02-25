@@ -1,0 +1,49 @@
+.edit {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-left: 1px solid #CB395F;
+  border-bottom: 1px solid #CB395F;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.edit > div {
+  width: 7px;
+  height: 7px;
+  margin-top: 5px;
+  position: relative;
+}
+
+.edit > div::before {
+  content: "";
+  position: absolute;
+  height: 6px;
+  width: 1px;
+  top: -4px;
+  right: 1px;
+  background: #CB395F;
+}
+
+.edit > div::before {
+  transform: rotate(45deg);
+}
+
+.gas-price-input {
+  width: 12rem;
+}
+
+.gas-price-btn {
+  display: block;
+  width: 12rem;
+  margin-top: 15px;
+}
+
+.gas-price-btn > span:nth-of-type(1) {
+  float: left;
+}
+
+.gas-price-btn > span:nth-of-type(2) {
+  float: right;
+
+}

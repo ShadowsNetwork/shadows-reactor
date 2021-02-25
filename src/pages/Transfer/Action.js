@@ -215,12 +215,6 @@ function Action(props) {
             />
           </div>
         </div>
-        <div className="transaction-content-bottom">
-          <span>
-            {t('transaction.fees')}
-            ：0.3%
-          </span>
-        </div>
       </div>
       <div className="transaction-bottom">
         <Button

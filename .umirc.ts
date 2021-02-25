@@ -27,4 +27,5 @@ export default defineConfig({
     type: 'none',
     exclude: [],
   },
+  favicon: 'static/favicon.png'
 });

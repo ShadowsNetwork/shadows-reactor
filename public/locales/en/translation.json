@@ -1,7 +1,7 @@
 {
   "risk": {
     "title": "Risk Warning",
-    "text": "When collateralizing DOWS synthetic assets, a \"debt\" is generated. The \"debt\" is the amount of xUSD they initially minted. Next, the debt will fluctuate with the gains and losses of other synthetic asset holders. When the synthetic assets held by someone increase in value, that part of the proceeds will come from the debts of all DOWS holders in proportion. Each holder must pay their debts to unlock their collateralized DOWS."
+    "text": "When collateralizing DOWS to cast synthetic assets, a \"debt\" denominated in xUSD will be generated. Fluctuations in the value of synthetic assets held by others will affect the debt scale and thus affect the interests of each DOWS mortgagor."
   },
   "mortgage": {
     "title": "Staking Rewards",
@@ -16,7 +16,7 @@
     "text": "Shadows is a decentralized synthetic asset issuance protocol, trade protocol, and lending protocol built on Polkadot. The value of these synthetic assets is guaranteed by DOWS."
   },
   "person": {
-    "title": "Personal information",
+    "title": "Personal Information",
     "myRate": "My collateralization ratio",
     "targetRate": "Target collateralization ratio",
     "dows": "total",
@@ -27,7 +27,7 @@
   "synthesis": {
     "title": "Synthesis",
     "text":
-    "Synthetic assets meet our diverse needs. For users with hedging needs, compared with the U.S. dollar, they need stable coins (USDT, dUSD, xUSD, etc., belonging to synthetic assets) on the blockchain to facilitate the flow of funds",
+    "Collateralizing DOWS will cast synthetic asset xUSD which can be used in trading other synthetic assets.  Users obtain synthetic assets as rewards when meeting collateralization ratio",
     "debtRatio": "debt ratio",
     "start": "Start Synthesis",
     "all": "All",
@@ -39,7 +39,7 @@
       "edit": "Edit"
     },
     "title": "Transaction",
-    "text": "Trade your synthetic assets and xUSD.",
+    "text": "By using xUSD, you will be able to trade any synthetic assets supported by the system.",
     "pay": "pay",
     "available": "available",
     "receive": "receive",
@@ -55,7 +55,7 @@
 
   "destroy": {
     "title": "Burn",
-    "text": "Burn xUSD to unlock your collateralized DOWS. This will increase your collateralization ratio and reduce your debt, allowing you to transfer DOWS not in custody",
+    "text": "Burning xUSD will allow you to unlock your collateralized DOWS and meanwhile reduce your ‘debt’ in the system",
     "adjust": "Adjust to target collateralization ratio",
     "destroyAll": "Burn All",
     "all": "All",
@@ -86,7 +86,7 @@
   },
   "transfer": {
     "title": "Transfer",
-    "text": "Here is the description for transfer.",
+    "text": "Please check your receipt address very carefully.",
     "amount": "Amount",
     "destinationAddress": "Destination Address",
     "sendNow": "Send Now",

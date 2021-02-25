@@ -2,7 +2,7 @@ import useEthGasPriceQuery from '@/web3/useEthGasPriceQuery'
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useReducer } from 'react'
 import { Button, InputNumber, Popover } from 'antd'
-import '../styles/network.css'
+import './index.css'
 
 function PopoverContent(props) {
   const { t } = useTranslation()
@@ -18,21 +18,33 @@ function PopoverContent(props) {
   }
 
   return (
-    <>
-      <InputNumber onChange={handleInputChange} style={{ width: '90px' }} />
-      <Button style={{ display: 'block', marginTop: '15px' }} type="text" onClick={() => handleInputChange(fastest)}>
+    <div>
+      <InputNumber onChange={handleInputChange} className="gas-price-input" />
+      <Button
+        className="gas-price-btn"
+        type="text"
+        onClick={() => handleInputChange(fastest)}
+      >
         <span>{t('gasPrice.fastest')}</span>
-        <span style={{ marginLeft: '38px' }}>{fastest}</span>
+        <span>{fastest}</span>
       </Button>
-      <Button style={{ display: 'block', marginTop: '15px' }} type="text" onClick={() => handleInputChange(fast)}>
+      <Button
+        className="gas-price-btn"
+        type="text"
+        onClick={() => handleInputChange(fast)}
+      >
         <span>{t('gasPrice.fast')}</span>
-        <span style={{ marginLeft: '38px' }}>{fast}</span>
+        <span>{fast}</span>
       </Button>
-      <Button style={{ display: 'block', marginTop: '15px' }} type="text" onClick={() => handleInputChange(average)}>
+      <Button
+        className="gas-price-btn"
+        type="text"
+        onClick={() => handleInputChange(average)}
+      >
         <span>{t('gasPrice.average')}</span>
-        <span style={{ marginLeft: '38px' }}>{average}</span>
+        <span>{average}</span>
       </Button>
-    </>
+    </div>
   )
 }
 

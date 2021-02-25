@@ -26,8 +26,8 @@ function SideBar(props) {
           onMouseLeave={() => { setCollapsed(true) }}
           inlineCollapsed={collapsed}
         >
-          <Menu.Item onClick={() => onNavItemClicked(routers[0])}>
-            <Link to="/">
+          <Menu.Item onClick={() => onNavItemClicked(routers[0])} style={{ overflow: 'hidden' }}>
+            <Link to="/" style={{ overflow: 'hidden' }}>
               <LogoSet collapsed={collapsed} />
             </Link>
           </Menu.Item>

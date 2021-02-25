@@ -1,7 +1,9 @@
 @import "~antd/dist/antd.css";
+
 html {
   font-size: 62.5%;
 }
+
 .App {
   width: 100%;
   height: 100vh;
@@ -10,13 +12,15 @@ html {
   left: 0;
   transition: background-image 1s;
 }
+
 .ant-menu-dark.ant-menu-inline {
-  width: 20.5rem;
+  width: 24.5rem;
   border-top-right-radius: 25px;
   border-bottom-right-radius: 25px;
   background-color: #1d1b1d;
   margin-top: 20px;
 }
+
 .ant-menu-dark.ant-menu-vertical {
   width: 6rem;
   border-top-right-radius: 25px;
@@ -25,51 +29,65 @@ html {
   background-color: #1d1b1d;
   margin-top: 20px;
 }
+
 .ant-menu-inline-collapsed > .ant-menu-item .ant-menu-item-icon, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .ant-menu-item-icon, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title .ant-menu-item-icon, .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .ant-menu-item-icon, .ant-menu-inline-collapsed > .ant-menu-item .anticon, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .anticon, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title .anticon, .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .anticon {
-    font-size: 1.6rem !important;
+  font-size: 1.6rem !important;
 }
+
 .ant-menu-item .ant-menu-item-icon, .ant-menu-submenu-title .ant-menu-item-icon, .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
-    font-size: 1.5rem !important;
-    min-width: 1.4rem !important;
+  font-size: 1.5rem !important;
+  min-width: 1.4rem !important;
 }
+
 .ant-menu-item a {
-    font-size: 1.6rem;
+  font-size: 1.8rem;
 }
+
 .ant-menu-dark.ant-menu-inline .ant-menu-item {
   border-radius: 2.5rem;
   margin-top: 1.5rem;
 }
+
 .ant-menu-dark.ant-menu-inline .ant-menu-item:nth-of-type(5) {
   margin-top: 5rem;
 }
+
 .ant-menu-dark.ant-menu-inline .ant-menu-item:nth-of-type(7) {
-    margin-bottom: 2.3rem;
+  margin-bottom: 2.3rem;
 }
+
 .ant-menu-dark.ant-menu-vertical .ant-menu-item {
   margin-top: 1.5rem;
   border-radius: 2.5rem;
 }
+
 .ant-menu-dark.ant-menu-vertical .ant-menu-item:nth-of-type(5) {
   margin-top: 5rem;
 }
+
 .ant-menu-dark.ant-menu-vertical .ant-menu-item:nth-of-type(7) {
-    margin-bottom: 2.3rem;
+  margin-bottom: 2.3rem;
 }
+
 .ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background-color: #292528 !important;
 }
+
 .ant-menu-dark .ant-menu-item-selected .ant-menu-item-icon + span,
 .ant-menu-dark .ant-menu-item-selected .anticon + span {
   color: #f64b78;
 }
+
 .money:hover {
   background-color: #342b31;
   cursor: pointer;
 }
+
 .money:active {
   background-color: #342b31;
   border: 1px solid #8a8187;
 }
+
 .money {
   height: 3rem;
   background-color: #201b1e;
@@ -83,11 +101,12 @@ html {
   top: 25px;
   right: 180px;
 }
+
 .money > span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-left: 5px;
-    display: inline-block;
-    padding-right: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 5px;
+  display: inline-block;
+  padding-right: 10px;
 }

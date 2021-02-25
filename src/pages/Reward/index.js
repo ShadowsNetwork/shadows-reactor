@@ -36,6 +36,7 @@ function Reward() {
             </span>
           </Button>
           <input
+            disabled
             style={{
               width: '60%',
               height: '4.3rem',
@@ -70,6 +71,7 @@ function Reward() {
             </span>
           </Button>
           <input
+            disabled
             style={{
               width: '60%',
               height: '4.3rem',
