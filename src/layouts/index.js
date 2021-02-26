@@ -73,8 +73,10 @@ function App() {
 }
 
 function Root() {
-  const provider = new ethers.providers.Web3Provider(window.ethereum)
-  setSigner({ networkId: 42, signer: provider.getSigner() })
+  if (window.ethereum) {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    setSigner({ networkId: 42, signer: provider.getSigner() })
+  }
 
   return (
     <Suspense fallback={<div />}>
