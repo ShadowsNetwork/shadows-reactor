@@ -1,72 +1,81 @@
-import React from 'react'
-import '../../styles/synthesis.css'
+import React, { useCallback, useEffect, useState } from 'react'
+import './index.css'
 import '../../styles/dropDown.css'
-import { Button } from 'antd'
+import { Button, Input } from 'antd'
 import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
+import { useWeb3React } from '@web3-react/core'
+import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
+import { LoadingOutlined } from '@ant-design/icons'
+import { fromWei, toWei } from '@/web3/utils'
+import BigNumber from 'bignumber.js'
 
-// const menu = (
-//   <Menu>
-//     <Menu.Item>
-//       <span
-//         style={{
-//           display: 'inline-block',
-//           width: '15px',
-//           height: '15px',
-//           borderRadius: '15px',
-//           background: '#4444FF',
-//         }}
-//       />
-//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         xUSD
-//       </span>
-//     </Menu.Item>
-//     <Menu.Item>
-//       <span
-//         style={{
-//           display: 'inline-block',
-//           width: '15px',
-//           height: '15px',
-//           borderRadius: '15px',
-//           background: '#03AF91',
-//         }}
-//       />
-//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         xETC
-//       </span>
-//     </Menu.Item>
-//     <Menu.Item>
-//       <span
-//         style={{
-//           display: 'inline-block',
-//           width: '15px',
-//           height: '15px',
-//           borderRadius: '15px',
-//           background: '#D2417E',
-//         }}
-//       />
-//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         xUSD
-//       </span>
-//     </Menu.Item>
-//     <Menu.Item>
-//       <span
-//         style={{
-//           display: 'inline-block',
-//           width: '15px',
-//           height: '15px',
-//           borderRadius: '15px',
-//           background: '#464146',
-//         }}
-//       />
-//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         DOWS
-//       </span>
-//     </Menu.Item>
-//   </Menu>
-// )
 function Synthesis() {
   const { t } = useTranslation()
+  const { account } = useWeb3React()
+
+  const [available, setAvailable] = useState()
+  const [staking, setStaking] = useState()
+  const [totalBalance, setTotalBalance] = useState(null)
+  const [transactionInProgress, setTransactionInProgress] = useState(false)
+
+  const fetchDataFromContract = useCallback(async () => {
+    const [
+      [availableBalance, stakingBalance],
+      dowsBalance,
+    ] = await Promise.all([
+      dowsJSConnector.dowsJs.Shadows.remainingIssuableSynths(account),
+      dowsJSConnector.dowsJs.Shadows.balanceOf(account),
+    ])
+
+    setAvailable(fromWei(availableBalance))
+    setStaking(fromWei(stakingBalance))
+    setTotalBalance(fromWei(dowsBalance))
+  }, [account])
+
+  useEffect(() => {
+    fetchDataFromContract()
+  }, [fetchDataFromContract])
+
+  const [inputValue, setInputValue] = useState('')
+
+  const issueSynth = async () => {
+    setTransactionInProgress(true)
+    const amount = toWei(inputValue)
+    const r = await dowsJSConnector.dowsJs.Shadows.issueSynths(amount)
+    setTransactionInProgress(false)
+    console.log(r)
+  }
+
+  const handleInputKeyPress = e => {
+    if (!/[\d.]/.test(e.key)) {
+      e.preventDefault()
+    }
+  }
+
+  const handleInputOnChange = e => {
+    if (!e.target.value) {
+      setInputValue('')
+    } else if (parseFloat(e.target.value) <= available) {
+      setInputValue(e.target.value)
+    } else if (parseFloat(e.target.value) > available) {
+      setInputValue(available)
+    }
+  }
+
+  const AllBtn = (
+    <Button
+      type="text"
+      disabled={!available}
+      className="all"
+      style={{ fontSize: '1.6rem' }}
+      onClick={() => {
+        setInputValue(available)
+      }}
+    >
+      {t('synthesis.all')}
+    </Button>
+  )
 
   return (
     <div className="bg">
@@ -81,62 +90,46 @@ function Synthesis() {
               {t('synthesis.balance')}
               ：
             </span>
-            <span>20 DOWS</span>
+            <span>{available ? `${available} DOWS` : <LoadingOutlined />}</span>
           </div>
           <div className="Synthesis-input">
-            {/* <Dropdown overlay={menu} placement="bottomLeft"> */}
-            <Button
-              style={{
-                height: '4.3rem',
-                background: 'none',
-                border: 0,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <div
-                style={{
-                  width: '1.5rem',
-                  height: '1.5rem',
-                  borderRadius: '1.5rem',
-                  background: '#4444FF',
-                }}
-              />
-              <span
-                style={{
-                  marginLeft: '1rem',
-                  color: '#B9B1B7',
-                  fontSize: '1.6rem',
-                }}
-              >
+            <div className="prefix">
+              <div className="dot" />
+              <span className="text">
                 DOWS
               </span>
-            </Button>
-            {/* </Dropdown> */}
-            <input
-              style={{
-                width: '60%',
-                height: '4.3rem',
-                background: 'none',
-                border: 0,
-                outline: 'none',
-                color: '#fff',
-              }}
-            />
-            <div className="all" style={{ position: 'absolute', right: '1.5rem', fontSize: '1.6rem' }}>
-              {t('synthesis.all')}
             </div>
+            <Input
+              className="input"
+              value={inputValue}
+              bordered={false}
+              onKeyPress={handleInputKeyPress}
+              onChange={handleInputOnChange}
+              suffix={AllBtn}
+            />
           </div>
           <div className="Synthesis-content-bottom">
-            <span>Staking：00 DOWS</span>
+            <span>
+              {t('synthesis.staking')}
+              {': '}
+              {staking ? `${staking} DOWS` : <LoadingOutlined />}
+            </span>
             <span>
               {t('synthesis.debtRatio')}
-              ：0.0%
+              {': '}
+              {
+                totalBalance && staking
+                  ? `${new BigNumber((staking / totalBalance)).multipliedBy(100).dp(8)}  %`
+                  : <LoadingOutlined />
+              }
             </span>
           </div>
         </div>
         <div className="Synthesis-bottom">
-          <Button>{t('synthesis.start')}</Button>
+          <Button onClick={issueSynth}>
+            {transactionInProgress ? <LoadingOutlined /> : ''}
+            {t('synthesis.start')}
+          </Button>
           <GasPrice />
         </div>
       </div>

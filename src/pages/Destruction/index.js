@@ -1,73 +1,76 @@
-import React from 'react'
-import '../../styles/destruction.css'
+import React, { useCallback, useEffect, useState } from 'react'
+import './index.css'
 import '../../styles/dropDown.css'
-import { Button } from 'antd'
+import { Button, Input } from 'antd'
 import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
-
-// const menu = (
-//   <Menu>
-//     <Menu.Item>
-//       <span
-//         style={{
-//           display: 'inline-block',
-//           width: '15px',
-//           height: '15px',
-//           borderRadius: '15px',
-//           background: '#4444FF',
-//         }}
-//       />
-//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         xUSD
-//       </span>
-//     </Menu.Item>
-//     <Menu.Item>
-//       <span
-//         style={{
-//           display: 'inline-block',
-//           width: '15px',
-//           height: '15px',
-//           borderRadius: '15px',
-//           background: '#03AF91',
-//         }}
-//       />
-//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         xETC
-//       </span>
-//     </Menu.Item>
-//     <Menu.Item>
-//       <span
-//         style={{
-//           display: 'inline-block',
-//           width: '15px',
-//           height: '15px',
-//           borderRadius: '15px',
-//           background: '#D2417E',
-//         }}
-//       />
-//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         xUSD
-//       </span>
-//     </Menu.Item>
-//     <Menu.Item>
-//       <span
-//         style={{
-//           display: 'inline-block',
-//           width: '15px',
-//           height: '15px',
-//           borderRadius: '15px',
-//           background: '#464146',
-//         }}
-//       />
-//       <span style={{ marginLeft: '10px', color: '#B9B1B7', fontSize: '8pt' }}>
-//         DOWS
-//       </span>
-//     </Menu.Item>
-//   </Menu>
-// )
+import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
+import {
+  fromWei, toBigNumber, toByte32, toWei,
+} from '@/web3/utils'
+import { useWeb3React } from '@web3-react/core'
+import { LoadingOutlined } from '@ant-design/icons'
 
 function Destruction() {
   const { t } = useTranslation()
+  const { account } = useWeb3React()
+
+  const [xUSD, setXUSD] = useState(null)
+  const [inputValue, setInputValue] = useState('')
+  const [outputValue, setOutputValue] = useState('')
+  const [outputLoading, setOutputLoading] = useState(false)
+  const [transactionInProgress, setTransactionInProgress] = useState(false)
+
+  const handleInputKeyPress = e => {
+    if (!/[\d.]/.test(e.key)) {
+      e.preventDefault()
+    }
+  }
+
+  const handleInputOnChange = e => {
+    if (!e.target.value) {
+      setInputValue('')
+    } else if (parseFloat(e.target.value) <= xUSD) {
+      setInputValue(e.target.value)
+    } else if (parseFloat(e.target.value) > xUSD) {
+      setInputValue(xUSD)
+    }
+  }
+
+  const burnSynths = async () => {
+    setTransactionInProgress(true)
+    const amount = toWei(inputValue)
+    const r = await dowsJSConnector.dowsJs.Shadows.burnSynths(amount)
+    setTransactionInProgress(false)
+    console.log(r)
+  }
+
+  const fetchDowsByXusd = useCallback(async () => {
+    const rateForCurrency = await dowsJSConnector.dowsJs.ExchangeRates.rateForCurrency(toByte32('xUSD'))
+    setOutputLoading(false)
+    setOutputValue(toBigNumber(fromWei(rateForCurrency)).multipliedBy(toBigNumber(inputValue)).toString())
+  }, [inputValue])
+
+  const fetchXUSD = useCallback(async () => {
+    const [xUSDBalance] = await Promise.all([
+      dowsJSConnector.dowsJs.SynthxUSD.balanceOf(account),
+    ])
+
+    setXUSD(fromWei(xUSDBalance))
+  }, [account])
+
+  useEffect(() => {
+    if (inputValue && /^\d+(\.\d+)?$/.test(inputValue)) {
+      setTimeout(() => {
+        setOutputLoading(true)
+        fetchDowsByXusd()
+      }, 500)
+    }
+  }, [inputValue])
+
+  useEffect(() => {
+    fetchXUSD()
+  }, [fetchXUSD])
 
   return (
     <div className="destruction">
@@ -77,7 +80,9 @@ function Destruction() {
       </div>
       <div className="operation">
         <Button>{t('destroy.adjust')}</Button>
-        <Button>{t('destroy.destroyAll')}</Button>
+        <Button onClick={() => setInputValue(xUSD)}>
+          {t('destroy.destroyAll')}
+        </Button>
       </div>
       <div className="destruction-content">
         <div className="destruction-content-title">
@@ -85,105 +90,45 @@ function Destruction() {
             {t('destroy.balance')}
             ：
           </span>
-          <span>20 xUSD</span>
+          <span>{xUSD ? `${xUSD} xUSD` : <LoadingOutlined />}</span>
         </div>
         <div className="destruction-input">
-          {/* <Dropdown overlay={menu} placement="bottomLeft"> */}
-          <Button
-            style={{
-              height: '4.3rem',
-              background: 'none',
-              border: 0,
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <div
-              style={{
-                width: '1.5rem',
-                height: '1.5rem',
-                borderRadius: '1.5rem',
-                background: '#4444FF',
-              }}
-            />
-            <span
-              style={{
-                marginLeft: '1rem',
-                color: '#B9B1B7',
-                fontSize: '1.6rem',
-              }}
-            >
+          <div className="prefix">
+            <div className="dot" />
+            <span className="text">
               xUSD
             </span>
-          </Button>
-          {/* </Dropdown> */}
-          <input
-            style={{
-              width: '60%',
-              height: '4.3rem',
-              background: 'none',
-              border: 0,
-              outline: 'none',
-              color: '#fff',
-            }}
-            placeholder="0.00"
-          />
-          <span className="all" style={{ position: 'absolute', right: '1.5rem', fontSize: '1.6remt' }}>
-            {t('destroy.all')}
-          </span>
-        </div>
-        <div className="destruction-content">
-          <div className="destruction-content-title">
-            <span>{t('destroy.quantity')}</span>
           </div>
-          <div className="destruction-input">
-            {/* <Dropdown overlay={menu} placement="bottomLeft"> */}
-            <Button
-              style={{
-                height: '4.3rem',
-                background: 'none',
-                border: 0,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <div
-                style={{
-                  width: '1.5rem',
-                  height: '1.5rem',
-                  borderRadius: '1.5rem',
-                  background: '#4444FF',
-                }}
-              />
-              <span
-                style={{
-                  marginLeft: '1rem',
-                  color: '#B9B1B7',
-                  fontSize: '1.6rem',
-                }}
-              >
-                DOWS
-              </span>
-            </Button>
-            {/* </Dropdown> */}
-            <input
-              style={{
-                width: '60%',
-                height: '4.3rem',
-                background: 'none',
-                border: 0,
-                outline: 'none',
-                color: '#fff',
-              }}
-            />
-            <span className="all" style={{ position: 'absolute', right: '1.5rem', fontSize: '1.6rem' }}>
-              {t('destroy.all')}
+          <Input
+            className="input"
+            value={inputValue}
+            bordered={false}
+            onKeyPress={handleInputKeyPress}
+            onChange={handleInputOnChange}
+          />
+        </div>
+      </div>
+      <div className="destruction-content">
+        <div className="destruction-content-title">
+          <span>{t('destroy.quantity')}</span>
+        </div>
+        <div className="destruction-input">
+          <div className="prefix">
+            <div className="dot" />
+            <span className="text">
+              DOWS
             </span>
+          </div>
+          <div className="output">
+            {outputLoading ? <LoadingOutlined /> : outputValue}
           </div>
         </div>
       </div>
       <div className="destruction-bottom">
-        <Button>{t('destroy.destroyAll')}</Button>
+        <Button onClick={burnSynths}>
+          {transactionInProgress ? <LoadingOutlined /> : ''}
+          {t('destroy.start')}
+        </Button>
         <GasPrice />
       </div>
     </div>

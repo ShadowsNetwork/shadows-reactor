@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useWeb3React } from '@web3-react/core'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
+import { fromWei, toByte32 } from '@/web3/utils'
 
 function Personal() {
   const { t } = useTranslation()
@@ -14,29 +15,44 @@ function Personal() {
   const [xJPY, setXJPY] = useState(null)
   const [xAUD, setXAUD] = useState(null)
   const [xEUR, setXEUR] = useState(null)
-  const dows = 0
-  const myRatio = ''
-  const targetRatio = ''
-  const transferableShadows = ''
-  const lockedShadows = ''
+  const [dows, setDows] = useState(null)
+  const [myRatio, setMyRatio] = useState(null)
+  const [targetRatio, setTargetRatio] = useState(null)
+  const [transferableDows, setTransferableDows] = useState(null)
+  const [lockedShadows, setLockedShadows] = useState(null)
 
-  const getSynthBalance = useCallback(async () => {
-    const [xUSDBalance, xJPYBalance, xAUDBalance, xEURBalance] = await Promise.all([
+  const fetchDataFromContract = useCallback(async () => {
+    const [xUSDBalance, xJPYBalance, xAUDBalance, xEURBalance,
+      dowsBalance, collateralisationRatio, issuanceRatio,
+      transferableShadows, debtBalance,
+    ] = await Promise.all([
       dowsJSConnector.dowsJs.SynthxUSD.balanceOf(account),
       dowsJSConnector.dowsJs.SynthxJPY.balanceOf(account),
       dowsJSConnector.dowsJs.SynthxAUD.balanceOf(account),
       dowsJSConnector.dowsJs.SynthxEUR.balanceOf(account),
+
+      dowsJSConnector.dowsJs.Shadows.balanceOf(account),
+      dowsJSConnector.dowsJs.Shadows.collateralisationRatio(account),
+      dowsJSConnector.dowsJs.ShadowsState.issuanceRatio(),
+
+      dowsJSConnector.dowsJs.Shadows.transferableShadows(account),
+      dowsJSConnector.dowsJs.Shadows.debtBalanceOf(account, toByte32('DOWS')),
     ])
 
-    setXUSD(dowsJSConnector.dowsJs.util.formatEther(xUSDBalance))
-    setXJPY(dowsJSConnector.dowsJs.util.formatEther(xJPYBalance))
-    setXAUD(dowsJSConnector.dowsJs.util.formatEther(xAUDBalance))
-    setXEUR(dowsJSConnector.dowsJs.util.formatEther(xEURBalance))
+    setXUSD(fromWei(xUSDBalance))
+    setXJPY(fromWei(xJPYBalance))
+    setXAUD(fromWei(xAUDBalance))
+    setXEUR(fromWei(xEURBalance))
+    setDows(fromWei(dowsBalance))
+    setMyRatio(fromWei(collateralisationRatio))
+    setTargetRatio(fromWei(issuanceRatio))
+    setTransferableDows(fromWei(transferableShadows))
+    setLockedShadows(fromWei(debtBalance.div(issuanceRatio)))
   }, [account])
 
   useEffect(() => {
-    getSynthBalance()
-  }, [getSynthBalance])
+    fetchDataFromContract()
+  }, [fetchDataFromContract])
 
   return (
     <div className="me">
@@ -99,7 +115,7 @@ function Personal() {
           <span>
             {t('person.Transferable')}
             {': '}
-            {transferableShadows ?? <LoadingOutlined />}
+            {transferableDows ?? <LoadingOutlined />}
           </span>
         </div>
         <Progress

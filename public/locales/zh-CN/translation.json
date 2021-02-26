@@ -61,7 +61,8 @@
     "all": "全部",
     "quantity": "可解锁的数量",
     "balance": "余额",
-    "networkPrice": "网络费用"
+    "networkPrice": "网络费用",
+    "start": "开始销毁"
   },
 
   "reward": {

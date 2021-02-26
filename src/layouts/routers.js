@@ -45,42 +45,42 @@ const routers = [
 
   /** 显示的菜单、路由 */
   {
-    path: '/Personal',
+    path: '/personal',
     key: 'person',
     component: Personal,
     icon: UserOutlined,
     backgroundImage: Map,
   },
   {
-    path: '/Synthesis',
+    path: '/synthesis',
     key: 'synthesis',
     component: Synthesis,
     icon: PartitionOutlined,
     backgroundImage: Map,
   },
   {
-    path: '/Transaction',
-    key: 'transaction',
-    component: Transaction,
-    icon: InteractionOutlined,
-    backgroundImage: Map,
-  },
-  {
-    path: '/Destruction',
+    path: '/destruction',
     key: 'destroy',
     component: Destruction,
     icon: RestOutlined,
     backgroundImage: Map,
   },
   {
-    path: '/Reward',
+    path: '/transaction',
+    key: 'transaction',
+    component: Transaction,
+    icon: InteractionOutlined,
+    backgroundImage: Map,
+  },
+  {
+    path: '/reward',
     key: 'reward',
     component: Reward,
     icon: GiftOutlined,
     backgroundImage: Map,
   },
   {
-    path: '/Transfer',
+    path: '/transfer',
     key: 'transfer',
     component: Transfer,
     icon: ExportOutlined,
@@ -89,7 +89,7 @@ const routers = [
 
   /** 隐藏的路由 */
   {
-    path: '/Liquidity',
+    path: '/liquidity',
     key: 'liquidity',
     component: Liquidity,
     hide: true,

@@ -26,6 +26,8 @@
     "@web3-react/injected-connector": "latest",
     "antd": "^4.12.3",
     "axios": "^0.21.1",
+    "bignumber.js": "^9.0.1",
+    "bn.js": "^5.2.0",
     "ethereumjs-tx": "^2.1.2",
     "ethers": "^5.0.31",
     "file-system": "^2.2.2",

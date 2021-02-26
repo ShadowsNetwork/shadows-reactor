@@ -57,7 +57,8 @@
     "all": "All",
     "quantity": "Un-lockable quantity",
     "balance": "Balance",
-    "networkPrice": "Network Fee"
+    "networkPrice": "Network Fee",
+    "start": "Destroy Now"
   },
   "reward": {
     "title": "Reward",
