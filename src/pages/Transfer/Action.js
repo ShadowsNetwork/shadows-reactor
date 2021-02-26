@@ -10,6 +10,7 @@ import { formatEther } from '@ethersproject/units'
 import { useWeb3React } from '@web3-react/core'
 import Web3 from 'web3'
 import { injected } from '@/web3/connectors'
+import '../../styles/dropDown.css'
 
 const availableCurrentType = [
   { name: 'xETH', iconColor: '#4444FF' },
@@ -26,14 +27,14 @@ function MenuItemContent(props) {
       <span
         style={{
           display: 'inline-block',
-          width: '15px',
-          height: '15px',
-          borderRadius: '15px',
+          width: '1.5rem',
+          height: '1.5rem',
+          borderRadius: '1.5rem',
           background: iconColor,
         }}
       />
       <span style={{
-        marginLeft: '10px',
+        marginLeft: '1rem',
         color: '#B9B1B7',
         fontSize: '8pt',
       }}
@@ -49,7 +50,7 @@ function DropdownMenu(props) {
 
   return (
     <Menu>
-      {availableCurrentType.map((type) => (
+      {availableCurrentType.map(type => (
         <Menu.Item onClick={() => { onChange(type.name) }} key={type.name}>
           <MenuItemContent value={type.name} iconColor={type.iconColor} />
         </Menu.Item>
@@ -84,9 +85,9 @@ async function handleSendTransfer(
     method: 'eth_sendTransaction',
     params: [transactionParams],
     from: account,
-  }).then((result) => {
+  }).then(result => {
     onComplete(result)
-  }).catch((error) => {
+  }).catch(error => {
     console.log(error)
   })
 }
@@ -98,9 +99,9 @@ function CurrentCurrencyType(props) {
     <>
       <div
         style={{
-          width: '15px',
-          height: '15px',
-          borderRadius: '15px',
+          width: '1.5rem',
+          height: '1.5rem',
+          borderRadius: '1.5rem',
           background: iconColor,
         }}
       />
@@ -135,12 +136,12 @@ function Action(props) {
   const [gasPrice, setGasPrice] = useState(0)
 
   const getCurrencyType = (availableCurrentType.filter(
-    (type) => type.name === selectedCurrencyName,
+    type => type.name === selectedCurrencyName,
   ))[0]
 
-  const onDropdownMenuChange = (name) => { setSelectedCurrencyName(name) }
+  const onDropdownMenuChange = name => { setSelectedCurrencyName(name) }
 
-  const handleGasPriceChange = (price) => { setGasPrice(price) }
+  const handleGasPriceChange = price => { setGasPrice(price) }
 
   return (
     <div className="transaction">
@@ -173,7 +174,7 @@ function Action(props) {
             </Button>
           </Dropdown>
           <Input
-            onChange={((event) => { setAmount(event.target.value) })}
+            onChange={(event => { setAmount(event.target.value) })}
             style={{
               width: '60%',
               height: '4.3rem',
@@ -202,7 +203,7 @@ function Action(props) {
           </div>
           <div className="transaction-input">
             <Input
-              onChange={((event) => { setDestinationAccount(event.target.value) })}
+              onChange={(event => { setDestinationAccount(event.target.value) })}
               placeholder="e.g. 0x185f5a"
               style={{
                 width: '100%',

@@ -18,7 +18,7 @@ function Transfer() {
     setDestinationAccount(_destinationAccount)
   }
 
-  const onComplete = (_txHash) => {
+  const onComplete = _txHash => {
     setActivePageKey('COMPLETION')
     setTxHash(_txHash)
   }
@@ -48,7 +48,7 @@ function Transfer() {
     },
   ]
 
-  return PAGES.filter((p) => (p.key === activePageKey))[0].page
+  return PAGES.filter(p => (p.key === activePageKey))[0].page
 }
 
 export default Transfer

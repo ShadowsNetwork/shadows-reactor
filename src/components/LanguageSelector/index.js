@@ -14,12 +14,12 @@ function LanguageSelector() {
 
   const { i18n } = useTranslation()
   const currentLanguage = i18n.language
-    ? SUPPORT_LANGUAGE.filter((lang) => lang.key === i18n.language)[0]
+    ? SUPPORT_LANGUAGE.filter(lang => lang.key === i18n.language)[0]
     : SUPPORT_LANGUAGE[0]
 
   const langMenu = (
     <Menu selectedKeys={[currentLanguage.key]} onClick={changeLanguage}>
-      {SUPPORT_LANGUAGE.map((language) => (
+      {SUPPORT_LANGUAGE.map(language => (
         <Menu.Item key={language.key}>
           <span role="img" aria-label={language.name} style={{ marginRight: '5px', fontSize: '1.4rem' }}>
             {language.icon}
@@ -34,8 +34,7 @@ function LanguageSelector() {
     <Dropdown
       mouseEnterDelay="0"
       overlay={langMenu}
-      placement="bottomLeft"
-      arrow
+      placement="bottomCenter"
       overlayStyle={{ width: '80px' }}
     >
       <div className="language">
