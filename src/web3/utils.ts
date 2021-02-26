@@ -8,7 +8,7 @@ export function fromWei(value: any, decimalPlaces: number = 8) {
 }
 
 export function toWei(amount: number | string) {
-  return toBigNumber(amount).multipliedBy(toBigNumber('1e+18')).toString()
+  return toBigNumber(amount).multipliedBy(toBigNumber('1e+18')).toString(10)
 }
 
 export function isBN(value: any) {
