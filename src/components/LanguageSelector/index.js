@@ -29,7 +29,11 @@ function LanguageSelector() {
   }, [i18n.language])
 
   const langMenu = (
-    <Menu selectedKeys={[currentLanguage.key]} onClick={changeLanguage}>
+    <Menu
+      defaultSelectedKeys={[currentLanguage.key]}
+      onSelect={changeLanguage}
+      selectable
+    >
       {SUPPORT_LANGUAGE.map(language => (
         <Menu.Item key={language.key}>
           <span role="img" aria-label={language.name} style={{ marginRight: '5px', fontSize: '1.4rem' }}>
