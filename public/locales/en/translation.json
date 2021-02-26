@@ -23,17 +23,15 @@
     "locked": "locked",
     "Transferable": "Transferable"
   },
-
   "synthesis": {
     "title": "Synthesis",
-    "text":
-    "Collateralizing DOWS will cast synthetic asset xUSD which can be used in trading other synthetic assets.  Users obtain synthetic assets as rewards when meeting collateralization ratio",
-    "debtRatio": "debt ratio",
+    "text": "Collateralizing DOWS will cast synthetic asset xUSD which can be used in trading other synthetic assets.  Users obtain synthetic assets as rewards when meeting collateralization ratio",
+    "debtRatio": "Debt Ratio",
     "start": "Start Synthesis",
     "all": "All",
-    "balance": "Balance"
+    "balance": "Balance",
+    "staking": "Staking"
   },
-
   "transaction": {
     "networkPrice": {
       "edit": "Edit"
@@ -47,12 +45,10 @@
     "fees": "transaction fees",
     "all": "All"
   },
-
   "liquidity": {
     "title": "Liquidity",
     "text": "Liquidity measures how easy it is to convert assets into cash quickly and without loss. The easier the conversion, the better the liquidity of the asset."
   },
-
   "destroy": {
     "title": "Burn",
     "text": "Burning xUSD will allow you to unlock your collateralized DOWS and meanwhile reduce your ‘debt’ in the system",
@@ -63,17 +59,14 @@
     "balance": "Balance",
     "networkPrice": "Network Fee"
   },
-
   "reward": {
     "title": "Reward",
     "text": "Stake DOWS to cast synthetic assets, trade synthetic assets, and get rewards every week",
     "transactionReward": "Transaction reward",
     "syntheticReward": "Synthetic reward",
-    "bottomText":
-    "If you don’t claim it for 7 days, the reward will be recycled to the pool. If the collateralization ratio is insufficient, you will not be able to get the reward.",
+    "bottomText": "If you don’t claim it for 7 days, the reward will be recycled to the pool. If the collateralization ratio is insufficient, you will not be able to get the reward.",
     "receive": "Claim"
   },
-
   "wallet": {
     "connectToWallet": "Connect To A Wallet"
   },

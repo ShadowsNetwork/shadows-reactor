@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Menu, Dropdown } from 'antd'
 import '@/styles/languageDropDown.css'
 import '@/styles/language.css'
@@ -8,14 +8,29 @@ import { SUPPORT_LANGUAGE } from '@/i18n/Language'
 import { useTranslation } from 'react-i18next'
 
 function LanguageSelector() {
+  const [currentLanguage, setCurrentLanguage] = useState(SUPPORT_LANGUAGE[0])
+
   const changeLanguage = ({ key }) => {
     i18next.changeLanguage(key)
+    setCurrentLanguage(SUPPORT_LANGUAGE.filter(lang => lang.key === key)[0])
   }
 
   const { i18n } = useTranslation()
-  const currentLanguage = i18n.language
-    ? SUPPORT_LANGUAGE.filter(lang => lang.key === i18n.language)[0]
-    : SUPPORT_LANGUAGE[0]
+
+  useEffect(() => {
+    let getCurrentLanguage
+    if (i18n.language) {
+      const filtered = SUPPORT_LANGUAGE.filter(lang => lang.key === i18n.language)
+      if (filtered && filtered.length === 1) {
+        // eslint-disable-next-line prefer-destructuring
+        getCurrentLanguage = filtered[0]
+      } else {
+        // eslint-disable-next-line prefer-destructuring
+        getCurrentLanguage = SUPPORT_LANGUAGE[0]
+      }
+    }
+    setCurrentLanguage(getCurrentLanguage)
+  }, [i18n.language])
 
   const langMenu = (
     <Menu
@@ -36,7 +51,7 @@ function LanguageSelector() {
 
   return (
     <Dropdown
-      mouseEnterDelay="0"
+      trigger="click"
       overlay={langMenu}
       placement="bottomCenter"
       overlayStyle={{ width: '80px' }}
@@ -48,7 +63,7 @@ function LanguageSelector() {
             color: '#fff',
           }}
         />
-        <span style={{ marginLeft: '5px', fontSize: '1.4rem' }}>
+        <span style={{ marginLeft: '5px', fontSize: '1.4rem', userSelect: 'none' }}>
           {currentLanguage.name}
         </span>
         <div>

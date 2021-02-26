@@ -5,6 +5,6 @@ type Language = {
 }
 
 export const SUPPORT_LANGUAGE: Language[] = [
-  { key: 'en-US', name: 'English', icon: '🇬🇧' },
+  { key: 'en', name: 'English', icon: '🇬🇧' },
   { key: 'zh-CN', name: '简体中文', icon: '🇨🇳' },
 ]

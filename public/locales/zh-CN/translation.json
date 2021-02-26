@@ -30,7 +30,8 @@
     "debtRatio": "债务比例",
     "start": "开始合成",
     "all": "全部",
-    "balance": "余额"
+    "balance": "余额",
+    "staking": "已抵押"
   },
 
   "transaction": {
