@@ -1,7 +1,7 @@
 {
   "risk": {
     "title": "Risk Warning",
-    "text": "When collateralizing DOWS to cast synthetic assets, a \"debt\" denominated in xUSD will be generated. Fluctuations in the value of synthetic assets held by others will affect the debt scale and thus affect the interests of each DOWS mortgagor."
+    "text": "When DOWS are collateralized, a \"debt\" denominated in xUSD will be generated. Fluctuations in the value of every single synthetic asset change the total debt scale on Shadows, which affects everyone who collateralized DOWS."
   },
   "mortgage": {
     "title": "Staking Rewards",
@@ -25,19 +25,19 @@
   },
   "synthesis": {
     "title": "Synthesis",
-    "text": "Collateralizing DOWS will cast synthetic asset xUSD which can be used in trading other synthetic assets.  Users obtain synthetic assets as rewards when meeting collateralization ratio",
-    "debtRatio": "Debt Ratio",
+    "text": "Collateralizing DOWS casts synthetic asset xUSD. When your collateralization ratio is higher than 800%, you are qualified to claim weekly rewards.",
+    "debtRatio": "Collateralization Ratio",
     "start": "Start Synthesis",
     "all": "All",
     "balance": "Balance",
-    "staking": "Staking"
+    "staking": "Collateralized DOWS"
   },
   "transaction": {
     "networkPrice": {
       "edit": "Edit"
     },
-    "title": "Transaction",
-    "text": "By using xUSD, you will be able to trade any synthetic assets supported by the system.",
+    "title": "Trade",
+    "text": "With xUSD, you can buy other types of synthetic assets that are available on Shadows.",
     "pay": "pay",
     "available": "available",
     "receive": "receive",
@@ -51,7 +51,7 @@
   },
   "destroy": {
     "title": "Burn",
-    "text": "Burning xUSD will allow you to unlock your collateralized DOWS and meanwhile reduce your ‘debt’ in the system",
+    "text": "Burning xUSD allows you to unlock your collateralized DOWS, meanwhile reducing your ‘debt’.",
     "adjust": "Adjust to target collateralization ratio",
     "destroyAll": "Burn All",
     "all": "All",
@@ -62,10 +62,10 @@
   },
   "reward": {
     "title": "Reward",
-    "text": "Stake DOWS to cast synthetic assets, trade synthetic assets, and get rewards every week",
-    "transactionReward": "Transaction reward",
+    "text": "Collateralizing DOWS to cast xUSD, buy synthetic assets, and get rewards from the transaction fees generated on Shadows every week.",
+    "transactionReward": "Trading reward",
     "syntheticReward": "Synthetic reward",
-    "bottomText": "If you don’t claim it for 7 days, the reward will be recycled to the pool. If the collateralization ratio is insufficient, you will not be able to get the reward.",
+    "bottomText": "If your weekly reward is not claimed after 7 days, it will be recycled to the pool. If your collateralization ratio is lower than 800%, you will not be allowed to claim rewards until you collateralize more DOWS.",
     "receive": "Claim"
   },
   "wallet": {
