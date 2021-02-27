@@ -44,6 +44,14 @@ function Shadows({ signer, provider }) {
   this.burnSynths = async amount => {
     return await this.contract.burnSynths(amount)
   }
+
+  this.exchange = async (sourceCurrencyKey, sourceAmount, destinationCurrencyKey) => {
+    return await this.contract.exchange(sourceCurrencyKey, sourceAmount, destinationCurrencyKey)
+  }
+
+  this.availableCurrencyKeys = async () => {
+    return await this.contract.availableCurrencyKeys()
+  }
 }
 
 export default Shadows
