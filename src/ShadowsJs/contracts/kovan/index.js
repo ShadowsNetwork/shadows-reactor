@@ -6,6 +6,7 @@ import Synth from './Synth'
 import Shadows from './Shadows'
 import ShadowsState from './ShadowsState'
 import ExchangeRates from './ExchangeRates'
+import FeePool from './FeePool'
 
 export default {
   SynthxUSD,
@@ -16,4 +17,5 @@ export default {
   Shadows,
   ShadowsState,
   ExchangeRates,
+  FeePool,
 }

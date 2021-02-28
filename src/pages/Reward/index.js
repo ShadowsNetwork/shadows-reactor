@@ -1,12 +1,38 @@
-import React from 'react'
-import '../../styles/reward.css'
+import React, { useCallback, useEffect, useState } from 'react'
+import './index.css'
 import '../../styles/dropDown.css'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
+import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
+import { useWeb3React } from '@web3-react/core'
+import { fromWei, toBigNumber } from '@/web3/utils'
+import { LoadingOutlined } from '@ant-design/icons'
 
 function Reward() {
   const { t } = useTranslation()
+  const { account } = useWeb3React()
+
+  const [tradingReward, setTradingReward] = useState('0')
+  const [syntheticReward, setSyntheticReward] = useState('0')
+
+  const [claimRewardDisabled, setClaimRewardDisabled] = useState(true)
+
+  const fetchClaimFees = useCallback(async () => {
+    setTradingReward(null)
+    setSyntheticReward(null)
+    const [tradingRewardFee, syntheticRewardFee] = await dowsJSConnector.dowsJs.FeePool.feesAvailable(account)
+    setTradingReward(fromWei(tradingRewardFee))
+    setSyntheticReward(fromWei(syntheticRewardFee))
+  }, [])
+  useEffect(() => {
+    fetchClaimFees()
+  }, [fetchClaimFees])
+
+  useEffect(() => {
+    const canClaimReward = toBigNumber(tradingReward).gt(toBigNumber('0')) || toBigNumber(syntheticReward).gt(toBigNumber('0'))
+    setClaimRewardDisabled(!canClaimReward)
+  }, [tradingReward, syntheticReward])
 
   return (
     <div className="reward">
@@ -16,73 +42,19 @@ function Reward() {
       </div>
       <div className="reward-content">
         <div className="reward-input">
-          <Button
-            style={{
-              height: '4.3rem',
-              background: 'none',
-              border: 0,
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <span
-              style={{
-                marginLeft: '1rem',
-                color: '#B9B1B7',
-                fontSize: '1.6rem',
-              }}
-            >
-              {t('reward.transactionReward')}
-            </span>
-          </Button>
-          <input
-            disabled
-            style={{
-              width: '60%',
-              height: '4.3rem',
-              background: 'none',
-              border: 0,
-              outline: 'none',
-              color: '#fff',
-            }}
-          />
-          <span className="all" style={{ position: 'absolute', right: '1.5rem', fontSize: '1.6rem' }}>
-            0.00
+          <div className="label">
+            {t('reward.transactionReward')}
+          </div>
+          <span className="value">
+            {tradingReward ?? <LoadingOutlined />}
           </span>
         </div>
         <div className="reward-input">
-          <Button
-            style={{
-              height: '4.3rem',
-              background: 'none',
-              border: 0,
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <span
-              style={{
-                marginLeft: '1rem',
-                color: '#B9B1B7',
-                fontSize: '1.6rem',
-              }}
-            >
-              {t('reward.syntheticReward')}
-            </span>
-          </Button>
-          <input
-            disabled
-            style={{
-              width: '60%',
-              height: '4.3rem',
-              background: 'none',
-              border: 0,
-              outline: 'none',
-              color: '#fff',
-            }}
-          />
-          <span className="all" style={{ position: 'absolute', right: '1.5rem', fontSize: '1.6rem' }}>
-            0.00
+          <div className="label">
+            {t('reward.syntheticReward')}
+          </div>
+          <span className="value">
+            {syntheticReward ?? <LoadingOutlined />}
           </span>
         </div>
         <div className="reward-content-bottom">
@@ -90,7 +62,9 @@ function Reward() {
         </div>
       </div>
       <div className="reward-bottom">
-        <Button>{t('reward.receive')}</Button>
+        <Button disabled={claimRewardDisabled}>
+          {t('reward.receive')}
+        </Button>
         <GasPrice />
       </div>
     </div>

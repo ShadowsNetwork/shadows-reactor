@@ -36,6 +36,25 @@
     align-items: center;
     position: relative;
 }
+
+.reward-input .label {
+  height: 4.3rem;
+  background: none;
+  border: 0;
+  display: flex;
+  align-items: center;
+  margin-left: 1.5rem;
+  color: #B9B1B7;
+  font-size: 1.6rem;
+  user-select: none;
+}
+
+.reward-input .value {
+  margin-left: 2rem;
+  font-size: 1.6rem;
+  color: white;
+  user-select: none;
+}
 .all {
     cursor: pointer;
     color: white;
