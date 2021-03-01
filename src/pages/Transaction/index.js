@@ -12,26 +12,6 @@ import { useWeb3React } from '@web3-react/core'
 import {
   bytesToString, fromWei, toBigNumber, toByte32, toWei,
 } from '@/web3/utils'
-import { getSynths } from '@/ShadowsJs/contracts/utils'
-
-/* const SUPPORTED_CURRENCY = [
-  {
-    name: 'xUSD',
-    icon: '#4444FF',
-  },
-  {
-    name: 'xAUD',
-    icon: '#03AF91',
-  },
-  {
-    name: 'xJPY',
-    icon: '#D2417E',
-  },
-  {
-    name: 'xEUR',
-    icon: '#464146',
-  },
-] */
 
 function MenuContent(props) {
   const {

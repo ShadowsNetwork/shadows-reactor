@@ -7,6 +7,7 @@ import Shadows from './Shadows'
 import ShadowsState from './ShadowsState'
 import ExchangeRates from './ExchangeRates'
 import FeePool from './FeePool'
+import ProxyERC20 from './ProxyERC20'
 
 export default {
   SynthxUSD,
@@ -18,4 +19,5 @@ export default {
   ShadowsState,
   ExchangeRates,
   FeePool,
+  ProxyERC20,
 }

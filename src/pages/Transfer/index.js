@@ -18,9 +18,9 @@ function Transfer() {
     setDestinationAccount(_destinationAccount)
   }
 
-  const onComplete = _txHash => {
+  const onComplete = result => {
     setActivePageKey('COMPLETION')
-    setTxHash(_txHash)
+    setTxHash(result.hash)
   }
 
   const PAGES = [

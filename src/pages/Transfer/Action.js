@@ -1,232 +1,147 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Button, Dropdown, Input, Menu,
 } from 'antd'
 import GasPrice from '@/components/GasPrice'
-import useBalanceQuery from '@/web3/useBalanceQuery'
-import { formatEther } from '@ethersproject/units'
 
 import { useWeb3React } from '@web3-react/core'
-import Web3 from 'web3'
-import { injected } from '@/web3/connectors'
 import '../../styles/dropDown.css'
-
-const availableCurrentType = [
-  { name: 'xETH', iconColor: '#4444FF' },
-  { name: 'xUSD', iconColor: '#de2c2c' },
-  { name: 'xETC', iconColor: '#03AF91' },
-  { name: 'xJPY', iconColor: '#D2417E' },
-  { name: 'xEUR', iconColor: '#464146' },
-]
-
-function MenuItemContent(props) {
-  const { value, iconColor } = props
-  return (
-    <div>
-      <span
-        style={{
-          display: 'inline-block',
-          width: '1.5rem',
-          height: '1.5rem',
-          borderRadius: '1.5rem',
-          background: iconColor,
-        }}
-      />
-      <span style={{
-        marginLeft: '1rem',
-        color: '#B9B1B7',
-        fontSize: '8pt',
-      }}
-      >
-        {value}
-      </span>
-    </div>
-  )
-}
+import './index.less'
+import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
+import { bytesToString, fromWei, toWei } from '@/web3/utils'
+import { LoadingOutlined } from '@ant-design/icons'
 
 function DropdownMenu(props) {
-  const { onChange } = props
+  const { onChange, currencies, selectedCurrency } = props
 
   return (
-    <Menu>
-      {availableCurrentType.map(type => (
-        <Menu.Item onClick={() => { onChange(type.name) }} key={type.name}>
-          <MenuItemContent value={type.name} iconColor={type.iconColor} />
+    <Menu defaultSelectedKeys={selectedCurrency} selectable>
+      {currencies.map(currency => (
+        <Menu.Item onClick={() => { onChange(currency) }} key={currency} className="menu-item">
+          <span>
+            {currency}
+          </span>
         </Menu.Item>
       ))}
     </Menu>
   )
 }
 
-async function handleSendTransfer(
-  context, amount, destinationAccount, gasPrice, onConfirm, onComplete,
-) {
-  onConfirm(amount, destinationAccount)
-  const { account } = context
-
-  let web3
-  if (typeof web3 !== 'undefined') {
-    web3 = new Web3(web3.currentProvider)
-  } else {
-    web3 = new Web3(injected)
-  }
-
-  const transactionParams = {
-    // nonce: web3.utils.toHex(txCount),
-    from: account,
-    to: destinationAccount,
-    value: web3.utils.toHex(web3.utils.toWei(amount, 'ether')),
-    // gasLimit: web3.utils.toHex(21000),
-    gasPrice: web3.utils.toHex(web3.utils.toWei(gasPrice.toString(), 'gwei')),
-  }
-
-  window.ethereum.request({
-    method: 'eth_sendTransaction',
-    params: [transactionParams],
-    from: account,
-  }).then(result => {
-    onComplete(result)
-  }).catch(error => {
-    console.log(error)
-  })
-}
-
-function CurrentCurrencyType(props) {
-  const { currencyType } = props
-  const { iconColor, name } = currencyType
-  return (
-    <>
-      <div
-        style={{
-          width: '1.5rem',
-          height: '1.5rem',
-          borderRadius: '1.5rem',
-          background: iconColor,
-        }}
-      />
-      <span
-        style={{
-          marginLeft: '10px',
-          color: '#B9B1B7',
-          fontSize: '8pt',
-        }}
-      >
-        {name}
-      </span>
-    </>
-  )
-}
-
 function Action(props) {
   const { t } = useTranslation()
-
-  const { balance } = useBalanceQuery()
+  const { account } = useWeb3React()
 
   const { onConfirm, onComplete } = props
 
-  const context = useWeb3React()
-
-  const [selectedCurrencyName, setSelectedCurrencyName] = useState(availableCurrentType[0].name)
-
+  const [currencyKeys, setCurrencyKeys] = useState([])
+  const [selectedCurrency, setSelectedCurrency] = useState()
   const [destinationAccount, setDestinationAccount] = useState('')
-
-  const [amount, setAmount] = useState('')
-
+  const [inputValue, setInputValue] = useState('')
+  const [balance, setBalance] = useState()
   const [gasPrice, setGasPrice] = useState(0)
 
-  const getCurrencyType = (availableCurrentType.filter(
-    type => type.name === selectedCurrencyName,
-  ))[0]
+  const fetchAvailableCurrencyKeys = useCallback(async () => {
+    const availableCurrencyKeys = (await dowsJSConnector.dowsJs.Shadows.availableCurrencyKeys()).map(k => bytesToString(k))
+    setCurrencyKeys(availableCurrencyKeys)
+    setSelectedCurrency(availableCurrencyKeys[0])
+  }, [])
+  useEffect(() => {
+    fetchAvailableCurrencyKeys()
+  }, [fetchAvailableCurrencyKeys])
 
-  const onDropdownMenuChange = name => { setSelectedCurrencyName(name) }
+  const fetchBalance = useCallback(async () => {
+    setBalance(null)
+    if (selectedCurrency) {
+      const balanceOf = await dowsJSConnector.dowsJs.Synth[selectedCurrency].balanceOf(account)
+      setBalance(fromWei(balanceOf))
+    }
+  }, [account, selectedCurrency])
 
-  const handleGasPriceChange = price => { setGasPrice(price) }
+  useEffect(() => {
+    fetchBalance()
+  }, [fetchBalance])
+
+  const handleTransfer = async () => {
+    onConfirm(inputValue, destinationAccount)
+    const to = destinationAccount
+    const value = toWei(inputValue)
+    dowsJSConnector.dowsJs.Synth[selectedCurrency].transfer(to, value).then(result => {
+      onComplete(result)
+    }).catch(error => {
+      console.error(error)
+    })
+  }
 
   return (
-    <div className="transaction">
-      <div className="transaction-title">
+    <div className="transfer">
+      <div className="transfer-title">
         <span>{t('transfer.title')}</span>
         <span>{t('transfer.text')}</span>
       </div>
-      <div className="transaction-content">
-        <div className="transaction-content-title">
+      <div className="transfer-content">
+        <div className="transfer-content-title">
           <span>{t('transfer.amount')}</span>
           <span>
             {t('transaction.available')}
             ：
             {/* eslint-disable-next-line no-nested-ternary */}
-            {balance === null ? 'Error' : balance ? `${formatEther(balance)}ETH` : ''}
+            {balance ?? <LoadingOutlined />}
           </span>
         </div>
-        <div className="transaction-input">
-          <Dropdown overlay={<DropdownMenu onChange={onDropdownMenuChange} />} placement="bottomLeft">
-            <Button
-              style={{
-                height: '4.3rem',
-                background: 'none',
-                border: 0,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <CurrentCurrencyType currencyType={getCurrencyType} />
-            </Button>
+        <div className="transfer-input">
+          {currencyKeys.length === 0 ? <LoadingOutlined style={{ color: 'white', fontSize: '3rem', marginLeft: '1rem' }} /> : ''}
+          <Dropdown
+            trigger="click"
+            overlay={(
+              <DropdownMenu
+                onChange={currency => { setSelectedCurrency(currency) }}
+                selectedCurrency={selectedCurrency}
+                currencies={currencyKeys}
+              />
+            )}
+            overlayStyle={{ height: '300px', overflowY: 'scroll' }}
+            placement="bottomLeft"
+          >
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a>
+              <span>
+                {selectedCurrency}
+              </span>
+            </a>
           </Dropdown>
           <Input
-            onChange={(event => { setAmount(event.target.value) })}
-            style={{
-              width: '60%',
-              height: '4.3rem',
-              background: 'none',
-              border: 0,
-              outline: 'none',
-              color: '#fff',
-            }}
+            value={inputValue}
+            className="amount-input"
+            bordered={false}
+            onChange={(event => { setInputValue(event.target.value) })}
           />
-          <Button
-            type="text"
-            className="all"
-            style={{
-              position: 'absolute',
-              right: '0px',
-              fontSize: '1.6rem',
-              lineHeight: '0',
-            }}
-          >
+          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+          <span className="all" onClick={() => { setInputValue(balance) }}>
             {t('transaction.all')}
-          </Button>
+          </span>
         </div>
-        <div className="transaction-content">
-          <div className="transaction-content-title">
+        <div className="transfer-content">
+          <div className="transfer-content-title">
             <span>{t('transfer.destinationAddress')}</span>
           </div>
-          <div className="transaction-input">
+          <div className="transfer-input">
             <Input
+              className="address-input"
+              bordered={false}
               onChange={(event => { setDestinationAccount(event.target.value) })}
               placeholder="e.g. 0x185f5a"
-              style={{
-                width: '100%',
-                height: '4.3rem',
-                background: 'none',
-                border: 0,
-                outline: 'none',
-                color: '#fff',
-              }}
             />
           </div>
         </div>
       </div>
-      <div className="transaction-bottom">
+      <div className="transfer-bottom">
         <Button
-          onClick={() => {
-            handleSendTransfer(context,
-              amount, destinationAccount, gasPrice, onConfirm, onComplete)
-          }}
+          onClick={handleTransfer}
         >
           {t('transfer.sendNow')}
         </Button>
-        <GasPrice onChange={handleGasPriceChange} />
+        <GasPrice onChange={price => { setGasPrice(price) }} />
       </div>
     </div>
   )
