@@ -11,7 +11,7 @@ function SideBar(props) {
 
   const { t } = useTranslation()
 
-  const { pathname } = window.location
+  const { hash } = window.location
 
   const { onNavItemClicked } = props
 
@@ -19,7 +19,7 @@ function SideBar(props) {
     <div className="App">
       <div style={{ width: 256 }}>
         <Menu
-          defaultSelectedKeys={[pathname]}
+          defaultSelectedKeys={[hash.slice(1)]}
           mode="inline"
           theme="dark"
           onMouseEnter={() => { setCollapsed(false) }}
@@ -32,7 +32,7 @@ function SideBar(props) {
             </Link>
           </Menu.Item>
           {
-            routers.filter((router) => router.hide !== true).map((router) => (
+            routers.filter(router => router.hide !== true).map(router => (
               <Menu.Item
                 key={router.path}
                 icon={<router.icon />}

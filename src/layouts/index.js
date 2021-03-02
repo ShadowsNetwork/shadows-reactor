@@ -1,5 +1,5 @@
 import React, { Suspense, useState } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { HashRouter as Router, Route } from 'react-router-dom'
 import { PaperClipOutlined } from '@ant-design/icons'
 import './App.css'
 import { IntlProvider } from 'react-intl'
@@ -18,6 +18,7 @@ import { Web3ReactProvider } from '@web3-react/core'
 import routers from '@/layouts/routers'
 import { ethers } from 'ethers'
 import { setSigner } from '@/ShadowsJs/dowsJSConnector'
+import Map from '@/img/background/map.jpg'
 
 const queryClient = new QueryClient()
 
@@ -28,11 +29,11 @@ function getLibrary(provider) {
 }
 
 function App() {
-  const { pathname } = window.location
+  const { hash } = window.location
 
-  const currentRouter = routers.filter(router => router.path === pathname)[0]
+  const currentRouter = routers.filter(router => router.path === hash.slice(1))[0]
 
-  const [background, setBackground] = useState(currentRouter.backgroundImage)
+  const [background, setBackground] = useState(currentRouter ? currentRouter.backgroundImage : Map)
 
   const handleNavItemClicked = router => {
     setBackground(router.backgroundImage)
