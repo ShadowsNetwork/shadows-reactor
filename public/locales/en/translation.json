@@ -29,7 +29,7 @@
     "debtRatio": "Collateralization Ratio",
     "start": "Start Synthesis",
     "all": "All",
-    "balance": "Balance",
+    "balance": "Available Balance",
     "staking": "Collateralized DOWS"
   },
   "transaction": {

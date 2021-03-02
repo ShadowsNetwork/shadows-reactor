@@ -8,7 +8,6 @@ import { useWeb3React } from '@web3-react/core'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { LoadingOutlined } from '@ant-design/icons'
 import { fromWei, toWei } from '@/web3/utils'
-import BigNumber from 'bignumber.js'
 
 function Synthesis() {
   const { t } = useTranslation()
@@ -16,21 +15,21 @@ function Synthesis() {
 
   const [available, setAvailable] = useState()
   const [staking, setStaking] = useState()
-  const [totalBalance, setTotalBalance] = useState(null)
   const [transactionInProgress, setTransactionInProgress] = useState(false)
+  const [myRatio, setMyRatio] = useState(null)
 
   const fetchDataFromContract = useCallback(async () => {
     const [
       [availableBalance, stakingBalance],
-      dowsBalance,
+      collateralisationRatio,
     ] = await Promise.all([
       dowsJSConnector.dowsJs.Shadows.remainingIssuableSynths(account),
-      dowsJSConnector.dowsJs.Shadows.balanceOf(account),
+      dowsJSConnector.dowsJs.Shadows.collateralisationRatio(account),
     ])
 
     setAvailable(fromWei(availableBalance))
     setStaking(fromWei(stakingBalance))
-    setTotalBalance(fromWei(dowsBalance))
+    setMyRatio(fromWei(collateralisationRatio))
   }, [account])
 
   useEffect(() => {
@@ -117,11 +116,7 @@ function Synthesis() {
             <span>
               {t('synthesis.debtRatio')}
               {': '}
-              {
-                totalBalance && staking
-                  ? `${new BigNumber((staking / totalBalance)).multipliedBy(100).dp(8)}  %`
-                  : <LoadingOutlined />
-              }
+              {myRatio ? `${Math.round(100 / myRatio)} %` : <LoadingOutlined />}
             </span>
           </div>
         </div>

@@ -16,6 +16,7 @@ function Destruction() {
   const { account } = useWeb3React()
 
   const [xUSD, setXUSD] = useState(null)
+  const [burnAmountToFixRatio, setBurnAmountToFixRatio] = useState(null)
   const [inputValue, setInputValue] = useState('')
   const [outputValue, setOutputValue] = useState('')
   const [outputLoading, setOutputLoading] = useState(false)
@@ -45,32 +46,37 @@ function Destruction() {
     console.log(r)
   }
 
-  const fetchDowsByXusd = useCallback(async () => {
+  const fetchDowsByXUsd = useCallback(async () => {
     const rateForCurrency = await dowsJSConnector.dowsJs.ExchangeRates.rateForCurrency(toByte32('xUSD'))
     setOutputLoading(false)
-    setOutputValue(toBigNumber(fromWei(rateForCurrency)).multipliedBy(toBigNumber(inputValue)).toString())
+    setOutputValue(toBigNumber(fromWei(rateForCurrency))
+      .multipliedBy(toBigNumber(inputValue))
+      .toString())
   }, [inputValue])
-
-  const fetchXUSD = useCallback(async () => {
-    const [xUSDBalance] = await Promise.all([
-      dowsJSConnector.dowsJs.SynthxUSD.balanceOf(account),
-    ])
-
-    setXUSD(fromWei(xUSDBalance))
-  }, [account])
 
   useEffect(() => {
     if (inputValue && /^\d+(\.\d+)?$/.test(inputValue)) {
       setTimeout(() => {
         setOutputLoading(true)
-        fetchDowsByXusd()
+        fetchDowsByXUsd()
       }, 500)
     }
   }, [inputValue])
 
+  const fetchInitData = useCallback(async () => {
+    const [xUSDBalance, debtBalance, maxIssuableSynth] = await Promise.all([
+      dowsJSConnector.dowsJs.Synth.xUSD.balanceOf(account),
+      dowsJSConnector.dowsJs.Shadows.debtBalanceOf(account, toByte32('xUSD')),
+      dowsJSConnector.dowsJs.Shadows.maxIssuableSynths(account),
+    ])
+
+    setXUSD(fromWei(xUSDBalance))
+    setBurnAmountToFixRatio(Math.max(fromWei(debtBalance) - fromWei(maxIssuableSynth), 0))
+  }, [account])
+
   useEffect(() => {
-    fetchXUSD()
-  }, [fetchXUSD])
+    fetchInitData()
+  }, [fetchInitData])
 
   return (
     <div className="destruction">
@@ -79,7 +85,9 @@ function Destruction() {
         <span>{t('destroy.text')}</span>
       </div>
       <div className="operation">
-        <Button>{t('destroy.adjust')}</Button>
+        <Button onClick={() => setInputValue(burnAmountToFixRatio)}>
+          {t('destroy.adjust')}
+        </Button>
         <Button onClick={() => setInputValue(xUSD)}>
           {t('destroy.destroyAll')}
         </Button>

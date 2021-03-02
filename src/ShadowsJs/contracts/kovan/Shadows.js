@@ -52,6 +52,10 @@ function Shadows({ signer, provider }) {
   this.availableCurrencyKeys = async () => {
     return await this.contract.availableCurrencyKeys()
   }
+
+  this.maxIssuableSynths = async account => {
+    return await this.contract.maxIssuableSynths(account)
+  }
 }
 
 export default Shadows

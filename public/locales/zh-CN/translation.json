@@ -27,10 +27,10 @@
   "synthesis": {
     "title": "合成",
     "text": "抵押DOWS铸造生成合成资产xUSD，xUSD可用于交易其他品类合成资产；满足抵押率要求可获得合成资产奖励。",
-    "debtRatio": "债务比例",
+    "debtRatio": "当前抵押率",
     "start": "开始合成",
     "all": "全部",
-    "balance": "余额",
+    "balance": "可用余额",
     "staking": "已抵押"
   },
 
