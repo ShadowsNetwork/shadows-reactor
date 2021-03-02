@@ -1,95 +1,116 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import '../../styles/personal.css'
+import './index.css'
 import { Progress } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useWeb3React } from '@web3-react/core'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { fromWei, toByte32 } from '@/web3/utils'
+import { bytesToString, fromWei } from '@/web3/utils'
 
 function Personal() {
   const { t } = useTranslation()
   const { account } = useWeb3React()
 
-  const [xUSD, setXUSD] = useState(null)
-  const [xJPY, setXJPY] = useState(null)
-  const [xAUD, setXAUD] = useState(null)
-  const [xEUR, setXEUR] = useState(null)
   const [dows, setDows] = useState(null)
   const [myRatio, setMyRatio] = useState(null)
   const [targetRatio, setTargetRatio] = useState(null)
   const [transferableDows, setTransferableDows] = useState(null)
   const [lockedShadows, setLockedShadows] = useState(null)
+  const [currencyToBalanceList, setCurrencyToBalanceList] = useState([])
 
-  const fetchDataFromContract = useCallback(async () => {
-    const [xUSDBalance, xJPYBalance, xAUDBalance, xEURBalance,
-      dowsBalance, collateralisationRatio, issuanceRatio,
-      transferableShadows, debtBalance,
-    ] = await Promise.all([
-      dowsJSConnector.dowsJs.SynthxUSD.balanceOf(account),
-      dowsJSConnector.dowsJs.SynthxJPY.balanceOf(account),
-      dowsJSConnector.dowsJs.SynthxAUD.balanceOf(account),
-      dowsJSConnector.dowsJs.SynthxEUR.balanceOf(account),
-
-      dowsJSConnector.dowsJs.Shadows.balanceOf(account),
+  const fetchRatio = useCallback(async () => {
+    const [collateralisationRatio, issuanceRatio, transferableShadows] = await Promise.all([
       dowsJSConnector.dowsJs.Shadows.collateralisationRatio(account),
       dowsJSConnector.dowsJs.ShadowsState.issuanceRatio(),
-
       dowsJSConnector.dowsJs.Shadows.transferableShadows(account),
-      dowsJSConnector.dowsJs.Shadows.debtBalanceOf(account, toByte32('DOWS')),
     ])
-
-    setXUSD(fromWei(xUSDBalance))
-    setXJPY(fromWei(xJPYBalance))
-    setXAUD(fromWei(xAUDBalance))
-    setXEUR(fromWei(xEURBalance))
-    setDows(fromWei(dowsBalance))
     setMyRatio(fromWei(collateralisationRatio))
     setTargetRatio(fromWei(issuanceRatio))
     setTransferableDows(fromWei(transferableShadows))
-    setLockedShadows(fromWei(debtBalance.div(issuanceRatio)))
+  }, [account])
+
+  useEffect(() => {
+    fetchRatio()
+  }, [fetchRatio])
+
+  const fetchDataFromContract = useCallback(async () => {
+    const [dowsBalance, transferableShadows] = await Promise.all([
+      dowsJSConnector.dowsJs.Shadows.balanceOf(account),
+      dowsJSConnector.dowsJs.Shadows.transferableShadows(account),
+    ])
+    setDows(fromWei(dowsBalance))
+    setLockedShadows(fromWei(dowsBalance.sub(transferableShadows)))
   }, [account])
 
   useEffect(() => {
     fetchDataFromContract()
   }, [fetchDataFromContract])
 
+  const fetchAllCurrencyBalance = useCallback(async () => {
+    if (account) {
+      const availableCurrencies = (await dowsJSConnector.dowsJs.Shadows.availableCurrencyKeys()).map(k => bytesToString(k))
+      const balanceList = await Promise.all(
+        availableCurrencies.map(currency => dowsJSConnector.dowsJs.Synth[currency].balanceOf(account)),
+      )
+      const currencyToBalance = balanceList.map((balance, index) => ({
+        currency: availableCurrencies[index],
+        balance: fromWei(balance),
+      }))
+      currencyToBalance.sort((b, a) => a.balance - b.balance)
+      setCurrencyToBalanceList(currencyToBalance.slice(0, 4))
+    }
+  }, [account])
+
+  useEffect(() => {
+    fetchAllCurrencyBalance()
+  }, [fetchAllCurrencyBalance])
+
   return (
     <div className="me">
       <div className="personal-title">
-        <span>Personal information</span>
+        <span>Personal Information</span>
         <span>{t('person.title')}</span>
       </div>
       <div className="personal-content">
-        <div className="synth-assets">
-          <div>
-            <span>xUSD</span>
-            <span>{xUSD ?? <LoadingOutlined />}</span>
+        {currencyToBalanceList.length === 0 ? (
+          <div className="synth-assets-loading">
+            <div>
+              <LoadingOutlined />
+            </div>
+            <div>
+              <LoadingOutlined />
+            </div>
+            <div>
+              <LoadingOutlined />
+            </div>
+            <div>
+              <LoadingOutlined />
+            </div>
           </div>
-          <div>
-            <span>xEUR</span>
-            <span>{xEUR ?? <LoadingOutlined />}</span>
+        ) : (
+          <div className="synth-assets">
+            {currencyToBalanceList.map(({
+              currency,
+              balance,
+            }) => (
+              <div key={currency}>
+                <span>{currency}</span>
+                <span>{balance ?? <LoadingOutlined />}</span>
+              </div>
+            ))}
           </div>
-          <div>
-            <span>xJPY</span>
-            <span>{xJPY ?? <LoadingOutlined />}</span>
-          </div>
-          <div>
-            <span>xAUD</span>
-            <span>{xAUD ?? <LoadingOutlined />}</span>
-          </div>
-        </div>
+        )}
         <div className="mortgage">
           <div>
             <span>{t('person.myRate')}</span>
             <span>
-              {myRatio ? `${myRatio} %` : <LoadingOutlined />}
+              {myRatio ? `${Math.round(100 / myRatio)} %` : <LoadingOutlined />}
             </span>
           </div>
           <div>
             <span>{t('person.targetRate')}</span>
             <span>
-              {targetRatio ? `${targetRatio} %` : <LoadingOutlined />}
+              {targetRatio ? `${Math.round(100 / targetRatio)} %` : <LoadingOutlined />}
             </span>
           </div>
         </div>
@@ -119,7 +140,7 @@ function Personal() {
           </span>
         </div>
         <Progress
-          percent={50}
+          percent={dows ? ((lockedShadows / dows) * 100) : 50}
           showInfo={false}
           strokeColor="#FF2C63"
           trailColor="#342D33"
@@ -129,7 +150,7 @@ function Personal() {
           }}
         />
       </div>
-      <div className="progressBar">
+      {/* <div className="progressBar">
         <div className="progressBar-top">
           <span>Staked: 10000</span>
           <span>NotStaked: 0</span>
@@ -160,7 +181,7 @@ function Personal() {
             top: '20px',
           }}
         />
-      </div>
+      </div> */}
     </div>
   )
 }
