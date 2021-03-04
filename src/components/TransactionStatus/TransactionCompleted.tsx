@@ -20,30 +20,39 @@ const TransactionCompleted: React.FC<TransactionCompletedProps> = ({
 
   return success && !closed ? (
     <div className="transaction-completed">
-      <CheckOutlined
-        style={{
-          fontSize: '2.4rem',
-          color: 'white'
-        }}
-      />
-      <span className="title">
-        {t('transaction.completed.title')}
-      </span>
-      <span className="content">
-        {content}
-      </span>
-      <Button
-        onClick={() => {
-          window.open(`https://kovan.etherscan.io/tx/${hash}`)
-        }}
-      >
-        {t('transaction.completed.view')}
-      </Button>
-      <Button
-        onClick={() => setClosed(true)}
-      >
-        {t('transaction.completed.close')}
-      </Button>
+        <div className="transaction-success">
+          <CheckOutlined
+            style={{
+              fontSize: '2.4rem',
+              color: 'white',
+                marginTop: '0.9rem'
+            }}
+          />
+        </div>
+      <div className="transaction-completed-text">
+          <span className="title">
+            {t('transaction.completed.title')}
+          </span>
+          <span className="content">
+            {content}
+          </span>
+      </div>
+        <div className="transaction-btn">
+          <Button
+              className="viewBtn"
+            onClick={() => {
+              window.open(`https://kovan.etherscan.io/tx/${hash}`)
+            }}
+          >
+            {t('transaction.completed.view')}
+          </Button>
+          <Button
+              className="closeBtn"
+            onClick={() => setClosed(true)}
+          >
+            {t('transaction.completed.close')}
+          </Button>
+        </div>
     </div>
   ) : (<></>)
 }

@@ -10,7 +10,7 @@ function Completion(props) {
   return (
     <div className="completion">
       <div className="completion-title">
-        <span>{t('transfer.completion.title')}</span>
+        <span>{t('transfer.completizon.title')}</span>
         <span>{t('transfer.completion.text')}</span>
       </div>
       <div className="completion-content">

@@ -19,30 +19,37 @@ const TransactionInProgress: React.FC<TransactionInProgressProps> = ({
   const [closed, setClosed] = useState<boolean>(false)
 
   return (
-    inProgress && !closed ? (
+    true ? (
       <div className="transaction-in-progress">
         <LoadingOutlined style={{
-          fontSize: '2.4rem',
-          color: 'white'
+          fontSize: '3rem',
+          color: 'white',
+            marginLeft: '2rem'
         }} />
-        <span className="title">
-          {t('transaction.inProgress.title')}
-        </span>
-        <span className="content">
-          {content}
-        </span>
-        <Button
-          onClick={() => {
-            window.open(`https://kovan.etherscan.io/tx/${hash}`)
-          }}
-        >
-          {t('transaction.inProgress.view')}
-        </Button>
-        <Button
-          onClick={() => setClosed(true)}
-        >
-          {t('transaction.inProgress.close')}
-        </Button>
+          <div className="transaction-completed-text">
+            <span className="title">
+              {t('transaction.inProgress.title')}
+            </span>
+            <span className="content">
+              {content}
+            </span>
+          </div>
+          <div className="transaction-btn">
+            <Button
+                className="viewBtn"
+              onClick={() => {
+                window.open(`https://kovan.etherscan.io/tx/${hash}`)
+              }}
+            >
+              {t('transaction.inProgress.view')}
+            </Button>
+            <Button
+                className="closeBtn"
+              onClick={() => setClosed(true)}
+            >
+              {t('transaction.inProgress.close')}
+            </Button>
+          </div>
       </div>
     ) : (<></>)
   )

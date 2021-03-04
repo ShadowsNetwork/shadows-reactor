@@ -1,9 +1,55 @@
 .transaction-in-progress {
-  margin-top: 10rem;
+  margin-top: 5rem;
   color: white;
   width: 100%;
   height: 10.4rem;
   background-color: #292427;
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-radius: 0.4rem;
+
+  .transaction-completed-text {
+    margin-left: 2rem;
+  }
+  .transaction-completed-text > span {
+    text-align: left;
+  }
+
+  .transaction-completed-text > span:nth-of-type(1) {
+    display: block;
+  }
+
+  .transaction-btn {
+    position: absolute;
+    right: 2rem;
+    top: 3.5rem;
+  }
+
+  .viewBtn {
+    width: 8rem;
+    height: 3.4rem;
+    margin-left: 2rem;
+    border: 1px solid #fff;
+    color: #E2D8DE;
+  }
+  .viewBtn:hover {
+    background-color: #292427;
+    border: 1px solid #fff;
+    color: #fff;
+  }
+  .closeBtn {
+    width: 8rem;
+    height: 3.4rem;
+    margin-left: 2rem;
+    border: 1px solid #fff;
+    color: #E2D8DE;
+  }
+  .closeBtn:hover {
+    background-color: #292427;
+    border: 1px solid #fff;
+    color: #fff;
+  }
 
   .content {
     display: block;
@@ -17,11 +63,66 @@
 }
 
 .transaction-completed {
-  margin-top: 10rem;
+  margin-top: 5rem;
   color: white;
   width: 100%;
   height: 10.4rem;
   background-color: #292427;
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-radius: 0.4rem;
+
+  .transaction-success {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 4.5rem;
+    background-color: #1EC195;
+    display: flex;
+    justify-content: center;
+    margin-left: 2rem;
+  }
+  .transaction-completed-text {
+    margin-left: 2rem;
+  }
+  .transaction-completed-text > span {
+    text-align: left;
+  }
+
+  .transaction-completed-text > span:nth-of-type(1) {
+    display: block;
+  }
+
+  .transaction-btn {
+    position: absolute;
+    right: 2rem;
+    top: 3.5rem;
+  }
+
+  .viewBtn {
+    width: 8rem;
+    height: 3.4rem;
+    margin-left: 2rem;
+    border: 1px solid #fff;
+    color: #E2D8DE;
+  }
+  .viewBtn:hover {
+    background-color: #292427;
+    border: 1px solid #fff;
+    color: #fff;
+  }
+  .closeBtn {
+    width: 8rem;
+    height: 3.4rem;
+    margin-left: 2rem;
+    border: 1px solid #fff;
+    color: #E2D8DE;
+  }
+  .closeBtn:hover {
+    background-color: #292427;
+    border: 1px solid #fff;
+    color: #fff;
+  }
 
   .content {
     display: block;
