@@ -43,7 +43,23 @@
     "receive": "receive",
     "estimated": "estimated",
     "fees": "transaction fees",
-    "all": "All"
+    "all": "All",
+    "inProgress": {
+      "title": "Transaction in progress",
+      "content": {
+        "synthesis": "Synthesise assets"
+      },
+      "view": "View",
+      "close": "Close"
+    },
+    "completed": {
+      "title": "Transaction completed!",
+      "content": {
+        "synthesis": "Synthesise assets"
+      },
+      "view": "View",
+      "close": "Close"
+    }
   },
   "liquidity": {
     "title": "Liquidity",

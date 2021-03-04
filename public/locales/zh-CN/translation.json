@@ -45,7 +45,23 @@
     "receive": "接收",
     "estimated": "估计",
     "fees": "交易手续费",
-    "all": "全部"
+    "all": "全部",
+    "inProgress": {
+      "title": "交易正在进行中",
+      "content": {
+        "synthesis": "合成资产"
+      },
+      "view": "查看",
+      "close": "关闭"
+    },
+    "completed": {
+      "title": "交易已完成！",
+      "content": {
+        "synthesis": "合成资产"
+      },
+      "view": "查看",
+      "close": "关闭"
+    }
   },
 
   "liquidity": {

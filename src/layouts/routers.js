@@ -95,14 +95,14 @@ const routers = [
     hide: true,
   },
   {
-    path: '/Success',
+    path: '/success',
     key: 'success',
     component: Success,
     hide: true,
     backgroundImage: Map,
   },
   {
-    path: '/Error',
+    path: '/error',
     key: 'error',
     component: Error,
     hide: true,

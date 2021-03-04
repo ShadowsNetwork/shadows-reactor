@@ -110,3 +110,8 @@ html {
   display: inline-block;
   padding-right: 10px;
 }
+
+.error-message {
+  display: block;
+  color: red;
+}
