@@ -19,37 +19,37 @@ const TransactionInProgress: React.FC<TransactionInProgressProps> = ({
   const [closed, setClosed] = useState<boolean>(false)
 
   return (
-    true ? (
-      <div className="transaction-in-progress">
+    inProgress && !closed ? (
+      <div className="transaction-status">
         <LoadingOutlined style={{
-          fontSize: '3rem',
+          fontSize: '4.5rem',
           color: 'white',
-            marginLeft: '2rem'
+          marginLeft: '2rem'
         }} />
-          <div className="transaction-completed-text">
-            <span className="title">
-              {t('transaction.inProgress.title')}
-            </span>
-            <span className="content">
-              {content}
-            </span>
-          </div>
-          <div className="transaction-btn">
-            <Button
-                className="viewBtn"
-              onClick={() => {
-                window.open(`https://kovan.etherscan.io/tx/${hash}`)
-              }}
-            >
-              {t('transaction.inProgress.view')}
-            </Button>
-            <Button
-                className="closeBtn"
-              onClick={() => setClosed(true)}
-            >
-              {t('transaction.inProgress.close')}
-            </Button>
-          </div>
+        <div className="text">
+          <span className="title">
+            {t('transactionStatus.title.inProgress')}
+          </span>
+          <span className="content">
+            {content}
+          </span>
+        </div>
+        <div className="transaction-btn-group">
+          <Button
+            className="view-btn"
+            onClick={() => {
+              window.open(`https://kovan.etherscan.io/tx/${hash}`)
+            }}
+          >
+            {t('transactionStatus.button.view')}
+          </Button>
+          <Button
+            className="close-btn"
+            onClick={() => setClosed(true)}
+          >
+            {t('transactionStatus.button.close')}
+          </Button>
+        </div>
       </div>
     ) : (<></>)
   )

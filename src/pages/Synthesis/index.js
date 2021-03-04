@@ -47,7 +47,45 @@ function Synthesis() {
 
   const [inputValue, setInputValue] = useState('')
 
-  const issueSynth = async () => {
+  const onTransactionCompleted = ({ transactionHash: hash }) => {
+    setTransaction({
+      hash,
+      error: null,
+      success: true,
+      inProgress: false,
+      toBeConfirmed: false
+    })
+    fetchDataFromContract()
+  }
+
+  const onTransactionConfirmed = ({
+    hash,
+    wait
+  }) => {
+    setInputValue('')
+    setTransaction({
+      hash,
+      error: null,
+      success: false,
+      inProgress: true,
+      toBeConfirmed: false
+    })
+
+    wait()
+      .then(onTransactionCompleted)
+  }
+
+  const onTransactionException = error => {
+    setTransaction({
+      hash: null,
+      error,
+      success: false,
+      inProgress: false,
+      toBeConfirmed: false
+    })
+  }
+
+  const initTransaction = () => {
     setTransaction({
       hash: null,
       error: null,
@@ -55,37 +93,13 @@ function Synthesis() {
       inProgress: false,
       toBeConfirmed: true
     })
-    const amount = toWei(inputValue)
-    dowsJSConnector.dowsJs.Shadows.issueSynths(amount)
-      .then(r => {
-        const { hash } = r
-        setTransaction({
-          hash,
-          error: null,
-          success: false,
-          inProgress: true,
-          toBeConfirmed: false
-        })
-        r.wait()
-          .then(_ => {
-            setTransaction({
-              hash,
-              error: null,
-              success: true,
-              inProgress: false,
-              toBeConfirmed: false
-            })
-          })
-      })
-      .catch(error => {
-        setTransaction({
-          hash: null,
-          error,
-          success: false,
-          inProgress: false,
-          toBeConfirmed: false
-        })
-      })
+  }
+
+  const issueSynth = async () => {
+    initTransaction()
+    dowsJSConnector.dowsJs.Shadows.issueSynths(toWei(inputValue))
+      .then(onTransactionConfirmed)
+      .catch(onTransactionException)
   }
 
   const handleInputKeyPress = e => {
@@ -164,18 +178,25 @@ function Synthesis() {
           </div>
         </div>
         <div className="Synthesis-bottom">
-          <Button onClick={issueSynth} disabled={transaction.toBeConfirmed && !available}>
+          <Button
+            onClick={issueSynth}
+            disabled={
+              transaction.toBeConfirmed ||
+              !available ||
+              !inputValue
+            }
+          >
             {transaction.toBeConfirmed ? <LoadingOutlined /> : ''}
             {t('synthesis.start')}
           </Button>
           <GasPrice />
           <TransactionInProgress
             {...transaction}
-            content={t('transaction.inProgress.content.synthesis')}
+            content={t('transactionStatus.transactionType.synthesis')}
           />
           <TransactionCompleted
             {...transaction}
-            content={t('transaction.inProgress.content.synthesis')}
+            content={t('transactionStatus.transactionType.synthesis')}
           />
           <div className="error-message">
             {transaction.error && transaction.error.message}

@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import {
-  Button, Dropdown, Input, Menu,
-} from 'antd'
+import { Button, Dropdown, Input, Menu } from 'antd'
 import './index.css'
 import '@/styles/dropDown.css'
 import { useTranslation } from 'react-i18next'
@@ -9,15 +7,15 @@ import GasPrice from '@/components/GasPrice'
 import { LoadingOutlined } from '@ant-design/icons'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { useWeb3React } from '@web3-react/core'
-import {
-  bytesToString, fromWei, toBigNumber, toByte32, toWei,
-} from '@/web3/utils'
+import { bytesToString, fromWei, toBigNumber, toByte32, toWei } from '@/web3/utils'
+import TransactionInProgress from '@/components/TransactionStatus/TransactionInProgress'
+import TransactionCompleted from '@/components/TransactionStatus/TransactionCompleted'
 
 function MenuContent(props) {
   const {
     defaultSelectedKey,
     onSelect,
-    currencyKeys,
+    currencyKeys
   } = props
 
   const currencies = currencyKeys.map(key => ({ name: key }))
@@ -47,7 +45,10 @@ function MenuContent(props) {
 }
 
 function InputPrefixCurrency(props) {
-  const { currencyKey, currencyKeys } = props
+  const {
+    currencyKey,
+    currencyKeys
+  } = props
 
   const currencies = currencyKeys.map(key => ({ name: key }))
 
@@ -87,6 +88,14 @@ function Transaction() {
 
   const [currencyKeys, setCurrencyKeys] = useState([])
 
+  const [transaction, setTransaction] = useState({
+    hash: null,
+    error: null,
+    success: false,
+    inProgress: false,
+    toBeConfirmed: false
+  })
+
   const handleInputKeyPress = e => {
     if (!/[\d.]/.test(e.key)) {
       e.preventDefault()
@@ -103,23 +112,17 @@ function Transaction() {
     }
   }
 
-  const handleExchange = async () => {
-    const r = await dowsJSConnector.dowsJs.Shadows.exchange(
-      toByte32(sourceCurrencyKey), toWei(inputValue), toByte32(destinationCurrencyKey),
-    )
-    console.log(r)
-  }
-
   const AllButton = () => {
     return (
-      // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
       <span
-        onClick={() => { setInputValue(synthBalance) }}
+        onClick={() => {
+          setInputValue(synthBalance)
+        }}
         className="all"
         style={{
           position: 'absolute',
           right: '1.5rem',
-          fontSize: '1.6rem',
+          fontSize: '1.6rem'
         }}
       >
         {t('transaction.all')}
@@ -154,14 +157,18 @@ function Transaction() {
       toBigNumber(sourceRate)
         .multipliedBy(toBigNumber(inputValue))
         .dividedBy(destinationRate)
-        .toString(),
+        .toString()
     )
     setOutputLoading(false)
   }, [inputValue, sourceRate, destinationRate])
 
   useEffect(() => {
-    if (inputValue && sourceRate && destinationRate) {
-      calculateOutput()
+    if (!inputValue) {
+      setOutputValue('')
+    } else {
+      if (sourceRate && destinationRate) {
+        calculateOutput()
+      }
     }
   }, [calculateOutput])
 
@@ -188,6 +195,65 @@ function Transaction() {
     fetchDestinationRate()
   }, [fetchDestinationRate])
 
+  const onTransactionCompleted = ({ transactionHash: hash }) => {
+    setTransaction({
+      hash,
+      error: null,
+      success: true,
+      inProgress: false,
+      toBeConfirmed: false
+    })
+    fetchSynthBalance()
+  }
+
+  const onTransactionConfirmed = ({
+    hash,
+    wait
+  }) => {
+    setInputValue('')
+    setOutputValue('')
+    setTransaction({
+      hash,
+      error: null,
+      success: false,
+      inProgress: true,
+      toBeConfirmed: false
+    })
+
+    wait()
+      .then(onTransactionCompleted)
+  }
+
+  const onTransactionException = error => {
+    setTransaction({
+      hash: null,
+      error,
+      success: false,
+      inProgress: false,
+      toBeConfirmed: false
+    })
+  }
+
+  const initTransaction = () => {
+    setTransaction({
+      hash: null,
+      error: null,
+      success: false,
+      inProgress: false,
+      toBeConfirmed: true
+    })
+  }
+
+  const handleExchange = async () => {
+    initTransaction()
+
+    dowsJSConnector.dowsJs.Shadows.exchange(
+      toByte32(sourceCurrencyKey), toWei(inputValue), toByte32(destinationCurrencyKey)
+    )
+      .then(onTransactionConfirmed)
+      .catch(onTransactionException)
+  }
+
   return (
     <div className="transaction">
       <div className="transaction-title">
@@ -204,7 +270,11 @@ function Transaction() {
           </span>
         </div>
         <div className="transaction-input">
-          {currencyKeys.length === 0 ? <LoadingOutlined style={{ color: 'white', fontSize: '3rem', marginLeft: '1rem' }} /> : ''}
+          {currencyKeys.length === 0 ? <LoadingOutlined style={{
+            color: 'white',
+            fontSize: '3rem',
+            marginLeft: '1rem'
+          }} /> : ''}
           <Dropdown
             trigger="click"
             placement="bottomLeft"
@@ -221,12 +291,11 @@ function Transaction() {
             )}
             overlayStyle={{
               height: '300px',
-              overflowY: 'scroll',
+              overflowY: 'scroll'
             }}
             visible={sourceDropdownVisible}
             onVisibleChange={v => setSourceDropdownVisible(v)}
           >
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a>
               <InputPrefixCurrency
                 currencyKey={sourceCurrencyKey}
@@ -251,7 +320,11 @@ function Transaction() {
           <span>{t('transaction.estimated')}</span>
         </div>
         <div className="transaction-input">
-          {currencyKeys.length === 0 ? <LoadingOutlined style={{ color: 'white', fontSize: '3rem', marginLeft: '1rem' }} /> : ''}
+          {currencyKeys.length === 0 ? <LoadingOutlined style={{
+            color: 'white',
+            fontSize: '3rem',
+            marginLeft: '1rem'
+          }} /> : ''}
           <Dropdown
             trigger="click"
             placement="bottomLeft"
@@ -268,12 +341,11 @@ function Transaction() {
             )}
             overlayStyle={{
               height: '300px',
-              overflowY: 'scroll',
+              overflowY: 'scroll'
             }}
             visible={destinationDropdownVisible}
             onVisibleChange={v => setDestinationDropdownVisible(v)}
           >
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a>
               <InputPrefixCurrency
                 currencyKey={destinationCurrencyKey}
@@ -296,11 +368,28 @@ function Transaction() {
       <div className="transaction-bottom">
         <Button
           onClick={handleExchange}
-          disabled={sourceCurrencyKey === destinationCurrencyKey}
+          disabled={
+            sourceCurrencyKey === destinationCurrencyKey ||
+            !inputValue ||
+            transaction.toBeConfirmed ||
+            parseInt(inputValue) <= 0
+          }
         >
+          {transaction.toBeConfirmed ? <LoadingOutlined /> : ''}
           {t('transaction.title')}
         </Button>
         <GasPrice />
+        <TransactionInProgress
+          {...transaction}
+          content={t('transactionStatus.transactionType.transaction')}
+        />
+        <TransactionCompleted
+          {...transaction}
+          content={t('transactionStatus.transactionType.transaction')}
+        />
+        <div className="error-message">
+          {transaction.error && transaction.error.message}
+        </div>
       </div>
     </div>
   )

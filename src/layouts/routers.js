@@ -1,4 +1,4 @@
-import MenuLay from '@/pages/menuLay/MenuLay'
+import MenuLay from './MenuLay'
 import Personal from '@/pages/Personal'
 import Synthesis from '@/pages/Synthesis'
 import Transaction from '@/pages/Transaction'
@@ -20,7 +20,7 @@ import {
   InteractionOutlined,
   PartitionOutlined,
   RestOutlined,
-  UserOutlined,
+  UserOutlined
 } from '@ant-design/icons'
 
 export const routerLabelMapper = {
@@ -30,7 +30,7 @@ export const routerLabelMapper = {
   liquidity: { title: 'liquidity.title' },
   destroy: { title: 'destroy.title' },
   reward: { title: 'reward.title' },
-  transfer: { title: 'transfer.title' },
+  transfer: { title: 'transfer.title' }
 }
 
 const routers = [
@@ -40,7 +40,7 @@ const routers = [
     key: 'index',
     component: MenuLay,
     hide: true,
-    backgroundImage: Welcome,
+    backgroundImage: Welcome
   },
 
   /** 显示的菜单、路由 */
@@ -49,42 +49,42 @@ const routers = [
     key: 'person',
     component: Personal,
     icon: UserOutlined,
-    backgroundImage: Map,
+    backgroundImage: Map
   },
   {
     path: '/synthesis',
     key: 'synthesis',
     component: Synthesis,
     icon: PartitionOutlined,
-    backgroundImage: Map,
+    backgroundImage: Map
   },
   {
     path: '/destruction',
     key: 'destroy',
     component: Destruction,
     icon: RestOutlined,
-    backgroundImage: Map,
+    backgroundImage: Map
   },
   {
     path: '/transaction',
     key: 'transaction',
     component: Transaction,
     icon: InteractionOutlined,
-    backgroundImage: Map,
+    backgroundImage: Map
   },
   {
     path: '/reward',
     key: 'reward',
     component: Reward,
     icon: GiftOutlined,
-    backgroundImage: Map,
+    backgroundImage: Map
   },
   {
     path: '/transfer',
     key: 'transfer',
     component: Transfer,
     icon: ExportOutlined,
-    backgroundImage: LiquidityImage,
+    backgroundImage: LiquidityImage
   },
 
   /** 隐藏的路由 */
@@ -92,29 +92,29 @@ const routers = [
     path: '/liquidity',
     key: 'liquidity',
     component: Liquidity,
-    hide: true,
+    hide: true
   },
   {
     path: '/success',
     key: 'success',
     component: Success,
     hide: true,
-    backgroundImage: Map,
+    backgroundImage: Map
   },
   {
     path: '/error',
     key: 'error',
     component: Error,
     hide: true,
-    backgroundImage: Map,
+    backgroundImage: Map
   },
   {
     path: '/FlowStep',
     key: 'flowstep',
     component: FlowStep,
     hide: true,
-    backgroundImage: LiquidityImage,
-  },
+    backgroundImage: LiquidityImage
+  }
 ]
 
 export default routers

@@ -23,7 +23,6 @@
     "locked": "已锁定",
     "Transferable": "可转账"
   },
-
   "synthesis": {
     "title": "合成",
     "text": "抵押DOWS铸造生成合成资产xUSD，xUSD可用于交易其他品类合成资产；满足抵押率要求可获得合成资产奖励。",
@@ -33,7 +32,6 @@
     "balance": "可用余额",
     "staking": "已抵押"
   },
-
   "transaction": {
     "networkPrice": {
       "edit": "编辑"
@@ -45,30 +43,29 @@
     "receive": "接收",
     "estimated": "估计",
     "fees": "交易手续费",
-    "all": "全部",
-    "inProgress": {
-      "title": "交易正在进行中",
-      "content": {
-        "synthesis": "合成资产"
-      },
-      "view": "查看",
-      "close": "关闭"
+    "all": "全部"
+  },
+  "transactionStatus": {
+    "transactionType": {
+      "synthesis": "合成资产",
+      "burn": "销毁合成资产",
+      "transaction": "交易合成资产",
+      "reward": "领取奖励",
+      "transfer": "转账"
     },
-    "completed": {
-      "title": "交易已完成！",
-      "content": {
-        "synthesis": "合成资产"
-      },
+    "title": {
+      "inProgress": "交易进行中...",
+      "completed": "交易已完成！"
+    },
+    "button": {
       "view": "查看",
       "close": "关闭"
     }
   },
-
   "liquidity": {
     "title": "流动性",
     "text": "流动性衡量的是将资产快速且无损失地转换为现金的难易程度。转换越容易，\n说明资产的流动性越好。"
   },
-
   "destroy": {
     "title": "销毁",
     "text": "销毁xUSD可解锁您抵押的DOWS，同时可减少您在系统中的“债务”",
@@ -80,7 +77,6 @@
     "networkPrice": "网络费用",
     "start": "开始销毁"
   },
-
   "reward": {
     "title": "奖励",
     "text": "抵押DOWS铸造合成资产、交易合成资产，每周可获得奖励",
@@ -89,11 +85,9 @@
     "bottomText": "7天不领取，奖励将被回收至池子里，抵押率不足将无法获得奖励",
     "receive": "领取"
   },
-
   "wallet": {
     "connectToWallet": "链接到钱包"
   },
-
   "gasPrice": {
     "networkFee": "网络费用",
     "edit": "编辑",

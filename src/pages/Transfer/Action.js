@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  Button, Dropdown, Input, Menu,
-} from 'antd'
+import { Button, Dropdown, Input, Menu } from 'antd'
 import GasPrice from '@/components/GasPrice'
 
 import { useWeb3React } from '@web3-react/core'
@@ -11,14 +9,22 @@ import './index.less'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { bytesToString, fromWei, toWei } from '@/web3/utils'
 import { LoadingOutlined } from '@ant-design/icons'
+import TransactionInProgress from '@/components/TransactionStatus/TransactionInProgress'
+import TransactionCompleted from '@/components/TransactionStatus/TransactionCompleted'
 
 function DropdownMenu(props) {
-  const { onChange, currencies, selectedCurrency } = props
+  const {
+    onChange,
+    currencies,
+    selectedCurrency
+  } = props
 
   return (
     <Menu defaultSelectedKeys={selectedCurrency} selectable>
       {currencies.map(currency => (
-        <Menu.Item onClick={() => { onChange(currency) }} key={currency} className="menu-item">
+        <Menu.Item onClick={() => {
+          onChange(currency)
+        }} key={currency} className="menu-item">
           <span>
             {currency}
           </span>
@@ -28,18 +34,28 @@ function DropdownMenu(props) {
   )
 }
 
-function Action(props) {
+function Action() {
   const { t } = useTranslation()
   const { account } = useWeb3React()
 
-  const { onConfirm, onComplete } = props
+  // const {
+  //   onConfirm,
+  //   onComplete
+  // } = props
 
   const [currencyKeys, setCurrencyKeys] = useState([])
   const [selectedCurrency, setSelectedCurrency] = useState()
   const [destinationAccount, setDestinationAccount] = useState('')
   const [inputValue, setInputValue] = useState('')
   const [balance, setBalance] = useState()
-  const [gasPrice, setGasPrice] = useState(0)
+
+  const [transaction, setTransaction] = useState({
+    hash: null,
+    error: null,
+    success: false,
+    inProgress: false,
+    toBeConfirmed: false
+  })
 
   const fetchAvailableCurrencyKeys = useCallback(async () => {
     const availableCurrencyKeys = (await dowsJSConnector.dowsJs.Shadows.availableCurrencyKeys()).map(k => bytesToString(k))
@@ -62,15 +78,63 @@ function Action(props) {
     fetchBalance()
   }, [fetchBalance])
 
+  const onTransactionCompleted = ({ transactionHash: hash }) => {
+    setTransaction({
+      hash,
+      error: null,
+      success: true,
+      inProgress: false,
+      toBeConfirmed: false
+    })
+    fetchBalance()
+  }
+
+  const onTransactionConfirmed = ({
+    hash,
+    wait
+  }) => {
+    setInputValue('')
+    setDestinationAccount('')
+    setTransaction({
+      hash,
+      error: null,
+      success: false,
+      inProgress: true,
+      toBeConfirmed: false
+    })
+
+    wait()
+      .then(onTransactionCompleted)
+  }
+
+  const onTransactionException = error => {
+    setTransaction({
+      hash: null,
+      error,
+      success: false,
+      inProgress: false,
+      toBeConfirmed: false
+    })
+  }
+
+  const initTransaction = () => {
+    setTransaction({
+      hash: null,
+      error: null,
+      success: false,
+      inProgress: false,
+      toBeConfirmed: true
+    })
+  }
+
   const handleTransfer = async () => {
-    onConfirm(inputValue, destinationAccount)
+    // onConfirm(inputValue, destinationAccount)
+    initTransaction()
     const to = destinationAccount
     const value = toWei(inputValue)
-    dowsJSConnector.dowsJs.Synth[selectedCurrency].transfer(to, value).then(result => {
-      onComplete(result)
-    }).catch(error => {
-      console.error(error)
-    })
+    dowsJSConnector.dowsJs.Synth[selectedCurrency].transfer(to, value)
+      .then(onTransactionConfirmed)
+      .catch(onTransactionException)
   }
 
   return (
@@ -90,20 +154,28 @@ function Action(props) {
           </span>
         </div>
         <div className="transfer-input">
-          {currencyKeys.length === 0 ? <LoadingOutlined style={{ color: 'white', fontSize: '3rem', marginLeft: '1rem' }} /> : ''}
+          {currencyKeys.length === 0 ? <LoadingOutlined style={{
+            color: 'white',
+            fontSize: '3rem',
+            marginLeft: '1rem'
+          }} /> : ''}
           <Dropdown
             trigger="click"
             overlay={(
               <DropdownMenu
-                onChange={currency => { setSelectedCurrency(currency) }}
+                onChange={currency => {
+                  setSelectedCurrency(currency)
+                }}
                 selectedCurrency={selectedCurrency}
                 currencies={currencyKeys}
               />
             )}
-            overlayStyle={{ height: '300px', overflowY: 'scroll' }}
+            overlayStyle={{
+              height: '300px',
+              overflowY: 'scroll'
+            }}
             placement="bottomLeft"
           >
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a>
               <span>
                 {selectedCurrency}
@@ -114,10 +186,13 @@ function Action(props) {
             value={inputValue}
             className="amount-input"
             bordered={false}
-            onChange={(event => { setInputValue(event.target.value) })}
+            onChange={(event => {
+              setInputValue(event.target.value)
+            })}
           />
-          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-          <span className="all" onClick={() => { setInputValue(balance) }}>
+          <span className="all" onClick={() => {
+            setInputValue(balance)
+          }}>
             {t('transaction.all')}
           </span>
         </div>
@@ -129,7 +204,9 @@ function Action(props) {
             <Input
               className="address-input"
               bordered={false}
-              onChange={(event => { setDestinationAccount(event.target.value) })}
+              onChange={(event => {
+                setDestinationAccount(event.target.value)
+              })}
               placeholder="e.g. 0x185f5a"
             />
           </div>
@@ -137,11 +214,29 @@ function Action(props) {
       </div>
       <div className="transfer-bottom">
         <Button
+          className="start-btn"
           onClick={handleTransfer}
+          disabled={
+            !inputValue ||
+            !destinationAccount ||
+            transaction.toBeConfirmed
+          }
         >
+          {transaction.toBeConfirmed ? <LoadingOutlined /> : ''}
           {t('transfer.sendNow')}
         </Button>
-        <GasPrice onChange={price => { setGasPrice(price) }} />
+        <GasPrice />
+        <TransactionInProgress
+          {...transaction}
+          content={t('transactionStatus.transactionType.transfer')}
+        />
+        <TransactionCompleted
+          {...transaction}
+          content={t('transactionStatus.transactionType.transfer')}
+        />
+        <div className="error-message">
+          {transaction.error && transaction.error.message}
+        </div>
       </div>
     </div>
   )

@@ -4,6 +4,7 @@ import Confirmation from '@/pages/Transfer/Confirmation'
 import Completion from '@/pages/Transfer/Completion'
 
 function Transfer() {
+  // eslint-disable-next-line no-unused-vars
   const [activePageKey, setActivePageKey] = useState('ACTION')
 
   const [amount, setAmount] = useState('')
@@ -48,7 +49,7 @@ function Transfer() {
     },
   ]
 
-  return PAGES.filter(p => (p.key === activePageKey))[0].page
+  return PAGES[0].page
 }
 
 export default Transfer

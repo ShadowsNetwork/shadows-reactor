@@ -6,10 +6,12 @@ import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import {
-  fromWei, toBigNumber, toByte32, toWei,
+  fromWei, toBigNumber, toByte32, toWei
 } from '@/web3/utils'
 import { useWeb3React } from '@web3-react/core'
 import { LoadingOutlined } from '@ant-design/icons'
+import TransactionInProgress from '@/components/TransactionStatus/TransactionInProgress'
+import TransactionCompleted from '@/components/TransactionStatus/TransactionCompleted'
 
 function Destruction() {
   const { t } = useTranslation()
@@ -20,7 +22,14 @@ function Destruction() {
   const [inputValue, setInputValue] = useState('')
   const [outputValue, setOutputValue] = useState('')
   const [outputLoading, setOutputLoading] = useState(false)
-  const [transactionInProgress, setTransactionInProgress] = useState(false)
+
+  const [transaction, setTransaction] = useState({
+    hash: null,
+    error: null,
+    success: false,
+    inProgress: false,
+    toBeConfirmed: false
+  })
 
   const handleInputKeyPress = e => {
     if (!/[\d.]/.test(e.key)) {
@@ -36,14 +45,6 @@ function Destruction() {
     } else if (parseFloat(e.target.value) > xUSD) {
       setInputValue(xUSD)
     }
-  }
-
-  const burnSynths = async () => {
-    setTransactionInProgress(true)
-    const amount = toWei(inputValue)
-    const r = await dowsJSConnector.dowsJs.Shadows.burnSynths(amount)
-    setTransactionInProgress(false)
-    console.log(r)
   }
 
   const fetchDowsByXUsd = useCallback(async () => {
@@ -67,7 +68,7 @@ function Destruction() {
     const [xUSDBalance, debtBalance, maxIssuableSynth] = await Promise.all([
       dowsJSConnector.dowsJs.Synth.xUSD.balanceOf(account),
       dowsJSConnector.dowsJs.Shadows.debtBalanceOf(account, toByte32('xUSD')),
-      dowsJSConnector.dowsJs.Shadows.maxIssuableSynths(account),
+      dowsJSConnector.dowsJs.Shadows.maxIssuableSynths(account)
     ])
 
     setXUSD(fromWei(xUSDBalance))
@@ -77,6 +78,62 @@ function Destruction() {
   useEffect(() => {
     fetchInitData()
   }, [fetchInitData])
+
+  const onTransactionCompleted = ({ transactionHash: hash }) => {
+    setTransaction({
+      hash,
+      error: null,
+      success: true,
+      inProgress: false,
+      toBeConfirmed: false
+    })
+    fetchInitData()
+  }
+
+  const onTransactionConfirmed = ({
+    hash,
+    wait
+  }) => {
+    setInputValue('')
+    setOutputValue('')
+    setTransaction({
+      hash,
+      error: null,
+      success: false,
+      inProgress: true,
+      toBeConfirmed: false
+    })
+
+    wait()
+      .then(onTransactionCompleted)
+  }
+
+  const onTransactionException = error => {
+    setTransaction({
+      hash: null,
+      error,
+      success: false,
+      inProgress: false,
+      toBeConfirmed: false
+    })
+  }
+
+  const initTransaction = () => {
+    setTransaction({
+      hash: null,
+      error: null,
+      success: false,
+      inProgress: false,
+      toBeConfirmed: true
+    })
+  }
+
+  const burnSynths = async () => {
+    initTransaction()
+    dowsJSConnector.dowsJs.Shadows.burnSynths(toWei(inputValue))
+      .then(onTransactionConfirmed)
+      .catch(onTransactionException)
+  }
 
   return (
     <div className="destruction">
@@ -133,11 +190,29 @@ function Destruction() {
         </div>
       </div>
       <div className="destruction-bottom">
-        <Button onClick={burnSynths}>
-          {transactionInProgress ? <LoadingOutlined /> : ''}
+        <Button
+          onClick={burnSynths}
+          disabled={
+            transaction.toBeConfirmed ||
+            !xUSD ||
+            !inputValue
+          }
+        >
+          {transaction.toBeConfirmed ? <LoadingOutlined /> : ''}
           {t('destroy.start')}
         </Button>
         <GasPrice />
+        <TransactionInProgress
+          {...transaction}
+          content={t('transactionStatus.transactionType.burn')}
+        />
+        <TransactionCompleted
+          {...transaction}
+          content={t('transactionStatus.transactionType.burn')}
+        />
+        <div className="error-message">
+          {transaction.error && transaction.error.message}
+        </div>
       </div>
     </div>
   )

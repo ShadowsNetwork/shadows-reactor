@@ -43,20 +43,21 @@
     "receive": "receive",
     "estimated": "estimated",
     "fees": "transaction fees",
-    "all": "All",
-    "inProgress": {
-      "title": "Transaction in progress",
-      "content": {
-        "synthesis": "Synthesise assets"
-      },
-      "view": "View",
-      "close": "Close"
+    "all": "All"
+  },
+  "transactionStatus": {
+    "transactionType": {
+      "synthesis": "Synthesise assets",
+      "burn": "Burning your synthetic assets",
+      "transaction": "Trade your synthetic assets",
+      "reward": "Claim rewards",
+      "transfer": "Transfer"
     },
-    "completed": {
-      "title": "Transaction completed!",
-      "content": {
-        "synthesis": "Synthesise assets"
-      },
+    "title": {
+      "inProgress": "Transaction in progress...",
+      "completed": "Transaction completed!"
+    },
+    "button": {
       "view": "View",
       "close": "Close"
     }

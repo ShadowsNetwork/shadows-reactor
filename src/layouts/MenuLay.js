@@ -1,36 +1,29 @@
 import React from 'react'
 import { Carousel } from 'antd'
-import '../../styles/menuLay.css'
-import { RightOutlined, LeftOutlined } from '@ant-design/icons'
+import '@/styles/menuLay.css'
+import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
-import risk from '../../img/risk.png'
-import mortgage from '../../img/mortgage.png'
-import mortgageRate from '../../img/mortgageRate.png'
+import risk from '@/img/risk.png'
+import mortgage from '@/img/mortgage.png'
+import mortgageRate from '@/img/mortgageRate.png'
 
 function MenuLay() {
-  // eslint-disable-next-line no-unused-vars
-  const next = () => {
-    // eslint-disable-next-line no-use-before-define
-    slider.next()
-  }
-
-  const prev = () => {
-    // eslint-disable-next-line react/no-this-in-sfc,no-use-before-define
-    slider.prev()
-  }
-  const { t } = useTranslation()
   let slider
+
+  const { t } = useTranslation()
   return (
     <div className="swiper">
       <Carousel
         effect="fade"
-        ref={(el) => (slider = el)}
+        ref={el => {
+          slider = el
+        }}
         style={{
           width: '46%',
           height: '600px',
           position: 'absolute',
           top: 'calc((100% - 600px) / 2)',
-          left: '27%',
+          left: '27%'
         }}
       >
         <div className="menuLay">
@@ -68,16 +61,20 @@ function MenuLay() {
           </span>
         </div>
       </Carousel>
-      {/* eslint-disable-next-line max-len */}
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <div onClick={prev} className="leftClick">
+      <div
+        onClick={() => {
+          slider.prev()
+        }}
+        className="leftClick"
+      >
         <LeftOutlined style={{ fontSize: '22px' }} />
       </div>
-      {/* <RightCircleOutlined onClick={this.next} style={{fontSize:'40px',color:'#FFFFFF',
-        position:'absolute',bottom:'calc((100% - 580px) / 2)',right:'42%'}}/> */}
-      {/* eslint-disable-next-line max-len */}
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <div onClick={next} className="rightClick">
+      <div
+        onClick={() => {
+          slider.next()
+        }}
+        className="rightClick"
+      >
         <RightOutlined style={{ fontSize: '22px' }} />
       </div>
     </div>

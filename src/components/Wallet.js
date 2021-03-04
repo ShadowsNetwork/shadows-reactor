@@ -9,7 +9,10 @@ import { useTranslation } from 'react-i18next'
 import useBalanceQuery from '@/web3/useBalanceQuery'
 
 function Balance() {
-  const { loading, balance } = useBalanceQuery()
+  const {
+    loading,
+    balance
+  } = useBalanceQuery()
 
   return (
     <>
@@ -44,10 +47,14 @@ function CurrentAccount(props) {
 
   return (
     <>
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
       <span
         style={{
-          display: 'block', width: '9rem', height: '2.8rem', lineHeight: '2.8rem', fontSize: '1.3rem',
+          display: 'block',
+          width: '9rem',
+          height: '2.8rem',
+          lineHeight: '2.8rem',
+          fontSize: '1.3rem',
+          userSelect: 'none'
         }}
         onClick={openModal}
       >
@@ -71,8 +78,13 @@ function ConnectToWallet() {
   const { t } = useTranslation()
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-    <span onClick={() => { activate(injected) }}>{t('wallet.connectToWallet')}</span>
+    <span
+      onClick={() => {
+        activate(injected)
+      }}
+    >
+      {t('wallet.connectToWallet')}
+    </span>
   )
 }
 
