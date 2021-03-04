@@ -2,8 +2,17 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    node: true,
   },
-  extends: ['eslint:recommended', 'prettier', 'prettier/react', 'plugin:react/recommended', 'airbnb'],
+  parser: '@typescript-eslint/parser',
+  extends: [
+    'eslint:recommended',
+    'prettier',
+    'prettier/react',
+    'plugin:react/recommended',
+    // 'airbnb',
+    'plugin:@typescript-eslint/recommended',
+  ],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -21,7 +30,7 @@ module.exports = {
     'no-unused-vars': [
       1,
       {
-        argsIgnorePattern: 'res|next|^err',
+        argsIgnorePattern: 'res|next|^err|_',
       },
     ],
     'no-console': [0],
@@ -32,5 +41,23 @@ module.exports = {
     'max-len': [0],
     'arrow-parens': [2, 'as-needed'],
     'no-param-reassign': [0],
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': ['error'],
+    '@typescript-eslint/no-unused-vars': [
+      1,
+      {
+        argsIgnorePattern: 'res|next|^err|_',
+      },
+    ],
+    '@typescript-eslint/explicit-module-boundary-types': 'off'
   },
+  'overrides': [
+    {
+      // enable the rule specifically for TypeScript files
+      'files': ['*.ts', '*.tsx'],
+      'rules': {
+        '@typescript-eslint/explicit-module-boundary-types': ['error']
+      }
+    }
+  ]
 }
