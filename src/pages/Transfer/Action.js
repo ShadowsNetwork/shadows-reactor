@@ -214,7 +214,6 @@ function Action() {
       </div>
       <div className="transfer-bottom">
         <Button
-          className="start-btn"
           onClick={handleTransfer}
           disabled={
             !inputValue ||
