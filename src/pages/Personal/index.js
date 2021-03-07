@@ -24,6 +24,7 @@ function Personal() {
       dowsJSConnector.dowsJs.ShadowsState.issuanceRatio(),
       dowsJSConnector.dowsJs.Shadows.transferableShadows(account),
     ])
+
     setMyRatio(fromWei(collateralisationRatio))
     setTargetRatio(fromWei(issuanceRatio))
     setTransferableDows(fromWei(transferableShadows))
@@ -104,7 +105,8 @@ function Personal() {
           <div>
             <span>{t('person.myRate')}</span>
             <span>
-              {myRatio ? `${Math.round(100 / myRatio)} %` : <LoadingOutlined />}
+              {myRatio && (parseFloat(myRatio) !== 0 ? `${Math.round(100 / myRatio)} %` : 0)}
+              {!myRatio && <LoadingOutlined />}
             </span>
           </div>
           <div>
@@ -117,30 +119,28 @@ function Personal() {
       </div>
       <div className="snk">
         <span>
-          {t('person.dows')}
-          {' '}
-          DOWS
+          {t('person.totalDows')}
         </span>
         <span>
-          {dows ? `${dows} DOWS` : <LoadingOutlined />}
+          {dows ?? <LoadingOutlined />}
         </span>
       </div>
       <div className="hr" />
       <div className="progressBar">
         <div className="progressBar-top">
           <span>
-            {t('person.locked')}
-            {': '}
-            {lockedShadows ?? <LoadingOutlined />}
-          </span>
-          <span>
             {t('person.Transferable')}
             {': '}
             {transferableDows ?? <LoadingOutlined />}
           </span>
+          <span>
+            {t('person.locked')}
+            {': '}
+            {lockedShadows ?? <LoadingOutlined />}
+          </span>
         </div>
         <Progress
-          percent={dows ? ((lockedShadows / dows) * 100) : 50}
+          percent={dows ? ((transferableDows / dows) * 100) : 50}
           showInfo={false}
           strokeColor="#FF2C63"
           trailColor="#342D33"

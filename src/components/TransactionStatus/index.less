@@ -43,14 +43,21 @@
     }
   }
 
-  .transaction-success {
+  .transaction-success, .transaction-failed {
     width: 4.5rem;
     height: 4.5rem;
     border-radius: 4.5rem;
-    background-color: #1EC195;
     display: flex;
     justify-content: center;
     margin-left: 2rem;
+  }
+
+  .transaction-success {
+    background-color: #1EC195;
+  }
+
+  .transaction-failed {
+    background-color: #ff5050;
   }
 
   .text {

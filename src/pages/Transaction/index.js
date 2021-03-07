@@ -8,8 +8,12 @@ import { LoadingOutlined } from '@ant-design/icons'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { useWeb3React } from '@web3-react/core'
 import { bytesToString, fromWei, toBigNumber, toByte32, toWei } from '@/web3/utils'
-import TransactionInProgress from '@/components/TransactionStatus/TransactionInProgress'
-import TransactionCompleted from '@/components/TransactionStatus/TransactionCompleted'
+import {
+  initTransaction,
+  onTransactionConfirmed,
+  onTransactionException
+} from '@/components/TransactionStatus/event'
+import TransactionStatus from '@/components/TransactionStatus'
 
 function MenuContent(props) {
   const {
@@ -88,12 +92,14 @@ function Transaction() {
 
   const [currencyKeys, setCurrencyKeys] = useState([])
 
-  const [transaction, setTransaction] = useState({
+  const [transactionStatus, setTransactionStatus] = useState({
     hash: null,
     error: null,
+    exception: null,
     success: false,
     inProgress: false,
-    toBeConfirmed: false
+    toBeConfirmed: false,
+    closed: false
   })
 
   const handleInputKeyPress = e => {
@@ -195,63 +201,22 @@ function Transaction() {
     fetchDestinationRate()
   }, [fetchDestinationRate])
 
-  const onTransactionCompleted = ({ transactionHash: hash }) => {
-    setTransaction({
-      hash,
-      error: null,
-      success: true,
-      inProgress: false,
-      toBeConfirmed: false
-    })
-    fetchSynthBalance()
-  }
-
-  const onTransactionConfirmed = ({
-    hash,
-    wait
-  }) => {
-    setInputValue('')
-    setOutputValue('')
-    setTransaction({
-      hash,
-      error: null,
-      success: false,
-      inProgress: true,
-      toBeConfirmed: false
-    })
-
-    wait()
-      .then(onTransactionCompleted)
-  }
-
-  const onTransactionException = error => {
-    setTransaction({
-      hash: null,
-      error,
-      success: false,
-      inProgress: false,
-      toBeConfirmed: false
-    })
-  }
-
-  const initTransaction = () => {
-    setTransaction({
-      hash: null,
-      error: null,
-      success: false,
-      inProgress: false,
-      toBeConfirmed: true
-    })
-  }
-
   const handleExchange = async () => {
-    initTransaction()
+    initTransaction(setTransactionStatus)
 
     dowsJSConnector.dowsJs.Shadows.exchange(
-      toByte32(sourceCurrencyKey), toWei(inputValue), toByte32(destinationCurrencyKey)
+      toByte32(sourceCurrencyKey),
+      toWei(inputValue),
+      toByte32(destinationCurrencyKey)
     )
-      .then(onTransactionConfirmed)
-      .catch(onTransactionException)
+      .then(r => {
+        setInputValue('')
+        setOutputValue('')
+        onTransactionConfirmed(setTransactionStatus, r)
+      })
+      .catch(e => {
+        onTransactionException(setTransactionStatus, e)
+      })
   }
 
   return (
@@ -371,24 +336,25 @@ function Transaction() {
           disabled={
             sourceCurrencyKey === destinationCurrencyKey ||
             !inputValue ||
-            transaction.toBeConfirmed ||
+            transactionStatus.toBeConfirmed ||
             parseInt(inputValue) <= 0
           }
         >
-          {transaction.toBeConfirmed ? <LoadingOutlined /> : ''}
+          {transactionStatus.toBeConfirmed ? <LoadingOutlined /> : ''}
           {t('transaction.title')}
         </Button>
         <GasPrice />
-        <TransactionInProgress
-          {...transaction}
-          content={t('transactionStatus.transactionType.transaction')}
-        />
-        <TransactionCompleted
-          {...transaction}
+        <TransactionStatus
+          {...transactionStatus}
+          closed={transactionStatus.closed}
+          onClosed={() => setTransactionStatus({
+            ...transactionStatus,
+            closed: true
+          })}
           content={t('transactionStatus.transactionType.transaction')}
         />
         <div className="error-message">
-          {transaction.error && transaction.error.message}
+          {transactionStatus.error && transactionStatus.error.message}
         </div>
       </div>
     </div>

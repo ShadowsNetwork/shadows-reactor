@@ -1,17 +1,17 @@
 import React from 'react'
+import { CloseOutlined } from '@ant-design/icons'
 import { withTranslation } from 'react-i18next'
 import './index.less'
-import { CheckOutlined } from '@ant-design/icons'
 import TransactionStatusProps from '@/components/TransactionStatus/props'
 
-const TransactionCompleted: React.FC<TransactionStatusProps> = ({
+const TransactionFailed: React.FC<TransactionStatusProps> = ({
   t,
   content,
 }) => {
   return (
     <>
-      <div className="transaction-success">
-        <CheckOutlined
+      <div className="transaction-failed">
+        <CloseOutlined
           style={{
             fontSize: '2.4rem',
             color: 'white',
@@ -21,7 +21,7 @@ const TransactionCompleted: React.FC<TransactionStatusProps> = ({
       </div>
       <div className="text">
         <span className="title">
-          {t('transactionStatus.title.completed')}
+          {t('transactionStatus.title.failed')}
         </span>
         <span className="content">
           {content}
@@ -31,4 +31,4 @@ const TransactionCompleted: React.FC<TransactionStatusProps> = ({
   )
 }
 
-export default withTranslation()(TransactionCompleted)
+export default withTranslation()(TransactionFailed)

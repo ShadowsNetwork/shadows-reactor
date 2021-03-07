@@ -5,15 +5,17 @@ import { Button, Input } from 'antd'
 import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import {
-  fromWei, toBigNumber, toByte32, toWei
-} from '@/web3/utils'
+import { fromWei, toBigNumber, toByte32, toWei } from '@/web3/utils'
 import { useWeb3React } from '@web3-react/core'
 import { LoadingOutlined } from '@ant-design/icons'
-import TransactionInProgress from '@/components/TransactionStatus/TransactionInProgress'
-import TransactionCompleted from '@/components/TransactionStatus/TransactionCompleted'
+import {
+  initTransaction,
+  onTransactionConfirmed,
+  onTransactionException
+} from '@/components/TransactionStatus/event'
+import TransactionStatus from '@/components/TransactionStatus'
 
-function Destruction() {
+function Burn() {
   const { t } = useTranslation()
   const { account } = useWeb3React()
 
@@ -23,12 +25,14 @@ function Destruction() {
   const [outputValue, setOutputValue] = useState('')
   const [outputLoading, setOutputLoading] = useState(false)
 
-  const [transaction, setTransaction] = useState({
+  const [transactionStatus, setTransactionStatus] = useState({
     hash: null,
     error: null,
+    exception: null,
     success: false,
     inProgress: false,
-    toBeConfirmed: false
+    toBeConfirmed: false,
+    closed: false
   })
 
   const handleInputKeyPress = e => {
@@ -48,11 +52,17 @@ function Destruction() {
   }
 
   const fetchDowsByXUsd = useCallback(async () => {
-    const rateForCurrency = await dowsJSConnector.dowsJs.ExchangeRates.rateForCurrency(toByte32('xUSD'))
+    const [xUSDRate, dowsRate] = await Promise.all([
+      dowsJSConnector.dowsJs.ExchangeRates.rateForCurrency(toByte32('xUSD')),
+      dowsJSConnector.dowsJs.ExchangeRates.rateForCurrency(toByte32('DOWS'))
+    ])
     setOutputLoading(false)
-    setOutputValue(toBigNumber(fromWei(rateForCurrency))
-      .multipliedBy(toBigNumber(inputValue))
-      .toString())
+    setOutputValue(
+      toBigNumber(fromWei(xUSDRate))
+        .dividedBy(toBigNumber(fromWei(dowsRate)))
+        .multipliedBy(toBigNumber(inputValue))
+        .toString()
+    )
   }, [inputValue])
 
   useEffect(() => {
@@ -65,13 +75,11 @@ function Destruction() {
   }, [inputValue])
 
   const fetchInitData = useCallback(async () => {
-    const [xUSDBalance, debtBalance, maxIssuableSynth] = await Promise.all([
-      dowsJSConnector.dowsJs.Synth.xUSD.balanceOf(account),
+    const [debtBalance, maxIssuableSynth] = await Promise.all([
       dowsJSConnector.dowsJs.Shadows.debtBalanceOf(account, toByte32('xUSD')),
       dowsJSConnector.dowsJs.Shadows.maxIssuableSynths(account)
     ])
-
-    setXUSD(fromWei(xUSDBalance))
+    setXUSD(fromWei(debtBalance))
     setBurnAmountToFixRatio(Math.max(fromWei(debtBalance) - fromWei(maxIssuableSynth), 0))
   }, [account])
 
@@ -79,60 +87,24 @@ function Destruction() {
     fetchInitData()
   }, [fetchInitData])
 
-  const onTransactionCompleted = ({ transactionHash: hash }) => {
-    setTransaction({
-      hash,
-      error: null,
-      success: true,
-      inProgress: false,
-      toBeConfirmed: false
-    })
-    fetchInitData()
+  const burnSynths = async amount => {
+    initTransaction(setTransactionStatus)
+    dowsJSConnector.dowsJs.Shadows.burnSynths(amount)
+      .then(r => {
+        setInputValue('')
+        setOutputValue('')
+        onTransactionConfirmed(setTransactionStatus, r)
+      })
+      .catch(e => {
+        onTransactionException(setTransactionStatus, e)
+      })
   }
 
-  const onTransactionConfirmed = ({
-    hash,
-    wait
-  }) => {
-    setInputValue('')
-    setOutputValue('')
-    setTransaction({
-      hash,
-      error: null,
-      success: false,
-      inProgress: true,
-      toBeConfirmed: false
-    })
-
-    wait()
-      .then(onTransactionCompleted)
-  }
-
-  const onTransactionException = error => {
-    setTransaction({
-      hash: null,
-      error,
-      success: false,
-      inProgress: false,
-      toBeConfirmed: false
-    })
-  }
-
-  const initTransaction = () => {
-    setTransaction({
-      hash: null,
-      error: null,
-      success: false,
-      inProgress: false,
-      toBeConfirmed: true
-    })
-  }
-
-  const burnSynths = async () => {
-    initTransaction()
-    dowsJSConnector.dowsJs.Shadows.burnSynths(toWei(inputValue))
-      .then(onTransactionConfirmed)
-      .catch(onTransactionException)
+  const burnAll = async () => {
+    setInputValue(xUSD)
+    initTransaction(setTransactionStatus)
+    const xUSDBalance = await dowsJSConnector.dowsJs.Synth.xUSD.balanceOf(account)
+    await burnSynths(xUSDBalance)
   }
 
   return (
@@ -145,7 +117,7 @@ function Destruction() {
         <Button onClick={() => setInputValue(burnAmountToFixRatio)}>
           {t('destroy.adjust')}
         </Button>
-        <Button onClick={() => setInputValue(xUSD)}>
+        <Button onClick={burnAll}>
           {t('destroy.destroyAll')}
         </Button>
       </div>
@@ -191,31 +163,32 @@ function Destruction() {
       </div>
       <div className="destruction-bottom">
         <Button
-          onClick={burnSynths}
+          onClick={() => burnSynths(toWei(inputValue))}
           disabled={
-            transaction.toBeConfirmed ||
+            transactionStatus.toBeConfirmed ||
             !xUSD ||
             !inputValue
           }
         >
-          {transaction.toBeConfirmed ? <LoadingOutlined /> : ''}
+          {transactionStatus.toBeConfirmed ? <LoadingOutlined /> : ''}
           {t('destroy.start')}
         </Button>
         <GasPrice />
-        <TransactionInProgress
-          {...transaction}
-          content={t('transactionStatus.transactionType.burn')}
-        />
-        <TransactionCompleted
-          {...transaction}
+        <TransactionStatus
+          {...transactionStatus}
+          closed={transactionStatus.closed}
+          onClosed={() => setTransactionStatus({
+            ...transactionStatus,
+            closed: true
+          })}
           content={t('transactionStatus.transactionType.burn')}
         />
         <div className="error-message">
-          {transaction.error && transaction.error.message}
+          {transactionStatus.exception && transactionStatus.exception.message}
         </div>
       </div>
     </div>
   )
 }
 
-export default Destruction
+export default Burn

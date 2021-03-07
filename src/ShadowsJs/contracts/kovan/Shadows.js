@@ -1,16 +1,20 @@
 /* eslint-disable no-param-reassign */
 import { Contract } from 'ethers'
 import { getSource, getTarget } from '@/ShadowsJs/contracts/utils'
+import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 
 const { address } = getTarget('kovan', 'Shadows')
 
 const { abi } = getSource('kovan', 'Shadows')
 
-function Shadows({ signer, provider }) {
+function Shadows({
+  signer,
+  provider
+}) {
   this.contract = new Contract(
     address,
     abi,
-    signer || provider,
+    signer || provider
   )
 
   this.collateralisationRatio = async account => {
@@ -42,11 +46,25 @@ function Shadows({ signer, provider }) {
   }
 
   this.burnSynths = async amount => {
-    return await this.contract.burnSynths(amount)
+    try {
+      return await this.contract.burnSynths(amount)
+    } catch (e) {
+      const gasLimit = (await dowsJSConnector.provider.getBlock('latest')).gasLimit
+      return await this.contract.burnSynths(amount, {
+        gasLimit
+      })
+    }
   }
 
   this.exchange = async (sourceCurrencyKey, sourceAmount, destinationCurrencyKey) => {
-    return await this.contract.exchange(sourceCurrencyKey, sourceAmount, destinationCurrencyKey)
+    try {
+      return await this.contract.exchange(sourceCurrencyKey, sourceAmount, destinationCurrencyKey)
+    } catch (e) {
+      console.error(e)
+      return await this.contract.exchange(sourceCurrencyKey, sourceAmount, destinationCurrencyKey, {
+        gasLimit: 1000000
+      })
+    }
   }
 
   this.availableCurrencyKeys = async () => {

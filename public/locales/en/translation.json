@@ -19,7 +19,7 @@
     "title": "Personal Information",
     "myRate": "My collateralization ratio",
     "targetRate": "Target collateralization ratio",
-    "dows": "total",
+    "totalDows": "Total DOWS",
     "locked": "locked",
     "Transferable": "Transferable"
   },
@@ -29,7 +29,7 @@
     "debtRatio": "Collateralization Ratio",
     "start": "Start Synthesis",
     "all": "All",
-    "balance": "Available Balance",
+    "balance": "Synthesizable amount",
     "staking": "Collateralized DOWS"
   },
   "transaction": {
@@ -55,7 +55,8 @@
     },
     "title": {
       "inProgress": "Transaction in progress...",
-      "completed": "Transaction completed!"
+      "completed": "Transaction completed!",
+      "failed": "Transaction Failed!"
     },
     "button": {
       "view": "View",
@@ -73,7 +74,7 @@
     "destroyAll": "Burn All",
     "all": "All",
     "quantity": "Un-lockable quantity",
-    "balance": "Balance",
+    "balance": "Destructible quantity",
     "networkPrice": "Network Fee",
     "start": "Destroy Now"
   },

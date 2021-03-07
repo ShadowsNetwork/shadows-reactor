@@ -8,8 +8,12 @@ import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { useWeb3React } from '@web3-react/core'
 import { fromWei, toBigNumber } from '@/web3/utils'
 import { LoadingOutlined } from '@ant-design/icons'
-import TransactionInProgress from '@/components/TransactionStatus/TransactionInProgress'
-import TransactionCompleted from '@/components/TransactionStatus/TransactionCompleted'
+import TransactionStatus from '@/components/TransactionStatus'
+import {
+  initTransaction,
+  onTransactionConfirmed,
+  onTransactionException
+} from '@/components/TransactionStatus/event'
 
 function Reward() {
   const { t } = useTranslation()
@@ -20,12 +24,14 @@ function Reward() {
 
   const [claimRewardDisabled, setClaimRewardDisabled] = useState(true)
 
-  const [transaction, setTransaction] = useState({
+  const [transactionStatus, setTransactionStatus] = useState({
     hash: null,
     error: null,
+    exception: null,
     success: false,
     inProgress: false,
-    toBeConfirmed: false
+    toBeConfirmed: false,
+    closed: false
   })
 
   const fetchClaimFees = useCallback(async () => {
@@ -44,58 +50,16 @@ function Reward() {
     setClaimRewardDisabled(!canClaimReward)
   }, [tradingReward, syntheticReward])
 
-  const onTransactionCompleted = ({ transactionHash: hash }) => {
-    setTransaction({
-      hash,
-      error: null,
-      success: true,
-      inProgress: false,
-      toBeConfirmed: false
-    })
-    fetchClaimFees()
-  }
-
-  const onTransactionConfirmed = ({
-    hash,
-    wait
-  }) => {
-    setTransaction({
-      hash,
-      error: null,
-      success: false,
-      inProgress: true,
-      toBeConfirmed: false
-    })
-
-    wait()
-      .then(onTransactionCompleted)
-  }
-
-  const onTransactionException = error => {
-    setTransaction({
-      hash: null,
-      error,
-      success: false,
-      inProgress: false,
-      toBeConfirmed: false
-    })
-  }
-
-  const initTransaction = () => {
-    setTransaction({
-      hash: null,
-      error: null,
-      success: false,
-      inProgress: false,
-      toBeConfirmed: true
-    })
-  }
-
   const claimRewards = async () => {
-    initTransaction()
+    initTransaction(setTransactionStatus)
+
     dowsJSConnector.dowsJs.FeePool.claimFees()
-      .then(onTransactionConfirmed)
-      .catch(onTransactionException)
+      .then(r => {
+        onTransactionConfirmed(setTransactionStatus, r)
+      })
+      .catch(e => {
+        onTransactionException(setTransactionStatus, e)
+      })
   }
 
   return (
@@ -129,23 +93,24 @@ function Reward() {
         <Button
           disabled={
             claimRewardDisabled ||
-            transaction.toBeConfirmed
+            transactionStatus.toBeConfirmed
           }
           onClick={claimRewards}
         >
           {t('reward.receive')}
         </Button>
         <GasPrice />
-        <TransactionInProgress
-          {...transaction}
-          content={t('transactionStatus.transactionType.reward')}
-        />
-        <TransactionCompleted
-          {...transaction}
-          content={t('transactionStatus.transactionType.reward')}
+        <TransactionStatus
+          {...transactionStatus}
+          closed={transactionStatus.closed}
+          onClosed={() => setTransactionStatus({
+            ...transactionStatus,
+            closed: true
+          })}
+          content={t('transactionStatus.transactionType.transaction')}
         />
         <div className="error-message">
-          {transaction.error && transaction.error.message}
+          {transactionStatus.error && transactionStatus.error.message}
         </div>
       </div>
     </div>

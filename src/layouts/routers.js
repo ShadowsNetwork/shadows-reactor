@@ -3,7 +3,7 @@ import Personal from '@/pages/Personal'
 import Synthesis from '@/pages/Synthesis'
 import Transaction from '@/pages/Transaction'
 import Liquidity from '@/pages/Liquidity'
-import Destruction from '@/pages/Destruction'
+import Burn from '@/pages/Burn'
 import Reward from '@/pages/Reward'
 import FlowStep from '@/pages/Liquidity/FlowStep'
 import Success from '@/pages/Success'
@@ -59,9 +59,9 @@ const routers = [
     backgroundImage: Map
   },
   {
-    path: '/destruction',
+    path: '/burn',
     key: 'destroy',
-    component: Destruction,
+    component: Burn,
     icon: RestOutlined,
     backgroundImage: Map
   },

@@ -19,7 +19,7 @@
     "title": "个人信息",
     "myRate": "我的抵押率",
     "targetRate": "目标抵押率",
-    "dows": "总",
+    "totalDows": "DOWS 总额",
     "locked": "已锁定",
     "Transferable": "可转账"
   },
@@ -29,7 +29,7 @@
     "debtRatio": "当前抵押率",
     "start": "开始合成",
     "all": "全部",
-    "balance": "可用余额",
+    "balance": "可合成数量",
     "staking": "已抵押"
   },
   "transaction": {
@@ -55,7 +55,8 @@
     },
     "title": {
       "inProgress": "交易进行中...",
-      "completed": "交易已完成！"
+      "completed": "交易已完成！",
+      "failed": "交易失败!"
     },
     "button": {
       "view": "查看",
@@ -73,7 +74,7 @@
     "destroyAll": "全部销毁",
     "all": "全部",
     "quantity": "可解锁的数量",
-    "balance": "余额",
+    "balance": "可销毁数量",
     "networkPrice": "网络费用",
     "start": "开始销毁"
   },

@@ -8,8 +8,12 @@ import { useWeb3React } from '@web3-react/core'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { LoadingOutlined } from '@ant-design/icons'
 import { fromWei, toWei } from '@/web3/utils'
-import TransactionInProgress from '@/components/TransactionStatus/TransactionInProgress'
-import TransactionCompleted from '@/components/TransactionStatus/TransactionCompleted'
+import TransactionStatus from '@/components/TransactionStatus'
+import {
+  initTransaction,
+  onTransactionConfirmed,
+  onTransactionException
+} from '@/components/TransactionStatus/event'
 
 function Synthesis() {
   const { t } = useTranslation()
@@ -19,12 +23,14 @@ function Synthesis() {
   const [staking, setStaking] = useState()
   const [myRatio, setMyRatio] = useState(null)
 
-  const [transaction, setTransaction] = useState({
+  const [transactionStatus, setTransactionStatus] = useState({
     hash: null,
     error: null,
+    exception: null,
     success: false,
     inProgress: false,
-    toBeConfirmed: false
+    toBeConfirmed: false,
+    closed: false
   })
 
   const fetchDataFromContract = useCallback(async () => {
@@ -47,59 +53,16 @@ function Synthesis() {
 
   const [inputValue, setInputValue] = useState('')
 
-  const onTransactionCompleted = ({ transactionHash: hash }) => {
-    setTransaction({
-      hash,
-      error: null,
-      success: true,
-      inProgress: false,
-      toBeConfirmed: false
-    })
-    fetchDataFromContract()
-  }
-
-  const onTransactionConfirmed = ({
-    hash,
-    wait
-  }) => {
-    setInputValue('')
-    setTransaction({
-      hash,
-      error: null,
-      success: false,
-      inProgress: true,
-      toBeConfirmed: false
-    })
-
-    wait()
-      .then(onTransactionCompleted)
-  }
-
-  const onTransactionException = error => {
-    setTransaction({
-      hash: null,
-      error,
-      success: false,
-      inProgress: false,
-      toBeConfirmed: false
-    })
-  }
-
-  const initTransaction = () => {
-    setTransaction({
-      hash: null,
-      error: null,
-      success: false,
-      inProgress: false,
-      toBeConfirmed: true
-    })
-  }
-
   const issueSynth = async () => {
-    initTransaction()
+    initTransaction(setTransactionStatus)
     dowsJSConnector.dowsJs.Shadows.issueSynths(toWei(inputValue))
-      .then(onTransactionConfirmed)
-      .catch(onTransactionException)
+      .then(r => {
+        setInputValue('')
+        onTransactionConfirmed(setTransactionStatus, r)
+      })
+      .catch(e => {
+        onTransactionException(setTransactionStatus, e)
+      })
   }
 
   const handleInputKeyPress = e => {
@@ -145,13 +108,13 @@ function Synthesis() {
               {t('synthesis.balance')}
               ：
             </span>
-            <span>{available ? `${available} DOWS` : <LoadingOutlined />}</span>
+            <span>{available ? `${available} xUSD` : <LoadingOutlined />}</span>
           </div>
           <div className="Synthesis-input">
             <div className="prefix">
               <div className="dot" />
               <span className="text">
-                DOWS
+                xUSD
               </span>
             </div>
             <Input
@@ -168,12 +131,12 @@ function Synthesis() {
             <span>
               {t('synthesis.staking')}
               {': '}
-              {staking ? `${staking} DOWS` : <LoadingOutlined />}
+              {staking ? `${staking} xUSD` : <LoadingOutlined />}
             </span>
             <span>
               {t('synthesis.debtRatio')}
               {': '}
-              {myRatio ? `${Math.round(100 / myRatio)} %` : <LoadingOutlined />}
+              {myRatio && (parseFloat(myRatio) !== 0 ? `${Math.round(100 / myRatio)} %` : 0)}
             </span>
           </div>
         </div>
@@ -181,25 +144,26 @@ function Synthesis() {
           <Button
             onClick={issueSynth}
             disabled={
-              transaction.toBeConfirmed ||
+              transactionStatus.toBeConfirmed ||
               !available ||
               !inputValue
             }
           >
-            {transaction.toBeConfirmed ? <LoadingOutlined /> : ''}
+            {transactionStatus.toBeConfirmed ? <LoadingOutlined /> : ''}
             {t('synthesis.start')}
           </Button>
           <GasPrice />
-          <TransactionInProgress
-            {...transaction}
-            content={t('transactionStatus.transactionType.synthesis')}
-          />
-          <TransactionCompleted
-            {...transaction}
+          <TransactionStatus
+            {...transactionStatus}
+            closed={transactionStatus.closed}
+            onClosed={() => setTransactionStatus({
+              ...transactionStatus,
+              closed: true
+            })}
             content={t('transactionStatus.transactionType.synthesis')}
           />
           <div className="error-message">
-            {transaction.error && transaction.error.message}
+            {transactionStatus.error && transactionStatus.error.message}
           </div>
         </div>
       </div>
