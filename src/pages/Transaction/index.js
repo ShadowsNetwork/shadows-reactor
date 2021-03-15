@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
 import { LoadingOutlined } from '@ant-design/icons'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { useWeb3React } from '@web3-react/core'
 import { bytesToString, fromWei, toBigNumber, toByte32, toWei } from '@/web3/utils'
 import {
   initTransaction,
@@ -14,6 +13,8 @@ import {
   onTransactionException
 } from '@/components/TransactionStatus/event'
 import TransactionStatus from '@/components/TransactionStatus'
+import { useSelector } from 'react-redux'
+import { getAccount } from '@/store/wallet'
 
 function MenuContent(props) {
   const {
@@ -73,7 +74,7 @@ function InputPrefixCurrency(props) {
 
 function Transaction() {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const account = useSelector(getAccount)
 
   const [sourceCurrencyKey, setSourceCurrencyKey] = useState()
   const [destinationCurrencyKey, setDestinationCurrencyKey] = useState()

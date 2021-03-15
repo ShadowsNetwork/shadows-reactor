@@ -1,8 +1,9 @@
-import axios from 'axios';
-import { useQuery } from 'react-query';
+import axios from 'axios'
+import { useQuery } from 'react-query'
+import { UseQueryResult } from 'react-query/types/react/types'
 
-const ETH_GAS_STATION_API_URL = 'https://ethgasstation.info/json/ethgasAPI.json';
-const GAS_NOW_API_URL = 'https://www.gasnow.org/api/v3/gas/price?utm_source=shadows';
+const ETH_GAS_STATION_API_URL = 'https://ethgasstation.info/json/ethgasAPI.json'
+const GAS_NOW_API_URL = 'https://www.gasnow.org/api/v3/gas/price?utm_source=shadows'
 
 type EthGasStationResponse = {
 	average: number;
@@ -38,35 +39,35 @@ export type GasPrices = {
 
 export type GasSpeed = keyof GasPrices;
 
-export const GAS_SPEEDS: GasSpeed[] = ['average', 'fast', 'fastest'];
+export const GAS_SPEEDS: GasSpeed[] = ['average', 'fast', 'fastest']
 
-const useEthGasPriceQuery = () => {
-	return useQuery<GasPrices>(
+const useEthGasPriceQuery = (): UseQueryResult => {
+  return useQuery<GasPrices>(
 	  'GAS_PRICE',
-		async () => {
-			try {
-				const result = await axios.get<GasNowResponse>(GAS_NOW_API_URL);
-				const { standard, fast, rapid: fastest } = result.data.data;
+    async () => {
+      try {
+        const result = await axios.get<GasNowResponse>(GAS_NOW_API_URL)
+        const { standard, fast, rapid: fastest } = result.data.data
 
-				return {
-					fastest: Math.round(fastest / 1e8 / 10),
-					fast: Math.round(fast / 1e8 / 10),
-					average: Math.round(standard / 1e8 / 10),
-				};
-			} catch (e) {
-				console.log(e);
+        return {
+          fastest: Math.round(fastest / 1e8 / 10),
+          fast: Math.round(fast / 1e8 / 10),
+          average: Math.round(standard / 1e8 / 10),
+        }
+      } catch (e) {
+        console.log(e)
 
-				const result = await axios.get<EthGasStationResponse>(ETH_GAS_STATION_API_URL);
-				const { average, fast, fastest } = result.data;
+        const result = await axios.get<EthGasStationResponse>(ETH_GAS_STATION_API_URL)
+        const { average, fast, fastest } = result.data
 
-				return {
-					fastest: Math.round(fastest / 10),
-					fast: Math.round(fast / 10),
-					average: Math.round(average / 10),
-				};
-			}
-		}
-	);
-};
+        return {
+          fastest: Math.round(fastest / 10),
+          fast: Math.round(fast / 10),
+          average: Math.round(average / 10),
+        }
+      }
+    }
+  )
+}
 
-export default useEthGasPriceQuery;
+export default useEthGasPriceQuery

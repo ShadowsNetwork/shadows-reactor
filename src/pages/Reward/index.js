@@ -5,7 +5,6 @@ import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { useWeb3React } from '@web3-react/core'
 import { fromWei, toBigNumber } from '@/web3/utils'
 import { LoadingOutlined } from '@ant-design/icons'
 import TransactionStatus from '@/components/TransactionStatus'
@@ -14,10 +13,12 @@ import {
   onTransactionConfirmed,
   onTransactionException
 } from '@/components/TransactionStatus/event'
+import { useSelector } from 'react-redux'
+import { getAccount } from '@/store/wallet'
 
 function Reward() {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const account = useSelector(getAccount)
 
   const [tradingReward, setTradingReward] = useState('0')
   const [syntheticReward, setSyntheticReward] = useState('0')

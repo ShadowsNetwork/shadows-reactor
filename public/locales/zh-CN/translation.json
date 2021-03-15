@@ -21,7 +21,8 @@
     "targetRate": "目标抵押率",
     "totalDows": "DOWS 总额",
     "locked": "已锁定",
-    "Transferable": "可转账"
+    "Transferable": "可转账",
+    "none": "无"
   },
   "synthesis": {
     "title": "合成",
@@ -30,7 +31,7 @@
     "start": "开始合成",
     "all": "全部",
     "balance": "可合成数量",
-    "staking": "已抵押"
+    "collateralized": "已抵押 DOWS"
   },
   "transaction": {
     "networkPrice": {

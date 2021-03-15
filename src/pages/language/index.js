@@ -1,6 +1,6 @@
 import React from 'react'
-import { setLocale, getLocale } from 'umi'
-import { Menu, Dropdown } from 'antd'
+import { getLocale, setLocale } from 'umi'
+import { Dropdown, Menu } from 'antd'
 import '@/styles/languageDropDown.css'
 import '@/styles/language.css'
 import { GlobalOutlined } from '@ant-design/icons'
@@ -24,7 +24,7 @@ export default class Header extends React.Component {
     }
     const langMenu = (
       <Menu selectedKeys={[selectedLang]} onClick={this.changeLang}>
-        {locales.map((locale) => (
+        {locales.map(locale => (
           <Menu.Item key={locale}>
             <span role="img" aria-label={languageLabels[locale]}>
               {languageIcons[locale]}

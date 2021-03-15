@@ -77,6 +77,7 @@ export async function getEthereumNetwork() {
   }
   let networkId = 1
   try {
+    console.log(window.ethereum)
     if (window.ethereum?.networkVersion) {
       networkId = Number(window.ethereum?.networkVersion)
       return {
@@ -84,20 +85,20 @@ export async function getEthereumNetwork() {
         networkId,
       }
     }
-    if (window.web3?.eth?.net) {
-      networkId = await window.web3.eth.net.getId()
-      return {
-        name: SUPPORTED_NETWORKS[networkId],
-        networkId: Number(networkId),
-      }
-    }
-    if (window.web3?.version?.network) {
-      networkId = Number(window.web3.version.network)
-      return {
-        name: SUPPORTED_NETWORKS[networkId],
-        networkId,
-      }
-    }
+    // if (window.web3?.eth?.net) {
+    //   networkId = await window.web3.eth.net.getId()
+    //   return {
+    //     name: SUPPORTED_NETWORKS[networkId],
+    //     networkId: Number(networkId),
+    //   }
+    // }
+    // if (window.web3?.version?.network) {
+    //   networkId = Number(window.web3.version.network)
+    //   return {
+    //     name: SUPPORTED_NETWORKS[networkId],
+    //     networkId,
+    //   }
+    // }
     return defaultNetwork
   } catch (e) {
     console.log(e)

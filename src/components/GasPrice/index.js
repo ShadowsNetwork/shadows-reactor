@@ -13,7 +13,7 @@ function PopoverContent(props) {
   }
   const { fastest, fast, average } = price
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     dispatch({ payload: e })
   }
 

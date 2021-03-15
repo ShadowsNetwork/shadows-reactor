@@ -1,14 +1,9 @@
-import { useWeb3React } from '@web3-react/core'
-import React, { useState } from 'react'
-import { useEagerConnect, useInactiveListener } from '@/web3/hooks'
-import { message, Modal } from 'antd'
-import { formatEther } from '@ethersproject/units'
-import { LoadingOutlined } from '@ant-design/icons'
-import { injected } from '@/web3/connectors'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import useBalanceQuery from '@/web3/useBalanceQuery'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAccount, setAccount } from '@/store/wallet'
 
-function Balance() {
+/*function Balance() {
   const {
     loading,
     balance
@@ -21,29 +16,24 @@ function Balance() {
       </span>
       <span>Balance</span>
       <span>{loading && <LoadingOutlined />}</span>
-      {/* eslint-disable-next-line no-nested-ternary */}
+      {/!* eslint-disable-next-line no-nested-ternary *!/}
       <span>{balance === null ? 'Error' : balance ? `Ξ${formatEther(balance)}` : ''}</span>
     </>
   )
-}
+}*/
 
 function CurrentAccount(props) {
-  const [isModalVisible, setModalVisible] = useState(false)
+  // const [isModalVisible, setModalVisible] = useState(false)
 
-  const { context } = props
+  const { account } = props
 
-  const { account } = context
   const accountStr1 = account.substr(0, 5)
   const accountStr2 = account.substr(-4, 4)
   const accountNum = `${accountStr1}...${accountStr2}`
 
-  const openModal = () => {
-    if (!props.context) {
-      message.warning('无法获取钱包信息，请在 MetaMask 中重新链接')
-    } else {
-      setModalVisible(true)
-    }
-  }
+  /* const openModal = () => {
+    setModalVisible(true)
+  }*/
 
   return (
     <>
@@ -56,33 +46,39 @@ function CurrentAccount(props) {
           fontSize: '1.3rem',
           userSelect: 'none'
         }}
-        onClick={openModal}
+        // onClick={openModal}
       >
         {accountNum}
       </span>
-      <Modal
+      {/*<Modal
         title="Basic Modal"
         visible={isModalVisible}
         onOk={() => setModalVisible(false)}
         onCancel={() => setModalVisible(false)}
       >
         <Balance />
-      </Modal>
+      </Modal>*/}
     </>
   )
 }
 
 function ConnectToWallet() {
-  const { activate } = useWeb3React()
-
+  const dispatch = useDispatch()
   const { t } = useTranslation()
 
+  const activateMetamask = () => {
+    if (!window.ethereum) {
+      throw new Error('No metamask installed, please install it before connecting!')
+    }
+    window.ethereum.request({ method: 'eth_requestAccounts' })
+      .then(accounts => {
+        const [account] = accounts
+        dispatch(setAccount(account))
+      })
+  }
+
   return (
-    <span
-      onClick={() => {
-        activate(injected)
-      }}
-    >
+    <span onClick={activateMetamask}>
       {t('wallet.connectToWallet')}
     </span>
   )
@@ -90,19 +86,18 @@ function ConnectToWallet() {
 
 function Wallet() {
   // const { connector, library, chainId, account, activate, deactivate, active, error } = context
-  const context = useWeb3React()
-  const { account } = context
+  const account = useSelector(getAccount)
 
-  const triedEager = useEagerConnect()
+  // const triedEager = useEagerConnect()
 
   // handle logic to connect in reaction to certain
   // events on the injected ethereum provider, if it exists
-  useInactiveListener(!triedEager)
+  // useInactiveListener(!triedEager)
 
   return (
     <>
       {!account && <ConnectToWallet />}
-      {!!account && <CurrentAccount context={context} />}
+      {!!account && <CurrentAccount account={account} />}
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { Wallet, getDefaultProvider } from 'ethers'
+import { getDefaultProvider, Wallet } from 'ethers'
 import ContractSettings from '../contractSettings'
 
 const PrivateKeySigner = (provider, networkId, privateKey) => {

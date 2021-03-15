@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { fromWei, toBigNumber, toByte32, toWei } from '@/web3/utils'
-import { useWeb3React } from '@web3-react/core'
 import { LoadingOutlined } from '@ant-design/icons'
 import {
   initTransaction,
@@ -14,10 +13,12 @@ import {
   onTransactionException
 } from '@/components/TransactionStatus/event'
 import TransactionStatus from '@/components/TransactionStatus'
+import { useSelector } from 'react-redux'
+import { getAccount } from '@/store/wallet'
 
 function Burn() {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const account = useSelector(getAccount)
 
   const [xUSD, setXUSD] = useState(null)
   const [burnAmountToFixRatio, setBurnAmountToFixRatio] = useState(null)

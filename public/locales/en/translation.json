@@ -17,11 +17,12 @@
   },
   "person": {
     "title": "Personal Information",
-    "myRate": "My collateralization ratio",
-    "targetRate": "Target collateralization ratio",
+    "myRate": "My Collateralization Ratio",
+    "targetRate": "Target Collateralization Ratio",
     "totalDows": "Total DOWS",
-    "locked": "locked",
-    "Transferable": "Transferable"
+    "locked": "Locked",
+    "Transferable": "Transferable",
+    "none": "None"
   },
   "synthesis": {
     "title": "Synthesis",
@@ -29,8 +30,8 @@
     "debtRatio": "Collateralization Ratio",
     "start": "Start Synthesis",
     "all": "All",
-    "balance": "Synthesizable amount",
-    "staking": "Collateralized DOWS"
+    "balance": "Synthesizable quantity",
+    "collateralized": "Collateralized DOWS"
   },
   "transaction": {
     "networkPrice": {

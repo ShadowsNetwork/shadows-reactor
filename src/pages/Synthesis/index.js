@@ -4,7 +4,6 @@ import '../../styles/dropDown.css'
 import { Button, Input } from 'antd'
 import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
-import { useWeb3React } from '@web3-react/core'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { LoadingOutlined } from '@ant-design/icons'
 import { fromWei, toWei } from '@/web3/utils'
@@ -14,13 +13,15 @@ import {
   onTransactionConfirmed,
   onTransactionException
 } from '@/components/TransactionStatus/event'
+import { useSelector } from 'react-redux'
+import { getAccount } from '@/store/wallet'
 
 function Synthesis() {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const account = useSelector(getAccount)
 
   const [available, setAvailable] = useState()
-  const [staking, setStaking] = useState()
+  const [collateralized, setCollateralized] = useState()
   const [myRatio, setMyRatio] = useState(null)
 
   const [transactionStatus, setTransactionStatus] = useState({
@@ -35,15 +36,19 @@ function Synthesis() {
 
   const fetchDataFromContract = useCallback(async () => {
     const [
-      [availableBalance, stakingBalance],
+      dowsBalance,
+      transferableDows,
+      [remainingIssuableSynths],
       collateralisationRatio
     ] = await Promise.all([
+      dowsJSConnector.dowsJs.Shadows.balanceOf(account),
+      dowsJSConnector.dowsJs.Shadows.transferableShadows(account),
       dowsJSConnector.dowsJs.Shadows.remainingIssuableSynths(account),
       dowsJSConnector.dowsJs.Shadows.collateralisationRatio(account)
     ])
 
-    setAvailable(fromWei(availableBalance))
-    setStaking(fromWei(stakingBalance))
+    setAvailable(fromWei(remainingIssuableSynths))
+    setCollateralized(fromWei(dowsBalance.sub(transferableDows)))
     setMyRatio(fromWei(collateralisationRatio))
   }, [account])
 
@@ -129,9 +134,9 @@ function Synthesis() {
           </div>
           <div className="Synthesis-content-bottom">
             <span>
-              {t('synthesis.staking')}
+              {t('synthesis.collateralized')}
               {': '}
-              {staking ? `${staking} xUSD` : <LoadingOutlined />}
+              {collateralized ?? <LoadingOutlined />}
             </span>
             <span>
               {t('synthesis.debtRatio')}

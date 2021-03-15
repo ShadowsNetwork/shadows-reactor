@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Dropdown, Input, Menu } from 'antd'
 import GasPrice from '@/components/GasPrice'
-
-import { useWeb3React } from '@web3-react/core'
 import '../../styles/dropDown.css'
 import './index.less'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
@@ -15,6 +13,8 @@ import {
   onTransactionConfirmed,
   onTransactionException
 } from '@/components/TransactionStatus/event'
+import { useSelector } from 'react-redux'
+import { getAccount } from '@/store/wallet'
 
 function DropdownMenu(props) {
   const {
@@ -40,7 +40,7 @@ function DropdownMenu(props) {
 
 function Action() {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const account = useSelector(getAccount)
 
   // const {
   //   onConfirm,

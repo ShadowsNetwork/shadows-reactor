@@ -3,13 +3,14 @@ import './index.css'
 import { Progress } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { LoadingOutlined } from '@ant-design/icons'
-import { useWeb3React } from '@web3-react/core'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { bytesToString, fromWei } from '@/web3/utils'
+import { useSelector } from 'react-redux'
+import { getAccount } from '@/store/wallet'
 
 function Personal() {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const account = useSelector(getAccount)
 
   const [dows, setDows] = useState(null)
   const [myRatio, setMyRatio] = useState(null)
@@ -19,15 +20,13 @@ function Personal() {
   const [currencyToBalanceList, setCurrencyToBalanceList] = useState([])
 
   const fetchRatio = useCallback(async () => {
-    const [collateralisationRatio, issuanceRatio, transferableShadows] = await Promise.all([
+    const [collateralisationRatio, issuanceRatio] = await Promise.all([
       dowsJSConnector.dowsJs.Shadows.collateralisationRatio(account),
       dowsJSConnector.dowsJs.ShadowsState.issuanceRatio(),
-      dowsJSConnector.dowsJs.Shadows.transferableShadows(account),
     ])
 
     setMyRatio(fromWei(collateralisationRatio))
     setTargetRatio(fromWei(issuanceRatio))
-    setTransferableDows(fromWei(transferableShadows))
   }, [account])
 
   useEffect(() => {
@@ -40,6 +39,7 @@ function Personal() {
       dowsJSConnector.dowsJs.Shadows.transferableShadows(account),
     ])
     setDows(fromWei(dowsBalance))
+    setTransferableDows(fromWei(transferableShadows))
     setLockedShadows(fromWei(dowsBalance.sub(transferableShadows)))
   }, [account])
 
@@ -105,7 +105,7 @@ function Personal() {
           <div>
             <span>{t('person.myRate')}</span>
             <span>
-              {myRatio && (parseFloat(myRatio) !== 0 ? `${Math.round(100 / myRatio)} %` : 0)}
+              {myRatio && (parseFloat(myRatio) !== 0 ? `${Math.round(100 / myRatio)} %` : t('person.none'))}
               {!myRatio && <LoadingOutlined />}
             </span>
           </div>

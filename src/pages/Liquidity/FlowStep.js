@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import '../../styles/flowStep.css'
-import { Modal, Button } from 'antd'
+import { Button, Modal } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import '../../styles/modal.css'
 
