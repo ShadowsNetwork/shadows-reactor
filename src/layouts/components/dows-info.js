@@ -26,7 +26,7 @@ const DowsInfo = () => {
   return (
     <div className="dows-info">
       <div className="dows-balance">
-        <img src={dowsIcon} className="icon" alt={} />
+        <img src={dowsIcon} className="icon" alt="" />
         <div className="label">
           DOWS
         </div>
@@ -35,8 +35,8 @@ const DowsInfo = () => {
         </div>
       </div>
       <div>
-        <img src={locationIcon} className="icon" alt={} />
-        <img src={twitterIcon} className="icon" alt={} />
+        <img src={locationIcon} className="icon" alt="" />
+        <img src={twitterIcon} className="icon" alt="" />
       </div>
     </div>
   )
