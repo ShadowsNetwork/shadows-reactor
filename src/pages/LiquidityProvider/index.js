@@ -50,8 +50,8 @@ const LiquidityProvider = () => {
 
   const lock = async () => {
     const lpBalance = dowsJSConnector.dowsJs.LpERC20Token.balanceOf(account)
-
     const { contractAddress } = dowsJSConnector.dowsJs.Farm
+
     try {
       const approveResult = await dowsJSConnector.dowsJs.LpERC20Token.approve(contractAddress, lpBalance)
       console.log(approveResult)

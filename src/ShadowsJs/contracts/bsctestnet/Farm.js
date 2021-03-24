@@ -16,7 +16,7 @@ function Farm({
     signer || provider
   )
 
-  this.contractAddress = () => this.contract.address
+  this.contractAddress = this.contract.address
 
   this.deposited = async (pid, account) => {
     return await this.contract.deposited(pid, account)
