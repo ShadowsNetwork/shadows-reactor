@@ -7,7 +7,6 @@ export const walletSlice = createSlice({
   },
   reducers: {
     setAccount: (state, action) => {
-      console.log('setAccount')
       state.account = action.payload
     },
   },

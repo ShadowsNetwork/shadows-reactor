@@ -1,8 +1,8 @@
-import MenuLay from './MenuLay'
+import MenuLay from '../layouts/components/menu-lay'
 import Personal from '@/pages/Personal'
 import Synthesis from '@/pages/Synthesis'
 import Transaction from '@/pages/Transaction'
-import Liquidity from '@/pages/Liquidity'
+import LiquidityProvider from '@/pages/LiquidityProvider'
 import Burn from '@/pages/Burn'
 import Reward from '@/pages/Reward'
 import FlowStep from '@/pages/Liquidity/FlowStep'
@@ -86,14 +86,15 @@ const routers = [
     icon: ExportOutlined,
     backgroundImage: LiquidityImage
   },
-
-  /** 隐藏的路由 */
   {
     path: '/liquidity',
     key: 'liquidity',
-    component: Liquidity,
-    hide: true
+    component: LiquidityProvider,
+    icon: ExportOutlined,
+    backgroundImage: LiquidityImage
   },
+
+  /** 隐藏的路由 */
   {
     path: '/success',
     key: 'success',

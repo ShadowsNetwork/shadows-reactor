@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAccount, setAccount } from '@/store/wallet'
+import { PaperClipOutlined } from '@ant-design/icons'
+import './index.less'
 
 /*function Balance() {
   const {
@@ -22,33 +24,17 @@ import { getAccount, setAccount } from '@/store/wallet'
   )
 }*/
 
-function CurrentAccount(props) {
+const CurrentAccount = ({ account }) => {
   // const [isModalVisible, setModalVisible] = useState(false)
-
-  const { account } = props
-
-  const accountStr1 = account.substr(0, 5)
-  const accountStr2 = account.substr(-4, 4)
-  const accountNum = `${accountStr1}...${accountStr2}`
 
   /* const openModal = () => {
     setModalVisible(true)
   }*/
 
   return (
-    <>
-      <span
-        style={{
-          display: 'block',
-          width: '9rem',
-          height: '2.8rem',
-          lineHeight: '2.8rem',
-          fontSize: '1.3rem',
-          userSelect: 'none'
-        }}
-        // onClick={openModal}
-      >
-        {accountNum}
+    <div className="current-account">
+      <span>
+        {`${account.substr(0, 5)}...${account.substr(-4, 4)}`}
       </span>
       {/*<Modal
         title="Basic Modal"
@@ -58,11 +44,11 @@ function CurrentAccount(props) {
       >
         <Balance />
       </Modal>*/}
-    </>
+    </div>
   )
 }
 
-function ConnectToWallet() {
+const ConnectToWallet = () => {
   const dispatch = useDispatch()
   const { t } = useTranslation()
 
@@ -84,21 +70,37 @@ function ConnectToWallet() {
   )
 }
 
-function Wallet() {
-  // const { connector, library, chainId, account, activate, deactivate, active, error } = context
+const Wallet = () => {
   const account = useSelector(getAccount)
+  const dispatch = useDispatch()
 
-  // const triedEager = useEagerConnect()
+  useEffect(() => {
+    const initEventListener = async () => {
+      if (window.ethereum) {
+        window.ethereum.on('accountsChanged', (newAccount, oldAccount) => {
+          console.log(newAccount[0], oldAccount)
+          dispatch(setAccount(newAccount[0]))
+          window.location.reload()
+        })
+      }
+    }
+    initEventListener()
 
-  // handle logic to connect in reaction to certain
-  // events on the injected ethereum provider, if it exists
-  // useInactiveListener(!triedEager)
+    return () => {
+      if (window.ethereum) {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        window.ethereum.removeListener('accountsChanged', () => {
+        })
+      }
+    }
+  }, [])
 
   return (
-    <>
+    <div className="wallet">
+      <PaperClipOutlined className="icon" />
       {!account && <ConnectToWallet />}
       {!!account && <CurrentAccount account={account} />}
-    </>
+    </div>
   )
 }
 

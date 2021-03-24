@@ -22,7 +22,7 @@ function Personal() {
   const fetchRatio = useCallback(async () => {
     const [collateralisationRatio, issuanceRatio] = await Promise.all([
       dowsJSConnector.dowsJs.Shadows.collateralisationRatio(account),
-      dowsJSConnector.dowsJs.ShadowsState.issuanceRatio(),
+      dowsJSConnector.dowsJs.ShadowsState.issuanceRatio()
     ])
 
     setMyRatio(fromWei(collateralisationRatio))
@@ -34,6 +34,19 @@ function Personal() {
   }, [fetchRatio])
 
   const fetchDataFromContract = useCallback(async () => {
+    /*let dowsBalance
+    let transferableShadows
+    try {
+      dowsBalance = await dowsJSConnector.dowsJs.Shadows.balanceOf(account)
+    } catch (e) {
+      console.log('dowsBalance', e)
+    }
+    try {
+      transferableShadows = await dowsJSConnector.dowsJs.Shadows.transferableShadows(account)
+    } catch (e) {
+      console.log('transferableShadows', e)
+    }*/
+
     const [dowsBalance, transferableShadows] = await Promise.all([
       dowsJSConnector.dowsJs.Shadows.balanceOf(account),
       dowsJSConnector.dowsJs.Shadows.transferableShadows(account),
@@ -51,11 +64,11 @@ function Personal() {
     if (account) {
       const availableCurrencies = (await dowsJSConnector.dowsJs.Shadows.availableCurrencyKeys()).map(k => bytesToString(k))
       const balanceList = await Promise.all(
-        availableCurrencies.map(currency => dowsJSConnector.dowsJs.Synth[currency].balanceOf(account)),
+        availableCurrencies.map(currency => dowsJSConnector.dowsJs.Synth[currency].balanceOf(account))
       )
       const currencyToBalance = balanceList.map((balance, index) => ({
         currency: availableCurrencies[index],
-        balance: fromWei(balance),
+        balance: fromWei(balance)
       }))
       currencyToBalance.sort((b, a) => a.balance - b.balance)
       setCurrencyToBalanceList(currencyToBalance.slice(0, 4))
@@ -92,7 +105,7 @@ function Personal() {
           <div className="synth-assets">
             {currencyToBalanceList.map(({
               currency,
-              balance,
+              balance
             }) => (
               <div key={currency}>
                 <span>{currency}</span>
@@ -146,7 +159,7 @@ function Personal() {
           trailColor="#342D33"
           style={{
             position: 'relative',
-            top: '20px',
+            top: '20px'
           }}
         />
       </div>

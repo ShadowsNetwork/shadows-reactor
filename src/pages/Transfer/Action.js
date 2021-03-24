@@ -194,7 +194,7 @@ function Action() {
             ...transactionStatus,
             closed: true
           })}
-          content={t('transactionStatus.transactionType.burn')}
+          content={t('transactionStatus.transactionType.transfer')}
         />
         <div className="error-message">
           {transactionStatus.error && transactionStatus.error.message}

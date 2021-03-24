@@ -1,19 +1,17 @@
 import { Link } from 'react-router-dom'
-import LogoSet from '@/layouts/LogoSet'
+import LogoSet from '@/layouts/components/logo-set'
 import { Menu } from 'antd'
 import React, { useState } from 'react'
-import './App.css'
+import '../app.less'
 import { useTranslation } from 'react-i18next'
-import routers, { routerLabelMapper } from '@/layouts/routers'
+import routers, { routerLabelMapper } from '@/router'
 
-function SideBar(props) {
+const SideBar = ({ onNavItemClicked }) => {
   const [collapsed, setCollapsed] = useState(false)
 
   const { t } = useTranslation()
 
   const { hash } = window.location
-
-  const { onNavItemClicked } = props
 
   return (
     <div className="App">
@@ -22,8 +20,12 @@ function SideBar(props) {
           defaultSelectedKeys={[hash.slice(1)]}
           mode="inline"
           theme="dark"
-          onMouseEnter={() => { setCollapsed(false) }}
-          onMouseLeave={() => { setCollapsed(true) }}
+          onMouseEnter={() => {
+            setCollapsed(false)
+          }}
+          onMouseLeave={() => {
+            setCollapsed(true)
+          }}
           inlineCollapsed={collapsed}
         >
           <Menu.Item onClick={() => onNavItemClicked(routers[0])} style={{ overflow: 'hidden' }}>
@@ -32,17 +34,18 @@ function SideBar(props) {
             </Link>
           </Menu.Item>
           {
-            routers.filter(router => router.hide !== true).map(router => (
-              <Menu.Item
-                key={router.path}
-                icon={<router.icon />}
-                onClick={() => onNavItemClicked(router)}
-              >
-                <Link to={router.path}>
-                  { t(routerLabelMapper[router.key].title) }
-                </Link>
-              </Menu.Item>
-            ))
+            routers.filter(router => router.hide !== true)
+              .map(router => (
+                <Menu.Item
+                  key={router.path}
+                  icon={<router.icon />}
+                  onClick={() => onNavItemClicked(router)}
+                >
+                  <Link to={router.path} style={{ userSelect: 'none' }}>
+                    {t(routerLabelMapper[router.key].title)}
+                  </Link>
+                </Menu.Item>
+              ))
           }
         </Menu>
       </div>

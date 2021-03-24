@@ -1,13 +1,13 @@
 import React from 'react'
 import { Carousel } from 'antd'
-import '@/styles/menuLay.css'
+import './index.less'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import risk from '@/img/risk.png'
 import mortgage from '@/img/mortgage.png'
 import mortgageRate from '@/img/mortgageRate.png'
 
-function MenuLay() {
+const MenuLay = () => {
   let slider
 
   const { t } = useTranslation()

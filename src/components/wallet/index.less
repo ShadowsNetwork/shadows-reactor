@@ -1,0 +1,46 @@
+.wallet {
+  height: 3rem;
+  background-color: #201b1e;
+  color: #fff;
+  font-size: 1.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25pt;
+  position: absolute;
+  top: 25px;
+  right: 180px;
+
+  &:active {
+    background-color: #342b31;
+    border: 1px solid #8a8187;
+  }
+
+  &:hover {
+    background-color: #342b31;
+    cursor: pointer;
+  }
+
+  .icon {
+    font-size: 16px;
+    color: #fff
+  }
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 5px;
+    display: inline-block;
+    padding-right: 10px;
+  }
+
+  .current-account {
+    display: block;
+    width: 9rem;
+    height: 2.8rem;
+    line-height: 2.8rem;
+    font-size: 1.3rem;
+    user-select: none;
+  }
+}
