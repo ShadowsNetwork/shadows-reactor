@@ -1,7 +1,7 @@
 .liquidity {
   position: absolute;
-  top: 15%;
-  left: 14%;
+  top: 9.4rem;
+  left: 25.4rem;
   height: 435px;
 
   .uniswap {
@@ -25,33 +25,95 @@
       margin-left: 1.117rem;
     }
   }
-  .info-container {
+  .info {
+    background: #121725;
     width: 39.1rem;
     height: 43.5rem;
     margin-top: 1rem;
     border-radius: 1rem;
-    display: flex;
-    background: #121725;
-    align-content: flex-start;
-    flex-flow: row wrap;
+    padding: 2.9rem 0 3.067rem 2.346rem;
 
-    .item {
-      color: white;
-      flex: 0 0 50%;
-      margin-bottom: 2.5rem;
+    .info-container-title {
+      font-size: 2.8rem;
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: -0.2px;
+    }
 
-      .title {
-        color: #63cca9;
-        font-size: 16px;
+    img {
+      width: 4.4rem;
+      margin-top: 1.4rem;
+    }
+
+    .info-container {
+      display: flex;
+      align-content: flex-start;
+      flex-flow: row wrap;
+
+      .item {
+        color: white;
+        flex: 0 0 50%;
+        margin-bottom: 2.5rem;
+        margin-top: 5.1rem;
+
+        .title {
+          color: #63cca9;
+          font-size: 1.4rem;
+        }
+
+        .value {
+          font-size: 2.8rem;
+        }
+
+        .additional {
+          color: #989898;
+        }
+      }
+    }
+    .button-container {
+      display: flex;
+
+      button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #63CCA9;
+        border: none;
       }
 
-      .value {
-        font-size: 36px;
+      button:active {
+        background: none;
       }
 
-      .additional {
-        color: #989898;
+      button:nth-of-type(1) {
+        width: 3.492rem;
+        height: 3.757rem;
+        border-radius: 3.492rem;
+        background: #63CCA9;
+        border: none;
+      }
+      button:nth-of-type(1) {
+        width: 3.492rem;
+        height: 3.757rem;
+        border-radius: 3.492rem;
+      }
+      button:nth-of-type(2) {
+        color: #fff;
+        font-weight: bold;
+        width: 10.354rem;
+        height: 3.757rem;
+        border-radius: 3.757rem;
+        margin-left: 0.607rem;
+      }
+      button:nth-of-type(3) {
+        width: 9.187rem;
+        height: 3.757rem;
+        border-radius: 3.757rem;;
+        color: #fff;
+        font-weight: bold;
+        margin-left: 5.438rem;
       }
     }
   }
+
 }
