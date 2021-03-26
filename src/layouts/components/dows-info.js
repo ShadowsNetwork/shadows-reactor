@@ -1,27 +1,13 @@
-import { useSelector } from 'react-redux'
-import { getAccount } from '@/store/wallet'
-import React, { useCallback, useEffect, useState } from 'react'
-import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { fromWei } from '@/web3/utils'
+import React from 'react'
 import dowsIcon from '@/img/dows-info/dows.png'
 import locationIcon from '@/img/dows-info/location.png'
 import twitterIcon from '@/img/dows-info/twitter.png'
 
 import './index.less'
+import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
 
 const DowsInfo = () => {
-  const account = useSelector(getAccount)
-
-  const [dowsBalance, setDowsBalance] = useState('')
-
-  const fetchData = useCallback(async () => {
-    const balance = await dowsJSConnector.dowsJs.ERC20Token.balanceOf(account)
-    setDowsBalance(fromWei(balance))
-  }, [account])
-
-  useEffect(() => {
-    fetchData()
-  }, [fetchData])
+  const { data: dowsPrice } = useDowsPriceQuery()
 
   return (
     <div className="dows-info">
@@ -30,8 +16,9 @@ const DowsInfo = () => {
         <div className="label">
           DOWS
         </div>
+        <div className="label dollar">$</div>
         <div className="value">
-          {dowsBalance}
+          {dowsPrice}
         </div>
       </div>
       <div>

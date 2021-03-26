@@ -37,10 +37,6 @@ export type GasPrices = {
 	average: number;
 };
 
-export type GasSpeed = keyof GasPrices;
-
-export const GAS_SPEEDS: GasSpeed[] = ['average', 'fast', 'fastest']
-
 const useEthGasPriceQuery = (): UseQueryResult => {
   return useQuery<GasPrices>(
 	  'GAS_PRICE',
