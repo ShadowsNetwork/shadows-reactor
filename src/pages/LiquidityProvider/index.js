@@ -7,6 +7,7 @@ import { PlusCircleOutlined } from '@ant-design/icons'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { fromWei } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
+import uniswap from '@/img/liquidityProvider/uniswap.png'
 
 async function getCurrentAPR() {
   const lp_to_dows = new BigNumber('33.22443529339985')
@@ -94,6 +95,10 @@ const LiquidityProvider = () => {
 
   return (
     <div className="liquidity">
+      <div className="uniswap">
+        <img src={uniswap}/>
+        <span>Uniswap</span>
+      </div>
       <div className="info-container">
         <div className="item">
           <div className="title">LP Tokens to Lock</div>

@@ -28,11 +28,6 @@ const SideBar = ({ onNavItemClicked }) => {
           }}
           inlineCollapsed={collapsed}
         >
-          <Menu.Item onClick={() => onNavItemClicked(routers[0])} style={{ overflow: 'hidden' }}>
-            <Link to="/" style={{ overflow: 'hidden' }}>
-              <LogoSet collapsed={collapsed} />
-            </Link>
-          </Menu.Item>
           {
             routers.filter(router => router.hide !== true)
               .map(router => (

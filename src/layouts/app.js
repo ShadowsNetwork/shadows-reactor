@@ -3,8 +3,9 @@ import React, { useState } from 'react'
 import Map from '@/img/background/map.jpg'
 import SideBar from '@/layouts/components/sidebar'
 import { Route } from 'react-router-dom'
-import Wallet from '@/components/wallet'
-import LanguageSelector from '@/components/LanguageSelector'
+// import Wallet from '@/components/wallet'
+// import LanguageSelector from '@/components/LanguageSelector'
+import Top from '@/components/Top'
 import DowsInfo from '@/layouts/components/dows-info'
 
 const App = () => {
@@ -32,9 +33,10 @@ const App = () => {
 
       <DowsInfo />
 
-      <Wallet />
+      <Top/>
+      {/*<Wallet />*/}
 
-      <LanguageSelector />
+      {/*<LanguageSelector />*/}
 
       {
         routers.map(router => (
