@@ -40,13 +40,12 @@ const Root = () => {
 
         provider.ready.then(network => {
           const { chainId } = network
-          console.log(chainId)
           if (!chainSupported(chainId)) {
             setupNetwork()
           }
 
           setSigner({
-            networkId: chainId,
+            networkId: 97,
             signer: provider.getSigner()
           })
           setInitialized(true)

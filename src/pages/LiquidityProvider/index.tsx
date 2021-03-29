@@ -3,11 +3,12 @@ import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
 import './index.less'
 import { Button, message } from 'antd'
-import { PlusCircleOutlined } from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { fromWei, toWei } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
 import uniswap from '@/img/liquidityProvider/uniswap.png'
+import eth from '@/img/liquidityProvider/eth.png'
 import AmountInputModal, { ModalStatus } from './amount-input-modal'
 import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
 import { numberWithCommas } from '@/utils'
@@ -138,56 +139,58 @@ const LiquidityProvider: React.FC = () => {
         <img src={uniswap} alt="" />
         <span>Uniswap</span>
       </div>
-      <div className="info-container">
-        <div className="item">
-          <div className="title">LP Tokens to Lock</div>
-          <div className="value">{numberWithCommas(lpBalance)}</div>
-          <div className="additional">
-            {lpBalanceInUSD && '$' + numberWithCommas(lpBalanceInUSD)}
+      <div className="info">
+        <div className="info-container-title">DOWS/ETH</div>
+        <img src={eth} alt="" />
+        <div className="info-container">
+          <div className="item">
+            <div className="title">LP Tokens to Lock</div>
+            <div className="value">{numberWithCommas(lpBalance)}</div>
+            <div className="additional">${numberWithCommas(lpBalanceInUSD)}</div>
+          </div>
+          <div className="item">
+            <div className="title">Current APR</div>
+            <div className="value">{currentAPR}</div>
+          </div>
+          <div className="item">
+            <div className="title">Your LP Locked</div>
+            <div className="value">{numberWithCommas(userLockedLp)}</div>
+            <div className="additional">${numberWithCommas(userLockedLpInUSD)}</div>
+          </div>
+          <div className="item">
+            <div className="title">DOWS Earned</div>
+            <div className="value">{dowsEarned}</div>
           </div>
         </div>
-        <div className="item">
-          <div className="title">Current APR</div>
-          <div className="value">{currentAPR}</div>
+        <div className="button-container">
+          <Button onClick={() => {
+            setModal({
+              ...modal,
+              maxAvailable: lpBalance,
+              visible: true,
+              title: 'Stake Liquidity',
+              cancelCallback,
+              confirmCallback: lock
+            })
+          }}>
+            <PlusOutlined />
+          </Button>
+          <Button onClick={() => {
+            setModal({
+              ...modal,
+              maxAvailable: userLockedLp,
+              visible: true,
+              title: 'Unstake Liquidity',
+              cancelCallback,
+              confirmCallback: unlock
+            })
+          }}>
+            Unlock
+          </Button>
+          <Button onClick={claim}>
+            Redeem
+          </Button>
         </div>
-        <div className="item">
-          <div className="title">Your LP Locked</div>
-          <div className="value">{numberWithCommas(userLockedLp)}</div>
-          <div className="additional">${numberWithCommas(userLockedLpInUSD)}</div>
-        </div>
-        <div className="item">
-          <div className="title">DOWS Earned</div>
-          <div className="value">{dowsEarned}</div>
-        </div>
-      </div>
-      <div className="button-container">
-        <Button onClick={() => {
-          setModal({
-            ...modal,
-            maxAvailable: lpBalance,
-            visible: true,
-            title: 'Stake Liquidity',
-            cancelCallback,
-            confirmCallback: lock
-          })
-        }}>
-          <PlusCircleOutlined />
-        </Button>
-        <Button onClick={() => {
-          setModal({
-            ...modal,
-            maxAvailable: userLockedLp,
-            visible: true,
-            title: 'Unstake Liquidity',
-            cancelCallback,
-            confirmCallback: unlock
-          })
-        }}>
-          Unlock
-        </Button>
-        <Button onClick={claim}>
-          Redeem
-        </Button>
       </div>
       <AmountInputModal {...modal} />
     </div>

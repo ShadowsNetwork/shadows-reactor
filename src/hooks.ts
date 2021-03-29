@@ -53,8 +53,6 @@ export function useDynamicBackgroundImage(): string {
 
   const { hash } = useLocation()
 
-  console.log(location)
-
   useEffect(() => {
     const currentRouter = routers.filter(router => router.path === hash.slice(1))[0]
     console.log(currentRouter)

@@ -1,14 +1,12 @@
 import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
-import React, { useState } from 'react'
+import React from 'react'
 import '../app.less'
 import { useTranslation } from 'react-i18next'
 import routers, { routerLabelMapper } from '@/router'
 import { useLocation } from '@/hooks'
 
 const SideBar = () => {
-  const [collapsed, setCollapsed] = useState(false)
-
   const { t } = useTranslation()
 
   const { hash } = useLocation()
@@ -20,21 +18,14 @@ const SideBar = () => {
           defaultSelectedKeys={[hash.slice(1)]}
           mode="inline"
           theme="dark"
-          onMouseEnter={() => {
-            setCollapsed(false)
-          }}
-          onMouseLeave={() => {
-            setCollapsed(true)
-          }}
-          inlineCollapsed={collapsed}
         >
           {
-            routers.filter(router => router.hide !== true)
+            routers.filter(router => !router.hide)
               .map(router => (
                 <Menu.Item
-                  key={router.path}
-                  icon={<router.icon />}
+                  key={router.key}
                 >
+                  <img className="slideIcon" src={router.image} alt="" />
                   <Link to={router.path} style={{ userSelect: 'none' }}>
                     {t(routerLabelMapper[router.key].title)}
                   </Link>
