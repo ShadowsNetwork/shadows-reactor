@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js'
 import { Button, message, Modal } from 'antd'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
 import { numberWithCommas } from '@/utils'
+import './amount-input-modal.less'
 
 export type ModalStatus = {
   visible: boolean,
@@ -48,17 +49,19 @@ const AmountInputModal: React.FC<ModalStatus> = ({
       onCancel={cancelCallback}
       footer={null}
     >
-      <span>{numberWithCommas(maxAvailable)} DOWS/ETH Available</span>
-      <LimitableNumberInput
-        min={0}
-        max={maxAvailable}
-        inputValue={inputValue}
-        inputValueSetter={setInputValue}
-        allowClear={true}
-      />
-      <span>DOWS</span>
-      <Button onClick={() => setInputValue(maxAvailable)}>MAX</Button>
-      <div>
+      <span className="available">{numberWithCommas(maxAvailable)} DOWS/ETH Available</span>
+      <div className="inputDows">
+        <LimitableNumberInput
+          min={0}
+          max={maxAvailable}
+          inputValue={inputValue}
+          inputValueSetter={setInputValue}
+          allowClear={true}
+        />
+        <span className="dows">DOWS</span>
+        <Button onClick={() => setInputValue(maxAvailable)}>MAX</Button>
+      </div>
+      <div className="stakeButton">
         <Button onClick={cancelCallback}>Cancel</Button>
         <Button onClick={handleConfirm} disabled={inputValue.length === 0}>Confirm</Button>
       </div>

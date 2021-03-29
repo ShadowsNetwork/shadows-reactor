@@ -20,12 +20,12 @@ const SideBar = ({ onNavItemClicked }) => {
           defaultSelectedKeys={[hash.slice(1)]}
           mode="inline"
           theme="dark"
-          onMouseEnter={() => {
-            setCollapsed(false)
-          }}
-          onMouseLeave={() => {
-            setCollapsed(true)
-          }}
+          // onMouseEnter={() => {
+          //   setCollapsed(false)
+          // }}
+          // onMouseLeave={() => {
+          //   setCollapsed(true)
+          // }}
           inlineCollapsed={collapsed}
         >
           {
@@ -33,9 +33,10 @@ const SideBar = ({ onNavItemClicked }) => {
               .map(router => (
                 <Menu.Item
                   key={router.path}
-                  icon={<router.icon />}
+
                   onClick={() => onNavItemClicked(router)}
                 >
+                  <img className="slideIcon" src={router.image}/>
                   <Link to={router.path} style={{ userSelect: 'none' }}>
                     {t(routerLabelMapper[router.key].title)}
                   </Link>
