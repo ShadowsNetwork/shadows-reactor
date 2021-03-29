@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAccount, setAccount } from '@/store/wallet'
@@ -72,28 +72,6 @@ const ConnectToWallet = () => {
 
 const Wallet = () => {
   const account = useSelector(getAccount)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    const initEventListener = async () => {
-      if (window.ethereum) {
-        window.ethereum.on('accountsChanged', (newAccount, oldAccount) => {
-          console.log(newAccount[0], oldAccount)
-          dispatch(setAccount(newAccount[0]))
-          window.location.reload()
-        })
-      }
-    }
-    initEventListener()
-
-    return () => {
-      if (window.ethereum) {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        window.ethereum.removeListener('accountsChanged', () => {
-        })
-      }
-    }
-  }, [])
 
   return (
     <div className="wallet">

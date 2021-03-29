@@ -84,7 +84,7 @@ const routers = [
     key: 'transfer',
     component: Transfer,
     icon: ExportOutlined,
-    backgroundImage: LiquidityImage
+    backgroundImage: Map
   },
   {
     path: '/liquidity',

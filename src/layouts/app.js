@@ -1,23 +1,14 @@
 import routers from '@/router'
-import React, { useState } from 'react'
-import Map from '@/img/background/map.jpg'
+import React from 'react'
 import SideBar from '@/layouts/components/sidebar'
 import { Route } from 'react-router-dom'
-// import Wallet from '@/components/wallet'
-// import LanguageSelector from '@/components/LanguageSelector'
 import Top from '@/components/Top'
 import DowsInfo from '@/layouts/components/dows-info'
+import { useDynamicBackgroundImage, useSetupEthereum } from '@/hooks'
 
 const App = () => {
-
-  const { hash } = window.location
-  const currentRouter = routers.filter(router => router.path === hash.slice(1))[0]
-
-  const [background, setBackground] = useState(currentRouter ? currentRouter.backgroundImage : Map)
-
-  const handleNavItemClicked = router => {
-    setBackground(router.backgroundImage)
-  }
+  const background = useDynamicBackgroundImage()
+  useSetupEthereum()
 
   return (
     <div
@@ -29,14 +20,11 @@ const App = () => {
         backgroundColor: 'black'
       }}
     >
-      <SideBar onNavItemClicked={handleNavItemClicked} />
+      <SideBar />
 
       <DowsInfo />
 
-      <Top/>
-      {/*<Wallet />*/}
-
-      {/*<LanguageSelector />*/}
+      <Top />
 
       {
         routers.map(router => (

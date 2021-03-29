@@ -16,6 +16,7 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import configureStore from '@/store'
 import App from '@/layouts/app'
+import { chainSupported, setupNetwork } from '@/ShadowsJs/networkHelper'
 
 const queryClient = new QueryClient()
 
@@ -39,6 +40,11 @@ const Root = () => {
 
         provider.ready.then(network => {
           const { chainId } = network
+          console.log(chainId)
+          if (!chainSupported(chainId)) {
+            setupNetwork()
+          }
+
           setSigner({
             networkId: chainId,
             signer: provider.getSigner()

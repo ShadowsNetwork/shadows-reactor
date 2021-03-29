@@ -5,7 +5,7 @@ export const SUPPORTED_NETWORKS = {
   3: 'ROPSTEN',
   4: 'RINKEBY',
   5: 'GOERLI',
-  42: 'KOVAN',
+  42: 'KOVAN'
 }
 
 export const NETWORK_NAMES = {
@@ -13,7 +13,7 @@ export const NETWORK_NAMES = {
   3: 'ROPSTEN',
   4: 'RINKEBY',
   5: 'GOERLI',
-  42: 'KOVAN',
+  42: 'KOVAN'
 }
 
 // export const SUPPORTED_NETWORKS_MAP = invert(SUPPORTED_NETWORKS)
@@ -25,7 +25,7 @@ export const DEFAULT_GAS_LIMIT = {
   exchange: 220000,
   sendSNX: 120000,
   sendEth: 21000,
-  sendSynth: 150000,
+  sendSynth: 150000
 }
 
 export const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID
@@ -35,15 +35,15 @@ export const INFURA_JSON_RPC_URLS = {
   3: `https://ropsten.infura.io/v3/${INFURA_PROJECT_ID}`,
   4: `https://rinkeby.infura.io/v3/${INFURA_PROJECT_ID}`,
   5: `https://goerli.infura.io/v3/${INFURA_PROJECT_ID}`,
-  42: `https://kovan.infura.io/v3/${INFURA_PROJECT_ID}`,
+  42: `https://kovan.infura.io/v3/${INFURA_PROJECT_ID}`
 }
 
 export const PORTIS_APP_ID = '81b6e4b9-9f28-4cce-b41f-2de90c4f906f'
 
 const DEFIPULSE_API_KEY = process.env.REACT_APP_DEFIPULSE_API_KEY
 
-const ETH_GAS_STATION_URL = `https://ethgasstation.info/api/ethgasAPI.json?api-key=${DEFIPULSE_API_KEY}`
-const GAS_NOW_URL = 'https://www.gasnow.org/api/v3/gas/price?utm_source=mintr'
+// const ETH_GAS_STATION_URL = `https://ethgasstation.info/api/ethgasAPI.json?api-key=${DEFIPULSE_API_KEY}`
+// const GAS_NOW_URL = 'https://www.gasnow.org/api/v3/gas/price?utm_source=mintr'
 
 export const SUPPORTED_WALLETS_MAP = {
   METAMASK: 'Metamask',
@@ -51,7 +51,7 @@ export const SUPPORTED_WALLETS_MAP = {
   LEDGER: 'Ledger',
   COINBASE: 'Coinbase',
   WALLET_CONNECT: 'WalletConnect',
-  PORTIS: 'Portis',
+  PORTIS: 'Portis'
 }
 
 export const OVM_RPC_URL = 'https://goerli.optimism.io'
@@ -68,7 +68,7 @@ export const hasEthereumInjected = () => !!window.ethereum
 
 const defaultNetwork = {
   name: 'MAINNET',
-  networkId: 1,
+  networkId: 1
 }
 
 export async function getEthereumNetwork() {
@@ -82,7 +82,7 @@ export async function getEthereumNetwork() {
       networkId = Number(window.ethereum?.networkVersion)
       return {
         name: SUPPORTED_NETWORKS[networkId],
-        networkId,
+        networkId
       }
     }
     // if (window.web3?.eth?.net) {
@@ -106,52 +106,6 @@ export async function getEthereumNetwork() {
   }
 }
 
-const handleGasNowRequest = async () => {
-  const result = await fetch(GAS_NOW_URL)
-  const { data } = await result.json()
-  return {
-    average: {
-      price: Math.round(data.standard / 1e8) / 10,
-    },
-    fast: {
-      price: Math.round(data.fast / 1e8) / 10,
-    },
-    fastest: {
-      price: Math.round(data.rapid / 1e8) / 10,
-    },
-  }
-}
-
-const handleEthGasStationRequest = async () => {
-  const result = await fetch(ETH_GAS_STATION_URL)
-  const networkInfo = await result.json()
-  return {
-    average: {
-      price: networkInfo.average / 10,
-      time: networkInfo.avgWait,
-    },
-    fast: {
-      price: networkInfo.fast / 10,
-      time: networkInfo.fastWait,
-    },
-    fastest: {
-      price: networkInfo.fastest / 10,
-      time: networkInfo.fastestWait,
-    },
-  }
-}
-
-export const getNetworkSpeeds = async () => {
-  try {
-    return await handleGasNowRequest()
-  } catch (e) {
-    console.log(e)
-    return await handleEthGasStationRequest()
-  }
-}
-
-export const formatGasPrice = gasPrice => gasPrice * 1000000000
-
 export const getTransactionPrice = (gasPrice, gasLimit, ethPrice) => {
   if (!gasPrice || !gasLimit) return 0
   return (gasPrice * ethPrice * gasLimit) / 1000000000
@@ -168,6 +122,41 @@ export function onMetamaskNetworkChange() {
   window.ethereum.on('chainChanged', () => {
     document.location.reload()
   })
+}
+
+export function chainSupported(chainId) {
+  return chainId === process.env.CHAIN_ID
+}
+
+export async function setupNetwork() {
+  const provider = window.ethereum
+  if (provider) {
+    try {
+      await provider.request({
+        method: 'wallet_addEthereumChain',
+        params: [
+          {
+            chainId: process.env.CHAIN_ID,
+            chainName: 'Binance Smart Chain Testnet',
+            nativeCurrency: {
+              name: 'BNB',
+              symbol: 'bnb',
+              decimals: 18
+            },
+            rpcUrls: [process.env.RPC_URL],
+            blockExplorerUrls: [process.env.BLOCK_EXPLORER_URL]
+          }
+        ]
+      })
+      return true
+    } catch (error) {
+      console.error(error)
+      return false
+    }
+  } else {
+    console.error('Can\'t setup the BSC network on metamask because window.ethereum is undefined')
+    return false
+  }
 }
 
 export const addBufferToGasLimit = gasLimit => Math.round(Number(gasLimit) * (1 + 0.2))

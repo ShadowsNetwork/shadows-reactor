@@ -1,17 +1,17 @@
 import { Link } from 'react-router-dom'
-import LogoSet from '@/layouts/components/logo-set'
 import { Menu } from 'antd'
 import React, { useState } from 'react'
 import '../app.less'
 import { useTranslation } from 'react-i18next'
 import routers, { routerLabelMapper } from '@/router'
+import { useLocation } from '@/hooks'
 
-const SideBar = ({ onNavItemClicked }) => {
+const SideBar = () => {
   const [collapsed, setCollapsed] = useState(false)
 
   const { t } = useTranslation()
 
-  const { hash } = window.location
+  const { hash } = useLocation()
 
   return (
     <div className="App">
@@ -34,7 +34,6 @@ const SideBar = ({ onNavItemClicked }) => {
                 <Menu.Item
                   key={router.path}
                   icon={<router.icon />}
-                  onClick={() => onNavItemClicked(router)}
                 >
                   <Link to={router.path} style={{ userSelect: 'none' }}>
                     {t(routerLabelMapper[router.key].title)}

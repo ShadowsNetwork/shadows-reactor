@@ -36,15 +36,21 @@ const LiquidityProvider: React.FC = () => {
 
   const dowsPrice = new BigNumber((useDowsPriceQuery().data as string))
 
-  const [lpBalance, setLpBalance] = useState('')
-  const [lpBalanceInUSD, setLpBalanceInUSD] = useState('')
-  const [currentAPR, setCurrentAPR] = useState('')
-  const [userLockedLp, setUserLockedLp] = useState('')
-  const [userLockedLpInUSD, setUserLockedLpInUSD] = useState('')
-  const [dowsEarned, setDowsEarned] = useState('')
+  const [lpBalance, setLpBalance] = useState('0')
+  const [lpBalanceInUSD, setLpBalanceInUSD] = useState('0')
+  const [currentAPR, setCurrentAPR] = useState('0')
+  const [userLockedLp, setUserLockedLp] = useState('0')
+  const [userLockedLpInUSD, setUserLockedLpInUSD] = useState('0')
+  const [dowsEarned, setDowsEarned] = useState('0')
 
   const fetchData = useCallback(async () => {
     if (!account) {
+      setLpBalance('0')
+      setLpBalanceInUSD('0')
+      setCurrentAPR('0')
+      setUserLockedLpInUSD('0')
+      setUserLockedLp('0')
+      setDowsEarned('0')
       return
     }
     const [balance, deposited, pending, currentAPR] = await Promise.all([
@@ -136,7 +142,9 @@ const LiquidityProvider: React.FC = () => {
         <div className="item">
           <div className="title">LP Tokens to Lock</div>
           <div className="value">{numberWithCommas(lpBalance)}</div>
-          <div className="additional">${numberWithCommas(lpBalanceInUSD)}</div>
+          <div className="additional">
+            {lpBalanceInUSD && '$' + numberWithCommas(lpBalanceInUSD)}
+          </div>
         </div>
         <div className="item">
           <div className="title">Current APR</div>

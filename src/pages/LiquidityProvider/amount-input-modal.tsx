@@ -33,7 +33,6 @@ const AmountInputModal: React.FC<ModalStatus> = ({
       return
     }
 
-    console.log(inputValue, maxAvailable)
     if (new BigNumber(inputValue).gt(new BigNumber(maxAvailable))) {
       message.error('Insufficient balance!')
       return
