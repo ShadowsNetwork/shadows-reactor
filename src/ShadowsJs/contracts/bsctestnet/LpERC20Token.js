@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { Contract } from 'ethers'
 import { getSource, getTarget } from '@/ShadowsJs/contracts/utils'
 
@@ -20,8 +19,11 @@ function LpERC20Token({
     return await this.contract.balanceOf(account)
   }
 
-  this.approve = async (spenderAddress, amount) => {
-    return await this.contract.approve(spenderAddress, amount)
+  this.approve = async (spenderAddress, amount, gasPrice) => {
+    console.log(gasPrice)
+    return await this.contract.approve(spenderAddress, amount, {
+      gasPrice: gasPrice
+    })
   }
 
   this.totalSupply = async () => {

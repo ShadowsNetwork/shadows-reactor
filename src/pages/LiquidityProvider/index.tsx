@@ -12,6 +12,7 @@ import eth from '@/img/liquidityProvider/eth.png'
 import AmountInputModal, { ModalStatus } from './amount-input-modal'
 import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
 import { numberWithCommas } from '@/utils'
+import useBscGasPriceQuery from '@/queries/useBscGasPriceQuery'
 
 async function getCurrentAPR() {
   const lp_to_dows = new BigNumber('33.22443529339985')
@@ -27,6 +28,7 @@ async function getCurrentAPR() {
 
 const LiquidityProvider: React.FC = () => {
   const account = useSelector(getAccount)
+  const { data: gasPrice } = useBscGasPriceQuery()
 
   const [modal, setModal] = useState<ModalStatus>({
     visible: false,
@@ -79,9 +81,9 @@ const LiquidityProvider: React.FC = () => {
   const lock = async (amount: string) => {
     const lpBalance = await dowsJSConnector.dowsJs.LpERC20Token.balanceOf(account)
     const amountInWei = toWei(amount)
-    console.log(lpBalance, amountInWei)
+    console.log(`lp balance: ${lpBalance.toString()}, amount: ${amountInWei}`)
 
-    if (new BigNumber(amountInWei).gt(new BigNumber(lpBalance))) {
+    if (new BigNumber(amountInWei).gt(new BigNumber(lpBalance.toString()))) {
       message.error('Insufficient balance.')
       return
     }
@@ -89,11 +91,11 @@ const LiquidityProvider: React.FC = () => {
     const { contractAddress } = dowsJSConnector.dowsJs.Farm
 
     try {
-      const approveResult = await dowsJSConnector.dowsJs.LpERC20Token.approve(contractAddress, amount)
+      const approveResult = await dowsJSConnector.dowsJs.LpERC20Token.approve(contractAddress, amountInWei, gasPrice)
       console.log(approveResult)
       const confirmation = await approveResult.wait()
       console.log(confirmation)
-      const depositResult = await dowsJSConnector.dowsJs.Farm.deposit(0, lpBalance)
+      const depositResult = await dowsJSConnector.dowsJs.Farm.deposit(0, lpBalance, gasPrice)
       console.log(depositResult)
     } catch (e) {
       console.error(e)
@@ -105,7 +107,7 @@ const LiquidityProvider: React.FC = () => {
     const amountInWei = toWei(amount)
 
     dowsJSConnector.dowsJs.Farm
-      .withdraw(0, amountInWei)
+      .withdraw(0, amountInWei, gasPrice)
       .then((r: unknown) => {
         console.log(r)
       })
@@ -116,7 +118,7 @@ const LiquidityProvider: React.FC = () => {
 
   const claim = async () => {
     try {
-      const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(0, 0)
+      const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(0, 0, gasPrice)
       console.log(withdrawResult)
 
       const confirmation = await withdrawResult.wait()

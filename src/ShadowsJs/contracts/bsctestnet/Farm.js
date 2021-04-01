@@ -26,12 +26,16 @@ function Farm({
     return await this.contract.userInfo(pid, account)
   }
 
-  this.withdraw = async (pid, account) => {
-    return await this.contract.withdraw(pid, account)
+  this.withdraw = async (pid, account, gasPrice) => {
+    return await this.contract.withdraw(pid, account, {
+      gasPrice
+    })
   }
 
-  this.deposit = async (pid, amount) => {
-    return await this.contract.deposit(pid, amount)
+  this.deposit = async (pid, amount, gasPrice) => {
+    return await this.contract.deposit(pid, amount, {
+      gasPrice
+    })
   }
 
   this.pending = async (pid, account) => {
