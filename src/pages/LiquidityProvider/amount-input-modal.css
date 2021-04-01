@@ -8,8 +8,8 @@
 .ant-modal-content {
     width: 44rem !important;
     height: 24.9rem !important;
-  margin-left: calc((100% - 44rem) / 2) !important;
-  margin-top: calc((100% - 24.9rem) / 2) !important;
+    margin-left: calc((100% - 44rem) / 2) !important;
+    margin-top: calc((100% - 24.9rem) / 2) !important;
     border-radius: 2rem;
     background: #1C1C1C !important;
 }
@@ -26,12 +26,13 @@
   font-weight: bold;
   color: #63CCA9;
 }
-.inputDows {
-  height: 3.757rem;
-  line-height: 3.757rem;
-  margin-top: 2.2rem;
-
-  .ant-input-affix-wrapper {
+.input-dows {
+    height: 3.757rem;
+    line-height: 3.757rem;
+    margin-top: 2.2rem;
+    display: flex;
+}
+.ant-input-affix-wrapper {
     width: 50%;
     height: 3.757rem;
     background: #363636;
@@ -39,20 +40,19 @@
     border: none;
     outline: none;
     margin-left: 2rem;
-
-    input.ant-input {
-      background: #363636;
-      color: #fff;
-    }
-  }
-  .dows {
+}
+input.ant-input {
+    background: #363636;
+    color: #fff !important;
+}
+.dows {
     color: #63CCA9;
     font-size: 1.5rem;
     font-weight: bold;
     margin-left: 1rem;
-  }
+}
 
-  Button {
+.input-dows > Button {
     width: 8.567rem;
     height: 3.757rem;
     background: #63CCA9;
@@ -63,18 +63,19 @@
     outline: none;
     margin-left: 3rem;
   }
-  Button:hover {
+.input-dows > Button:hover {
     background: #63CCA9;
     color: #fff;
   }
-}
+
 .stakeButton {
   width: 100%;
   display: flex;
   justify-content: center;
   margin-top: 4.243rem;
+}
 
-  Button:nth-of-type(1) {
+.stakeButton > Button:nth-of-type(1) {
     width: 14.202rem;
     height: 3.757rem;
     background: none;
@@ -85,11 +86,11 @@
     font-size: 1.5rem;
     outline: none;
   }
-  Button:nth-of-type(1):hover {
+.stakeButton > Button:nth-of-type(1):hover {
     background: none;
     border: 1px solid #63CCA9;
   }
-  Button:nth-of-type(2) {
+.stakeButton > Button:nth-of-type(2) {
     width: 14.202rem;
     height: 3.757rem;
     background: #63CCA9;
@@ -101,11 +102,10 @@
     outline: none;
     margin-left: 0.546rem;
   }
-  Button:nth-of-type(2):hover {
+.stakeButton > Button:nth-of-type(2):hover {
     background: #63CCA9;
     border: none;
   }
-}
 
 
 
