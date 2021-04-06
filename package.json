@@ -7,7 +7,7 @@
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage",
-    "deploy": "yarn build && node -r dotenv/config scripts/oss/upload-dir.js --sourceDir=./dist --targetDir=/ --bucketName=shadows-network"
+    "deploy": "yarn build && node -r dotenv/config scripts/oss/upload-dir.js --sourceDir=./dist --targetDir=/ --bucketName=shadows-staking"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
