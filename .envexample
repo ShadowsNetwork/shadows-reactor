@@ -1,0 +1,4 @@
+BROWSER=none
+ESLINT=1
+aliOssAccessKeyId=your access key id
+aliOssAccessKeySecret=your access key secret
