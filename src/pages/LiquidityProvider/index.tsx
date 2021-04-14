@@ -2,17 +2,17 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
 import './index.less'
-import { Button, message } from 'antd'
+import { Button, message, Modal } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { fromWei, toWei } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
 import uniswap from '@/img/liquidityProvider/uniswap.png'
 import eth from '@/img/liquidityProvider/eth.png'
-import AmountInputModal, { ModalStatus } from './amount-input-modal'
+import LpAmountInputModal, { LpAmountInputModalStatus } from './LpAmountInputModal'
 import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
 import { numberWithCommas } from '@/utils'
-import useBscGasPriceQuery from '@/queries/useBscGasPriceQuery'
+import dowsIcon from '@/img/dows-info/dows.png'
 
 async function getCurrentAPR() {
   const lp_to_dows = new BigNumber('33.22443529339985')
@@ -26,18 +26,54 @@ async function getCurrentAPR() {
     .toFixed(2)} %`
 }
 
+type RedeemModalStatus = {
+  visible: boolean
+  amount: string
+  onConfirm?: () => void
+  onClose?: () => void
+}
+
+const RedeemModal: React.FC<RedeemModalStatus> = ({
+  amount,
+  visible,
+  onClose,
+  onConfirm
+}) => {
+  return (
+    <Modal
+      title="Redeem Reward"
+      visible={visible}
+      okText="Confirm"
+      onOk={onConfirm}
+      onCancel={onClose}
+    >
+      <img src={dowsIcon} className="redeem-modal-dows-icon" alt="" />
+      <div className="redeem-modal-text">
+        {`${amount} DOWS Available`}
+      </div>
+    </Modal>
+  )
+}
+
 const LiquidityProvider: React.FC = () => {
   const account = useSelector(getAccount)
-  const { data: gasPrice } = useBscGasPriceQuery()
+  const dowsPrice = new BigNumber((useDowsPriceQuery().data as string))
+  // const { data: gasPrice } = useBscGasPriceQuery()
 
-  const [modal, setModal] = useState<ModalStatus>({
+  const [amountInputModalStatus, setAmountInputModalStatus] = useState<LpAmountInputModalStatus>({
     visible: false,
     title: '',
     confirmCallback: undefined,
     maxAvailable: ''
   })
 
-  const dowsPrice = new BigNumber((useDowsPriceQuery().data as string))
+  const [redeemModalStatus, setRedeemModalStatus] = useState<RedeemModalStatus>({
+    visible: false,
+    amount: '',
+    onConfirm: undefined,
+    onClose: undefined
+  })
+
 
   const [lpBalance, setLpBalance] = useState('0')
   const [lpBalanceInUSD, setLpBalanceInUSD] = useState('0')
@@ -79,9 +115,9 @@ const LiquidityProvider: React.FC = () => {
   }, [fetchData])
 
   const lock = async (amount: string) => {
+    // const gasPrice = await getBscGasPrice()
     const lpBalance = await dowsJSConnector.dowsJs.LpERC20Token.balanceOf(account)
     const amountInWei = toWei(amount)
-    console.log(`lp balance: ${lpBalance.toString()}, amount: ${amountInWei}`)
 
     if (new BigNumber(amountInWei).gt(new BigNumber(lpBalance.toString()))) {
       message.error('Insufficient balance.')
@@ -91,12 +127,13 @@ const LiquidityProvider: React.FC = () => {
     const { contractAddress } = dowsJSConnector.dowsJs.Farm
 
     try {
-      const approveResult = await dowsJSConnector.dowsJs.LpERC20Token.approve(contractAddress, amountInWei, gasPrice)
-      console.log(approveResult)
-      const confirmation = await approveResult.wait()
-      console.log(confirmation)
-      const depositResult = await dowsJSConnector.dowsJs.Farm.deposit(0, lpBalance, gasPrice)
-      console.log(depositResult)
+      const approveResult = await dowsJSConnector.dowsJs.LpERC20Token.approve(contractAddress, amountInWei/*, gasPrice*/)
+      const approveConfirmation = await approveResult.wait()
+      console.log(approveConfirmation)
+
+      const depositResult = await dowsJSConnector.dowsJs.Farm.deposit(0, lpBalance/*, gasPrice*/)
+      const depositConfirmation = await depositResult.wait()
+      console.log(depositConfirmation)
     } catch (e) {
       console.error(e)
     }
@@ -105,9 +142,10 @@ const LiquidityProvider: React.FC = () => {
 
   const unlock = async (amount: string) => {
     const amountInWei = toWei(amount)
+    // const gasPrice = await getBscGasPrice()
 
     dowsJSConnector.dowsJs.Farm
-      .withdraw(0, amountInWei, gasPrice)
+      .withdraw(0, amountInWei/*, gasPrice*/)
       .then((r: unknown) => {
         console.log(r)
       })
@@ -118,8 +156,8 @@ const LiquidityProvider: React.FC = () => {
 
   const claim = async () => {
     try {
-      const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(0, 0, gasPrice)
-      console.log(withdrawResult)
+      // const gasPrice = await getBscGasPrice()
+      const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(0, 0/*, gasPrice*/)
 
       const confirmation = await withdrawResult.wait()
       console.log(confirmation)
@@ -128,9 +166,16 @@ const LiquidityProvider: React.FC = () => {
     }
   }
 
-  const cancelCallback = () => {
-    setModal({
-      ...modal,
+  const closeAmountInputModal = () => {
+    setAmountInputModalStatus({
+      ...amountInputModalStatus,
+      visible: false
+    })
+  }
+
+  const closeRedeemModal = () => {
+    setRedeemModalStatus({
+      ...redeemModalStatus,
       visible: false
     })
   }
@@ -166,35 +211,44 @@ const LiquidityProvider: React.FC = () => {
         </div>
         <div className="button-container">
           <Button onClick={() => {
-            setModal({
-              ...modal,
+            setAmountInputModalStatus({
+              ...amountInputModalStatus,
               maxAvailable: lpBalance,
               visible: true,
               title: 'Stake Liquidity',
-              cancelCallback,
+              cancelCallback: closeAmountInputModal,
               confirmCallback: lock
             })
           }}>
             <PlusOutlined />
           </Button>
           <Button onClick={() => {
-            setModal({
-              ...modal,
+            setAmountInputModalStatus({
+              ...amountInputModalStatus,
               maxAvailable: userLockedLp,
               visible: true,
               title: 'Unstake Liquidity',
-              cancelCallback,
+              cancelCallback: closeAmountInputModal,
               confirmCallback: unlock
             })
           }}>
             Unlock
           </Button>
-          <Button onClick={claim}>
+          <Button onClick={() => {
+            setRedeemModalStatus({
+              ...redeemModalStatus,
+              amount: dowsEarned,
+              visible: true,
+              onConfirm: claim,
+              onClose: closeRedeemModal
+            })
+          }}>
             Redeem
           </Button>
         </div>
       </div>
-      <AmountInputModal {...modal} />
+      <LpAmountInputModal {...amountInputModalStatus} />
+      <RedeemModal {...redeemModalStatus} />
     </div>
   )
 }

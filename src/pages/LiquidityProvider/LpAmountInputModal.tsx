@@ -5,7 +5,7 @@ import LimitableNumberInput from '@/components/LimitableNumberInput'
 import { numberWithCommas } from '@/utils'
 import './amount-input-modal.css'
 
-export type ModalStatus = {
+export type LpAmountInputModalStatus = {
   visible: boolean,
   title: string,
   confirmCallback?: (_: string) => void,
@@ -13,7 +13,7 @@ export type ModalStatus = {
   maxAvailable: string,
 }
 
-const AmountInputModal: React.FC<ModalStatus> = ({
+const LpAmountInputModal: React.FC<LpAmountInputModalStatus> = ({
   title,
   visible,
   maxAvailable,
@@ -68,4 +68,4 @@ const AmountInputModal: React.FC<ModalStatus> = ({
   )
 }
 
-export default AmountInputModal
+export default LpAmountInputModal

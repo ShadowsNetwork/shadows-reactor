@@ -1,3 +1,4 @@
+/*
 import axios from 'axios'
 import { useQuery } from 'react-query'
 import { UseQueryResult } from 'react-query/types/react/types'
@@ -66,3 +67,4 @@ const useBscGasPriceQuery = (): UseQueryResult => {
 }
 
 export default useBscGasPriceQuery
+*/
