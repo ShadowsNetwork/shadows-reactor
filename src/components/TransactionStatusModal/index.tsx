@@ -1,10 +1,15 @@
-import { TransactionStatus } from '@/store/TransactionHistory/type'
+import { TransactionStatus } from '@/types/TransactionHistory'
 import React from 'react'
 import { Button, Modal } from 'antd'
-import { CheckCircleOutlined, CloseCircleOutlined, LoadingOutlined } from '@ant-design/icons'
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  CloseOutlined,
+  LoadingOutlined
+} from '@ant-design/icons'
 import './index.less'
 
-const mapTransactionStatusToIconAndLabel = new Map([
+export const mapTransactionStatusToIconAndLabel = new Map([
   [TransactionStatus.WaitForConfirmation.valueOf(), {
     icon: <LoadingOutlined />,
     label: 'Wait For Confirmation',
@@ -18,7 +23,15 @@ const mapTransactionStatusToIconAndLabel = new Map([
   [TransactionStatus.SignatureError.valueOf(), {
     icon: <CloseCircleOutlined />,
     color: '#de350b'
-  }]
+  }],
+  [TransactionStatus.Completed.valueOf(), {
+    icon: <CheckCircleOutlined />,
+    color: '#63cca9'
+  }],
+  [TransactionStatus.Failed.valueOf(), {
+    icon: <CloseOutlined />,
+    color: '#de350b'
+  }],
 ])
 
 export type TransactionStatusModalProps = {

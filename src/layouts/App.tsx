@@ -1,12 +1,12 @@
 import routers from '@/router'
 import React from 'react'
-import SideBar from '@/layouts/components/sidebar'
+import SideBar from '@/layouts/components/Sidebar'
 import { Route } from 'react-router-dom'
-import Top from '@/components/Top'
-import DowsInfo from '@/layouts/components/dows-info'
+import TopBar from '@/layouts/components/TopBar'
+import DowsInfo from '@/layouts/components/DowsInfo'
 import { useDynamicBackgroundImage, useSetupEthereum } from '@/hooks'
 
-const App = () => {
+const App: React.FC = () => {
   const background = useDynamicBackgroundImage()
   useSetupEthereum()
 
@@ -24,7 +24,7 @@ const App = () => {
 
       <DowsInfo />
 
-      <Top />
+      <TopBar />
 
       {
         routers.map(router => (

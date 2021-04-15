@@ -1,4 +1,4 @@
-import MenuLay from '../layouts/components/menu-lay'
+import Welcome from '@/pages/Welcome'
 import Personal from '@/pages/Personal'
 import Synthesis from '@/pages/Synthesis'
 import Transaction from '@/pages/Transaction'
@@ -6,18 +6,16 @@ import LiquidityProvider from '@/pages/LiquidityProvider'
 import Burn from '@/pages/Burn'
 import Reward from '@/pages/Reward'
 import FlowStep from '@/pages/Liquidity/FlowStep'
-import Success from '@/pages/Success'
-import Error from '@/pages/Error'
 import Transfer from '@/pages/Transfer'
 
 import LiquidityImage from '@/img/background/liquidity.jpg'
 import Map from '@/img/background/map.jpg'
-import Welcome from '@/img/background/welcome.jpg'
+import WelcomeImg from '@/img/background/welcome.jpg'
 
 import calendar from '@/img/slideBarIcon/calendar.png'
 import comment from '@/img/slideBarIcon/comment.png'
 import dashboard from '@/img/slideBarIcon/Dashboard.png'
-import kleaderboard from '@/img/slideBarIcon/leaderboard.png'
+import leaderboard from '@/img/slideBarIcon/leaderboard.png'
 import money from '@/img/slideBarIcon/money-bill-stack.png'
 import shopping from '@/img/slideBarIcon/shopping-bag.png'
 import viewList from '@/img/slideBarIcon/view-list.png'
@@ -33,30 +31,28 @@ export const routerLabelMapper = {
 }
 
 const routers = [
-  /** 首页 */
+  /** index page */
   {
     path: '/',
     key: 'index',
-    component: MenuLay,
+    component: Welcome,
     hide: true,
-    backgroundImage: Welcome
+    backgroundImage: WelcomeImg
   },
 
-  /** 显示的菜单、路由 */
+  /** displayed routers */
   {
     path: '/personal',
     key: 'person',
     component: Personal,
     image: dashboard,
-    // icon: UserOutlined,
     backgroundImage: Map
   },
   {
     path: '/synthesis',
     key: 'synthesis',
     component: Synthesis,
-    image: kleaderboard,
-    // icon: PartitionOutlined,
+    image: leaderboard,
     backgroundImage: Map
   },
   {
@@ -64,7 +60,6 @@ const routers = [
     key: 'destroy',
     component: Burn,
     image: viewList,
-    // icon: RestOutlined,
     backgroundImage: Map
   },
   {
@@ -72,7 +67,6 @@ const routers = [
     key: 'transaction',
     component: Transaction,
     image: money,
-    // icon: InteractionOutlined,
     backgroundImage: Map
   },
   {
@@ -80,7 +74,6 @@ const routers = [
     key: 'reward',
     component: Reward,
     image: calendar,
-    // icon: GiftOutlined,
     backgroundImage: Map
   },
   {
@@ -88,7 +81,6 @@ const routers = [
     key: 'transfer',
     component: Transfer,
     image: shopping,
-    // icon: ExportOutlined,
     backgroundImage: LiquidityImage
   },
   {
@@ -96,25 +88,10 @@ const routers = [
     key: 'liquidity',
     component: LiquidityProvider,
     image: comment,
-    // icon: ExportOutlined,
     backgroundImage: LiquidityImage
   },
 
-  /** 隐藏的路由 */
-  {
-    path: '/success',
-    key: 'success',
-    component: Success,
-    hide: true,
-    backgroundImage: Map
-  },
-  {
-    path: '/error',
-    key: 'error',
-    component: Error,
-    hide: true,
-    backgroundImage: Map
-  },
+  /** hidden routers */
   {
     path: '/FlowStep',
     key: 'flowstep',

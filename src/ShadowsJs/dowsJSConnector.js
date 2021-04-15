@@ -238,7 +238,7 @@ export const setSigner = ({
 /*
 
 export const connectToWallet = async ({
-  wallet,
+  Wallet,
   derivationPath,
 }) => {
   const {
@@ -253,20 +253,20 @@ export const connectToWallet = async ({
     }
   }
   setSigner({
-    type: wallet,
+    type: Wallet,
     networkId,
     derivationPath,
     networkName: name,
   })
 
-  switch (wallet) {
+  switch (Wallet) {
   case SUPPORTED_WALLETS_MAP.METAMASK:
     return connectToMetamask(networkId, name)
   case SUPPORTED_WALLETS_MAP.COINBASE:
     return connectToCoinbase(networkId, name)
   case SUPPORTED_WALLETS_MAP.TREZOR:
   case SUPPORTED_WALLETS_MAP.LEDGER:
-    return connectToHardwareWallet(networkId, name, wallet)
+    return connectToHardwareWallet(networkId, name, Wallet)
   case SUPPORTED_WALLETS_MAP.WALLET_CONNECT:
     return connectToWalletConnect(networkId, name)
   case SUPPORTED_WALLETS_MAP.PORTIS:

@@ -7,9 +7,6 @@ export default defineConfig({
     {
       path: '/',
       component: '../layouts/index',
-      routes: [
-        { path: '/', component: '../pages/index' }
-      ]
     }
   ],
   antd: {

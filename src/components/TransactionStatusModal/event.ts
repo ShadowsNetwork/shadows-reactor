@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 import { TransactionStatusModalProps } from '@/components/TransactionStatusModal/index'
-import { TransactionStatus } from '@/store/TransactionHistory/type'
+import { TransactionStatus } from '@/types/TransactionHistory'
 
 type TransactionStatusSetter = Dispatch<SetStateAction<TransactionStatusModalProps>>
 

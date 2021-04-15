@@ -15,7 +15,7 @@ import { setSigner } from '@/ShadowsJs/dowsJSConnector'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import configureStore from '@/store'
-import App from '@/layouts/app'
+import App from '@/layouts/App'
 import { chainSupported, setupNetwork } from '@/ShadowsJs/networkHelper'
 
 const queryClient = new QueryClient()
@@ -26,7 +26,7 @@ function getLibrary(provider) {
   return library
 }
 
-const Root = () => {
+const Root: React.FC = () => {
   const [initialized, setInitialized] = useState(false)
   const {
     store,
@@ -34,9 +34,10 @@ const Root = () => {
   } = configureStore()
 
   useEffect(() => {
+    const {ethereum} = window as WindowChain
     const initProvider = async () => {
-      if (window.ethereum) {
-        const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum, 'any')
 
         provider.ready.then(network => {
           const { chainId } = network

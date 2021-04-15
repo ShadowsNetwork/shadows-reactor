@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { getAccount } from '@/store/wallet'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAccount, updateTransactionHistoryStatus } from '@/store/wallet'
 import './index.less'
 import { Button, message, Modal } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
@@ -23,9 +23,10 @@ import {
   LockLPToken, RedeemDows,
   TransactionHistory,
   UnlockLPToken
-} from '@/store/TransactionHistory/type'
+} from '@/types/TransactionHistory'
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
 import { notifyTransactionFailed, notifyTransactionSuccess } from '@/utils/TransactionNotifycation'
+import { appendTransactionHistory } from '@/store/wallet'
 
 async function getCurrentAPR() {
   const lp_to_dows = new BigNumber('33.22443529339985')
@@ -71,6 +72,7 @@ const RedeemModal: React.FC<RedeemModalStatus> = ({
 const LiquidityProvider: React.FC = () => {
   const account = useSelector(getAccount)
   const dowsPrice = new BigNumber((useDowsPriceQuery().data as string))
+  const dispatch = useDispatch()
 
   const [amountInputModalStatus, setAmountInputModalStatus] = useState<LpAmountInputModalStatus>({
     visible: false,
@@ -172,15 +174,21 @@ const LiquidityProvider: React.FC = () => {
 
       beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
       const depositResult = await dowsJSConnector.dowsJs.Farm.deposit(0, amountInWei)
+      closeAmountInputModal()
+      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
       const transactionHistory: TransactionHistory = new LockLPToken(depositResult.hash, amount)
-      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      dispatch(appendTransactionHistory(transactionHistory))
 
       depositResult.wait()
         .then(() => {
+          transactionHistory.complete()
+          dispatch(updateTransactionHistoryStatus(transactionHistory))
           notifyTransactionSuccess(transactionHistory)
         })
         .catch(() => {
+          transactionHistory.fail()
+          dispatch(updateTransactionHistoryStatus(transactionHistory))
           notifyTransactionFailed(transactionHistory)
         })
     } catch (e) {
@@ -199,15 +207,21 @@ const LiquidityProvider: React.FC = () => {
       beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
       const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(0, amountInWei)
-      const transactionHistory: TransactionHistory = new UnlockLPToken(withdrawResult.hash, amount)
       closeAmountInputModal()
       submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
+      const transactionHistory: TransactionHistory = new UnlockLPToken(withdrawResult.hash, amount)
+      dispatch(appendTransactionHistory(transactionHistory))
+
       withdrawResult.wait()
         .then(() => {
+          transactionHistory.complete()
+          dispatch(updateTransactionHistoryStatus(transactionHistory))
           notifyTransactionSuccess(transactionHistory)
         })
         .catch(() => {
+          transactionHistory.fail()
+          dispatch(updateTransactionHistoryStatus(transactionHistory))
           notifyTransactionFailed(transactionHistory)
         })
     } catch (e) {
@@ -220,18 +234,25 @@ const LiquidityProvider: React.FC = () => {
       beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
       const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(0, 0)
-      const transactionHistory: TransactionHistory = new RedeemDows(withdrawResult.hash, dowsEarned)
       submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
       closeRedeemModal()
 
+      const transactionHistory: TransactionHistory = new RedeemDows(withdrawResult.hash, dowsEarned)
+      dispatch(appendTransactionHistory(transactionHistory))
+
       withdrawResult.wait()
         .then(() => {
+          transactionHistory.complete()
+          dispatch(updateTransactionHistoryStatus(transactionHistory))
           notifyTransactionSuccess(transactionHistory)
         })
         .catch(() => {
+          transactionHistory.fail()
+          dispatch(updateTransactionHistoryStatus(transactionHistory))
           notifyTransactionFailed(transactionHistory)
         })
     } catch (error) {
+      console.log(error)
       rejectTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
     }
   }

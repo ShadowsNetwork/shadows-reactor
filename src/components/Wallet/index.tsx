@@ -1,16 +1,12 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAccount, setAccount } from '@/store/wallet'
-import { LinkOutlined, Loading3QuartersOutlined, PaperClipOutlined } from '@ant-design/icons'
+import { getAccount, getTransactionHistoryList, setAccount } from '@/store/wallet'
+import { LinkOutlined, PaperClipOutlined } from '@ant-design/icons'
 import './index.less'
 import { Button, Modal } from 'antd'
-import {
-  LockLPToken,
-  RedeemDows,
-  TransactionHistory,
-  UnlockLPToken
-} from '@/store/TransactionHistory/type'
+import { TransactionHistory } from '@/types/TransactionHistory'
+import { mapTransactionStatusToIconAndLabel } from '@/components/TransactionStatusModal'
 
 type CurrentAccountProps = {
   account: string
@@ -25,6 +21,9 @@ const WalletModalContent: React.FC<WalletDetailModalProps> = ({
   account,
   transactionHistoryList
 }) => {
+  // TODO
+  const network = 'testnet'
+
   return (
     <div className="wallet-modal-content">
       <div>{account}</div>
@@ -33,17 +32,23 @@ const WalletModalContent: React.FC<WalletDetailModalProps> = ({
         <div>Disconnect</div>
       </div>
       {
-        transactionHistoryList.map(transaction => (
-          <div key={transaction.hash}>
+        transactionHistoryList.map(tx => (
+          <div
+            key={tx.hash}
+            style={{ color: mapTransactionStatusToIconAndLabel.get(tx.status)?.color }}
+          >
             <span className="transaction-history-string">
-              {transaction.toString()}
+              {tx.toString()}
             </span>
+            {' '}
             <span className="transaction-history-status">
-              <Loading3QuartersOutlined />
+              {mapTransactionStatusToIconAndLabel.get(tx.status)?.icon}
             </span>
-            <span className="transaction-history-link">
-              <LinkOutlined />
-            </span>
+            {' '}
+            <LinkOutlined
+              className="transaction-history-link"
+              onClick={() => window.open(`https://${network}.bscscan.com/tx/${tx.hash}`)}
+            />
           </div>
         ))
       }
@@ -52,18 +57,13 @@ const WalletModalContent: React.FC<WalletDetailModalProps> = ({
 }
 
 const CurrentAccount: React.FC<CurrentAccountProps> = ({ account }) => {
+  const transactionList = useSelector(getTransactionHistoryList)
+
   const [isModalVisible, setIsModalVisible] = useState(false)
 
   const closeModal = () => {
     setIsModalVisible(false)
   }
-
-  // TODO: fetch data from redux
-  const transactionList = [
-    new UnlockLPToken('0xffffffffff', '1.25'),
-    new LockLPToken('0xffffffffff', '1.22'),
-    new RedeemDows('0xffffffffff', '1.21')
-  ]
 
   return (
     <div className="current-account">

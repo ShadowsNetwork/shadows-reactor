@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import routers, { routerLabelMapper } from '@/router'
 import { useLocation } from '@/hooks'
 
-const SideBar = () => {
+const SideBar: React.FC = () => {
   const { t } = useTranslation()
 
   const { hash } = useLocation()

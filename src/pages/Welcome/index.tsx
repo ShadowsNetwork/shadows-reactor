@@ -7,12 +7,13 @@ import risk from '@/img/risk.png'
 import mortgage from '@/img/mortgage.png'
 import mortgageRate from '@/img/mortgageRate.png'
 
-const MenuLay = () => {
+const Welcome: React.FC = () => {
+  const { t } = useTranslation()
+
   let slider
 
-  const { t } = useTranslation()
   return (
-    <div className="swiper">
+    <div className="welcome-page">
       <Carousel
         effect="fade"
         ref={el => {
@@ -81,4 +82,4 @@ const MenuLay = () => {
   )
 }
 
-export default MenuLay
+export default Welcome

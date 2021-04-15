@@ -6,7 +6,7 @@ import twitterIcon from '@/img/dows-info/twitter.png'
 import './index.less'
 import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
 
-const DowsInfo = () => {
+const DowsInfo: React.FC = () => {
   const { data: dowsPrice } = useDowsPriceQuery()
 
   return (

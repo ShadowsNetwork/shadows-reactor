@@ -207,7 +207,7 @@ class Util {
    */
   async getGasEstimate(toAddress, ethValue, data) {
     // to get the gas estimate, the contract needs to be
-    // initialized with a wallet or a customSigner
+    // initialized with a Wallet or a customSigner
     const privateKey = '0x0123456789012345678901234567890123456789012345678901234567890123'
     const wallet = new Wallet(privateKey, this.provider)
     const tx = { to: toAddress }
