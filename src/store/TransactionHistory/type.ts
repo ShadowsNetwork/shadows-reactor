@@ -54,7 +54,7 @@ export abstract class TransactionHistory {
   abstract toString(): string
 }
 
-export class RedeemDowsTransaction extends TransactionHistory {
+export class RedeemDows extends TransactionHistory {
   constructor(hash: string, public amount: string) {
     super(hash)
   }
@@ -64,22 +64,22 @@ export class RedeemDowsTransaction extends TransactionHistory {
   }
 }
 
-export class DepositLPToken extends TransactionHistory {
+export class LockLPToken extends TransactionHistory {
   constructor(hash: string, public amount: string) {
     super(hash)
   }
 
   toString(): string {
-    return `Deposit ${this.amount} LP Tokens`
+    return `Lock ${this.amount} LP Tokens`
   }
 }
 
-export class WithdrawLPToken extends TransactionHistory {
+export class UnlockLPToken extends TransactionHistory {
   constructor(hash: string, public amount: string) {
     super(hash)
   }
 
   toString(): string {
-    return `Withdraw ${this.amount} LP Tokens`
+    return `Unlock ${this.amount} LP Tokens`
   }
 }

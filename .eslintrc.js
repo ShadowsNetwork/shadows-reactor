@@ -49,7 +49,8 @@ module.exports = {
         argsIgnorePattern: 'res|next|^err|_',
       },
     ],
-    '@typescript-eslint/explicit-module-boundary-types': 'off'
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off'
   },
   'overrides': [
     {

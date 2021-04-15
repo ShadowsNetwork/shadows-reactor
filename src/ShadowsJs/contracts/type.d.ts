@@ -37,7 +37,7 @@ export interface TransactionResponse extends Transaction {
   raw?: string,
 
   // This function waits until the transaction has been mined
-  wait: (confirmations?: number) => Promise<TransactionReceipt>
+  wait: (_confirmations?: number) => Promise<TransactionReceipt>
 }
 
 export interface TransactionReceipt {
@@ -79,5 +79,5 @@ export interface ContractReceipt extends TransactionReceipt {
 }
 
 export interface ContractTransaction extends TransactionResponse {
-  wait(confirmations?: number): Promise<ContractReceipt>;
+  wait(_confirmations?: number): Promise<ContractReceipt>;
 }

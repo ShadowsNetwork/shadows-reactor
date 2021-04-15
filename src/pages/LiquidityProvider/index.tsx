@@ -19,6 +19,13 @@ import {
   rejectTransaction,
   submitTransaction
 } from '@/components/TransactionStatusModal/event'
+import {
+  LockLPToken, RedeemDows,
+  TransactionHistory,
+  UnlockLPToken
+} from '@/store/TransactionHistory/type'
+import { TransactionResponse } from '@/ShadowsJs/contracts/type'
+import { notifyTransactionFailed, notifyTransactionSuccess } from '@/utils/TransactionNotifycation'
 
 async function getCurrentAPR() {
   const lp_to_dows = new BigNumber('33.22443529339985')
@@ -158,17 +165,24 @@ const LiquidityProvider: React.FC = () => {
 
     try {
       beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
-      const approveResult = await dowsJSConnector.dowsJs.LpERC20Token.approve(contractAddress, amountInWei)
+      const approveResult: TransactionResponse = await dowsJSConnector.dowsJs.LpERC20Token.approve(contractAddress, amountInWei)
       submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
-      const approveConfirmation = await approveResult.wait()
+      await approveResult.wait()
 
       beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
       const depositResult = await dowsJSConnector.dowsJs.Farm.deposit(0, amountInWei)
+
+      const transactionHistory: TransactionHistory = new LockLPToken(depositResult.hash, amount)
       submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
-      const depositConfirmation = await depositResult.wait()
-      console.log(depositConfirmation)
+      depositResult.wait()
+        .then(() => {
+          notifyTransactionSuccess(transactionHistory)
+        })
+        .catch(() => {
+          notifyTransactionFailed(transactionHistory)
+        })
     } catch (e) {
       const detailMessage = e.data ? `: ${e.data.message}` : ''
 
@@ -182,15 +196,20 @@ const LiquidityProvider: React.FC = () => {
   const unlock = async (amount: string) => {
     try {
       const amountInWei = toWei(amount)
-
       beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
       const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(0, amountInWei)
-      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      const transactionHistory: TransactionHistory = new UnlockLPToken(withdrawResult.hash, amount)
       closeAmountInputModal()
+      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
-      const withdrawConfirmation = await withdrawResult.wait()
-      console.log(withdrawConfirmation)
+      withdrawResult.wait()
+        .then(() => {
+          notifyTransactionSuccess(transactionHistory)
+        })
+        .catch(() => {
+          notifyTransactionFailed(transactionHistory)
+        })
     } catch (e) {
       rejectTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
     }
@@ -201,11 +220,17 @@ const LiquidityProvider: React.FC = () => {
       beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
       const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(0, 0)
+      const transactionHistory: TransactionHistory = new RedeemDows(withdrawResult.hash, dowsEarned)
       submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
       closeRedeemModal()
 
-      const confirmation = await withdrawResult.wait()
-      console.log(confirmation)
+      withdrawResult.wait()
+        .then(() => {
+          notifyTransactionSuccess(transactionHistory)
+        })
+        .catch(() => {
+          notifyTransactionFailed(transactionHistory)
+        })
     } catch (error) {
       rejectTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
     }

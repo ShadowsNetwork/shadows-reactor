@@ -6,10 +6,10 @@ import { LinkOutlined, Loading3QuartersOutlined, PaperClipOutlined } from '@ant-
 import './index.less'
 import { Button, Modal } from 'antd'
 import {
-  DepositLPToken,
-  RedeemDowsTransaction,
+  LockLPToken,
+  RedeemDows,
   TransactionHistory,
-  WithdrawLPToken
+  UnlockLPToken
 } from '@/store/TransactionHistory/type'
 
 type CurrentAccountProps = {
@@ -60,9 +60,9 @@ const CurrentAccount: React.FC<CurrentAccountProps> = ({ account }) => {
 
   // TODO: fetch data from redux
   const transactionList = [
-    new WithdrawLPToken('0xffffffffff', '1.25'),
-    new DepositLPToken('0xffffffffff', '1.22'),
-    new RedeemDowsTransaction('0xffffffffff', '1.21')
+    new UnlockLPToken('0xffffffffff', '1.25'),
+    new LockLPToken('0xffffffffff', '1.22'),
+    new RedeemDows('0xffffffffff', '1.21')
   ]
 
   return (
