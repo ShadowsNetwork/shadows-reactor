@@ -13,6 +13,12 @@ import LpAmountInputModal, { LpAmountInputModalStatus } from './LpAmountInputMod
 import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
 import { numberWithCommas } from '@/utils'
 import dowsIcon from '@/img/dows-info/dows.png'
+import TransactionStatusModal, { TransactionStatusModalProps } from '@/components/TransactionStatusModal'
+import {
+  beginTransaction,
+  rejectTransaction,
+  submitTransaction
+} from '@/components/TransactionStatusModal/event'
 
 async function getCurrentAPR() {
   const lp_to_dows = new BigNumber('33.22443529339985')
@@ -58,7 +64,6 @@ const RedeemModal: React.FC<RedeemModalStatus> = ({
 const LiquidityProvider: React.FC = () => {
   const account = useSelector(getAccount)
   const dowsPrice = new BigNumber((useDowsPriceQuery().data as string))
-  // const { data: gasPrice } = useBscGasPriceQuery()
 
   const [amountInputModalStatus, setAmountInputModalStatus] = useState<LpAmountInputModalStatus>({
     visible: false,
@@ -74,6 +79,11 @@ const LiquidityProvider: React.FC = () => {
     onClose: undefined
   })
 
+  const [transactionStatusModalProps, setTransactionStatusModalProps] = useState<TransactionStatusModalProps>({
+    onClose: undefined,
+    status: undefined,
+    visible: false
+  })
 
   const [lpBalance, setLpBalance] = useState('0')
   const [lpBalanceInUSD, setLpBalanceInUSD] = useState('0')
@@ -114,58 +124,6 @@ const LiquidityProvider: React.FC = () => {
     fetchData()
   }, [fetchData])
 
-  const lock = async (amount: string) => {
-    // const gasPrice = await getBscGasPrice()
-    const lpBalance = await dowsJSConnector.dowsJs.LpERC20Token.balanceOf(account)
-    const amountInWei = toWei(amount)
-
-    if (new BigNumber(amountInWei).gt(new BigNumber(lpBalance.toString()))) {
-      message.error('Insufficient balance.')
-      return
-    }
-
-    const { contractAddress } = dowsJSConnector.dowsJs.Farm
-
-    try {
-      const approveResult = await dowsJSConnector.dowsJs.LpERC20Token.approve(contractAddress, amountInWei/*, gasPrice*/)
-      const approveConfirmation = await approveResult.wait()
-      console.log(approveConfirmation)
-
-      const depositResult = await dowsJSConnector.dowsJs.Farm.deposit(0, lpBalance/*, gasPrice*/)
-      const depositConfirmation = await depositResult.wait()
-      console.log(depositConfirmation)
-    } catch (e) {
-      console.error(e)
-    }
-
-  }
-
-  const unlock = async (amount: string) => {
-    const amountInWei = toWei(amount)
-    // const gasPrice = await getBscGasPrice()
-
-    dowsJSConnector.dowsJs.Farm
-      .withdraw(0, amountInWei/*, gasPrice*/)
-      .then((r: unknown) => {
-        console.log(r)
-      })
-      .catch((e: Error) => {
-        console.error(e)
-      })
-  }
-
-  const claim = async () => {
-    try {
-      // const gasPrice = await getBscGasPrice()
-      const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(0, 0/*, gasPrice*/)
-
-      const confirmation = await withdrawResult.wait()
-      console.log(confirmation)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   const closeAmountInputModal = () => {
     setAmountInputModalStatus({
       ...amountInputModalStatus,
@@ -178,6 +136,79 @@ const LiquidityProvider: React.FC = () => {
       ...redeemModalStatus,
       visible: false
     })
+  }
+
+  const closeTransactionStatusModal = () => {
+    setTransactionStatusModalProps({
+      ...transactionStatusModalProps,
+      visible: false
+    })
+  }
+
+  const lock = async (amount: string) => {
+    const lpBalance = await dowsJSConnector.dowsJs.LpERC20Token.balanceOf(account)
+    const amountInWei = toWei(amount)
+
+    if (new BigNumber(amountInWei).gt(new BigNumber(lpBalance.toString()))) {
+      message.error('Insufficient balance.')
+      return
+    }
+
+    const { contractAddress } = dowsJSConnector.dowsJs.Farm
+
+    try {
+      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      const approveResult = await dowsJSConnector.dowsJs.LpERC20Token.approve(contractAddress, amountInWei)
+      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+
+      const approveConfirmation = await approveResult.wait()
+
+      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      const depositResult = await dowsJSConnector.dowsJs.Farm.deposit(0, amountInWei)
+      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+
+      const depositConfirmation = await depositResult.wait()
+      console.log(depositConfirmation)
+    } catch (e) {
+      const detailMessage = e.data ? `: ${e.data.message}` : ''
+
+      rejectTransaction(transactionStatusModalProps,
+        setTransactionStatusModalProps,
+        `${e.message}${detailMessage}`
+      )
+    }
+  }
+
+  const unlock = async (amount: string) => {
+    try {
+      const amountInWei = toWei(amount)
+
+      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+
+      const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(0, amountInWei)
+      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      closeAmountInputModal()
+
+      const withdrawConfirmation = await withdrawResult.wait()
+      console.log(withdrawConfirmation)
+    } catch (e) {
+      rejectTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+    }
+  }
+
+  const redeem = async () => {
+    try {
+      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+
+      const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(0, 0)
+      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      closeRedeemModal()
+
+      const confirmation = await withdrawResult.wait()
+      console.log(confirmation)
+    } catch (error) {
+      rejectTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+    }
   }
 
   return (
@@ -239,7 +270,7 @@ const LiquidityProvider: React.FC = () => {
               ...redeemModalStatus,
               amount: dowsEarned,
               visible: true,
-              onConfirm: claim,
+              onConfirm: redeem,
               onClose: closeRedeemModal
             })
           }}>
@@ -249,6 +280,8 @@ const LiquidityProvider: React.FC = () => {
       </div>
       <LpAmountInputModal {...amountInputModalStatus} />
       <RedeemModal {...redeemModalStatus} />
+      <TransactionStatusModal {...transactionStatusModalProps}
+        onClose={closeTransactionStatusModal} />
     </div>
   )
 }

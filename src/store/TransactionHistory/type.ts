@@ -1,4 +1,4 @@
-enum TransactionStatus {
+export enum TransactionStatus {
   /**
    * Transaction is initialized, and waiting user to confirm in wallet.
    */
@@ -7,7 +7,7 @@ enum TransactionStatus {
   /**
    * User rejects to sign the transaction.
    */
-  Rejected,
+  SignatureError,
 
   /**
    * Transaction has been sent to the chain, and waiting to be confirmed on chain.
@@ -40,7 +40,7 @@ export abstract class TransactionHistory {
   }
 
   reject(): void {
-    this._status = TransactionStatus.Rejected
+    this._status = TransactionStatus.SignatureError
   }
 
   complete(): void {

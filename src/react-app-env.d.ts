@@ -1,9 +1,9 @@
 interface WindowChain {
   ethereum?: {
     isMetaMask?: true
-    request?: (...args: any[]) => Promise<any>
+    request?: (..._: unknown[]) => Promise<any>
     selectedAddress?: string
-    on: (method: string, Function) => void
-    removeListener: (method: string, Function) => void
+    on: (_: string, ___: (___: unknown)=> unknown) => void
+    removeListener: (_: string, ___: (___: unknown)=> unknown) => void
   }
 }

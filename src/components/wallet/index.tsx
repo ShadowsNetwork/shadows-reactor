@@ -12,25 +12,6 @@ import {
   WithdrawLPToken
 } from '@/store/TransactionHistory/type'
 
-/*function Balance() {
-  const {
-    loading,
-    balance
-  } = useBalanceQuery()
-
-  return (
-    <>
-      <span role="img" aria-label="gold">
-        💰
-      </span>
-      <span>Balance</span>
-      <span>{loading && <LoadingOutlined />}</span>
-      {/!* eslint-disable-next-line no-nested-ternary *!/}
-      <span>{balance === null ? 'Error' : balance ? `Ξ${formatEther(balance)}` : ''}</span>
-    </>
-  )
-}*/
-
 type CurrentAccountProps = {
   account: string
 }
@@ -45,7 +26,7 @@ const WalletModalContent: React.FC<WalletDetailModalProps> = ({
   transactionHistoryList
 }) => {
   return (
-    <>
+    <div className="wallet-modal-content">
       <div>{account}</div>
       <div>
         <div>View on BscScan</div>
@@ -66,7 +47,7 @@ const WalletModalContent: React.FC<WalletDetailModalProps> = ({
           </div>
         ))
       }
-    </>
+    </div>
   )
 }
 
@@ -90,6 +71,7 @@ const CurrentAccount: React.FC<CurrentAccountProps> = ({ account }) => {
         {`${account.substr(0, 5)}...${account.substr(-4, 4)}`}
       </span>
       <Modal
+        closable={false}
         maskClosable={false}
         title="Your Wallet"
         visible={isModalVisible}
