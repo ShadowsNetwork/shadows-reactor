@@ -3,7 +3,7 @@ import { persistReducer, persistStore } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import wallet from './wallet'
 import app from './app'
-import { TransactionHistoryTransform } from '@/store/transforms'
+import { TransactionHistoryTransform, WalletAndAddressTransform } from '@/store/transforms'
 
 function configureStore(initialState = {}) {
   const reducer = combineReducers({
@@ -19,7 +19,7 @@ function configureStore(initialState = {}) {
       ''
     ],
     transforms: [
-      TransactionHistoryTransform
+      TransactionHistoryTransform, WalletAndAddressTransform
     ]
   }, reducer), initialState)
 

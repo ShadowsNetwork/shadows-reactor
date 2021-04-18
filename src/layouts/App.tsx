@@ -4,11 +4,13 @@ import SideBar from '@/layouts/components/Sidebar'
 import { Route } from 'react-router-dom'
 import TopBar from '@/layouts/components/TopBar'
 import DowsInfo from '@/layouts/components/DowsInfo'
-import { useDynamicBackgroundImage, useSetupEthereum } from '@/hooks'
+import { useDynamicBackgroundImage, useInitializeProvider } from '@/hooks'
 
 const App: React.FC = () => {
   const background = useDynamicBackgroundImage()
-  useSetupEthereum()
+  // useSetupProvider()
+
+  const providerInitialized = useInitializeProvider()
 
   return (
     <div
@@ -21,13 +23,10 @@ const App: React.FC = () => {
       }}
     >
       <SideBar />
-
       <DowsInfo />
-
       <TopBar />
-
       {
-        routers.map(router => (
+        providerInitialized && routers.map(router => (
           <Route
             path={router.path}
             exact

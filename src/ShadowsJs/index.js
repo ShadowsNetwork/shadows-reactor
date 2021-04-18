@@ -11,10 +11,8 @@ const signers = {
 
 export default class ShadowsJS extends ShadowsJsBase {
   /**
-   * Creates instances of Synthetix contracts based on ContractSettings.
+   * Creates instances of Shadows contracts based on ContractSettings.
    * Usage example:
-   * const { ShadowsJS } = require('ShadowsJS');
-   * const dowJS = new ShadowsJS();  //uses default ContractSettings - ethers.js default provider, mainnet
    * @constructor
    * @param contractSettings {ContractSettings}
    */

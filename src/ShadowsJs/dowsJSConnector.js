@@ -219,7 +219,7 @@ export const setSigner = ({
   // derivationPath,
   // networkName,
 }) => {
-  /* const signer = new dowsJSConnector.signers[type](
+  /* const signer = new dowsJSConnector.providers[type](
     getSignerConfig({
       type,
       networkId,

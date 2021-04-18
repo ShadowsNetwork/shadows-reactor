@@ -16,3 +16,20 @@ export const TransactionHistoryTransform = createTransform(
   },
   { whitelist: ['wallet'] }
 )
+
+export const WalletAndAddressTransform = createTransform(
+  null,
+  (outboundState, _key) => {
+    // const { selectedWallet } = outboundState
+    // if (selectedWallet === 'BSC') {
+    return {
+      ...outboundState,
+      account: null,
+      selectedWallet: null
+    }
+    // } else {
+    // return outboundState
+    // }
+  },
+  { whitelist: ['wallet'] }
+)

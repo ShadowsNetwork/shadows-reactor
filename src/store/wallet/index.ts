@@ -1,15 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TransactionHistory } from '@/types/TransactionHistory'
+import { State, WalletState } from '@/store/type'
+
+const initialState: WalletState = {
+  selectedWallet: undefined,
+  account: undefined,
+  transactionHistoryList: new Array<TransactionHistory>()
+}
 
 export const walletSlice = createSlice({
   name: 'wallet',
-  initialState: {
-    account: undefined,
-    transactionHistoryList: new Array<TransactionHistory>()
-  },
+  initialState,
   reducers: {
     setAccount: (state, action) => {
+      if (!action.payload) {
+        console.error('set account null')
+      }
       state.account = action.payload
+    },
+    setSelectedWallet: (state, action) => {
+      state.selectedWallet = action.payload
     },
     appendTransactionHistory: (state, action) => {
       const transactionHistory = action.payload as TransactionHistory
@@ -41,23 +51,21 @@ export const walletSlice = createSlice({
   }
 })
 
-type WalletState = {
-  wallet: {
-    account: string,
-    transactionHistoryList: Array<TransactionHistory>
-  }
-}
-
-export function getTransactionHistoryList(state: WalletState): Array<TransactionHistory> {
+export function getTransactionHistoryList(state: State): Array<TransactionHistory> {
   return state.wallet.transactionHistoryList ?? []
 }
 
-export function getAccount(state: WalletState): string {
+export function getAccount(state: State): string | undefined {
   return state.wallet.account
+}
+
+export function getSelectedWallet(state: State): string | undefined {
+  return state.wallet.selectedWallet
 }
 
 export const {
   setAccount,
+  setSelectedWallet,
   appendTransactionHistory,
   updateTransactionHistoryStatus
 } = walletSlice.actions

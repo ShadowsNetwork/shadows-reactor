@@ -102,6 +102,7 @@ const LiquidityProvider: React.FC = () => {
   const [dowsEarned, setDowsEarned] = useState('0')
 
   const fetchData = useCallback(async () => {
+    console.log(account)
     if (!account) {
       setLpBalance('0')
       setLpBalanceInUSD('0')
@@ -326,8 +327,10 @@ const LiquidityProvider: React.FC = () => {
       </div>
       <LpAmountInputModal {...amountInputModalStatus} />
       <RedeemModal {...redeemModalStatus} />
-      <TransactionStatusModal {...transactionStatusModalProps}
-        onClose={closeTransactionStatusModal} />
+      <TransactionStatusModal
+        {...transactionStatusModalProps}
+        onClose={closeTransactionStatusModal}
+      />
     </div>
   )
 }

@@ -42,6 +42,7 @@ module.exports = {
     'arrow-parens': [2, 'as-needed'],
     'no-param-reassign': [0],
     'no-use-before-define': 'off',
+    'object-curly-newline': ['off'],
     '@typescript-eslint/no-use-before-define': ['error'],
     '@typescript-eslint/no-unused-vars': [
       1,
@@ -50,7 +51,8 @@ module.exports = {
       },
     ],
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off'
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off'
   },
   'overrides': [
     {

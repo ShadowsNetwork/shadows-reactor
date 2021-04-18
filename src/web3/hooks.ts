@@ -1,9 +1,19 @@
-import { useEffect, useState } from 'react'
-import { useWeb3React } from '@web3-react/core'
+/*
+import { useCallback, useEffect, useState } from 'react'
+import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
 
-import { injected } from './connectors'
+import {
+  NoEthereumProviderError, UserRejectedRequestError as UserRejectedRequestErrorInjected
+} from '@web3-react/injected-connector'
 
-export function useEagerConnect(): boolean {
+import {
+  UserRejectedRequestError as UserRejectedRequestErrorWalletConnect, WalletConnectConnector
+} from '@web3-react/walletconnect-connector'
+
+import { setupNetwork } from '@/ShadowsJs/networkHelper'
+import { NoBscProviderError } from '@binance-chain/bsc-connector'
+
+/!*export function useEagerConnect(): boolean {
   const {
     activate,
     active
@@ -12,10 +22,10 @@ export function useEagerConnect(): boolean {
   const [tried, setTried] = useState(false)
 
   useEffect(() => {
-    injected.isAuthorized()
+    injectedConnector.isAuthorized()
       .then((isAuthorized: boolean) => {
         if (isAuthorized) {
-          activate(injected, undefined, true)
+          activate(injectedConnector, undefined, true)
             .catch(() => {
               setTried(true)
             })
@@ -33,9 +43,9 @@ export function useEagerConnect(): boolean {
   }, [tried, active])
 
   return tried
-}
+}*!/
 
-export function useInactiveListener(suppress = false): void {
+/!*export function useInactiveListener(suppress = false): void {
   const {
     active,
     error,
@@ -47,21 +57,21 @@ export function useInactiveListener(suppress = false): void {
     if (ethereum && ethereum.on && !active && !error && !suppress) {
       const handleConnect = () => {
         console.log('Handling \'connect\' event')
-        activate(injected)
+        activate(injectedConnector)
       }
       const handleChainChanged = (chainId: string | number) => {
         console.log('Handling \'chainChanged\' event with payload', chainId)
-        activate(injected)
+        activate(injectedConnector)
       }
       const handleAccountsChanged = (accounts: string[]) => {
         console.log('Handling \'accountsChanged\' event with payload', accounts)
         if (accounts.length > 0) {
-          activate(injected)
+          activate(injectedConnector)
         }
       }
       const handleNetworkChanged = (networkId: string | number) => {
         console.log('Handling \'networkChanged\' event with payload', networkId)
-        activate(injected)
+        activate(injectedConnector)
       }
 
       ethereum.on('connect', handleConnect)
@@ -79,4 +89,42 @@ export function useInactiveListener(suppress = false): void {
       }
     }
   }, [active, error, suppress, activate])
+}*!/
+
+interface UseConnectType {
+  login,
+  logout
 }
+
+/!*export function useConnect(): UseConnectType {
+  const { activate, deactivate } = useWeb3React()
+
+  const login = useCallback((connector: Connector) => {
+    activate(connector, async (error: Error) => {
+      if (error instanceof UnsupportedChainIdError) {
+        const hasSetup = await setupNetwork()
+        if (hasSetup) {
+          login(connector)
+        }
+      } else {
+        if (error instanceof NoEthereumProviderError || error instanceof NoBscProviderError) {
+          console.log('Provider Error', 'No provider was found')
+        } else if (
+          error instanceof UserRejectedRequestErrorInjected ||
+          error instanceof UserRejectedRequestErrorWalletConnect
+        ) {
+          if (connector instanceof WalletConnectConnector) {
+            const walletConnector = connector as WalletConnectConnector
+            walletConnector.walletConnectProvider = null
+          }
+          console.log('Authorization Error', 'Please authorize to access your account')
+        } else {
+          console.log(error.name, error.message)
+        }
+      }
+    })
+  }, [])
+
+  return { login, logout: deactivate }
+}*!/
+*/

@@ -1,23 +1,24 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { getAccount, getTransactionHistoryList, setAccount } from '@/store/wallet'
+import { useSelector } from 'react-redux'
+import { getAccount, getTransactionHistoryList } from '@/store/wallet'
 import { LinkOutlined, PaperClipOutlined } from '@ant-design/icons'
 import './index.less'
 import { Button, Modal } from 'antd'
 import { TransactionHistory } from '@/types/TransactionHistory'
 import { mapTransactionStatusToIconAndLabel } from '@/components/TransactionStatusModal'
+import WalletSelectionModal from '@/components/Wallet/WalletSelectionModal'
 
 type CurrentAccountProps = {
   account: string
 }
 
-type WalletDetailModalProps = {
+type WalletModalContentProps = {
   account: string,
   transactionHistoryList: TransactionHistory[]
 }
 
-const WalletModalContent: React.FC<WalletDetailModalProps> = ({
+const WalletModalContent: React.FC<WalletModalContentProps> = ({
   account,
   transactionHistoryList
 }) => {
@@ -88,28 +89,19 @@ const CurrentAccount: React.FC<CurrentAccountProps> = ({ account }) => {
 }
 
 const ConnectToWallet = () => {
-  const dispatch = useDispatch()
   const { t } = useTranslation()
 
-  const { ethereum } = window as WindowChain
-
-  const activateMetamask = () => {
-    if (!ethereum) {
-      throw new Error('No metamask installed, please install it before connecting!')
-    }
-
-    ethereum.request?.({ method: 'eth_requestAccounts' })
-      .then(accounts => {
-        const [account] = accounts
-        dispatch(setAccount(account))
-      })
-
-  }
+  const [modalVisible, setModalVisible] = useState<boolean>(false)
 
   return (
-    <span onClick={activateMetamask}>
-      {t('wallet.connectToWallet')}
-    </span>
+    <div>
+      <span onClick={() => setModalVisible(true)}>
+        {t('wallet.connectToWallet')}
+      </span>
+      <WalletSelectionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+    </div>
+    // <span onClick={activateMetamask}>
+
   )
 }
 
