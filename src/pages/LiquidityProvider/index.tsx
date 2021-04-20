@@ -305,7 +305,7 @@ const LiquidityProvider: React.FC = () => {
               confirmCallback: lock
             })
           }}>
-            <PlusOutlined className="addAmount"/>
+            <PlusOutlined className="addAmount" style={{fontSize:'1.1rem'}}/>
           </Button>
           <Button onClick={() => {
             setAmountInputModalStatus({
