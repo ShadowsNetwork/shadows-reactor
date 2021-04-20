@@ -67,10 +67,7 @@ const TransactionStatusModal: React.FC<TransactionStatusModalProps> = ({
       <div className="label" style={{ color }}>
         {label}
       </div>
-      {
-        status !== TransactionStatus.WaitForConfirmation &&
-        <Button onClick={onClose}>Dismiss</Button>
-      }
+      <Button onClick={onClose}>Dismiss</Button>
     </Modal>
   )
 }

@@ -1,5 +1,6 @@
 import MetamaskIcon from '@/img/wallet/metamask.png'
 import BSCIcon from '@/img/wallet/bsc.png'
+import WalletConnectIcon from '@/img/wallet/wallet-connect.png'
 import { setAccount, setSelectedWallet } from '@/store/wallet'
 import { providers } from 'ethers'
 import { chainSupported, setupNetwork } from '@/ShadowsJs/networkHelper'
@@ -8,6 +9,7 @@ import { MetamaskWeb3Provider } from './providers/Metamask'
 import { WalletConnectWeb3Provider } from './providers/WalletConnect'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { BscWeb3Provider } from '@/web3/providers/BSC'
+import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 
 export type WalletNames = 'Metamask' | 'BSC' | 'WalletConnect'
 
@@ -65,9 +67,24 @@ const connectToWalletConnect = async (dispatch: Dispatch<any>): Promise<void> =>
 
   const walletConnectProvider = web3Provider.provider as WalletConnectProvider
 
-  await walletConnectProvider.disconnect()
+  console.log(walletConnectProvider)
+
+  if (walletConnectProvider.connected || walletConnectProvider.wc.connected) {
+    await walletConnectProvider.wc.killSession()
+  }
 
   walletConnectProvider.enable()
+    .then(accounts => {
+      const [account] = accounts
+      dispatch(setAccount(account))
+      dispatch(setSelectedWallet('WalletConnect'))
+
+      dowsJSConnector.setContractSettings({
+        networkId: 97,
+        provider: web3Provider,
+        signer: web3Provider.getSigner ? web3Provider.getSigner() : null
+      })
+    })
     .catch(error => {
       console.log(error)
     })
@@ -117,11 +134,11 @@ export const SUPPORT_WALLETS: Wallet[] = [
     icon: MetamaskIcon,
     handleConnect: connectToMetamask
   },
-  // {
-  //   name: 'Wallet Connect',
-  //   icon: WalletConnectIcon,
-  //   handleConnect: connectToWalletConnect
-  // },
+  {
+    name: 'Wallet Connect',
+    icon: WalletConnectIcon,
+    handleConnect: connectToWalletConnect
+  },
   {
     name: 'Binance Chain Wallet',
     icon: BSCIcon,

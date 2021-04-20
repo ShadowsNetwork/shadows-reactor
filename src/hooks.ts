@@ -79,6 +79,14 @@ export function useInitializeProvider(): boolean {
     let provider: providers.Web3Provider | undefined
     try {
       provider = (await getWeb3ProviderByWallet(selectedWallet))
+
+      if (selectedWallet === 'WalletConnect' && !!provider) {
+        setInitialized(true)
+        return
+        // const wcProvider = provider.provider as WalletConnectProvider
+        // await wcProvider.disconnect()
+        // wcProvider.enable()
+      }
     } catch (e) {
       dispatch(setAccount(null))
       dispatch(setSelectedWallet(null))
@@ -89,41 +97,14 @@ export function useInitializeProvider(): boolean {
       setInitialized(false)
       return
     }
-    /*const web3Provider = new ethers.providers.Web3Provider(provider, 'any')
 
-    setSigner({
-      networkId: 97,
-      signer: web3Provider.getSigner()
-    })*/
+    console.log('web3 provider and signer: ', provider, provider.getSigner())
     dowsJSConnector.setContractSettings({
       networkId: 97,
       provider: provider,
       signer: provider.getSigner ? provider.getSigner() : null
     })
     setInitialized(true)
-    /*provider.ready.then(network => {
-          console.log('ready, network: ', network)
-          const { chainId } = network
-          if (!chainSupported(chainId)) {
-            setupNetwork()
-          }
-
-          // setSigner({
-          //   networkId: 97,
-          //   signer: web3Provider.getSigner()
-          // })
-          // setInitialized(true)
-        })*/
-
-    /*provider.on('network', (newNetwork, oldNetwork) => {
-      // When a Provider makes its initial connection, it emits a "network"
-      // event with a null oldNetwork along with the newNetwork. So, if the
-      // oldNetwork exists, it represents a changing network
-      if (oldNetwork) {
-        window.location.reload()
-      }
-    })*/
-
   }, [selectedWallet])
 
   useEffect(() => {
