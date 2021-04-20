@@ -152,10 +152,6 @@
   font-size: 1.6rem;
 }
 
-.ant-btn:focus {
-  background: #CB395F;
-  color: white;
-}
 
 /*.Synthesis-bottom > span:nth-of-type(2) {
     display: inline-block;

@@ -69,11 +69,3 @@
     margin-top: 98.5pt;
     font-size: 1.6rem;
 }
-.error > button:hover {
-    background-color: #EB557C;
-    color: #fff;
-}
-.ant-btn:focus {
-    background: #CB395F;
-    color: white;
-}

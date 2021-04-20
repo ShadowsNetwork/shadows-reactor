@@ -46,3 +46,83 @@
     user-select: none;
   }
 }
+
+.wallet-modal-content{
+
+  .walletModal-Title {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #fff;
+  }
+
+  .bscScan {
+    margin-top: 1.4rem;
+    display: flex;
+    align-items: center;
+
+    span {
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: #63CCA9;
+    }
+
+    img {
+      width: 1.8rem;
+      margin-left: 0.6rem;
+    }
+
+    span:nth-of-type(2) {
+      margin-left: 12.1rem;
+    }
+  }
+  // 交易记录
+  .transactionContent {
+    margin-top: 9.4rem;
+  }
+  .transactionRecord {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    .transaction-history-string {
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+
+    .transaction-history-status {
+      margin-left: 15.9rem;
+      font-size: 2.0rem;
+      position: absolute;
+      right: 6rem;
+    }
+
+    img {
+      width: 1.8rem;
+      margin-left: 1.3rem;
+      position: absolute;
+      right: 3rem;
+    }
+  }
+}
+
+.walletModalClose {
+  width: 14.202rem;
+  height: 3.757rem;
+  background: #63CCA9;
+  border: none;
+  border-radius: 3.375rem;
+  color: #FFFEFE;
+  font-weight: bold;
+  margin-left: calc((100% - 14.202rem) / 2);
+  margin-top: 13.1rem;
+  margin-bottom: 3.843rem;
+}
+.walletModalClose:hover {
+  background: #63CCA9;
+  border: none;
+  color: #FFFEFE;
+}
+.toAmount {
+  display: flex;
+  align-items: center;
+}

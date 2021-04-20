@@ -1,7 +1,7 @@
 .ant-modal-content {
     background-color: #2C262C;
     width: 600px;
-    height: 340px;
+    height: auto;
     margin-left: calc((100% - 600px) / 2);
     margin-top: calc((100% - 340px) / 2);
 }

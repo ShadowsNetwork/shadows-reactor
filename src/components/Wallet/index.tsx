@@ -8,6 +8,7 @@ import { Button, Modal } from 'antd'
 import { TransactionHistory } from '@/types/TransactionHistory'
 import { mapTransactionStatusToIconAndLabel } from '@/components/TransactionStatusModal'
 import WalletSelectionModal from '@/components/Wallet/WalletSelectionModal'
+import share from '@/img/status/promptShare.png'
 
 type CurrentAccountProps = {
   account: string
@@ -27,32 +28,37 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
 
   return (
     <div className="wallet-modal-content">
-      <div>{account}</div>
-      <div>
-        <div>View on BscScan</div>
-        <div>Disconnect</div>
+      <div className="walletModal-Title">{account}</div>
+      <div className="bscScan">
+        <span >View on BscScan</span>
+        <img src={share}/>
+        <span>Disconnect</span>
       </div>
-      {
-        transactionHistoryList.map(tx => (
-          <div
-            key={tx.hash}
-            style={{ color: mapTransactionStatusToIconAndLabel.get(tx.status)?.color }}
-          >
-            <span className="transaction-history-string">
-              {tx.toString()}
-            </span>
-            {' '}
-            <span className="transaction-history-status">
-              {mapTransactionStatusToIconAndLabel.get(tx.status)?.icon}
-            </span>
-            {' '}
-            <LinkOutlined
-              className="transaction-history-link"
-              onClick={() => window.open(`https://${network}.bscscan.com/tx/${tx.hash}`)}
-            />
-          </div>
-        ))
-      }
+      <div className="transactionContent">
+        {
+          transactionHistoryList.map(tx => (
+            <div
+              key={tx.hash}
+              style={{ color: mapTransactionStatusToIconAndLabel.get(tx.status)?.color }}
+              className="transactionRecord"
+            >
+              <span className="transaction-history-string">
+                {tx.toString()}
+              </span>
+              {' '}
+              <span className="transaction-history-status">
+                {mapTransactionStatusToIconAndLabel.get(tx.status)?.icon}
+              </span>
+              {' '}
+              <img
+                src={share}
+                className="transaction-history-link"
+                onClick={() => window.open(`https://${network}.bscscan.com/tx/${tx.hash}`)}
+              />
+            </div>
+          ))
+        }
+      </div>
     </div>
   )
 }
@@ -76,13 +82,12 @@ const CurrentAccount: React.FC<CurrentAccountProps> = ({ account }) => {
         maskClosable={false}
         title="Your Wallet"
         visible={isModalVisible}
-        footer={
-          <Button onClick={closeModal}>
-            Close
-          </Button>
-        }
+        footer=""
       >
         <WalletModalContent account={account} transactionHistoryList={transactionList} />
+        <Button className="walletModalClose" onClick={closeModal}>
+              Close
+        </Button>
       </Modal>
     </div>
   )
@@ -94,7 +99,7 @@ const ConnectToWallet = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false)
 
   return (
-    <div>
+    <div className="toAmount">
       <span onClick={() => setModalVisible(true)}>
         {t('wallet.connectToWallet')}
       </span>

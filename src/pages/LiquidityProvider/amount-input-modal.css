@@ -7,7 +7,6 @@
 }
 .ant-modal-content {
     width: 44rem !important;
-    height: 24.9rem !important;
     margin-left: calc((100% - 44rem) / 2) !important;
     margin-top: calc((100% - 24.9rem) / 2) !important;
     border-radius: 2rem;
@@ -73,6 +72,7 @@ input.ant-input {
   display: flex;
   justify-content: center;
   margin-top: 4.243rem;
+  margin-bottom: 2.243rem;
 }
 
 .stakeButton > Button:nth-of-type(1) {

@@ -93,6 +93,7 @@
     line-height: 0;
     border: 1px solid white;
     color: white;
+
     background: none;
     margin-left: 2rem;
 }
@@ -100,9 +101,5 @@
     color: white;
     border: 1px solid white;
     background: none;
-}
-.ant-btn:focus {
-    background: #CB395F;
-    color: white;
 }
 

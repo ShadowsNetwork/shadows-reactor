@@ -60,10 +60,17 @@ const RedeemModal: React.FC<RedeemModalStatus> = ({
       okText="Confirm"
       onOk={onConfirm}
       onCancel={onClose}
+      footer=""
     >
-      <img src={dowsIcon} className="redeem-modal-dows-icon" alt="" />
-      <div className="redeem-modal-text">
-        {`${amount} DOWS Available`}
+      <div className="redeemContent">
+        <img src={dowsIcon} className="redeem-modal-dows-icon" alt="" />
+        <span className="redeem-modal-text">
+          {`${amount} DOWS Available`}
+        </span>
+      </div>
+      <div className="redeemFoot">
+        <Button key="back" className="onClose" onClick={onClose}>cancel</Button>
+        <Button key="redeem" className="redeem" onClick={onConfirm}>Redeem</Button>
       </div>
     </Modal>
   )
@@ -298,7 +305,7 @@ const LiquidityProvider: React.FC = () => {
               confirmCallback: lock
             })
           }}>
-            <PlusOutlined />
+            <PlusOutlined className="addAmount"/>
           </Button>
           <Button onClick={() => {
             setAmountInputModalStatus({
