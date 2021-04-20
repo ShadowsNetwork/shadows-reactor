@@ -78,7 +78,6 @@ const TransactionStatusModal: React.FC<TransactionStatusModalProps> = ({
         status !== TransactionStatus.WaitForConfirmation &&
         <Button className="dismiss" onClick={onClose}>Dismiss</Button>
       }
-      <Button onClick={onClose}>Dismiss</Button>
     </Modal>
   )
 }

@@ -1,6 +1,6 @@
-import MetamaskIcon from '@/img/wallet/metamask.png'
+import MetamaskIcon from '@/img/wallet/metamask.svg'
 import BSCIcon from '@/img/wallet/bsc.png'
-import WalletConnectIcon from '@/img/wallet/wallet-connect.png'
+import WalletConnectIcon from '@/img/wallet/walletconnect.svg'
 import { setAccount, setSelectedWallet } from '@/store/wallet'
 import { providers } from 'ethers'
 import { chainSupported, setupNetwork } from '@/ShadowsJs/networkHelper'

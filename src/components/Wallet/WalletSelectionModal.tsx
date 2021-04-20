@@ -2,6 +2,7 @@ import React from 'react'
 import { SUPPORT_WALLETS, Wallet } from '@/web3/wallets'
 import { Modal } from 'antd'
 import { useDispatch } from 'react-redux'
+import './walletSelect.less'
 
 type WalletCardProps = {
   wallet: Wallet
@@ -17,16 +18,15 @@ const WalletCard: React.FC<WalletCardProps> = ({ wallet }) => {
   const dispatch = useDispatch()
 
   return (
-    <div onClick={() => handleConnect(dispatch)}>
-      <div className="wallet-name">
-        {name}
-      </div>
-      <div className="wallet-icon">
+    <div className="walletSelect">
+      <div className="walletItem" onClick={() => handleConnect(dispatch)}>
         <img src={icon} alt="" />
+        <span className="wallet-name">
+          {name}
+        </span>
       </div>
     </div>
   )
-
 }
 
 const WalletSelectionModal: React.FC<WalletSelectionModalProps> = ({
@@ -36,7 +36,7 @@ const WalletSelectionModal: React.FC<WalletSelectionModalProps> = ({
   <Modal
     visible={visible}
     onCancel={onClose}
-    footer={<></>}
+    footer=""
   >
     {
       SUPPORT_WALLETS.map(wallet => (
