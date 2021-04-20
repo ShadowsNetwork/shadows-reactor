@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
-import { getAccount, getTransactionHistoryList } from '@/store/wallet'
-import { LinkOutlined, PaperClipOutlined } from '@ant-design/icons'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  getAccount, getTransactionHistoryList, setAccount, setSelectedWallet
+} from '@/store/wallet'
+import { PaperClipOutlined } from '@ant-design/icons'
 import './index.less'
 import { Button, Modal } from 'antd'
 import { TransactionHistory } from '@/types/TransactionHistory'
@@ -25,14 +27,26 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
 }) => {
   // TODO
   const network = 'testnet'
+  const dispatch = useDispatch()
+
+  const disconnect = () => {
+    dispatch(setSelectedWallet(null))
+    dispatch(setAccount(null))
+  }
 
   return (
     <div className="wallet-modal-content">
       <div className="walletModal-Title">{account}</div>
       <div className="bscScan">
-        <span >View on BscScan</span>
-        <img src={share}/>
-        <span>Disconnect</span>
+        <span>View on BscScan</span>
+        <img src={share} alt="" />
+        <Button
+          type="text"
+          onClick={disconnect}
+          className="disconnect"
+        >
+          Disconnect
+        </Button>
       </div>
       <div className="transactionContent">
         {
@@ -52,6 +66,7 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
               {' '}
               <img
                 src={share}
+                alt=""
                 className="transaction-history-link"
                 onClick={() => window.open(`https://${network}.bscscan.com/tx/${tx.hash}`)}
               />
@@ -78,15 +93,16 @@ const CurrentAccount: React.FC<CurrentAccountProps> = ({ account }) => {
         {`${account.substr(0, 5)}...${account.substr(-4, 4)}`}
       </span>
       <Modal
+        style={{ top: 20 }}
         closable={false}
         maskClosable={false}
         title="Your Wallet"
         visible={isModalVisible}
-        footer=""
+        footer={null}
       >
         <WalletModalContent account={account} transactionHistoryList={transactionList} />
         <Button className="walletModalClose" onClick={closeModal}>
-              Close
+          Close
         </Button>
       </Modal>
     </div>
@@ -105,7 +121,6 @@ const ConnectToWallet = () => {
       </span>
       <WalletSelectionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
     </div>
-    // <span onClick={activateMetamask}>
 
   )
 }

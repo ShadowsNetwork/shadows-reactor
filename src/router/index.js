@@ -20,6 +20,17 @@ import money from '@/img/slideBarIcon/money-bill-stack.png'
 import shopping from '@/img/slideBarIcon/shopping-bag.png'
 import viewList from '@/img/slideBarIcon/view-list.png'
 
+// import { lazy } from 'react'
+// const Welcome = lazy(() => import('@/pages/Welcome'))
+// const Personal = lazy(() => import('@/pages/Personal'))
+// const Synthesis = lazy(() => import('@/pages/Synthesis'))
+// const Transaction = lazy(() => import('@/pages/Transaction'))
+// const LiquidityProvider = lazy(() => import('@/pages/LiquidityProvider'))
+// const Burn = lazy(() => import('@/pages/Burn'))
+// const Reward = lazy(() => import('@/pages/Reward'))
+// const FlowStep = lazy(() => import('@/pages/Liquidity/FlowStep'))
+// const Transfer = lazy(() => import('@/pages/Transfer'))
+
 export const routerLabelMapper = {
   person: { title: 'person.title' },
   synthesis: { title: 'synthesis.title' },
