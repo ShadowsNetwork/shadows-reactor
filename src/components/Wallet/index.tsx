@@ -155,6 +155,9 @@ const Wallet: React.FC = () => {
       <MetamaskIcon/>
       {!account && <ConnectToWallet />}
       {!!account && <CurrentAccount account={account} />}
+      <div className="pendingNum">
+          1
+      </div>
     </div>
   )
 }
