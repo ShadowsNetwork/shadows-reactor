@@ -60,7 +60,7 @@ export function useDynamicBackgroundImage(): string {
   const [background, setBackground] = useState('')
 
   const { hash } = useLocation()
-  const path = hash.replace(new RegExp('#/?'), '/')
+  const path = hash.replace(new RegExp('(#/)?'), '/')
 
   useEffect(() => {
     const currentRouter = routers.filter(router => router.path === path)[0]
@@ -170,3 +170,25 @@ export function useInitializeProvider(): boolean {
     return undefined
   }
 }*/
+
+export type ErrorMessageGetter = (error: any) => string
+
+export function useErrorMessage(): any {
+  const selectedWallet = useSelector(getSelectedWallet) as WalletNames | undefined
+
+  return useCallback((e: any) => {
+    if (!selectedWallet) {
+      return 'No Wallet Connected'
+    } else if (selectedWallet === 'Metamask') {
+      const detailMessage = e.data ? `: ${e.data.message}` : ''
+      return `${e.message}${detailMessage}`
+    } else if (selectedWallet === 'BSC') {
+      return e.error
+    } else if (selectedWallet === 'WalletConnect') {
+      console.log('error', e)
+      return 'WalletConnect error message'
+    } else {
+      throw new Error('Unknown selected wallet')
+    }
+  }, [selectedWallet])
+}

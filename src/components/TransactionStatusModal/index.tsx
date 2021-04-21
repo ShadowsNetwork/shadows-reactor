@@ -2,11 +2,7 @@ import { TransactionStatus } from '@/types/TransactionHistory'
 import React from 'react'
 import { Button, Modal } from 'antd'
 import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  CheckOutlined,
-  CloseOutlined,
-  LoadingOutlined
+  CheckCircleOutlined, CheckOutlined, CloseOutlined, LoadingOutlined
 } from '@ant-design/icons'
 import './index.less'
 import vector from '@/img/status/Vector.png'
@@ -25,7 +21,7 @@ export const mapTransactionStatusToIconAndLabel = new Map([
   [TransactionStatus.SignatureError.valueOf(), {
     icon: <div className="transactionError">
       <div className="transactionErrorIcon">
-        <img src={vector}/>
+        <img src={vector} alt="" />
       </div>
     </div>,
     color: '#de350b'
@@ -37,7 +33,7 @@ export const mapTransactionStatusToIconAndLabel = new Map([
   [TransactionStatus.Failed.valueOf(), {
     icon: <CloseOutlined />,
     color: '#de350b'
-  }],
+  }]
 ])
 
 export type TransactionStatusModalProps = {
@@ -74,10 +70,7 @@ const TransactionStatusModal: React.FC<TransactionStatusModalProps> = ({
       <div className="icon" style={{ color }}>
         {icon}
       </div>
-      {
-        status !== TransactionStatus.WaitForConfirmation &&
-        <Button className="dismiss" onClick={onClose}>Dismiss</Button>
-      }
+      <Button className="dismiss" onClick={onClose}>Dismiss</Button>
     </Modal>
   )
 }

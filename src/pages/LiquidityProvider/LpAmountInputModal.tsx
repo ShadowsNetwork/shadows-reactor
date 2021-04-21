@@ -43,12 +43,13 @@ const LpAmountInputModal: React.FC<LpAmountInputModalStatus> = ({
 
   return (
     <Modal
+      zIndex={1}
       title={title}
       visible={visible}
       onCancel={cancelCallback}
       footer={null}
     >
-      <span className="available">{numberWithCommas(maxAvailable)} DOWS/ETH Available</span>
+      <span className="available">{numberWithCommas(maxAvailable)} LP Tokens Available</span>
       <span className="input-dows">
         <LimitableNumberInput
           min={0}

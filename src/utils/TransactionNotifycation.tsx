@@ -1,12 +1,9 @@
 import { notification } from 'antd'
 import React from 'react'
 import { TransactionHistory } from '@/types/TransactionHistory'
-import { CheckOutlined, CloseOutlined, LinkOutlined } from '@ant-design/icons'
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import './notifycation.less'
-import promptShare from '@/img/status/promptShare.png'
-
-
-const network = 'testnet'
+import { ReactComponent as LinkIcon } from '@/img/link.svg'
 
 const closeIcon = (color: string) => (
   <div style={{ color }}>
@@ -27,20 +24,20 @@ export function notifyTransactionSuccess(transactionHistory: TransactionHistory)
         <CheckOutlined />
         <div className="promptContent">
           <span className="promptText">{transactionHistory.toString()}</span>
-          <img src={promptShare} className="promptImg" onClick={() => {
-            window.open(`https://${network}.bscscan.com/tx/${transactionHistory.hash}`)
+          <LinkIcon fill={color} className="promptImg" onClick={() => {
+            window.open(`${process.env.BLOCK_EXPLORER_URL}/tx/${transactionHistory.hash}`)
           }} />
         </div>
       </div>
     ),
     style: {
-      width: 440,
+      width: 440
     }
   })
 }
 
 export function notifyTransactionFailed(transactionHistory: TransactionHistory): void {
-  const color = '#63cca9'
+  const color = '#de350b'
 
   notification.open({
     message: '',
@@ -51,8 +48,8 @@ export function notifyTransactionFailed(transactionHistory: TransactionHistory):
       <div style={{ color }}>
         {'Failed - '}
         <span>{transactionHistory.toString()}</span>
-        <LinkOutlined onClick={() => {
-          window.open(`https://${network}.bscscan.com/tx/${transactionHistory.hash}`)
+        <LinkIcon fill={color} className="promptImg" onClick={() => {
+          window.open(`${process.env.BLOCK_EXPLORER_URL}/tx/${transactionHistory.hash}`)
         }} />
       </div>
     ),

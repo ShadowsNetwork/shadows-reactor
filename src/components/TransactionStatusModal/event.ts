@@ -9,6 +9,7 @@ export function beginTransaction(props: TransactionStatusModalProps, setter: Tra
     ...props,
     visible: true,
     status: TransactionStatus.WaitForConfirmation,
+    errorMessage: ''
   })
 }
 
@@ -17,6 +18,7 @@ export function submitTransaction(props: TransactionStatusModalProps, setter: Tr
     ...props,
     visible: true,
     status: TransactionStatus.Submitted,
+    errorMessage: ''
   })
 }
 

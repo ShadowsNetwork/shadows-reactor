@@ -27,6 +27,7 @@ import {
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
 import { notifyTransactionFailed, notifyTransactionSuccess } from '@/utils/TransactionNotifycation'
 import { appendTransactionHistory } from '@/store/wallet'
+import { useErrorMessage } from '@/hooks'
 
 async function getCurrentAPR() {
   const lp_to_dows = new BigNumber('33.22443529339985')
@@ -69,7 +70,7 @@ const RedeemModal: React.FC<RedeemModalStatus> = ({
         </span>
       </div>
       <div className="redeemFoot">
-        <Button key="back" className="onClose" onClick={onClose}>cancel</Button>
+        <Button key="back" className="onClose" onClick={onClose}>Cancel</Button>
         <Button key="redeem" className="redeem" onClick={onConfirm}>Redeem</Button>
       </div>
     </Modal>
@@ -77,9 +78,11 @@ const RedeemModal: React.FC<RedeemModalStatus> = ({
 }
 
 const LiquidityProvider: React.FC = () => {
+  const [refreshFlag, setRefreshFlag] = useState(0)
   const account = useSelector(getAccount)
   const dowsPrice = new BigNumber((useDowsPriceQuery().data as string))
   const dispatch = useDispatch()
+  const getErrorMessage = useErrorMessage()
 
   const [amountInputModalStatus, setAmountInputModalStatus] = useState<LpAmountInputModalStatus>({
     visible: false,
@@ -109,7 +112,6 @@ const LiquidityProvider: React.FC = () => {
   const [dowsEarned, setDowsEarned] = useState('0')
 
   const fetchData = useCallback(async () => {
-    console.log(account)
     if (!account) {
       setLpBalance('0')
       setLpBalanceInUSD('0')
@@ -135,7 +137,7 @@ const LiquidityProvider: React.FC = () => {
 
     setDowsEarned(new BigNumber(fromWei(pending)).toFixed(2))
     setCurrentAPR(currentAPR)
-  }, [account, dowsPrice])
+  }, [account, dowsPrice, refreshFlag])
 
   useEffect(() => {
     fetchData()
@@ -193,6 +195,7 @@ const LiquidityProvider: React.FC = () => {
           transactionHistory.complete()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
           notifyTransactionSuccess(transactionHistory)
+          setRefreshFlag(refreshFlag + 1)
         })
         .catch(() => {
           transactionHistory.fail()
@@ -200,11 +203,9 @@ const LiquidityProvider: React.FC = () => {
           notifyTransactionFailed(transactionHistory)
         })
     } catch (e) {
-      const detailMessage = e.data ? `: ${e.data.message}` : ''
-
       rejectTransaction(transactionStatusModalProps,
         setTransactionStatusModalProps,
-        `${e.message}${detailMessage}`
+        getErrorMessage(e)
       )
     }
   }
@@ -226,6 +227,7 @@ const LiquidityProvider: React.FC = () => {
           transactionHistory.complete()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
           notifyTransactionSuccess(transactionHistory)
+          setRefreshFlag(refreshFlag + 1)
         })
         .catch(() => {
           transactionHistory.fail()
@@ -233,7 +235,11 @@ const LiquidityProvider: React.FC = () => {
           notifyTransactionFailed(transactionHistory)
         })
     } catch (e) {
-      rejectTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      rejectTransaction(
+        transactionStatusModalProps,
+        setTransactionStatusModalProps,
+        getErrorMessage(e)
+      )
     }
   }
 
@@ -253,15 +259,19 @@ const LiquidityProvider: React.FC = () => {
           transactionHistory.complete()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
           notifyTransactionSuccess(transactionHistory)
+          setRefreshFlag(refreshFlag + 1)
         })
         .catch(() => {
           transactionHistory.fail()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
           notifyTransactionFailed(transactionHistory)
         })
-    } catch (error) {
-      console.log(error)
-      rejectTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+    } catch (e) {
+      rejectTransaction(
+        transactionStatusModalProps,
+        setTransactionStatusModalProps,
+        getErrorMessage(e)
+      )
     }
   }
 
@@ -305,7 +315,7 @@ const LiquidityProvider: React.FC = () => {
               confirmCallback: lock
             })
           }}>
-            <PlusOutlined className="addAmount" style={{fontSize:'1.1rem'}}/>
+            <PlusOutlined className="addAmount" style={{ fontSize: '1.1rem' }} />
           </Button>
           <Button onClick={() => {
             setAmountInputModalStatus({

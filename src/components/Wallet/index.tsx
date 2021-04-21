@@ -10,7 +10,7 @@ import { Button, Modal } from 'antd'
 import { TransactionHistory } from '@/types/TransactionHistory'
 import { mapTransactionStatusToIconAndLabel } from '@/components/TransactionStatusModal'
 import WalletSelectionModal from '@/components/Wallet/WalletSelectionModal'
-import share from '@/img/status/promptShare.png'
+import { ReactComponent as LinkIcon } from '@/img/link.svg'
 
 type CurrentAccountProps = {
   account: string
@@ -25,8 +25,6 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
   account,
   transactionHistoryList
 }) => {
-  // TODO
-  const network = 'testnet'
   const dispatch = useDispatch()
 
   const disconnect = () => {
@@ -39,10 +37,9 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
       <div className="walletModal-Title">{account}</div>
       <div className="bscScan">
         <span>View on BscScan</span>
-        <img
-          src={share}
-          style={{ cursor: 'pointer' }}
-          alt=""
+        <LinkIcon
+          fill="#63CCA9"
+          className="link-icon"
           onClick={() => window.open(`${process.env.BLOCK_EXPLORER_URL}/address/${account}`)}
         />
         <Button
@@ -55,28 +52,31 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
       </div>
       <div className="transactionContent">
         {
-          transactionHistoryList.map(tx => (
-            <div
-              key={tx.hash}
-              style={{ color: mapTransactionStatusToIconAndLabel.get(tx.status)?.color }}
-              className="transactionRecord"
-            >
-              <span className="transaction-history-string">
-                {tx.toString()}
-              </span>
-              {' '}
-              <span className="transaction-history-status">
-                {mapTransactionStatusToIconAndLabel.get(tx.status)?.icon}
-              </span>
-              {' '}
-              <img
-                src={share}
-                alt=""
-                className="transaction-history-link"
-                onClick={() => window.open(`https://${network}.bscscan.com/tx/${tx.hash}`)}
-              />
-            </div>
-          ))
+          transactionHistoryList.map(tx => {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const { color, icon } = mapTransactionStatusToIconAndLabel.get(tx.status)!
+            return (
+              <div
+                key={tx.hash}
+                style={{ color }}
+                className="transactionRecord"
+              >
+                <span className="transaction-history-string">
+                  {tx.toString()}
+                </span>
+                {' '}
+                <span className="transaction-history-status">
+                  {icon}
+                </span>
+                {' '}
+                <LinkIcon
+                  fill={color}
+                  className="transaction-history-link"
+                  onClick={() => window.open(`${process.env.BLOCK_EXPLORER_URL}/tx/${tx.hash}`)}
+                />
+              </div>
+            )
+          })
         }
       </div>
     </div>
