@@ -4,7 +4,7 @@ import {
   appendTransactionHistory, getAccount, updateTransactionHistoryStatus
 } from '@/store/wallet'
 import './index.less'
-import { Button, message, Modal } from 'antd'
+import { Button, message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { fromWei, toWei } from '@/web3/utils'
@@ -24,7 +24,8 @@ import {
 } from '@/types/TransactionHistory'
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
 import { notifyTransactionFailed, notifyTransactionSuccess } from '@/utils/TransactionNotifycation'
-import { useErrorMessage } from '@/hooks'
+import { useErrorMessage, useInitializeProvider } from '@/hooks'
+import RedeemModal, { RedeemModalStatus } from '@/pages/LiquidityProvider/RedeemModal'
 
 async function getCurrentAPR() {
   const lp_to_dows = new BigNumber('33.22443529339985')
@@ -38,43 +39,50 @@ async function getCurrentAPR() {
     .toFixed(2)} %`
 }
 
-type RedeemModalStatus = {
-  visible: boolean
-  amount: string
-  onConfirm?: () => void
-  onClose?: () => void
-}
-
-const RedeemModal: React.FC<RedeemModalStatus> = ({
-  amount,
-  visible,
-  onClose,
-  onConfirm
-}) => {
-  return (
-    <Modal
-      title="Redeem Reward"
-      visible={visible}
-      okText="Confirm"
-      onOk={onConfirm}
-      onCancel={onClose}
-      footer=""
-    >
-      <div className="redeemContent">
-        <img src={dowsIcon} className="redeem-modal-dows-icon" alt="" />
-        <span className="redeem-modal-text">
-          {`${amount} DOWS Available`}
-        </span>
+const EmptyPool: React.FC = () => (
+  <div className="liquidity">
+    <div className="uniswap">
+      <img src={uniswap} alt="" />
+      <span>Uniswap</span>
+    </div>
+    <div className="info">
+      <div className="info-container-title">DOWS/ETH</div>
+      <img src={eth} alt="" />
+      <img className="infoContent-dows" src={dowsIcon} alt="" />
+      <div className="info-container">
+        <div className="item">
+          <div className="title">LP Tokens to Lock</div>
+          <div className="value">-</div>
+        </div>
+        <div className="item">
+          <div className="title">Current APR</div>
+          <div className="value">-</div>
+        </div>
+        <div className="item">
+          <div className="title">Your LP Locked</div>
+          <div className="value">-</div>
+        </div>
+        <div className="item">
+          <div className="title">DOWS Earned</div>
+          <div className="value">-</div>
+        </div>
       </div>
-      <div className="redeemFoot">
-        <Button key="back" className="onClose" onClick={onClose}>Cancel</Button>
-        <Button key="redeem" className="redeem" onClick={onConfirm}>Redeem</Button>
+      <div className="button-container">
+        <Button disabled={true}>
+          <PlusOutlined className="addAmount" style={{ fontSize: '1.1rem' }} />
+        </Button>
+        <Button disabled={true}>
+          Unlock
+        </Button>
+        <Button disabled={true}>
+          Redeem
+        </Button>
       </div>
-    </Modal>
-  )
-}
+    </div>
+  </div>
+)
 
-const LiquidityProvider: React.FC = () => {
+const Pool: React.FC = () => {
   const [refreshFlag, setRefreshFlag] = useState(0)
   const account = useSelector(getAccount)
   const dowsPrice = new BigNumber((useDowsPriceQuery().data as string))
@@ -175,13 +183,13 @@ const LiquidityProvider: React.FC = () => {
     try {
       beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
       const approveResult: TransactionResponse = await dowsJSConnector.dowsJs.LpERC20Token.approve(contractAddress, amountInWei)
+      closeAmountInputModal()
       submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
       await approveResult.wait()
 
       beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
       const depositResult = await dowsJSConnector.dowsJs.Farm.deposit(0, amountInWei)
-      closeAmountInputModal()
       submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
       const transactionHistory: TransactionHistory = new LockLPToken(depositResult.hash, amount, TransactionStatus.Submitted)
@@ -281,7 +289,7 @@ const LiquidityProvider: React.FC = () => {
       <div className="info">
         <div className="info-container-title">DOWS/ETH</div>
         <img src={eth} alt="" />
-        <img className="infoContent-dows" src={dowsIcon} alt=""/>
+        <img className="infoContent-dows" src={dowsIcon} alt="" />
         <div className="info-container">
           <div className="item">
             <div className="title">LP Tokens to Lock</div>
@@ -327,15 +335,16 @@ const LiquidityProvider: React.FC = () => {
           }}>
             Unlock
           </Button>
-          <Button onClick={() => {
-            setRedeemModalStatus({
-              ...redeemModalStatus,
-              amount: dowsEarned,
-              visible: true,
-              onConfirm: redeem,
-              onClose: closeRedeemModal
-            })
-          }}>
+          <Button
+            onClick={() => {
+              setRedeemModalStatus({
+                ...redeemModalStatus,
+                amount: dowsEarned,
+                visible: true,
+                onConfirm: redeem,
+                onClose: closeRedeemModal
+              })
+            }}>
             Redeem
           </Button>
         </div>
@@ -347,6 +356,17 @@ const LiquidityProvider: React.FC = () => {
         onClose={closeTransactionStatusModal}
       />
     </div>
+  )
+}
+
+const LiquidityProvider: React.FC = () => {
+  const providerInitialized = useInitializeProvider()
+
+  return (
+    <>
+      {providerInitialized && <Pool />}
+      {!providerInitialized && <EmptyPool />}
+    </>
   )
 }
 

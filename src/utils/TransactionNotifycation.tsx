@@ -16,7 +16,6 @@ export function notifyTransactionSuccess(transactionHistory: TransactionHistory)
 
   notification.open({
     message: '',
-    duration: null,
     className: 'transaction-success',
     closeIcon: closeIcon(color),
     description: (
@@ -41,7 +40,6 @@ export function notifyTransactionFailed(transactionHistory: TransactionHistory):
 
   notification.open({
     message: '',
-    duration: null,
     className: 'transaction-failed',
     closeIcon: closeIcon(color),
     description: (

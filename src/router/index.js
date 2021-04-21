@@ -2,7 +2,7 @@ import Welcome from '@/pages/Welcome'
 import Personal from '@/pages/Personal'
 import Synthesis from '@/pages/Synthesis'
 import Transaction from '@/pages/Transaction'
-import LiquidityProvider from '@/pages/LiquidityProvider'
+import Pool from '@/pages/LiquidityProvider'
 import Burn from '@/pages/Burn'
 import Reward from '@/pages/Reward'
 import FlowStep from '@/pages/Liquidity/FlowStep'
@@ -97,7 +97,7 @@ const routers = [
   {
     path: '/liquidity',
     key: 'liquidity',
-    component: LiquidityProvider,
+    component: Pool,
     image: comment,
     backgroundImage: LiquidityImage
   },

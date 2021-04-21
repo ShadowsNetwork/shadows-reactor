@@ -14,7 +14,7 @@ export default defineConfig({
     compact: true
   },
   locale: {
-    default: 'zh-CN',
+    default: 'en',
     antd: false,
     title: false,
     baseNavigator: true,
