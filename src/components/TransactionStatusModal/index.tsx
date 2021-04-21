@@ -7,7 +7,7 @@ import {
 import './index.less'
 import vector from '@/img/status/Vector.png'
 
-export const mapTransactionStatusToIconAndLabel = new Map([
+const mapTransactionStatusToIconAndLabel = new Map([
   [TransactionStatus.WaitForConfirmation.valueOf(), {
     icon: <LoadingOutlined />,
     label: 'Wait For Confirmation',

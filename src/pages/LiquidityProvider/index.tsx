@@ -184,7 +184,7 @@ const LiquidityProvider: React.FC = () => {
       closeAmountInputModal()
       submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
-      const transactionHistory: TransactionHistory = new LockLPToken(depositResult.hash, amount)
+      const transactionHistory: TransactionHistory = new LockLPToken(depositResult.hash, amount, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
 
       depositResult.wait()
@@ -216,7 +216,7 @@ const LiquidityProvider: React.FC = () => {
       closeAmountInputModal()
       submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
-      const transactionHistory: TransactionHistory = new UnlockLPToken(withdrawResult.hash, amount)
+      const transactionHistory: TransactionHistory = new UnlockLPToken(withdrawResult.hash, amount, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
 
       withdrawResult.wait()

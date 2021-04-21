@@ -7,10 +7,10 @@ import {
 import './index.less'
 import { Button, Modal } from 'antd'
 import { TransactionHistory, TransactionStatus } from '@/types/TransactionHistory'
-import { mapTransactionStatusToIconAndLabel } from '@/components/TransactionStatusModal'
 import WalletSelectionModal from '@/components/Wallet/WalletSelectionModal'
 import { ReactComponent as LinkIcon } from '@/img/link.svg'
 import Jazzicon from 'jazzicon'
+import { CheckOutlined, CloseOutlined, LoadingOutlined } from '@ant-design/icons'
 
 type CurrentAccountProps = {
   account: string
@@ -20,6 +20,22 @@ type WalletModalContentProps = {
   account: string,
   transactionHistoryList: TransactionHistory[]
 }
+
+const mapTransactionStatusToIconAndLabel = new Map([
+  [TransactionStatus.Submitted.valueOf(), {
+    icon: <LoadingOutlined />,
+    label: 'Submitted',
+    color: '#63cca9'
+  }],
+  [TransactionStatus.Completed.valueOf(), {
+    icon: <CheckOutlined />,
+    color: '#63cca9'
+  }],
+  [TransactionStatus.Failed.valueOf(), {
+    icon: <CloseOutlined />,
+    color: '#de350b'
+  }]
+])
 
 const WalletModalContent: React.FC<WalletModalContentProps> = ({
   account,
