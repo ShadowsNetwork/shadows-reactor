@@ -20,10 +20,10 @@ const WalletCard: React.FC<WalletCardProps> = ({ wallet }) => {
   return (
     <div className="walletSelect">
       <div className="walletItem" onClick={() => handleConnect(dispatch)}>
-        <img src={icon} alt="" />
         <span className="wallet-name">
           {name}
         </span>
+        <img className="SelectImg" src={icon} alt="" />
       </div>
     </div>
   )
@@ -34,6 +34,7 @@ const WalletSelectionModal: React.FC<WalletSelectionModalProps> = ({
   onClose
 }) => (
   <Modal
+    title="Connect to wallet"
     visible={visible}
     onCancel={onClose}
     footer=""

@@ -22,8 +22,8 @@ const DowsInfo: React.FC = () => {
         </div>
       </div>
       <div>
-        <img src={locationIcon} className="icon" alt="" />
-        <img src={twitterIcon} className="icon" alt="" />
+        <a href={'https://t.me/Shadows_defi'} target="_blank" rel="noreferrer"><img src={locationIcon} className="icon" alt="" /></a>
+        <a href={'https://twitter.com/shadows_defi'} target="_blank" rel="noreferrer"><img src={twitterIcon} className="icon" alt="" /></a>
       </div>
     </div>
   )

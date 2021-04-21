@@ -168,12 +168,11 @@ const ConnectToWallet = () => {
 
   return (
     <div className="toAmount">
-      <span onClick={() => setModalVisible(true)}>
+      <span onClick={() => setModalVisible(true)} className="toAmountText">
         {t('wallet.connectToWallet')}
       </span>
       <WalletSelectionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
     </div>
-
   )
 }
 
