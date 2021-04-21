@@ -39,7 +39,12 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
       <div className="walletModal-Title">{account}</div>
       <div className="bscScan">
         <span>View on BscScan</span>
-        <img src={share} alt="" />
+        <img
+          src={share}
+          style={{ cursor: 'pointer' }}
+          alt=""
+          onClick={() => window.open(`${process.env.BLOCK_EXPLORER_URL}/address/${account}`)}
+        />
         <Button
           type="text"
           onClick={disconnect}
