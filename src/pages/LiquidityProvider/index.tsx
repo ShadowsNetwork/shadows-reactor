@@ -281,6 +281,7 @@ const LiquidityProvider: React.FC = () => {
       <div className="info">
         <div className="info-container-title">DOWS/ETH</div>
         <img src={eth} alt="" />
+        <img className="infoContent-dows" src={dowsIcon} alt=""/>
         <div className="info-container">
           <div className="item">
             <div className="title">LP Tokens to Lock</div>
