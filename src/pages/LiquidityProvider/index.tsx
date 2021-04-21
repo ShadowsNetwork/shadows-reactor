@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAccount, updateTransactionHistoryStatus } from '@/store/wallet'
+import {
+  appendTransactionHistory, getAccount, updateTransactionHistoryStatus
+} from '@/store/wallet'
 import './index.less'
 import { Button, message, Modal } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
@@ -15,18 +17,13 @@ import { numberWithCommas } from '@/utils'
 import dowsIcon from '@/img/dows-info/dows.png'
 import TransactionStatusModal, { TransactionStatusModalProps } from '@/components/TransactionStatusModal'
 import {
-  beginTransaction,
-  rejectTransaction,
-  submitTransaction
+  beginTransaction, rejectTransaction, submitTransaction
 } from '@/components/TransactionStatusModal/event'
 import {
-  LockLPToken, RedeemDows,
-  TransactionHistory,
-  UnlockLPToken
+  LockLPToken, RedeemDows, TransactionHistory, TransactionStatus, UnlockLPToken
 } from '@/types/TransactionHistory'
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
 import { notifyTransactionFailed, notifyTransactionSuccess } from '@/utils/TransactionNotifycation'
-import { appendTransactionHistory } from '@/store/wallet'
 import { useErrorMessage } from '@/hooks'
 
 async function getCurrentAPR() {
@@ -251,7 +248,7 @@ const LiquidityProvider: React.FC = () => {
       submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
       closeRedeemModal()
 
-      const transactionHistory: TransactionHistory = new RedeemDows(withdrawResult.hash, dowsEarned)
+      const transactionHistory: TransactionHistory = new RedeemDows(withdrawResult.hash, dowsEarned, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
 
       withdrawResult.wait()

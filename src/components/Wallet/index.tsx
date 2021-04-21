@@ -1,13 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   getAccount, getTransactionHistoryList, setAccount, setSelectedWallet
 } from '@/store/wallet'
-import { PaperClipOutlined } from '@ant-design/icons'
 import './index.less'
 import { Button, Modal } from 'antd'
-import { TransactionHistory } from '@/types/TransactionHistory'
+import { TransactionHistory, TransactionStatus } from '@/types/TransactionHistory'
 import { mapTransactionStatusToIconAndLabel } from '@/components/TransactionStatusModal'
 import WalletSelectionModal from '@/components/Wallet/WalletSelectionModal'
 import { ReactComponent as LinkIcon } from '@/img/link.svg'
@@ -84,20 +83,51 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
   )
 }
 
+const MetamaskIcon: React.FC = () => {
+  const ref = useRef<HTMLDivElement>()
+  const account = useSelector(getAccount)
+
+  useEffect(() => {
+    if (account && ref.current) {
+      ref.current.innerHTML = ''
+      ref.current.appendChild(Jazzicon(26, parseInt(account.slice(2, 10), 26)))
+    }
+  }, [account])
+
+  return (
+    <div>
+      <div className="userIcon" ref={ref as any} />
+    </div>
+  )
+}
+
 const CurrentAccount: React.FC<CurrentAccountProps> = ({ account }) => {
   const transactionList = useSelector(getTransactionHistoryList)
 
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [pendingTransactionCount, setPendingTransactionCount] = useState<number>(0)
+
+  useEffect(() => {
+    setPendingTransactionCount(transactionList.filter(t => t.status === TransactionStatus.Submitted).length)
+  }, [transactionList, pendingTransactionCount])
 
   const closeModal = () => {
     setIsModalVisible(false)
   }
 
+
   return (
     <div className="current-account">
+      <MetamaskIcon />
       <span onClick={() => setIsModalVisible(true)}>
         {`${account.substr(0, 5)}...${account.substr(-4, 4)}`}
       </span>
+      {
+        pendingTransactionCount !== 0 &&
+        <div className="pending-transaction-count">
+          {pendingTransactionCount}
+        </div>
+      }
       <Modal
         style={{ top: 20 }}
         closable={false}
@@ -130,34 +160,14 @@ const ConnectToWallet = () => {
 
   )
 }
-const MetamaskIcon: React.FC = () => {
-  const ref = useRef<HTMLDivElement>()
-  const account = useSelector(getAccount)
 
-  useEffect(() => {
-    if (account && ref.current) {
-      ref.current.innerHTML = ''
-      ref.current.appendChild(Jazzicon(26, parseInt(account.slice(2, 10), 26)))
-    }
-  }, [account])
-
-  return (
-    <div>
-      <div className="userIcon" ref={ref as any} />
-    </div>
-  )
-}
 const Wallet: React.FC = () => {
   const account = useSelector(getAccount)
 
   return (
     <div className="wallet">
-      <MetamaskIcon/>
       {!account && <ConnectToWallet />}
       {!!account && <CurrentAccount account={account} />}
-      <div className="pendingNum">
-          1
-      </div>
     </div>
   )
 }
