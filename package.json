@@ -42,6 +42,7 @@
     "i18next": "^19.8.9",
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.1.0",
+    "jazzicon": "^1.5.0",
     "lodash": "^4.17.20",
     "react": "17.x",
     "react-dom": "17.x",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -11,6 +11,7 @@ import { TransactionHistory } from '@/types/TransactionHistory'
 import { mapTransactionStatusToIconAndLabel } from '@/components/TransactionStatusModal'
 import WalletSelectionModal from '@/components/Wallet/WalletSelectionModal'
 import { ReactComponent as LinkIcon } from '@/img/link.svg'
+import Jazzicon from 'jazzicon'
 
 type CurrentAccountProps = {
   account: string
@@ -129,13 +130,29 @@ const ConnectToWallet = () => {
 
   )
 }
+const MetamaskIcon: React.FC = () => {
+  const ref = useRef<HTMLDivElement>()
+  const account = useSelector(getAccount)
 
+  useEffect(() => {
+    if (account && ref.current) {
+      ref.current.innerHTML = ''
+      ref.current.appendChild(Jazzicon(26, parseInt(account.slice(2, 10), 26)))
+    }
+  }, [account])
+
+  return (
+    <div>
+      <div className="userIcon" ref={ref as any} />
+    </div>
+  )
+}
 const Wallet: React.FC = () => {
   const account = useSelector(getAccount)
 
   return (
     <div className="wallet">
-      <PaperClipOutlined className="icon" />
+      <MetamaskIcon/>
       {!account && <ConnectToWallet />}
       {!!account && <CurrentAccount account={account} />}
     </div>
