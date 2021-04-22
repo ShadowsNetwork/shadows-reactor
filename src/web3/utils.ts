@@ -7,8 +7,12 @@ export function toBigNumber(value: string | number): BigNumber {
   return new BigNumber(value)
 }
 
-export function fromWei(value: string | number, decimalPlaces = 8): string {
+export function weiToBigNumber(value: string | number, decimalPlaces = 8): BigNumber {
   return new BigNumber(web3Utils.fromWei(value.toString())).dp(decimalPlaces)
+}
+
+export function weiToString(value: string | number, decimalPlaces = 8): string {
+  return weiToBigNumber(value, decimalPlaces)
     .toString()
 }
 

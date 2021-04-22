@@ -76,18 +76,22 @@ const EmptyPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency
 const Pool: React.FC<PoolConfig> = ({
   poolNumber,
   poolName,
+  poolType,
   leftCurrency,
   rightCurrency,
   lpTokenContractAddress,
   farmContractAddress
 }) => {
+  const unit = (leftCurrency ? `${leftCurrency.name}/` : '') + rightCurrency.name
+
   const [refreshFlag, setRefreshFlag] = useState(0)
 
   const [amountInputModalStatus, setAmountInputModalStatus] = useState<LpAmountInputModalStatus>({
     visible: false,
     title: '',
     confirmCallback: undefined,
-    maxAvailable: ''
+    maxAvailable: '',
+    unit
   })
 
   const [redeemModalStatus, setRedeemModalStatus] = useState<RedeemModalStatus>({
@@ -112,12 +116,14 @@ const Pool: React.FC<PoolConfig> = ({
   const {
     lpBalance,
     lpBalanceInUSD,
-    currentAPR,
+    APY,
     userLockedLp,
     userLockedLpInUSD,
     dowsEarned,
     allowanceEnough
-  } = usePoolData({ lpTokenContractAddress, farmContractAddress, poolNumber, refreshFlag })
+  } = usePoolData({
+    lpTokenContractAddress, farmContractAddress, poolNumber, poolType, refreshFlag
+  })
 
   const closeAmountInputModal = () => {
     setAmountInputModalStatus({
@@ -279,7 +285,7 @@ const Pool: React.FC<PoolConfig> = ({
       </div>
       <div className="pool-main">
         <div className="info-container-title">
-          {leftCurrency && `${leftCurrency.name}/`}{rightCurrency.name}
+          {unit}
         </div>
         <img src={rightCurrency.icon} alt="" />
         <img className="infoContent-dows" src={leftCurrency?.icon} alt="" />
@@ -291,7 +297,7 @@ const Pool: React.FC<PoolConfig> = ({
           </div>
           <div className="item">
             <div className="title">APY</div>
-            <div className="value">{numberWithCommas(currentAPR)}</div>
+            <div className="value">{numberWithCommas(APY)}%</div>
           </div>
           <div className="item">
             <div className="title">Your LP Locked</div>

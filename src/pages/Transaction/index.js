@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
 import { LoadingOutlined } from '@ant-design/icons'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { bytesToString, fromWei, toBigNumber, toByte32, toWei } from '@/web3/utils'
+import { bytesToString, weiToString, toBigNumber, toByte32, toWei } from '@/web3/utils'
 import {
   initTransaction,
   onTransactionConfirmed,
@@ -151,7 +151,7 @@ function Transaction() {
     if (sourceCurrencyKey) {
       setSynthBalance(null)
       const balance = await dowsJSConnector.dowsJs.Synth[sourceCurrencyKey].balanceOf(account)
-      setSynthBalance(fromWei(balance))
+      setSynthBalance(weiToString(balance))
     }
   }, [account, sourceCurrencyKey])
 
@@ -182,7 +182,7 @@ function Transaction() {
   const fetchSourceRate = useCallback(async () => {
     setInputValue('')
     setOutputValue('')
-    const sourceRateForCurrency = fromWei(await dowsJSConnector.dowsJs.ExchangeRates.rateForCurrency(toByte32(sourceCurrencyKey)))
+    const sourceRateForCurrency = weiToString(await dowsJSConnector.dowsJs.ExchangeRates.rateForCurrency(toByte32(sourceCurrencyKey)))
     setSourceRate(sourceRateForCurrency)
   }, [sourceCurrencyKey])
 
@@ -194,7 +194,7 @@ function Transaction() {
     if (outputValue && inputValue) {
       setOutputLoading(true)
     }
-    const destinationRateForCurrency = fromWei(await dowsJSConnector.dowsJs.ExchangeRates.rateForCurrency(toByte32(destinationCurrencyKey)))
+    const destinationRateForCurrency = weiToString(await dowsJSConnector.dowsJs.ExchangeRates.rateForCurrency(toByte32(destinationCurrencyKey)))
     setDestinationRate(destinationRateForCurrency)
   }, [destinationCurrencyKey])
 

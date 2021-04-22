@@ -36,6 +36,10 @@ class Farm extends AbstractContractCaller {
   async pending(farmAddress, pid, account) {
     return await new Contract(farmAddress, this.abi, this.signer || this.provider).pending(pid, account)
   }
+
+  async rewardPerBlock(farmAddress) {
+    return await new Contract(farmAddress, this.abi, this.signer || this.provider).rewardPerBlock()
+  }
 }
 
 export default Farm

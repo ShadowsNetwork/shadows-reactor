@@ -11,10 +11,12 @@ export type LpAmountInputModalStatus = {
   confirmCallback?: (_: string) => void,
   cancelCallback?: () => void
   maxAvailable: string,
+  unit: string
 }
 
 const LpAmountInputModal: React.FC<LpAmountInputModalStatus> = ({
   title,
+  unit,
   visible,
   maxAvailable,
   confirmCallback,
@@ -49,7 +51,7 @@ const LpAmountInputModal: React.FC<LpAmountInputModalStatus> = ({
       onCancel={cancelCallback}
       footer={null}
     >
-      <span className="available">{numberWithCommas(maxAvailable)} LP Tokens Available</span>
+      <span className="available">{numberWithCommas(maxAvailable)} {unit} Available</span>
       <span className="input-dows">
         <LimitableNumberInput
           min={0}
@@ -58,7 +60,7 @@ const LpAmountInputModal: React.FC<LpAmountInputModalStatus> = ({
           inputValueSetter={setInputValue}
           allowClear={true}
         />
-        <span className="dows">DOWS</span>
+        <span className="dows">{unit}</span>
         <Button onClick={() => setInputValue(maxAvailable)}>MAX</Button>
       </span>
       <div className="stakeButton">

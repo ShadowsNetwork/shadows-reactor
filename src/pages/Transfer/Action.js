@@ -5,7 +5,7 @@ import GasPrice from '@/components/GasPrice'
 import '../../styles/dropDown.css'
 import './index.less'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { bytesToString, fromWei, toWei } from '@/web3/utils'
+import { bytesToString, weiToString, toWei } from '@/web3/utils'
 import { LoadingOutlined } from '@ant-design/icons'
 import TransactionStatus from '@/components/TransactionStatus'
 import {
@@ -76,7 +76,7 @@ function Action() {
     setBalance(null)
     if (selectedCurrency) {
       const balanceOf = await dowsJSConnector.dowsJs.Synth[selectedCurrency].balanceOf(account)
-      setBalance(fromWei(balanceOf))
+      setBalance(weiToString(balanceOf))
     }
   }, [account, selectedCurrency])
 

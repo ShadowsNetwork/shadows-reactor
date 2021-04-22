@@ -10,6 +10,7 @@ import { WalletConnectWeb3Provider } from './providers/WalletConnect'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { BscWeb3Provider } from '@/web3/providers/BSC'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
+import ContractSettings from '@/ShadowsJs/ContractSettings'
 
 export type WalletNames = 'Metamask' | 'BSC' | 'WalletConnect'
 
@@ -67,11 +68,11 @@ const connectToWalletConnect = async (dispatch: Dispatch<any>): Promise<void> =>
       dispatch(setAccount(account))
       dispatch(setSelectedWallet('WalletConnect'))
 
-      dowsJSConnector.setContractSettings({
-        networkId: 97,
-        provider: web3Provider,
-        signer: web3Provider.getSigner ? web3Provider.getSigner() : null
-      })
+      dowsJSConnector.setContractSettings(new ContractSettings(
+        web3Provider,
+        web3Provider.getSigner ? web3Provider.getSigner() : null,
+        97,
+      ))
     })
     .catch(error => {
       console.log(error)

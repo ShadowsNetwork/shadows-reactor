@@ -1,7 +1,7 @@
 import { PoolConfig } from '@/types/LiquidityProvider'
 
-import bnb from '@/img/liquidityProvider/bnb.png'
-import dowsIcon from '@/img/dows-info/dows.png'
+import BNBIcon from '@/img/liquidityProvider/bnb.png'
+import DOWSIcon from '@/img/dows-info/dows.png'
 
 type Config = {
   liquidityProvider: {
@@ -17,24 +17,26 @@ const config: Config = {
         poolName: 'Pancake Swap LP',
         leftCurrency: {
           name: 'DOWS',
-          icon: dowsIcon
+          icon: DOWSIcon
         },
         rightCurrency: {
           name: 'BNB',
-          icon: bnb
+          icon: BNBIcon
         },
         lpTokenContractAddress: '0xA327906d3407e1ba1276eB1cBEeaBBF5F33cCb3F',
         farmContractAddress: '0xE86F343E3F5f988eDc6007494127A8B7c7F4E61c',
+        poolType: 'pair'
       },
       {
         poolNumber: 0,
         poolName: 'Single Token Yield',
         rightCurrency: {
           name: 'DOWS',
-          icon: dowsIcon
+          icon: DOWSIcon
         },
         lpTokenContractAddress: '0x40D34A92435c7699E63C20A79F95eE3b226b67f6',
         farmContractAddress: '0x5FE75A88999b8b58f98bF458c8252209CA1f332d',
+        poolType: 'single'
       }
     ]
   }

@@ -44,8 +44,8 @@ export const routerLabelMapper = {
 const routers = [
   /** index page */
   {
-    path: '/',
-    key: 'index',
+    path: '/welcome',
+    key: 'welcome',
     component: Welcome,
     hide: true,
     backgroundImage: WelcomeImg

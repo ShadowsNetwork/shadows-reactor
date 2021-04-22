@@ -6,11 +6,17 @@ import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 
 import { providers } from 'ethers'
 import { getWeb3ProviderByWallet, WalletNames } from '@/web3/wallets'
+import ContractSettings from '@/ShadowsJs/ContractSettings'
 
 export function useLocation(): Location {
   const [location, setLocation] = useState(window.location)
 
   const listenToPopstate = () => {
+    const { hash } = window.location
+    console.log(hash)
+    if (hash === '#/') {
+      window.location.hash = '#/liquidity'
+    }
     setLocation(window.location)
   }
 
@@ -64,7 +70,7 @@ export function useDynamicBackgroundImage(): string {
 
   useEffect(() => {
     const currentRouter = routers.filter(router => router.path === path)[0]
-    setBackground(currentRouter.backgroundImage)
+    setBackground(currentRouter?.backgroundImage)
   }, [hash])
 
   return background
@@ -89,6 +95,9 @@ export function useInitializeProvider(): boolean {
         return
       } else if (selectedWallet === 'Metamask' || selectedWallet === 'BSC') {
         // @ts-ignore
+        await provider.provider.enable()
+
+        // @ts-ignore
         provider.provider.on('accountsChanged', async (newAccount, oldAccount) => {
           console.log('on accounts changed: ', newAccount, oldAccount)
           if (!newAccount.length) {
@@ -111,11 +120,11 @@ export function useInitializeProvider(): boolean {
     }
 
     // console.log('web3 provider and signer: ', provider, provider.getSigner())
-    dowsJSConnector.setContractSettings({
-      networkId: 97,
-      provider: provider,
-      signer: provider.getSigner ? provider.getSigner() : null
-    })
+    dowsJSConnector.setContractSettings(new ContractSettings(
+      provider,
+      provider.getSigner ? provider.getSigner() : null,
+      97
+    ))
     setInitialized(true)
   }, [selectedWallet])
 

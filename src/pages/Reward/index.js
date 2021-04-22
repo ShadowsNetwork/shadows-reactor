@@ -5,7 +5,7 @@ import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { fromWei, toBigNumber } from '@/web3/utils'
+import { weiToString, toBigNumber } from '@/web3/utils'
 import { LoadingOutlined } from '@ant-design/icons'
 import TransactionStatus from '@/components/TransactionStatus'
 import {
@@ -39,8 +39,8 @@ function Reward() {
     setTradingReward(null)
     setSyntheticReward(null)
     const [tradingRewardFee, syntheticRewardFee] = await dowsJSConnector.dowsJs.FeePool.feesAvailable(account)
-    setTradingReward(fromWei(tradingRewardFee))
-    setSyntheticReward(fromWei(syntheticRewardFee))
+    setTradingReward(weiToString(tradingRewardFee))
+    setSyntheticReward(weiToString(syntheticRewardFee))
   }, [])
   useEffect(() => {
     fetchClaimFees()

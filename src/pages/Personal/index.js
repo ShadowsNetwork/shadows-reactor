@@ -4,7 +4,7 @@ import { Progress } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { LoadingOutlined } from '@ant-design/icons'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { bytesToString, fromWei } from '@/web3/utils'
+import { bytesToString, weiToString } from '@/web3/utils'
 import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
 
@@ -25,8 +25,8 @@ function Personal() {
       dowsJSConnector.dowsJs.ShadowsState.issuanceRatio()
     ])
 
-    setMyRatio(fromWei(collateralisationRatio))
-    setTargetRatio(fromWei(issuanceRatio))
+    setMyRatio(weiToString(collateralisationRatio))
+    setTargetRatio(weiToString(issuanceRatio))
   }, [account])
 
   useEffect(() => {
@@ -51,9 +51,9 @@ function Personal() {
       dowsJSConnector.dowsJs.Shadows.balanceOf(account),
       dowsJSConnector.dowsJs.Shadows.transferableShadows(account),
     ])
-    setDows(fromWei(dowsBalance))
-    setTransferableDows(fromWei(transferableShadows))
-    setLockedShadows(fromWei(dowsBalance.sub(transferableShadows)))
+    setDows(weiToString(dowsBalance))
+    setTransferableDows(weiToString(transferableShadows))
+    setLockedShadows(weiToString(dowsBalance.sub(transferableShadows)))
   }, [account])
 
   useEffect(() => {
@@ -68,7 +68,7 @@ function Personal() {
       )
       const currencyToBalance = balanceList.map((balance, index) => ({
         currency: availableCurrencies[index],
-        balance: fromWei(balance)
+        balance: weiToString(balance)
       }))
       currencyToBalance.sort((b, a) => a.balance - b.balance)
       setCurrencyToBalanceList(currencyToBalance.slice(0, 4))
