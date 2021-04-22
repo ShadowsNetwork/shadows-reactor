@@ -40,12 +40,12 @@ const EmptyPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency
       <img className="infoContent-dows" src={leftCurrency?.icon} alt="" />
       <div className="info-container">
         <div className="item">
-          <div className="title">LP Tokens to Lock</div>
+          <div className="title">Total LP Locked</div>
           <div className="value">-</div>
           <div className="additional">-</div>
         </div>
         <div className="item">
-          <div className="title">Current APR</div>
+          <div className="title">APY</div>
           <div className="value">-</div>
         </div>
         <div className="item">
@@ -285,12 +285,12 @@ const Pool: React.FC<PoolConfig> = ({
         <img className="infoContent-dows" src={leftCurrency?.icon} alt="" />
         <div className="info-container">
           <div className="item">
-            <div className="title">LP Tokens to Lock</div>
+            <div className="title">Total LP Locked</div>
             <div className="value">{numberWithCommas(lpBalance)}</div>
             <div className="additional">${numberWithCommas(lpBalanceInUSD)}</div>
           </div>
           <div className="item">
-            <div className="title">Current APR</div>
+            <div className="title">APY</div>
             <div className="value">{numberWithCommas(currentAPR)}</div>
           </div>
           <div className="item">

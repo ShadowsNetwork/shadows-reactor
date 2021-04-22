@@ -1,6 +1,6 @@
 import { PoolConfig } from '@/types/LiquidityProvider'
 
-import eth from '@/img/liquidityProvider/eth.png'
+import bnb from '@/img/liquidityProvider/bnb.png'
 import dowsIcon from '@/img/dows-info/dows.png'
 
 type Config = {
@@ -20,15 +20,15 @@ const config: Config = {
           icon: dowsIcon
         },
         rightCurrency: {
-          name: 'ETH',
-          icon: eth
+          name: 'BNB',
+          icon: bnb
         },
         lpTokenContractAddress: '0xA327906d3407e1ba1276eB1cBEeaBBF5F33cCb3F',
         farmContractAddress: '0xE86F343E3F5f988eDc6007494127A8B7c7F4E61c',
       },
       {
         poolNumber: 0,
-        poolName: 'Pancake Swap LP',
+        poolName: 'Single Token Yield',
         rightCurrency: {
           name: 'DOWS',
           icon: dowsIcon

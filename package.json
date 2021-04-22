@@ -38,6 +38,7 @@
     "ethereumjs-tx": "^2.1.2",
     "ethers": "^5.0.31",
     "file-system": "^2.2.2",
+    "filesize": "^6.3.0",
     "http-proxy-middleware": "^1.0.6",
     "i18next": "^19.8.9",
     "i18next-browser-languagedetector": "^6.0.1",
