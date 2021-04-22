@@ -10,7 +10,7 @@ import { TransactionHistory, TransactionStatus } from '@/types/TransactionHistor
 import WalletSelectionModal from '@/components/Wallet/WalletSelectionModal'
 import { ReactComponent as LinkIcon } from '@/img/link.svg'
 import Jazzicon from 'jazzicon'
-import { CheckOutlined, CloseOutlined, LoadingOutlined } from '@ant-design/icons'
+import { CloseOutlined, LoadingOutlined } from '@ant-design/icons'
 
 type CurrentAccountProps = {
   account: string
@@ -130,7 +130,6 @@ const CurrentAccount: React.FC<CurrentAccountProps> = ({ account }) => {
   const closeModal = () => {
     setIsModalVisible(false)
   }
-
 
   return (
     <div className="current-account">

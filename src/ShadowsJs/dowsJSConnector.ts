@@ -1,7 +1,8 @@
 import ShadowsJS from '@/ShadowsJs/index'
-// import { providers } from 'ethers'
-// import { INFURA_PROJECT_ID, NETWORK_NAMES, SUPPORTED_WALLETS_MAP } from '@/ShadowsJs/networkHelper'
-/* import {
+import ContractSettings from '@/ShadowsJs/ContractSettings'
+/* import { providers } from 'ethers'
+ import { INFURA_PROJECT_ID, NETWORK_NAMES, SUPPORTED_WALLETS_MAP } from '@/ShadowsJs/networkHelper'
+ import {
   getEthereumNetwork,
   INFURA_JSON_RPC_URLS,
   SUPPORTED_WALLETS_MAP,
@@ -28,19 +29,32 @@ import {
   iBtc2Rewards,
 } from './contracts' */
 
-const dowsJSConnector = {
+type DowsJSConnector = {
+  initialized: boolean,
+  signers: unknown,
+  dowsJs: ShadowsJS,
+  synths?: unknown,
+  signer?: unknown,
+  provider?: unknown,
+  web3Utils?: unknown,
+  ethersUtils?: unknown,
+  setContractSettings: (_: ContractSettings) => void
+}
+
+const dowsJSConnector: DowsJSConnector = {
   initialized: false,
   signers: ShadowsJS.signers,
-  dowsJs: null,
+  dowsJs: new ShadowsJS(),
+
   setContractSettings({ provider, signer, networkId }) {
     this.initialized = true
-    this.dowsJs = new ShadowsJS({ provider, signer, networkId })
-    this.synths = this.dowsJs.contractSettings.synths
-    this.signer = this.dowsJs.contractSettings.signer
-    this.provider = this.dowsJs.contractSettings.provider
-    this.web3Utils = this.dowsJs.utils
-    this.ethersUtils = this.dowsJs.ethers.utils
-  },
+    this.dowsJs = new ShadowsJS(new ContractSettings(provider, signer, networkId))
+    this.synths = this.dowsJs?.contractSettings.synths
+    this.signer = this.dowsJs?.contractSettings.signer
+    this.provider = this.dowsJs?.contractSettings.provider
+    this.web3Utils = this.dowsJs?.utils
+    this.ethersUtils = this.dowsJs?.ethers.utils
+  }
 }
 
 /* const connectToMetamask = async (networkId, networkName) => {
@@ -212,28 +226,28 @@ const dowsJSConnector = {
   return {}
 } */
 
-export const setSigner = ({
+/*export const setSigner = ({
   // type,
   networkId,
-  signer,
+  signer
   // derivationPath,
   // networkName,
 }) => {
-  /* const signer = new dowsJSConnector.providers[type](
+  /!* const signer = new dowsJSConnector.providers[type](
     getSignerConfig({
       type,
       networkId,
       derivationPath,
       networkName,
     }),
-  ) */
+  ) *!/
 
   dowsJSConnector.setContractSettings({
     networkId,
     signer,
-    provider: signer.provider,
+    provider: signer.provider
   })
-}
+}*/
 
 /*
 

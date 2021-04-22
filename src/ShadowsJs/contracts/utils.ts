@@ -1,3 +1,5 @@
+import { JsonFragment } from '@ethersproject/abi'
+
 type Target = {
   name: string;
   address: string;
@@ -8,7 +10,7 @@ type Target = {
   network: string;
 }
 
-type Abi = {
+/*type Abi = {
   constant: boolean,
   inputs: unknown[],
   name: string,
@@ -17,11 +19,11 @@ type Abi = {
   stateMutability: string,
   type: string,
   signature: string
-}
+}*/
 
 type Source = {
   bytecode: string,
-  abi: Abi[]
+  abi: Array<JsonFragment>
 }
 
 type Deployment = {

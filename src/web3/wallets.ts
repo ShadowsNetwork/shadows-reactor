@@ -47,18 +47,6 @@ const connectToMetamask = async (dispatch: Dispatch<any>): Promise<void> => {
         dispatch(setAccount(account))
         dispatch(setSelectedWallet('Metamask'))
       })
-
-    // @ts-ignore
-    provider.provider.on('accountsChanged', async (newAccount, oldAccount) => {
-      console.log('on accounts changed: ', newAccount, oldAccount)
-      if (!newAccount.length) {
-        dispatch(setAccount(null))
-        dispatch(setSelectedWallet(null))
-      } else {
-        dispatch(setAccount(newAccount[0]))
-      }
-    })
-
   })
 }
 

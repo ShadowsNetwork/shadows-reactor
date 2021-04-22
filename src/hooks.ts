@@ -80,12 +80,24 @@ export function useInitializeProvider(): boolean {
     try {
       provider = (await getWeb3ProviderByWallet(selectedWallet))
 
-      if (selectedWallet === 'WalletConnect' && !!provider) {
+      if (!provider) {
+        throw new Error('provider is null')
+      }
+
+      if (selectedWallet === 'WalletConnect') {
         setInitialized(true)
         return
-        // const wcProvider = provider.provider as WalletConnectProvider
-        // await wcProvider.disconnect()
-        // wcProvider.enable()
+      } else if (selectedWallet === 'Metamask' || selectedWallet === 'BSC') {
+        // @ts-ignore
+        provider.provider.on('accountsChanged', async (newAccount, oldAccount) => {
+          console.log('on accounts changed: ', newAccount, oldAccount)
+          if (!newAccount.length) {
+            dispatch(setAccount(null))
+            dispatch(setSelectedWallet(null))
+          } else {
+            dispatch(setAccount(newAccount[0]))
+          }
+        })
       }
     } catch (e) {
       dispatch(setAccount(null))
@@ -98,7 +110,7 @@ export function useInitializeProvider(): boolean {
       return
     }
 
-    console.log('web3 provider and signer: ', provider, provider.getSigner())
+    // console.log('web3 provider and signer: ', provider, provider.getSigner())
     dowsJSConnector.setContractSettings({
       networkId: 97,
       provider: provider,

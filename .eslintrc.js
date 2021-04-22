@@ -52,15 +52,16 @@ module.exports = {
     ],
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/ban-ts-comment': 'off'
+    '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off'
   },
-  'overrides': [
-    {
-      // enable the rule specifically for TypeScript files
-      'files': ['*.ts', '*.tsx'],
-      'rules': {
-        '@typescript-eslint/explicit-module-boundary-types': ['error']
-      }
-    }
-  ]
+  // 'overrides': [
+  //   {
+  //     // enable the rule specifically for TypeScript files
+  //     'files': ['*.ts', '*.tsx'],
+  //     'rules': {
+  //       '@typescript-eslint/explicit-module-boundary-types': ['error']
+  //     }
+  //   }
+  // ]
 }

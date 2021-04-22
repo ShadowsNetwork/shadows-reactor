@@ -2,15 +2,24 @@ import * as ethers from 'ethers'
 import contracts from './contracts'
 import Util from './utils/index'
 import * as BinaryOptionsUtils from './utils/binaryOptions'
-import ContractSettings from './contractSettings'
+import ContractSettings from './ContractSettings'
 
 class ShadowsJsBase {
-  constructor(contractSettings, signers) {
-    // prevent warnings about "Multiple definitions" for transfer* function from Synth contract
-    // ethers.errors.setLogLevel('error')
-    this.contractSettings = new ContractSettings(contractSettings)
-    const { network } = this.contractSettings
-    this.signers = signers
+  contractSettings: any
+  network: any
+  util: any
+  utils: any
+  binaryOptionsUtils: any
+  ethers: any
+  SUPPORTED_NETWORKS: any
+
+  constructor(contractSettings?: ContractSettings) {
+    if (!contractSettings) {
+      return
+    }
+
+    this.contractSettings = contractSettings
+    const { network } = contractSettings
     this.network = network
     const contractForEnv = contracts[network]
     Object.keys(contractForEnv)

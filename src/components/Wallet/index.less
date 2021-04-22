@@ -60,6 +60,50 @@
   }
 }
 
+.wallet-selection-modal {
+  .wallet-card {
+    cursor: pointer;
+
+    .walletItem {
+      width: 36.2rem;
+      height: 7rem;
+      margin-top: 2.2rem;
+      margin-left: calc((100% - 36.2rem) / 2);
+      border: 1px solid #979797;
+      display: flex;
+      align-items: center;
+      border-radius: 2rem;
+      position: relative;
+      transition: all 0.4s;
+
+      img {
+        width: 3.6rem;
+        margin-left: 2rem;
+        position: absolute;
+        right: 4rem;
+      }
+
+      span {
+        display: inline-block;
+        margin-left: 5rem;
+        color: #979797;
+        font-size: 1.8rem;
+        font-weight: bold;
+        transition: all 0.4s;
+        user-select: none;
+      }
+    }
+
+    .walletItem:hover {
+      border: 1px solid #fff;
+    }
+
+    .walletItem:hover span {
+      color: #fff;
+    }
+  }
+}
+
 .wallet-modal-content{
 
   .walletModal-Title {

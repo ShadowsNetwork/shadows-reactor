@@ -3,7 +3,6 @@
   display: flex;
   justify-content: center;
   font-family: "DM sans";
-
   .redeem-modal-text {
     display: inline-block;
     font-weight: bold;
@@ -42,149 +41,152 @@
   }
 }
 
-.liquidity {
+.liquidity-provider {
   margin-top: 9.4rem;
   margin-left: 25.4rem;
   height: 435px;
   display: flex;
 
-  .uniswap {
-    width: 39.1rem;
-    height: 6.641rem;
-    background: #1B1D21;
-    border-radius: 1rem;
-    display: flex;
-    align-items: center;
+  .pool {
+    margin-right: 2.0rem;
 
-    img {
-      width: 2.5rem;
-      margin-left: 3rem;
-    }
-    span {
-      font-weight: bold;
-      font-size: 18px;
-      line-height: 23px;
-      letter-spacing: -0.2px;
-      color: #FFFFFF;
-      margin-left: 3rem;
-    }
-  }
-  .info {
-    background: #121725;
-    width: 39.1rem;
-    margin-top: 1rem;
-    border-radius: 1rem;
-    padding: 2.9rem 0 3.067rem 2.346rem;
-
-
-    .info-container-title {
-      font-size: 2.8rem;
-      font-weight: bold;
-      color: #fff;
-      letter-spacing: -0.2px;
-    }
-    .infoContent-dows {
-      width: 3rem;
-      position: relative;
-      right: 1.5rem;
-      top: 1.5rem;
-    }
-    .title {
-      font-weight: bold;
-      letter-spacing: -0.02rem;
-    }
-    .value {
-      font-weight: bold;
-      letter-spacing: -0.02rem;
-    }
-    .additional {
-      font-size: 1.6rem;
-      letter-spacing: 0.3rem;
-    }
-
-    img {
-      width: 4.4rem;
-      margin-top: 1.4rem;
-    }
-
-    .info-container {
+    &-name {
+      width: 39.1rem;
+      height: 6.641rem;
+      background: #1B1D21;
+      border-radius: 1rem;
       display: flex;
-      align-content: flex-start;
-      flex-flow: row wrap;
+      align-items: center;
 
-      .item {
-        color: white;
-        flex: 0 0 50%;
-        margin-bottom: 2.5rem;
-        margin-top: 5.1rem;
-
-        .title {
-          color: #63cca9;
-          font-size: 1.4rem;
-        }
-
-        .value {
-          font-size: 2.8rem;
-        }
-
-        .additional {
-          color: #989898;
-        }
+      img {
+        width: 2.5rem;
+        margin-left: 3rem;
+      }
+      span {
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 23px;
+        letter-spacing: -0.2px;
+        color: #FFFFFF;
+        margin-left: 3rem;
       }
     }
-    .button-container {
-      display: flex;
 
-      button {
+    &-main {
+      background: #121725;
+      width: 39.1rem;
+      margin-top: 1rem;
+      border-radius: 1rem;
+      padding: 2.9rem 0 3.067rem 2.346rem;
+
+      .info-container-title {
+        font-size: 2.8rem;
+        font-weight: bold;
+        color: #fff;
+        letter-spacing: -0.2px;
+      }
+      .infoContent-dows {
+        width: 3rem;
+        position: relative;
+        right: 1.5rem;
+        top: 1.5rem;
+      }
+      .title {
+        font-weight: bold;
+        letter-spacing: -0.02rem;
+      }
+      .value {
+        font-weight: bold;
+        letter-spacing: -0.02rem;
+      }
+      .additional {
+        font-size: 1.6rem;
+        letter-spacing: 0.3rem;
+      }
+
+      img {
+        width: 4.4rem;
+        margin-top: 1.4rem;
+      }
+
+      .info-container {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #63CCA9;
-        border: none;
-      }
+        align-content: flex-start;
+        flex-flow: row wrap;
 
-      button:active {
-        background: none;
-      }
+        .item {
+          color: white;
+          flex: 0 0 50%;
+          margin-bottom: 2.5rem;
+          margin-top: 5.1rem;
 
-      button:nth-of-type(1) {
-        width: 3.492rem;
-        height: 3.757rem;
-        border-radius: 1.5rem;
-        background: #63CCA9;
-        border: none;
+          .title {
+            color: #63cca9;
+            font-size: 1.4rem;
+          }
+
+          .value {
+            font-size: 2.8rem;
+          }
+
+          .additional {
+            color: #989898;
+          }
+        }
       }
-      button:nth-of-type(1) {
-        width: 3.492rem;
-        height: 3.757rem;
-        border-radius: 3.492rem;
-      }
-      button:nth-of-type(2) {
-        color: #fff;
-        font-weight: bold;
-        width: 10.354rem;
-        height: 3.757rem;
-        border-radius: 3.757rem;
-        margin-left: 0.607rem;
-      }
-      button:nth-of-type(3) {
-        width: 9.187rem;
-        height: 3.757rem;
-        border-radius: 3.757rem;;
-        color: #fff;
-        font-weight: bold;
-        margin-left: 5.438rem;
+      .button-container {
+        display: flex;
+
+        button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: #63CCA9;
+          border: none;
+        }
+
+        button:active {
+          background: none;
+        }
+
+        .approve {
+          color: #fff;
+          font-weight: bold;
+          width: 9.354rem;
+          height: 3.757rem;
+          border-radius: 3.757rem;
+          margin-left: 0.607rem;
+          margin-right: 3.125rem;
+        }
+
+        .lock {
+          width: 3.492rem;
+          height: 3.757rem;
+          border-radius: 3.492rem;
+          background: #63CCA9;
+          border: none;
+        }
+
+        .unlock {
+          color: #fff;
+          font-weight: bold;
+          width: 10.354rem;
+          height: 3.757rem;
+          border-radius: 3.757rem;
+          margin-left: 0.607rem;
+        }
+
+        .redeem {
+          width: 9.187rem;
+          height: 3.757rem;
+          border-radius: 3.757rem;;
+          color: #fff;
+          font-weight: bold;
+          margin-left: 5.438rem;
+        }
       }
     }
   }
+}
 
-  .two {
-    width: 300px;
-    height: 300px;
-    background: red;
-    margin-left: 50px;
-  }
-}
-.addAmount {
-  color: #FFFEFE;
-}
+

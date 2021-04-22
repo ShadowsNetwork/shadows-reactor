@@ -18,6 +18,7 @@ const RedeemModal: React.FC<RedeemModalStatus> = ({
 }) => {
   return (
     <Modal
+      zIndex={1}
       title="Redeem Reward"
       visible={visible}
       okText="Confirm"

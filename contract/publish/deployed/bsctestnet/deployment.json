@@ -353,17 +353,15 @@
     },
     "LpERC20Token": {
       "name": "LpERC20Token",
-      "address": "0x0c7CC12dfFAEabbB7F7Ce2102223faa00563B654",
       "network": "bsctestnet"
     },
     "ERC20Token": {
       "name": "ERC20Token",
-      "address": "0x3Fb6DC2649e3c07B66F60D60834138563fa41661",
+      "address": "0x40D34A92435c7699E63C20A79F95eE3b226b67f6",
       "network": "bsctestnet"
     },
     "Farm": {
       "name": "Farm",
-      "address": "0x08C57175D3Fb788f1E3b5648eCA67C666048Dd9F",
       "network": "bsctestnet"
     }
   },

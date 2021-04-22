@@ -13,13 +13,20 @@ const SUPPORTED_NETWORKS = {
 }
 
 class ContractSettings {
+  networkId: any
+  network: any
+  provider: any
+  signer: any
+  static SUPPORTED_NETWORKS
+
   /**
    * @constructor
    * @param provider {Object} - ethers.js provider object - default ethers.providers.getDefaultProvider()
    * @param signer {Object} - one of 4 provided signers or a custom ethers.js compatible signer. Use Metamask for Dapp browser support
    * @param networkId {Number} - default 1 - mainnet, also supports 42 (Kovan)
    */
-  constructor({ provider, signer, networkId }) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  constructor(provider, signer, networkId) {
     // contractSettings = contractSettings || {}
     this.networkId = networkId || 1
     this.network = SUPPORTED_NETWORKS[Number(this.networkId)]

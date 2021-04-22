@@ -17,6 +17,7 @@ export const walletSlice = createSlice({
         console.error('set account null')
       }
       state.account = action.payload
+      state.transactionHistoryList = []
     },
     setSelectedWallet: (state, action) => {
       state.selectedWallet = action.payload
@@ -47,7 +48,7 @@ export const walletSlice = createSlice({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         state.transactionHistoryList.push(state.transactionHistoryList.pop()!)
       }
-    }
+    },
   }
 })
 

@@ -2,7 +2,7 @@ import { defineConfig } from 'umi'
 
 // ref: https://umijs.org/config/
 export default defineConfig({
-  title: 'shadows-reactor',
+  title: 'Shadows',
   routes: [
     {
       path: '/',
