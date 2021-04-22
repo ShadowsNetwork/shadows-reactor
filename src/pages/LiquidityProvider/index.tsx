@@ -114,9 +114,10 @@ const Pool: React.FC<PoolConfig> = ({
   const getErrorMessage = useErrorMessage()
 
   const {
-    lpBalance,
-    lpBalanceInUSD,
+    totalLockedLP,
+    totalLockedLPInUSD,
     APY,
+    userLpBalance,
     userLockedLp,
     userLockedLpInUSD,
     dowsEarned,
@@ -292,8 +293,8 @@ const Pool: React.FC<PoolConfig> = ({
         <div className="info-container">
           <div className="item">
             <div className="title">Total LP Locked</div>
-            <div className="value">{numberWithCommas(lpBalance)}</div>
-            <div className="additional">${numberWithCommas(lpBalanceInUSD)}</div>
+            <div className="value">{numberWithCommas(totalLockedLP)}</div>
+            <div className="additional">${numberWithCommas(totalLockedLPInUSD)}</div>
           </div>
           <div className="item">
             <div className="title">APY</div>
@@ -318,7 +319,7 @@ const Pool: React.FC<PoolConfig> = ({
                   onClick={() => {
                     setAmountInputModalStatus({
                       ...amountInputModalStatus,
-                      maxAvailable: lpBalance,
+                      maxAvailable: userLpBalance,
                       visible: true,
                       title: 'Stake Liquidity',
                       cancelCallback: closeAmountInputModal,

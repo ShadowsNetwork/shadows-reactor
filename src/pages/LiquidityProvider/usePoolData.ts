@@ -38,9 +38,10 @@ const getAPY = async (account: string, lpTokenAddress: string, farmAddress: stri
 }
 
 export type PoolData = {
-  lpBalance: string
-  lpBalanceInUSD: string
+  totalLockedLP: string
+  totalLockedLPInUSD: string
   APY: string
+  userLpBalance: string
   userLockedLp: string
   userLockedLpInUSD: string
   dowsEarned: string
@@ -65,34 +66,39 @@ export const usePoolData = ({
   const account = useSelector(getAccount)
   const dowsPrice = new BigNumber((useDowsPriceQuery().data as string))
 
-  const [lpBalance, setLpBalance] = useState('0')
-  const [lpBalanceInUSD, setLpBalanceInUSD] = useState('0')
+  const [farmLpBalance, setFarmLpBalance] = useState('0')
+  const [farmLpBalanceInUSD, setFarmLpBalanceInUSD] = useState('0')
   const [APY, setAPY] = useState('0')
   const [userLockedLp, setUserLockedLp] = useState('0')
   const [userLockedLpInUSD, setUserLockedLpInUSD] = useState('0')
   const [dowsEarned, setDowsEarned] = useState('0')
   const [allowanceEnough, setAllowanceEnough] = useState(false)
+  const [userLpBalance, setUserLpTokenBalance] = useState('')
 
   const fetchData = useCallback(async () => {
     if (!account) {
-      setLpBalance('0')
-      setLpBalanceInUSD('0')
+      setFarmLpBalance('0')
+      setFarmLpBalanceInUSD('0')
       setAPY('0')
       setUserLockedLpInUSD('0')
       setUserLockedLp('0')
       setDowsEarned('0')
+      setUserLpTokenBalance('0')
       return
     }
 
-    const [balance, deposited, pending, lpTokenAllowance, currentAPR] = await Promise.all([
+    const [_userLpBalance, farmLpBalance, deposited, pending, lpTokenAllowance, currentAPR] = await Promise.all([
+      dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, account),
       dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, farmContractAddress),
       dowsJSConnector.dowsJs.Farm.deposited(farmContractAddress, poolNumber, account),
       dowsJSConnector.dowsJs.Farm.pending(farmContractAddress, poolNumber, account),
       dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account, farmContractAddress),
       getAPY(account, lpTokenContractAddress, farmContractAddress, poolType)
     ])
-    setLpBalance(weiToString(balance))
-    setLpBalanceInUSD(new BigNumber(lpBalance).multipliedBy(dowsPrice)
+    setUserLpTokenBalance(weiToString(_userLpBalance))
+
+    setFarmLpBalance(weiToString(farmLpBalance))
+    setFarmLpBalanceInUSD(weiToBigNumber(farmLpBalance).multipliedBy(dowsPrice)
       .toFixed(2))
 
     setUserLockedLp(weiToString(deposited))
@@ -111,9 +117,10 @@ export const usePoolData = ({
   }, [fetchData])
 
   return {
-    lpBalance,
-    lpBalanceInUSD,
+    totalLockedLP: farmLpBalance,
+    totalLockedLPInUSD: farmLpBalanceInUSD,
     APY,
+    userLpBalance,
     userLockedLp,
     userLockedLpInUSD,
     dowsEarned,
