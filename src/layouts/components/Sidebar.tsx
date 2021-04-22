@@ -13,7 +13,7 @@ const SideBar: React.FC = () => {
 
   return (
     <div className="App">
-      <div style={{ width: 256 }}>
+      <div style={{ position:'fixed' }}>
         <Menu
           defaultSelectedKeys={[hash.slice(1)]}
           mode="inline"

@@ -28,7 +28,7 @@ const mapTransactionStatusToIconAndLabel = new Map([
     color: '#63cca9'
   }],
   [TransactionStatus.Completed.valueOf(), {
-    icon: <CheckOutlined />,
+    // icon: <CheckOutlined />,
     color: '#63cca9'
   }],
   [TransactionStatus.Failed.valueOf(), {

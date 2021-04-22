@@ -99,7 +99,6 @@ const routers = [
     key: 'liquidity',
     component: Pool,
     image: comment,
-    backgroundImage: LiquidityImage
   },
 
   /** hidden routers */

@@ -282,79 +282,83 @@ const Pool: React.FC = () => {
 
   return (
     <div className="liquidity">
-      <div className="uniswap">
-        <img src={uniswap} alt="" />
-        <span>Uniswap</span>
-      </div>
-      <div className="info">
-        <div className="info-container-title">DOWS/ETH</div>
-        <img src={eth} alt="" />
-        <img className="infoContent-dows" src={dowsIcon} alt="" />
-        <div className="info-container">
-          <div className="item">
-            <div className="title">LP Tokens to Lock</div>
-            <div className="value">{numberWithCommas(lpBalance)}</div>
-            <div className="additional">${numberWithCommas(lpBalanceInUSD)}</div>
-          </div>
-          <div className="item">
-            <div className="title">Current APR</div>
-            <div className="value">{currentAPR}</div>
-          </div>
-          <div className="item">
-            <div className="title">Your LP Locked</div>
-            <div className="value">{numberWithCommas(userLockedLp)}</div>
-            <div className="additional">${numberWithCommas(userLockedLpInUSD)}</div>
-          </div>
-          <div className="item">
-            <div className="title">DOWS Earned</div>
-            <div className="value">{dowsEarned}</div>
-          </div>
+      <div className="lp-locked">
+        <div className="uniswap">
+          <span>Pancake Swap LP</span>
         </div>
-        <div className="button-container">
-          <Button onClick={() => {
-            setAmountInputModalStatus({
-              ...amountInputModalStatus,
-              maxAvailable: lpBalance,
-              visible: true,
-              title: 'Stake Liquidity',
-              cancelCallback: closeAmountInputModal,
-              confirmCallback: lock
-            })
-          }}>
-            <PlusOutlined className="addAmount" style={{ fontSize: '1.1rem' }} />
-          </Button>
-          <Button onClick={() => {
-            setAmountInputModalStatus({
-              ...amountInputModalStatus,
-              maxAvailable: userLockedLp,
-              visible: true,
-              title: 'Unstake Liquidity',
-              cancelCallback: closeAmountInputModal,
-              confirmCallback: unlock
-            })
-          }}>
-            Unlock
-          </Button>
-          <Button
-            onClick={() => {
-              setRedeemModalStatus({
-                ...redeemModalStatus,
-                amount: dowsEarned,
+        <div className="info">
+          <div className="info-container-title">DOWS/ETH</div>
+          <img src={eth} alt="" />
+          <img className="infoContent-dows" src={dowsIcon} alt="" />
+          <div className="info-container">
+            <div className="item">
+              <div className="title">LP Tokens to Lock</div>
+              <div className="value">{numberWithCommas(lpBalance)}</div>
+              <div className="additional">${numberWithCommas(lpBalanceInUSD)}</div>
+            </div>
+            <div className="item">
+              <div className="title">Current APR</div>
+              <div className="value">{currentAPR}</div>
+            </div>
+            <div className="item">
+              <div className="title">Your LP Locked</div>
+              <div className="value">{numberWithCommas(userLockedLp)}</div>
+              <div className="additional">${numberWithCommas(userLockedLpInUSD)}</div>
+            </div>
+            <div className="item">
+              <div className="title">DOWS Earned</div>
+              <div className="value">{dowsEarned}</div>
+            </div>
+          </div>
+          <div className="button-container">
+            <Button onClick={() => {
+              setAmountInputModalStatus({
+                ...amountInputModalStatus,
+                maxAvailable: lpBalance,
                 visible: true,
-                onConfirm: redeem,
-                onClose: closeRedeemModal
+                title: 'Stake Liquidity',
+                cancelCallback: closeAmountInputModal,
+                confirmCallback: lock
               })
             }}>
+              <PlusOutlined className="addAmount" style={{ fontSize: '1.1rem' }} />
+            </Button>
+            <Button onClick={() => {
+              setAmountInputModalStatus({
+                ...amountInputModalStatus,
+                maxAvailable: userLockedLp,
+                visible: true,
+                title: 'Unstake Liquidity',
+                cancelCallback: closeAmountInputModal,
+                confirmCallback: unlock
+              })
+            }}>
+            Unlock
+            </Button>
+            <Button
+              onClick={() => {
+                setRedeemModalStatus({
+                  ...redeemModalStatus,
+                  amount: dowsEarned,
+                  visible: true,
+                  onConfirm: redeem,
+                  onClose: closeRedeemModal
+                })
+              }}>
             Redeem
-          </Button>
+            </Button>
+          </div>
         </div>
+        <LpAmountInputModal {...amountInputModalStatus} />
+        <RedeemModal {...redeemModalStatus} />
+        <TransactionStatusModal
+          {...transactionStatusModalProps}
+          onClose={closeTransactionStatusModal}
+        />
       </div>
-      <LpAmountInputModal {...amountInputModalStatus} />
-      <RedeemModal {...redeemModalStatus} />
-      <TransactionStatusModal
-        {...transactionStatusModalProps}
-        onClose={closeTransactionStatusModal}
-      />
+      <div className="two">
+
+      </div>
     </div>
   )
 }
