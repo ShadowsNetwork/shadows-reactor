@@ -25,7 +25,6 @@ const getAPY = async (account: string, lpTokenAddress: string, farmAddress: stri
   const rewardPerYear = rewardPerBlock.multipliedBy('10512000')
 
   const APR = rewardPerYear.dividedBy(staked)
-    .dividedBy('100.0')
     .dividedBy(poolType === 'pair' ? '2.0' : '1.0')
 
   // (1 + APR / 12) ^ 12 - 1
