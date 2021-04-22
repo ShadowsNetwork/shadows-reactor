@@ -19,7 +19,7 @@ const getAPY = async (account: string, lpTokenAddress: string, farmAddress: stri
   )
 
   const staked = weiToBigNumber(
-    await dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenAddress, account)
+    await dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenAddress, farmAddress)
   )
 
   const rewardPerYear = rewardPerBlock.multipliedBy('10512000')
@@ -85,7 +85,7 @@ export const usePoolData = ({
     }
 
     const [balance, deposited, pending, lpTokenAllowance, currentAPR] = await Promise.all([
-      dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, account),
+      dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, farmContractAddress),
       dowsJSConnector.dowsJs.Farm.deposited(farmContractAddress, poolNumber, account),
       dowsJSConnector.dowsJs.Farm.pending(farmContractAddress, poolNumber, account),
       dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account, farmContractAddress),
