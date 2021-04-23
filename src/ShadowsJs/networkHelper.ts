@@ -6,7 +6,8 @@ export const SUPPORTED_NETWORKS = {
   4: 'rinkeby',
   5: 'goerli',
   42: 'kovan',
-  97: 'bsctestnet'
+  97: 'bsctestnet',
+  56: 'bsc'
 }
 
 /*export const SUPPORTED_NETWORKS = {
