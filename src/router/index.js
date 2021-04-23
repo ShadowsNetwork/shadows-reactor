@@ -43,7 +43,7 @@ export const routerLabelMapper = {
 
 const routers = [
   /** index page */
-  {
+  /*{
     path: '/welcome',
     key: 'welcome',
     component: Welcome,
@@ -51,7 +51,7 @@ const routers = [
     backgroundImage: WelcomeImg
   },
 
-  /** displayed routers */
+  /!** displayed routers *!/
   {
     path: '/personal',
     key: 'person',
@@ -93,7 +93,7 @@ const routers = [
     component: Transfer,
     image: shopping,
     backgroundImage: LiquidityImage
-  },
+  },*/
   {
     path: '/liquidity',
     key: 'liquidity',
