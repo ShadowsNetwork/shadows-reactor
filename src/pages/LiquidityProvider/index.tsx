@@ -27,7 +27,7 @@ import { PoolConfig } from '@/types/LiquidityProvider'
 
 import config from '../../../config'
 
-const EmptyPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency }) => (
+const EmptyPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency, poolType }) => (
   <div className="pool">
     <div className="pool-name">
       <span>{poolName}</span>
@@ -40,7 +40,7 @@ const EmptyPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency
       <img className="infoContent-dows" src={leftCurrency?.icon} alt="" />
       <div className="info-container">
         <div className="item">
-          <div className="title">Total LP Locked</div>
+          <div className="title">{poolType == 'pair'?'Total LP Locked':'Total Locked'}</div>
           <div className="value">-</div>
           <div className="additional">-</div>
         </div>
@@ -49,7 +49,7 @@ const EmptyPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency
           <div className="value">-</div>
         </div>
         <div className="item">
-          <div className="title">Your LP Locked</div>
+          <div className="title">{poolType == 'pair'?'Your LP Locked':'Your Locked'}</div>
           <div className="value">-</div>
           <div className="additional">-</div>
         </div>
@@ -292,7 +292,7 @@ const Pool: React.FC<PoolConfig> = ({
         <img className="infoContent-dows" src={leftCurrency?.icon} alt="" />
         <div className="info-container">
           <div className="item">
-            <div className="title">Total LP Locked</div>
+            <div className="title">{poolType == 'pair'?'Total LP Locked':'Total Locked'}</div>
             <div className="value">{numberWithCommas(totalLockedLP)}</div>
             <div className="additional">${numberWithCommas(totalLockedLPInUSD)}</div>
           </div>
@@ -301,7 +301,7 @@ const Pool: React.FC<PoolConfig> = ({
             <div className="value">{numberWithCommas(APY)}%</div>
           </div>
           <div className="item">
-            <div className="title">Your LP Locked</div>
+            <div className="title">{poolType == 'pair'?'Your LP Locked':'Your Locked'}</div>
             <div className="value">{numberWithCommas(userLockedLp)}</div>
             <div className="additional">${numberWithCommas(userLockedLpInUSD)}</div>
           </div>

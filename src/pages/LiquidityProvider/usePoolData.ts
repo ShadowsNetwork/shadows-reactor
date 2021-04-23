@@ -97,12 +97,9 @@ export const usePoolData = ({
     setUserLpTokenBalance(weiToString(_userLpBalance))
 
     setFarmLpBalance(weiToString(farmLpBalance))
-    setFarmLpBalanceInUSD(weiToBigNumber(farmLpBalance).multipliedBy(dowsPrice)
-      .toFixed(2))
-
     setUserLockedLp(weiToString(deposited))
-    setUserLockedLpInUSD(new BigNumber(userLockedLp).multipliedBy(dowsPrice)
-      .toFixed(2))
+    setFarmLpBalanceInUSD(weiToBigNumber(farmLpBalance).multipliedBy(dowsPrice).multipliedBy(poolType==='pair'?2:1).toFixed(2))
+    setUserLockedLpInUSD(new BigNumber(userLockedLp).multipliedBy(dowsPrice).multipliedBy(poolType==='pair'?2:1).toFixed(2))
 
     setDowsEarned(new BigNumber(weiToString(pending)).toFixed(2))
 
