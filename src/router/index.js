@@ -98,7 +98,7 @@ const routers = [
     path: '/liquidity',
     key: 'liquidity',
     component: Pool,
-    image: comment,
+    image: money,
   },
 
   /** hidden routers */
