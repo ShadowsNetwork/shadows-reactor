@@ -3,7 +3,9 @@ import { BscConnector, NoBscProviderError } from '@binance-chain/bsc-connector'
 
 export const BscWeb3Provider: any = async () => new Promise((resolve, reject) => {
   const bscConnector = new BscConnector({
-    supportedChainIds: [97] // later on 1 ethereum mainnet and 3 ethereum ropsten will be supported
+    supportedChainIds: [
+      parseInt(process.env.CHAIN_ID!, 16)
+    ]
   })
   bscConnector.getProvider()
     .then(provider => {

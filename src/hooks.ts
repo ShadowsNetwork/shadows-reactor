@@ -123,7 +123,7 @@ export function useInitializeProvider(): boolean {
     dowsJSConnector.setContractSettings(new ContractSettings(
       provider,
       provider.getSigner ? provider.getSigner() : null,
-      97
+      parseInt(process.env.CHAIN_ID!, 16)
     ))
     setInitialized(true)
   }, [selectedWallet])

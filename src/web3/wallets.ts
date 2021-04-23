@@ -71,7 +71,7 @@ const connectToWalletConnect = async (dispatch: Dispatch<any>): Promise<void> =>
       dowsJSConnector.setContractSettings(new ContractSettings(
         web3Provider,
         web3Provider.getSigner ? web3Provider.getSigner() : null,
-        97,
+        parseInt(process.env.CHAIN_ID!, 16)
       ))
     })
     .catch(error => {

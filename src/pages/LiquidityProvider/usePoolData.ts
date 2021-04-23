@@ -65,28 +65,28 @@ export const usePoolData = ({
   const account = useSelector(getAccount)
   const dowsPrice = new BigNumber((useDowsPriceQuery().data as string))
 
-  const [farmLpBalance, setFarmLpBalance] = useState('0')
-  const [farmLpBalanceInUSD, setFarmLpBalanceInUSD] = useState('0')
+  const [totalLockedLP, setTotalLockedLP] = useState('0')
+  const [totalLockedLPInUSD, setTotalLockedLPInUSD] = useState('0')
   const [APY, setAPY] = useState('0')
   const [userLockedLp, setUserLockedLp] = useState('0')
   const [userLockedLpInUSD, setUserLockedLpInUSD] = useState('0')
   const [dowsEarned, setDowsEarned] = useState('0')
   const [allowanceEnough, setAllowanceEnough] = useState(false)
-  const [userLpBalance, setUserLpTokenBalance] = useState('')
+  const [userLpBalance, setUserLpBalance] = useState('')
 
   const fetchData = useCallback(async () => {
     if (!account) {
-      setFarmLpBalance('0')
-      setFarmLpBalanceInUSD('0')
+      setTotalLockedLP('0')
+      setTotalLockedLPInUSD('0')
       setAPY('0')
       setUserLockedLpInUSD('0')
       setUserLockedLp('0')
       setDowsEarned('0')
-      setUserLpTokenBalance('0')
+      setUserLpBalance('0')
       return
     }
 
-    const [_userLpBalance, farmLpBalance, deposited, pending, lpTokenAllowance, currentAPR] = await Promise.all([
+    const [_userLpBalance, _totalLockedLP, _userLockedLp, _dowsEarned, _lpTokenAllowance, _APY] = await Promise.all([
       dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, account),
       dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, farmContractAddress),
       dowsJSConnector.dowsJs.Farm.deposited(farmContractAddress, poolNumber, account),
@@ -94,18 +94,27 @@ export const usePoolData = ({
       dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account, farmContractAddress),
       getAPY(account, lpTokenContractAddress, farmContractAddress, poolType)
     ])
-    setUserLpTokenBalance(weiToString(_userLpBalance))
+    setUserLpBalance(weiToString(_userLpBalance))
 
-    setFarmLpBalance(weiToString(farmLpBalance))
-    setUserLockedLp(weiToString(deposited))
-    setFarmLpBalanceInUSD(weiToBigNumber(farmLpBalance).multipliedBy(dowsPrice).multipliedBy(poolType==='pair'?2:1).toFixed(2))
-    setUserLockedLpInUSD(new BigNumber(userLockedLp).multipliedBy(dowsPrice).multipliedBy(poolType==='pair'?2:1).toFixed(2))
+    setTotalLockedLP(weiToString(_totalLockedLP))
+    setTotalLockedLPInUSD(weiToBigNumber(_totalLockedLP)
+      .multipliedBy(dowsPrice)
+      .multipliedBy(poolType === 'pair' ? 2 : 1)
+      .toFixed(2)
+    )
 
-    setDowsEarned(new BigNumber(weiToString(pending)).toFixed(2))
+    setUserLockedLp(weiToString(_userLockedLp))
+    setUserLockedLpInUSD(weiToBigNumber(_userLockedLp)
+      .multipliedBy(dowsPrice)
+      .multipliedBy(poolType === 'pair' ? 2 : 1)
+      .toFixed(2)
+    )
 
-    setAllowanceEnough(isAllowanceEnough(weiToString(lpTokenAllowance)))
+    setDowsEarned(weiToBigNumber(_dowsEarned).toFixed(2))
 
-    setAPY(currentAPR)
+    setAllowanceEnough(isAllowanceEnough(weiToString(_lpTokenAllowance)))
+
+    setAPY(_APY)
   }, [account, dowsPrice, refreshFlag])
 
   useEffect(() => {
@@ -113,8 +122,8 @@ export const usePoolData = ({
   }, [fetchData])
 
   return {
-    totalLockedLP: farmLpBalance,
-    totalLockedLPInUSD: farmLpBalanceInUSD,
+    totalLockedLP,
+    totalLockedLPInUSD: totalLockedLPInUSD,
     APY,
     userLpBalance,
     userLockedLp,
