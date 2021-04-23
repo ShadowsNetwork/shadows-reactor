@@ -2,7 +2,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  font-family: "DM sans";
+
   .redeem-modal-text {
     display: inline-block;
     font-weight: bold;
@@ -44,11 +44,11 @@
 .liquidity-provider {
   margin-top: 9.4rem;
   margin-left: 25.4rem;
-  height: 435px;
   display: flex;
 
   .pool {
     margin-right: 2.0rem;
+    height: auto;
 
     &-name {
       width: 41rem;
@@ -186,6 +186,16 @@
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .liquidity-provider {
+    margin-left: 0;
+    display: block;
+  }
+  .pool {
+    margin-top: 4rem;
   }
 }
 
