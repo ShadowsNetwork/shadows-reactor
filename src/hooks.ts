@@ -201,13 +201,12 @@ export function useErrorMessage(): any {
     if (!selectedWallet) {
       return 'No Wallet Connected'
     } else if (selectedWallet === 'Metamask') {
-      const detailMessage = e.data ? `: ${e.data.message}` : ''
+      const detailMessage = e.data ? ` (${e.data.message})` : ''
       return `${e.message}${detailMessage}`
     } else if (selectedWallet === 'BSC') {
       return e.error
     } else if (selectedWallet === 'WalletConnect') {
-      console.log('error', e)
-      return 'WalletConnect error message'
+      return e.toString()
     } else {
       throw new Error('Unknown selected wallet')
     }

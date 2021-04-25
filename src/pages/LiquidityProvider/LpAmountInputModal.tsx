@@ -56,6 +56,7 @@ const LpAmountInputModal: React.FC<LpAmountInputModalStatus> = ({
         <LimitableNumberInput
           min={0}
           max={maxAvailable}
+          decimalPlaces={18}
           inputValue={inputValue}
           inputValueSetter={setInputValue}
           allowClear={true}

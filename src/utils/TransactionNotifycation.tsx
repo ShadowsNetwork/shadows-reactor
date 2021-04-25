@@ -5,7 +5,7 @@ import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import './notifycation.less'
 import { ReactComponent as LinkIcon } from '@/img/link.svg'
 
-const closeIcon = (color: string) => (
+const CloseIcon = (color: string) => (
   <div style={{ color }}>
     <CloseOutlined />
   </div>
@@ -17,19 +17,26 @@ export function notifyTransactionSuccess(transactionHistory: TransactionHistory)
   notification.open({
     message: '',
     className: 'transaction-success',
-    closeIcon: closeIcon(color),
+    closeIcon: CloseIcon(color),
     description: (
       <div className="prompt" style={{ color }}>
         <CheckOutlined />
         <div className="promptContent">
-          <span className="promptText">{transactionHistory.toString()}</span>
-          <LinkIcon fill={color} className="promptImg" onClick={() => {
-            window.open(`${process.env.BLOCK_EXPLORER_URL}/tx/${transactionHistory.hash}`)
-          }} />
+          <span className="promptText">
+            {transactionHistory.toString()}
+          </span>
+          <LinkIcon
+            fill={color}
+            className="promptImg"
+            onClick={() => {
+              window.open(`${process.env.BLOCK_EXPLORER_URL}/tx/${transactionHistory.hash}`)
+            }}
+          />
         </div>
       </div>
     ),
     style: {
+      top: 60,
       width: 440
     }
   })
@@ -41,17 +48,24 @@ export function notifyTransactionFailed(transactionHistory: TransactionHistory):
   notification.open({
     message: '',
     className: 'transaction-failed',
-    closeIcon: closeIcon(color),
+    closeIcon: CloseIcon(color),
     description: (
       <div style={{ color }}>
         {'Failed - '}
-        <span>{transactionHistory.toString()}</span>
-        <LinkIcon fill={color} className="promptImg" onClick={() => {
-          window.open(`${process.env.BLOCK_EXPLORER_URL}/tx/${transactionHistory.hash}`)
-        }} />
+        <span>
+          {transactionHistory.toString()}
+        </span>
+        <LinkIcon
+          fill={color}
+          className="promptImg"
+          onClick={() => {
+            window.open(`${process.env.BLOCK_EXPLORER_URL}/tx/${transactionHistory.hash}`)
+          }}
+        />
       </div>
     ),
     style: {
+      top: 60,
       width: 440,
       backgroundColor: '#000000'
     }
