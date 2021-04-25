@@ -7,6 +7,7 @@ import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { providers } from 'ethers'
 import { getWeb3ProviderByWallet, WalletNames } from '@/web3/wallets'
 import ContractSettings from '@/ShadowsJs/ContractSettings'
+import WalletConnectProvider from '@walletconnect/web3-provider'
 
 export function useLocation(): Location {
   const [location, setLocation] = useState(window.location)
@@ -84,15 +85,39 @@ export function useInitializeProvider(): boolean {
   const setup = useCallback(async () => {
     let provider: providers.Web3Provider | undefined
     try {
-      provider = (await getWeb3ProviderByWallet(selectedWallet))
+      provider = await getWeb3ProviderByWallet(selectedWallet)
 
-      if (!provider) {
-        throw new Error('provider is null')
+      if (!selectedWallet || !provider) {
+        setInitialized(false)
+        return
       }
 
       if (selectedWallet === 'WalletConnect') {
-        setInitialized(true)
-        return
+        const walletConnectProvider = provider.provider as WalletConnectProvider
+
+        console.log(walletConnectProvider.wc.connected)
+        await walletConnectProvider.enable()
+
+        const handleAccountChange = (accounts: string[]) => {
+          const [account] = accounts
+          dispatch(setAccount(account))
+          dispatch(setSelectedWallet('WalletConnect'))
+        }
+
+        const handleDisconnect = (code: number, reason: string) => {
+          console.log(code, reason)
+          dispatch(setAccount(null))
+          dispatch(setSelectedWallet(null))
+
+          walletConnectProvider.stop()
+          walletConnectProvider.removeListener('accountsChanged', handleAccountChange)
+        }
+
+        walletConnectProvider.removeListener('disconnect', handleDisconnect)
+        walletConnectProvider.removeListener('accountsChanged', handleAccountChange)
+
+        walletConnectProvider.on('disconnect', handleDisconnect)
+        walletConnectProvider.on('accountsChanged', handleAccountChange)
       } else if (selectedWallet === 'Metamask' || selectedWallet === 'BSC') {
         // @ts-ignore
         await provider.provider.enable()
@@ -114,12 +139,6 @@ export function useInitializeProvider(): boolean {
       return
     }
 
-    if (!selectedWallet || !provider) {
-      setInitialized(false)
-      return
-    }
-
-    // console.log('web3 provider and signer: ', provider, provider.getSigner())
     dowsJSConnector.setContractSettings(new ContractSettings(
       provider,
       provider.getSigner ? provider.getSigner() : null,

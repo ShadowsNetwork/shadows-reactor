@@ -9,8 +9,6 @@ import { MetamaskWeb3Provider } from './providers/Metamask'
 import { WalletConnectWeb3Provider } from './providers/WalletConnect'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { BscWeb3Provider } from '@/web3/providers/BSC'
-import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import ContractSettings from '@/ShadowsJs/ContractSettings'
 
 export type WalletNames = 'Metamask' | 'BSC' | 'WalletConnect'
 
@@ -51,51 +49,8 @@ const connectToMetamask = async (dispatch: Dispatch<any>): Promise<void> => {
   })
 }
 
-const connectToWalletConnect = async (dispatch: Dispatch<any>): Promise<void> => {
-  const web3Provider = await getWeb3ProviderByWallet('WalletConnect') as providers.Web3Provider
-
-  const walletConnectProvider = web3Provider.provider as WalletConnectProvider
-
-  console.log(walletConnectProvider)
-
-  if (walletConnectProvider.connected || walletConnectProvider.wc.connected) {
-    await walletConnectProvider.wc.killSession()
-  }
-
-  walletConnectProvider.enable()
-    .then(accounts => {
-      const [account] = accounts
-      dispatch(setAccount(account))
-      dispatch(setSelectedWallet('WalletConnect'))
-
-      dowsJSConnector.setContractSettings(new ContractSettings(
-        web3Provider,
-        web3Provider.getSigner ? web3Provider.getSigner() : null,
-        parseInt(process.env.CHAIN_ID!, 16)
-      ))
-    })
-    .catch(error => {
-      console.log(error)
-    })
-
-  walletConnectProvider.on('disconnect', (code: number, reason: string) => {
-    console.log(code, reason)
-    dispatch(setAccount(null))
-    dispatch(setSelectedWallet(null))
-  })
-
-  walletConnectProvider.on('accountsChanged', accounts => {
-    console.log('accountsChanged: ', accounts)
-    const [account] = accounts
-    dispatch(setAccount(account))
-    dispatch(setSelectedWallet('WalletConnect'))
-  })
-
-}
-
 const connectToBSC = async (dispatch: Dispatch<any>): Promise<void> => {
   const web3Provider = await getWeb3ProviderByWallet('BSC') as providers.Web3Provider
-  console.log(web3Provider)
 
   const bscProvider = web3Provider.provider
   // @ts-ignore
@@ -115,6 +70,29 @@ const connectToBSC = async (dispatch: Dispatch<any>): Promise<void> => {
         signer: web3Provider.getSigner()
       })
     })*/
+}
+
+const connectToWalletConnect = async (dispatch: Dispatch<any>): Promise<void> => {
+  const web3Provider = await getWeb3ProviderByWallet('WalletConnect') as providers.Web3Provider
+
+  const walletConnectProvider = web3Provider.provider as WalletConnectProvider
+
+  if (!walletConnectProvider.wc.connected) {
+    await walletConnectProvider.wc.createSession({ chainId: Number(Object.keys(walletConnectProvider.rpc!)[0]) })
+  }
+  // if (walletConnectProvider.connected || walletConnectProvider.wc.connected) {
+  //   await walletConnectProvider.wc.killSession()
+  // }
+
+  walletConnectProvider.enable()
+    .then(accounts => {
+      const [account] = accounts
+      dispatch(setAccount(account))
+      dispatch(setSelectedWallet('WalletConnect'))
+    })
+    .catch(error => {
+      console.log(error)
+    })
 }
 
 export const SUPPORT_WALLETS: Wallet[] = [
