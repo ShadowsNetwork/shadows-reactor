@@ -5,6 +5,8 @@ import '../app.less'
 import { useTranslation } from 'react-i18next'
 import routers, { routerLabelMapper } from '@/router'
 import { useLocation } from '@/hooks'
+import leaderboard from '@/img/slideBarIcon/leaderboard.png'
+import viewList from '@/img/slideBarIcon/view-list.png'
 
 const SideBar: React.FC = () => {
   const { t } = useTranslation()
@@ -32,6 +34,14 @@ const SideBar: React.FC = () => {
                 </Menu.Item>
               ))
           }
+          <Menu.Item>
+            <img style={{width:'2.4rem',marginRight:'1.6rem'}} src={leaderboard}/>
+            <a href={'https://bridge.poly.network/'} target='_blank'>Bridge</a>
+          </Menu.Item>
+          <Menu.Item>
+            <img style={{width:'2.4rem',marginRight:'1.6rem'}} src={viewList}/>
+            <a href={'https://exchange.pancakeswap.finance/#/pool'} target='_blank'>Provide liquidity</a>
+          </Menu.Item>
         </Menu>
       </div>
     </div>
