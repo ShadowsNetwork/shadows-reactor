@@ -1,0 +1,61 @@
+.dows-info {
+  font-size: 28px;
+  position: absolute;
+  bottom: 50px;
+  left: 15px;
+  color: white;
+  user-select: none;
+  position: fixed;
+
+  .dows-balance {
+    font-size: 1.8rem;
+    font-weight: bold;
+
+    .label, .value {
+      display: inline;
+      position: relative;
+    }
+
+    .value {
+      top: 11px;
+    }
+
+    .label {
+      top: 10px;
+      margin-right: 5px;
+    }
+
+    .dollar {
+      margin-right: 0;
+    }
+  }
+
+  .icon {
+    width: 33px;
+    height: 33px;
+    margin-right: 10px;
+    margin-top: 10px;
+  }
+}
+
+.top-bar {
+  width: 100%;
+  height: 7.3rem;
+  background: black;
+  border-bottom: 0.2px solid #979797;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  z-index: 999;
+
+  &-logo {
+    width: 16.1rem;
+    margin-left: 4.2rem;
+  }
+}
+
+@media screen and (max-width: 600px){
+  .dows-info{
+    display: none;
+  }
+ }

@@ -1,4 +1,4 @@
-import useEthGasPriceQuery from '@/web3/useEthGasPriceQuery'
+import useEthGasPriceQuery from '@/queries/useEthGasPriceQuery'
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useReducer } from 'react'
 import { Button, InputNumber, Popover } from 'antd'

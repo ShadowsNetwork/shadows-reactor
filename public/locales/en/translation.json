@@ -65,7 +65,7 @@
     }
   },
   "liquidity": {
-    "title": "Liquidity",
+      "title": "Staking",
     "text": "Liquidity measures how easy it is to convert assets into cash quickly and without loss. The easier the conversion, the better the liquidity of the asset."
   },
   "destroy": {

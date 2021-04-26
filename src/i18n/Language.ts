@@ -1,6 +1,6 @@
 type Language = {
-  key: String;
-  name: String;
+  key: string;
+  name: string;
   icon: any;
 }
 

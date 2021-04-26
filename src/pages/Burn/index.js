@@ -5,7 +5,7 @@ import { Button, Input } from 'antd'
 import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { fromWei, toBigNumber, toByte32, toWei } from '@/web3/utils'
+import { weiToString, toBigNumber, toByte32, toWei } from '@/web3/utils'
 import { LoadingOutlined } from '@ant-design/icons'
 import {
   initTransaction,
@@ -59,8 +59,8 @@ function Burn() {
     ])
     setOutputLoading(false)
     setOutputValue(
-      toBigNumber(fromWei(xUSDRate))
-        .dividedBy(toBigNumber(fromWei(dowsRate)))
+      toBigNumber(weiToString(xUSDRate))
+        .dividedBy(toBigNumber(weiToString(dowsRate)))
         .multipliedBy(toBigNumber(inputValue))
         .toString()
     )
@@ -80,8 +80,8 @@ function Burn() {
       dowsJSConnector.dowsJs.Shadows.debtBalanceOf(account, toByte32('xUSD')),
       dowsJSConnector.dowsJs.Shadows.maxIssuableSynths(account)
     ])
-    setXUSD(fromWei(debtBalance))
-    setBurnAmountToFixRatio(Math.max(fromWei(debtBalance) - fromWei(maxIssuableSynth), 0))
+    setXUSD(weiToString(debtBalance))
+    setBurnAmountToFixRatio(Math.max(weiToString(debtBalance) - weiToString(maxIssuableSynth), 0))
   }, [account])
 
   useEffect(() => {

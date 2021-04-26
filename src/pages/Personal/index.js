@@ -4,7 +4,7 @@ import { Progress } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { LoadingOutlined } from '@ant-design/icons'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { bytesToString, fromWei } from '@/web3/utils'
+import { bytesToString, weiToString } from '@/web3/utils'
 import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
 
@@ -22,11 +22,11 @@ function Personal() {
   const fetchRatio = useCallback(async () => {
     const [collateralisationRatio, issuanceRatio] = await Promise.all([
       dowsJSConnector.dowsJs.Shadows.collateralisationRatio(account),
-      dowsJSConnector.dowsJs.ShadowsState.issuanceRatio(),
+      dowsJSConnector.dowsJs.ShadowsState.issuanceRatio()
     ])
 
-    setMyRatio(fromWei(collateralisationRatio))
-    setTargetRatio(fromWei(issuanceRatio))
+    setMyRatio(weiToString(collateralisationRatio))
+    setTargetRatio(weiToString(issuanceRatio))
   }, [account])
 
   useEffect(() => {
@@ -34,13 +34,26 @@ function Personal() {
   }, [fetchRatio])
 
   const fetchDataFromContract = useCallback(async () => {
+    /*let dowsBalance
+    let transferableShadows
+    try {
+      dowsBalance = await dowsJSConnector.dowsJs.Shadows.balanceOf(account)
+    } catch (e) {
+      console.log('dowsBalance', e)
+    }
+    try {
+      transferableShadows = await dowsJSConnector.dowsJs.Shadows.transferableShadows(account)
+    } catch (e) {
+      console.log('transferableShadows', e)
+    }*/
+
     const [dowsBalance, transferableShadows] = await Promise.all([
       dowsJSConnector.dowsJs.Shadows.balanceOf(account),
       dowsJSConnector.dowsJs.Shadows.transferableShadows(account),
     ])
-    setDows(fromWei(dowsBalance))
-    setTransferableDows(fromWei(transferableShadows))
-    setLockedShadows(fromWei(dowsBalance.sub(transferableShadows)))
+    setDows(weiToString(dowsBalance))
+    setTransferableDows(weiToString(transferableShadows))
+    setLockedShadows(weiToString(dowsBalance.sub(transferableShadows)))
   }, [account])
 
   useEffect(() => {
@@ -51,11 +64,11 @@ function Personal() {
     if (account) {
       const availableCurrencies = (await dowsJSConnector.dowsJs.Shadows.availableCurrencyKeys()).map(k => bytesToString(k))
       const balanceList = await Promise.all(
-        availableCurrencies.map(currency => dowsJSConnector.dowsJs.Synth[currency].balanceOf(account)),
+        availableCurrencies.map(currency => dowsJSConnector.dowsJs.Synth[currency].balanceOf(account))
       )
       const currencyToBalance = balanceList.map((balance, index) => ({
         currency: availableCurrencies[index],
-        balance: fromWei(balance),
+        balance: weiToString(balance)
       }))
       currencyToBalance.sort((b, a) => a.balance - b.balance)
       setCurrencyToBalanceList(currencyToBalance.slice(0, 4))
@@ -92,7 +105,7 @@ function Personal() {
           <div className="synth-assets">
             {currencyToBalanceList.map(({
               currency,
-              balance,
+              balance
             }) => (
               <div key={currency}>
                 <span>{currency}</span>
@@ -146,7 +159,7 @@ function Personal() {
           trailColor="#342D33"
           style={{
             position: 'relative',
-            top: '20px',
+            top: '20px'
           }}
         />
       </div>

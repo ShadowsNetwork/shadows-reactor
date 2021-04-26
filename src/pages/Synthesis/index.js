@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import GasPrice from '@/components/GasPrice'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { LoadingOutlined } from '@ant-design/icons'
-import { fromWei, toWei } from '@/web3/utils'
+import { weiToString, toWei } from '@/web3/utils'
 import TransactionStatus from '@/components/TransactionStatus'
 import {
   initTransaction,
@@ -47,9 +47,9 @@ function Synthesis() {
       dowsJSConnector.dowsJs.Shadows.collateralisationRatio(account)
     ])
 
-    setAvailable(fromWei(remainingIssuableSynths))
-    setCollateralized(fromWei(dowsBalance.sub(transferableDows)))
-    setMyRatio(fromWei(collateralisationRatio))
+    setAvailable(weiToString(remainingIssuableSynths))
+    setCollateralized(weiToString(dowsBalance.sub(transferableDows)))
+    setMyRatio(weiToString(collateralisationRatio))
   }, [account])
 
   useEffect(() => {

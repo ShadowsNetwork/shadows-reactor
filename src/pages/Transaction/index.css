@@ -119,10 +119,6 @@
     color: #B9B1B7;
     font-size: 1.6rem;
 }
-.ant-btn:focus {
-    background: #CB395F;
-    color: white;
-}
 
 .menu-item > .icon {
   display: inline-block;

@@ -1,14 +1,18 @@
 import Web3 from 'web3'
 import BigNumber from 'bignumber.js'
 
-const utils = new Web3().utils
+export const web3Utils = new Web3().utils
 
 export function toBigNumber(value: string | number): BigNumber {
   return new BigNumber(value)
 }
 
-export function fromWei(value: string | number, decimalPlaces = 8): string {
-  return new BigNumber(utils.fromWei(value.toString())).dp(decimalPlaces)
+export function weiToBigNumber(value: string | number, decimalPlaces = 18): BigNumber {
+  return new BigNumber(web3Utils.fromWei(value.toString())).dp(decimalPlaces, BigNumber.ROUND_DOWN)
+}
+
+export function weiToString(value: string | number, decimalPlaces = 18): string {
+  return weiToBigNumber(value, decimalPlaces)
     .toString()
 }
 
@@ -19,15 +23,15 @@ export function toWei(amount: number | string): string {
 }
 
 export function toHex(value: string | number): string {
-  return utils.toHex(value)
+  return web3Utils.toHex(value)
 }
 
 export function toByte32(value: string): string {
-  return utils.rightPad(utils.asciiToHex(value), 64)
+  return web3Utils.rightPad(web3Utils.asciiToHex(value), 64)
 }
 
 export function bytesToString(bytes: string): string {
-  const result = utils.hexToAscii(bytes)
+  const result = web3Utils.hexToAscii(bytes)
   return result.replace(/\0/g, '')
 }
 

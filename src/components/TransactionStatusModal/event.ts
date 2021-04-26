@@ -1,0 +1,32 @@
+import { Dispatch, SetStateAction } from 'react'
+import { TransactionStatusModalProps } from '@/components/TransactionStatusModal/index'
+import { TransactionStatus } from '@/types/TransactionHistory'
+
+type TransactionStatusSetter = Dispatch<SetStateAction<TransactionStatusModalProps>>
+
+export function beginTransaction(props: TransactionStatusModalProps, setter: TransactionStatusSetter): void {
+  setter({
+    ...props,
+    visible: true,
+    status: TransactionStatus.WaitForConfirmation,
+    errorMessage: ''
+  })
+}
+
+export function submitTransaction(props: TransactionStatusModalProps, setter: TransactionStatusSetter): void {
+  setter({
+    ...props,
+    visible: true,
+    status: TransactionStatus.Submitted,
+    errorMessage: ''
+  })
+}
+
+export function rejectTransaction(props: TransactionStatusModalProps, setter: TransactionStatusSetter, errorMessage?: string): void {
+  setter({
+    ...props,
+    visible: true,
+    status: TransactionStatus.SignatureError,
+    errorMessage
+  })
+}

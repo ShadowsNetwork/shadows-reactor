@@ -1,0 +1,49 @@
+.transaction-status-modal {
+  z-index: 9999;
+  text-align: center;
+  position: relative;
+
+  .transactionError {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+
+    .transactionErrorIcon {
+      width: 8.1rem;
+      height: 8.1rem;
+      border-radius: 8.1rem;
+      border: 0.4rem solid red;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 4.8rem;
+      }
+    }
+  }
+
+  .message {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  .label {
+    width: 100%;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  .icon {
+    font-size: 8.1rem;
+  }
+  .dismiss {
+    width: 142.02px;
+    height: 37.57px;
+    background: #63CCA9;
+    border-radius: 20px;
+    color: #FFFEFE;
+    border: none;
+    margin-top: 3rem;
+    font-weight: bold;
+  }
+}

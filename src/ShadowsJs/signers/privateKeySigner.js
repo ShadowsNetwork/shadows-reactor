@@ -1,5 +1,5 @@
 import { getDefaultProvider, Wallet } from 'ethers'
-import ContractSettings from '../contractSettings'
+import ContractSettings from '../ContractSettings'
 
 const PrivateKeySigner = (provider, networkId, privateKey) => {
   if (networkId && !provider) {
