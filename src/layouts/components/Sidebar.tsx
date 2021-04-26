@@ -36,11 +36,11 @@ const SideBar: React.FC = () => {
           }
           <Menu.Item>
             <img style={{width:'2.4rem',marginRight:'1.6rem'}} src={leaderboard}/>
-            <a href={'https://bridge.poly.network/'} target='_blank'>Bridge</a>
+            <a href={'https://bridge.poly.network/'} target='_blank' rel="noreferrer">Bridge</a>
           </Menu.Item>
           <Menu.Item>
             <img style={{width:'2.4rem',marginRight:'1.6rem'}} src={viewList}/>
-            <a href={'https://exchange.pancakeswap.finance/#/pool'} target='_blank'>Provide liquidity</a>
+            <a href={'https://exchange.pancakeswap.finance/#/pool'} target='_blank' rel="noreferrer">Provide liquidity</a>
           </Menu.Item>
         </Menu>
       </div>
