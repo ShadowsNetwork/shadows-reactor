@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  getAccount, getTransactionHistoryList, setAccount, setSelectedWallet
+  getAccount, getSelectedWallet, getTransactionHistoryList, setAccount, setSelectedWallet
 } from '@/store/wallet'
 import './index.less'
 import { Button, Modal } from 'antd'
@@ -11,6 +11,8 @@ import WalletSelectionModal from '@/components/Wallet/WalletSelectionModal'
 import { ReactComponent as LinkIcon } from '@/img/link.svg'
 import Jazzicon from 'jazzicon'
 import { CloseOutlined, LoadingOutlined } from '@ant-design/icons'
+import { getWeb3ProviderByWallet, WalletNames } from '@/web3/wallets'
+import WalletConnectProvider from '@walletconnect/web3-provider'
 
 type CurrentAccountProps = {
   account: string
@@ -42,10 +44,17 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
   transactionHistoryList
 }) => {
   const dispatch = useDispatch()
+  const selectedWallet = useSelector(getSelectedWallet) as WalletNames
 
-  const disconnect = () => {
+  const disconnect = async () => {
     dispatch(setSelectedWallet(null))
     dispatch(setAccount(null))
+
+    if (selectedWallet === 'WalletConnect') {
+      const provider = await getWeb3ProviderByWallet(selectedWallet)
+      const walletConnectProvider = provider?.provider as WalletConnectProvider
+      walletConnectProvider.disconnect()
+    }
   }
 
   return (

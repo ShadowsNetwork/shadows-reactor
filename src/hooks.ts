@@ -211,8 +211,6 @@ export function useInitializeProvider(): boolean {
   }
 }*/
 
-export type ErrorMessageGetter = (error: any) => string
-
 export function useErrorMessage(): any {
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames | undefined
 
