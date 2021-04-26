@@ -24,8 +24,9 @@ import { useErrorMessage, useInitializeProvider } from '@/hooks'
 import RedeemModal, { RedeemModalStatus } from '@/pages/LiquidityProvider/RedeemModal'
 import { usePoolData } from '@/pages/LiquidityProvider/usePoolData'
 import { PoolConfig } from '@/types/LiquidityProvider'
+import { ConfigType } from '../../../config'
 
-import config from '../../../config'
+const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 
 const EmptyPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency, poolType }) => (
   <div className="pool">
