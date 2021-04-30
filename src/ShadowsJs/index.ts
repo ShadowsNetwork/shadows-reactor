@@ -4,6 +4,7 @@ import ShadowsJsBase from '@/ShadowsJs/ShadowsJsBase'
 import ContractSettings from '@/ShadowsJs/ContractSettings'
 import LpERC20Token from '@/ShadowsJs/contracts/LpERC20Token'
 import Farm from '@/ShadowsJs/contracts/Farm'
+import Bridge from './contracts/Bridge/Bridge'
 
 export default class ShadowsJS extends ShadowsJsBase {
   static signers
@@ -11,6 +12,7 @@ export default class ShadowsJS extends ShadowsJsBase {
 
   LpERC20Token: LpERC20Token
   Farm: Farm
+  Bridge: Bridge
 
   /**
    * Creates instances of Shadows contracts based on ContractSettings.
@@ -26,6 +28,7 @@ export default class ShadowsJS extends ShadowsJsBase {
 
     this.LpERC20Token = new LpERC20Token(network, signer, provider)
     this.Farm = new Farm(network, signer, provider)
+    this.Bridge = new Bridge(signer, provider)
   }
 
 }

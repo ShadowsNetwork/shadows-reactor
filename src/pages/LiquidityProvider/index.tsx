@@ -377,7 +377,7 @@ const Pool: React.FC<PoolConfig> = ({
 }
 
 const LiquidityProvider: React.FC = () => {
-  const providerInitialized = useInitializeProvider()
+  const providerInitialized = useInitializeProvider(parseInt(process.env.CHAIN_ID!, 16), process.env.RPC_URL!)
 
   return (
     <div className="liquidity-provider">

@@ -1,24 +1,9 @@
-import Welcome from '@/pages/Welcome'
-import Personal from '@/pages/Personal'
-import Synthesis from '@/pages/Synthesis'
-import Transaction from '@/pages/Transaction'
 import Pool from '@/pages/LiquidityProvider'
-import Burn from '@/pages/Burn'
-import Reward from '@/pages/Reward'
 import FlowStep from '@/pages/Liquidity/FlowStep'
-import Transfer from '@/pages/Transfer'
 
 import LiquidityImage from '@/img/background/liquidity.jpg'
-import Map from '@/img/background/map.jpg'
-import WelcomeImg from '@/img/background/welcome.jpg'
-
-import calendar from '@/img/slideBarIcon/calendar.png'
-import comment from '@/img/slideBarIcon/comment.png'
-import dashboard from '@/img/slideBarIcon/Dashboard.png'
-import leaderboard from '@/img/slideBarIcon/leaderboard.png'
 import money from '@/img/slideBarIcon/money-bill-stack.png'
-import shopping from '@/img/slideBarIcon/shopping-bag.png'
-import viewList from '@/img/slideBarIcon/view-list.png'
+import Bridge from '@/pages/Bridge'
 
 // import { lazy } from 'react'
 // const Welcome = lazy(() => import('@/pages/Welcome'))
@@ -97,7 +82,15 @@ const routers = [
   {
     path: '/liquidity',
     key: 'liquidity',
+    title: 'Staking',
     component: Pool,
+    image: money,
+  },
+  {
+    path: '/bridge',
+    key: 'bridge',
+    title: 'Bridge',
+    component: Bridge,
     image: money,
   },
 

@@ -15,16 +15,16 @@ class LpERC20Token extends AbstractContractCaller {
       return
     }
 
-    this.abi = getSource(this.network, 'ERC20').abi
+    this.abi = getSource(this.network, 'ERC20')?.abi
   }
 
   async balanceOf(lpTokenAddress: string, account: string) {
-    return await new Contract(lpTokenAddress, this.abi, this.signer || this.provider)
+    return await new Contract(lpTokenAddress, this.abi!, this.signer || this.provider)
       .balanceOf(account)
   }
 
   async approve(lpTokenAddress: string, farmAddress: string) {
-    return await new Contract(lpTokenAddress, this.abi, this.signer || this.provider)
+    return await new Contract(lpTokenAddress, this.abi!, this.signer || this.provider)
       .approve(
         farmAddress,
         new BigNumber('2').pow(256)
@@ -34,12 +34,12 @@ class LpERC20Token extends AbstractContractCaller {
   }
 
   async allowance(lpTokenAddress: string, owner: string, farmAddress: string) {
-    return await new Contract(lpTokenAddress, this.abi, this.signer || this.provider)
+    return await new Contract(lpTokenAddress, this.abi!, this.signer || this.provider)
       .allowance(owner, farmAddress)
   }
 
   async totalSupply(lpTokenAddress: string) {
-    return await new Contract(lpTokenAddress, this.abi, this.signer || this.provider)
+    return await new Contract(lpTokenAddress, this.abi!, this.signer || this.provider)
       .totalSupply()
   }
 

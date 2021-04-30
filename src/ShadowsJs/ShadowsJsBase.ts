@@ -20,14 +20,17 @@ class ShadowsJsBase {
 
     this.contractSettings = contractSettings
     const { network } = contractSettings
-    console.log('network:', network)
     this.network = network
+
     const contractForEnv = contracts[network]
-    Object.keys(contractForEnv)
-      .forEach(name => {
-        const Contract = contractForEnv[name]
-        this[name] = new Contract(contractSettings)
-      })
+    if (contractForEnv) {
+      Object.keys(contractForEnv)
+        .forEach(name => {
+          const Contract = contractForEnv[name]
+          this[name] = new Contract(contractSettings)
+        })
+    }
+
     this.util = new Util(contractSettings)
     this.utils = this.util
     this.binaryOptionsUtils = BinaryOptionsUtils

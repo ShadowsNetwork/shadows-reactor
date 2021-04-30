@@ -43,6 +43,9 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
   account,
   transactionHistoryList
 }) => {
+  const chainId: number = parseInt(process.env.CHAIN_ID!, 16)
+  const RPCUrl: string = process.env.RPC_URL!
+
   const dispatch = useDispatch()
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
 
@@ -51,7 +54,7 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
     dispatch(setAccount(null))
 
     if (selectedWallet === 'WalletConnect') {
-      const provider = await getWeb3ProviderByWallet(selectedWallet)
+      const provider = await getWeb3ProviderByWallet({ chainId, RPCUrl }, selectedWallet)
       const walletConnectProvider = provider?.provider as WalletConnectProvider
       walletConnectProvider.disconnect()
     }

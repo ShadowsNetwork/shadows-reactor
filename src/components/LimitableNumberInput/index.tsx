@@ -11,9 +11,7 @@ interface LimitableNumberInputProp extends InputProps {
   inputValueSetter: Dispatch<SetStateAction<string>>
   decimalPlaces?: number
 }
-// '1'
-// '1.123456789012345678'
-// '1.1234567890123456780'
+
 const LimitableNumberInput: React.FC<LimitableNumberInputProp> = ({
   min,
   max,
@@ -48,6 +46,7 @@ const LimitableNumberInput: React.FC<LimitableNumberInputProp> = ({
       return
     }
 
+    inputValueSetter(e.target.value)
     if (max) {
       if (new BigNumber(e.target.value).lt(new BigNumber(max))) {
         inputValueSetter(e.target.value)

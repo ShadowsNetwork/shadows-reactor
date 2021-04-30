@@ -1,5 +1,9 @@
 // import { NETWORK_SPEEDS_TO_KEY, GWEI_UNIT, GAS_LIMIT_BUFFER_PERCENTAGE } from '../constants/network'
 
+import { message } from 'antd'
+import { Web3Provider } from '@ethersproject/providers'
+import WalletConnectProvider from '@walletconnect/web3-provider'
+
 export const SUPPORTED_NETWORKS = {
   1: 'mainnet',
   3: 'ropsten',
@@ -134,33 +138,38 @@ const defaultNetwork = {
   })
 }*/
 
-export function chainSupported(chainId) {
-  return chainId === process.env.CHAIN_ID
+export type EthereumChainParams = {
+  chainId: string,
+  chainName: string,
+  nativeCurrency: {
+    name: string,
+    symbol: string,
+    decimals: number
+  },
+  rpcUrls: string[],
+  blockExplorerUrls: string[]
 }
 
-export async function setupNetwork() {
+export async function setupMetamaskNetwork(params: EthereumChainParams) {
   const provider = (window as WindowChain).ethereum
   if (provider) {
     try {
       await provider.request({
         method: 'wallet_addEthereumChain',
-        params: [
-          {
-            chainId: process.env.CHAIN_ID,
-            chainName: process.env.NETWORK_NAME,
-            nativeCurrency: {
-              name: 'BNB',
-              symbol: 'bnb',
-              decimals: 18
-            },
-            rpcUrls: [process.env.RPC_URL],
-            blockExplorerUrls: [process.env.BLOCK_EXPLORER_URL]
-          }
-        ]
+        params: [params]
       })
       return true
     } catch (error) {
-      console.error(error)
+      if (error.message.includes('May not specify default MetaMask chain.')) {
+        message.warn(`Please manually switch to the ${params.chainName} in MetaMask`, 5)
+      }
+
+      if (error.message.includes('User rejected the request.')) {
+        message.warn('Please allow switching network in Metamask')
+        setTimeout(() => {
+          setupMetamaskNetwork(params)
+        }, 1000)
+      }
       return false
     }
   } else {
@@ -169,8 +178,25 @@ export async function setupNetwork() {
   }
 }
 
-// export const addBufferToGasLimit = gasLimit => Math.round(Number(gasLimit) * (1 + 0.2))
+export async function setupWalletConnectNetwork(params: EthereumChainParams, web3Provider: Web3Provider) {
+  const provider = web3Provider.provider as WalletConnectProvider
+  if (provider.wc.chainId !== parseInt(params.chainId, 16)) {
+    message.warn(`Please manually switch to the ${params.chainName} in your WalletConnect App, and then try to re-connect.`, 5)
+    provider.wc.killSession()
+    provider.close()
 
-/* export const isMainNet = networkId => networkId === Number(SUPPORTED_NETWORKS_MAP.MAINNET)
+    setTimeout(() => {
+      window.location.reload()
+    }, 3000)
 
-export const isGoerliTestnet = networkId => networkId === Number(SUPPORTED_NETWORKS_MAP.GOERLI) */
+    return false
+  } else {
+    await provider.enable()
+    return true
+  }
+}
+
+export async function setupBSCNetwork(params: EthereumChainParams) {
+  message.warn(`Please manually switch to the ${params.chainName} in Binance Chain Wallet`, 5)
+  return false
+}

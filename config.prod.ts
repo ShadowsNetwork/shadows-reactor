@@ -5,6 +5,7 @@ const BNBIcon = lazy(() => import('./src/img/liquidityProvider/bnb.png'))
 const DOWSIcon = lazy(() => import('./src/img/dows-info/dows.png'))
 
 const config: ConfigType = {
+  bridge: { apiBaseUrl: 'https://bridge.poly.network/v1' },
   liquidityProvider: {
     supportedPools: [
       {

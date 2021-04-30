@@ -46,14 +46,14 @@ const dowsJSConnector: DowsJSConnector = {
   signers: ShadowsJS.signers,
   dowsJs: new ShadowsJS(),
 
-  setContractSettings({ provider, signer, networkId }) {
+  setContractSettings(contractSettings: ContractSettings) {
     this.initialized = true
-    this.dowsJs = new ShadowsJS(new ContractSettings(provider, signer, networkId))
-    this.synths = this.dowsJs?.contractSettings.synths
-    this.signer = this.dowsJs?.contractSettings.signer
-    this.provider = this.dowsJs?.contractSettings.provider
-    this.web3Utils = this.dowsJs?.utils
-    this.ethersUtils = this.dowsJs?.ethers.utils
+    this.dowsJs = new ShadowsJS(contractSettings)
+    this.synths = this.dowsJs.contractSettings.synths
+    this.signer = this.dowsJs.contractSettings.signer
+    this.provider = this.dowsJs.contractSettings.provider
+    this.web3Utils = this.dowsJs.utils
+    this.ethersUtils = this.dowsJs.ethers.utils
   }
 }
 

@@ -54,7 +54,7 @@ function getTarget(network = 'mainnet', contract: string): Target | Target[] {
   return deployment.targets
 }
 
-const getSource = (network = 'mainnet', contract: string): Source => {
+const getSource = (network = 'mainnet', contract: string): Source | undefined => {
   const deployment = loadDeploymentFile(network)
   if (contract) return deployment.sources[contract]
   return deployment.sources

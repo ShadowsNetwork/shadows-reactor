@@ -7,7 +7,7 @@ export class AbstractContractCaller {
   protected signer?: Signer
   protected provider?: Provider
 
-  protected abi!: Array<JsonFragment>
+  protected abi?: Array<JsonFragment>
 
   protected network!: string
 

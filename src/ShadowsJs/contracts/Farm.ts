@@ -14,31 +14,31 @@ class Farm extends AbstractContractCaller {
       return
     }
 
-    this.abi = getSource(this.network, 'Farm').abi
+    this.abi = getSource(this.network, 'Farm')?.abi
   }
 
   async deposited(farmAddress, pid, account) {
-    return await new Contract(farmAddress, this.abi, this.signer || this.provider).deposited(pid, account)
+    return await new Contract(farmAddress, this.abi!, this.signer || this.provider).deposited(pid, account)
   }
 
   async userInfo(farmAddress, pid, account) {
-    return await new Contract(farmAddress, this.abi, this.signer || this.provider).userInfo(pid, account)
+    return await new Contract(farmAddress, this.abi!, this.signer || this.provider).userInfo(pid, account)
   }
 
   async withdraw(farmAddress, pid, account) {
-    return await new Contract(farmAddress, this.abi, this.signer || this.provider).withdraw(pid, account)
+    return await new Contract(farmAddress, this.abi!, this.signer || this.provider).withdraw(pid, account)
   }
 
   async deposit(farmAddress, pid, amount) {
-    return await new Contract(farmAddress, this.abi, this.signer || this.provider).deposit(pid, amount)
+    return await new Contract(farmAddress, this.abi!, this.signer || this.provider).deposit(pid, amount)
   }
 
   async pending(farmAddress, pid, account) {
-    return await new Contract(farmAddress, this.abi, this.signer || this.provider).pending(pid, account)
+    return await new Contract(farmAddress, this.abi!, this.signer || this.provider).pending(pid, account)
   }
 
   async rewardPerBlock(farmAddress) {
-    return await new Contract(farmAddress, this.abi, this.signer || this.provider).rewardPerBlock()
+    return await new Contract(farmAddress, this.abi!, this.signer || this.provider).rewardPerBlock()
   }
 }
 

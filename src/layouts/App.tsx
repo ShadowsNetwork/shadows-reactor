@@ -5,10 +5,13 @@ import { Route } from 'react-router-dom'
 import TopBar from '@/layouts/components/TopBar'
 import DowsInfo from '@/layouts/components/DowsInfo'
 import { useDynamicBackgroundImage } from '@/hooks'
+import { useDispatch } from 'react-redux'
+import { setChainId } from '@/store/wallet'
 
 const App: React.FC = () => {
   const background = useDynamicBackgroundImage()
-  // useSetupProvider()
+  const dispatch = useDispatch()
+  dispatch(setChainId(parseInt(process.env.CHAIN_ID!, 16)))
 
   return (
     <div
