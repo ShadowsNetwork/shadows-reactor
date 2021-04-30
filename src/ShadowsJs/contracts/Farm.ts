@@ -40,6 +40,18 @@ class Farm extends AbstractContractCaller {
   async rewardPerBlock(farmAddress) {
     return await new Contract(farmAddress, this.abi, this.signer || this.provider).rewardPerBlock()
   }
+
+  async muliplier(farmAddress) {
+    return await new Contract(farmAddress, this.abi, this.signer || this.provider).BONUS_MULTIPLIER()
+  }
+
+  async poolInfo(farmAddress, pid) {
+    return await new Contract(farmAddress, this.abi, this.signer || this.provider).poolInfo(pid)
+  }
+
+  async totalAllocPoint(farmAddress) {
+    return await new Contract(farmAddress, this.abi, this.signer || this.provider).totalAllocPoint()
+  }
 }
 
 export default Farm

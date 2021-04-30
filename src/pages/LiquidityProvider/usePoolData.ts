@@ -13,19 +13,28 @@ const isAllowanceEnough = (allowance: string): boolean => {
   return new BigNumber(allowance).gt(ALLOWANCE_THRESHOLD_VALUE)
 }
 
-const getAPY = async (account: string, lpTokenAddress: string, farmAddress: string, poolType: PoolType) => {
-  const rewardPerBlock = weiToBigNumber(
-    await dowsJSConnector.dowsJs.Farm.rewardPerBlock(farmAddress)
-  )
+const getAPY = async (account: string, lpTokenAddress: string, farmAddress: string, poolType: PoolType, poolNumber: number, lpMultiplier:number) => {
 
-  const staked = weiToBigNumber(
-    await dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenAddress, farmAddress)
-  )
+  const [_rewardPerBlock, _BONUS_MULTIPLIER, _staked, _poolInfo, _totalAllocPoint] = await Promise.all([
+    dowsJSConnector.dowsJs.Farm.rewardPerBlock(farmAddress),
+    dowsJSConnector.dowsJs.Farm.muliplier(farmAddress),
+    dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenAddress, farmAddress),
+    dowsJSConnector.dowsJs.Farm.poolInfo(farmAddress, poolNumber),
+    dowsJSConnector.dowsJs.Farm.totalAllocPoint(farmAddress),
+  ])
+  const rewardPerBlock = weiToBigNumber(_rewardPerBlock)
 
-  const rewardPerYear = rewardPerBlock.multipliedBy('10512000')
+  const BONUS_MULTIPLIER = _BONUS_MULTIPLIER.toString()
 
-  const APR = rewardPerYear.dividedBy(staked)
-    .dividedBy(poolType === 'pair' ? '2.0' : '1.0')
+  const staked = weiToBigNumber(_staked).multipliedBy(lpMultiplier)
+
+  const allocPoint = _poolInfo.allocPoint.toString()
+
+  const totalAllocPoint = _totalAllocPoint.toString()
+
+  const rewardPerYear = rewardPerBlock.multipliedBy(BONUS_MULTIPLIER).multipliedBy(allocPoint).dividedBy(totalAllocPoint).multipliedBy('10368000')
+
+  const APR = rewardPerYear.dividedBy(staked);
 
   // (1 + APR / 12) ^ 12 - 1
   return (new BigNumber(1).plus(
@@ -52,7 +61,8 @@ type PoolDataProps = {
   farmContractAddress: string,
   poolType: PoolType,
   poolNumber: number,
-  refreshFlag: number
+  refreshFlag: number,
+  lpMultiplier: number,
 }
 
 export const usePoolData = ({
@@ -60,7 +70,8 @@ export const usePoolData = ({
   farmContractAddress,
   poolType,
   poolNumber,
-  refreshFlag
+  refreshFlag,
+  lpMultiplier
 }: PoolDataProps): PoolData => {
   const account = useSelector(getAccount)
   const dowsPrice = new BigNumber((useDowsPriceQuery().data as string))
@@ -92,21 +103,21 @@ export const usePoolData = ({
       dowsJSConnector.dowsJs.Farm.deposited(farmContractAddress, poolNumber, account),
       dowsJSConnector.dowsJs.Farm.pending(farmContractAddress, poolNumber, account),
       dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account, farmContractAddress),
-      getAPY(account, lpTokenContractAddress, farmContractAddress, poolType)
+      getAPY(account, lpTokenContractAddress, farmContractAddress, poolType, poolNumber, lpMultiplier)
     ])
     setUserLpBalance(weiToString(_userLpBalance))
 
     setTotalLockedLP(weiToString(_totalLockedLP))
     setTotalLockedLPInUSD(weiToBigNumber(_totalLockedLP)
       .multipliedBy(dowsPrice)
-      .multipliedBy(poolType === 'pair' ? 2 : 1)
+      .multipliedBy(lpMultiplier)
       .toFixed(2)
     )
 
     setUserLockedLp(weiToString(_userLockedLp))
     setUserLockedLpInUSD(weiToBigNumber(_userLockedLp)
       .multipliedBy(dowsPrice)
-      .multipliedBy(poolType === 'pair' ? 2 : 1)
+      .multipliedBy(lpMultiplier)
       .toFixed(2)
     )
 

@@ -78,6 +78,7 @@ const Pool: React.FC<PoolConfig> = ({
   poolNumber,
   poolName,
   poolType,
+  lpMultiplier,
   leftCurrency,
   rightCurrency,
   lpTokenContractAddress,
@@ -124,7 +125,7 @@ const Pool: React.FC<PoolConfig> = ({
     dowsEarned,
     allowanceEnough
   } = usePoolData({
-    lpTokenContractAddress, farmContractAddress, poolNumber, poolType, refreshFlag
+    lpTokenContractAddress, farmContractAddress, poolNumber, poolType, refreshFlag, lpMultiplier
   })
 
   const closeAmountInputModal = () => {
