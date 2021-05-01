@@ -210,7 +210,13 @@ export function useSetupNetwork(providerInitialized: boolean, params: EthereumCh
       if (selectedWallet === 'Metamask') {
         setReady(await setupMetamaskNetwork(params))
       } else if (selectedWallet === 'BSC') {
-        setReady(await setupBSCNetwork(params, web3Provider))
+        setReady(await setupBSCNetwork(params))
+      }
+    }).catch(async () => {
+      if (selectedWallet === 'Metamask') {
+        setReady(await setupMetamaskNetwork(params))
+      } else if (selectedWallet === 'BSC') {
+        setReady(await setupBSCNetwork(params))
       }
     })
   }, [selectedWallet, providerInitialized, params])

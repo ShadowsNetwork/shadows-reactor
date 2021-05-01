@@ -197,6 +197,13 @@ export async function setupWalletConnectNetwork(params: EthereumChainParams, web
 }
 
 export async function setupBSCNetwork(params: EthereumChainParams) {
+  // TODO
+  const supportChainIdList = [97]
+  if (!supportChainIdList.includes(parseInt(params.chainId, 16))) {
+    message.warn(`Binance Chain Wallet does NOT support for ${params.chainName}`)
+    return false
+  }
+
   message.warn(`Please manually switch to the ${params.chainName} in Binance Chain Wallet`, 5)
   return false
 }

@@ -45,7 +45,10 @@ const Bridge: React.FC<BridgeProps> = ({
   }
 
   const approve = async () => {
-    await dowsJSConnector.dowsJs.Bridge.approve(dowsTokenAddress, lockContractAddress)
+    const approveResult = await dowsJSConnector.dowsJs.Bridge.approve(dowsTokenAddress, lockContractAddress)
+    approveResult.wait().then(() => {
+      window.location.reload()
+    })
   }
 
   const confirm = async () => {
