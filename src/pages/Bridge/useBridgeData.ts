@@ -12,6 +12,7 @@ const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 type BridgeDataProps = {
   fromPolyChain: PolyChain
   toPolyChain: PolyChain
+  refreshFlag: number
 }
 
 const getBridgeFee = async (SrcChainId, Hash, DstChainId) => {
@@ -30,7 +31,8 @@ const getBridgeFee = async (SrcChainId, Hash, DstChainId) => {
 
 const useBridgeData = ({
   fromPolyChain,
-  toPolyChain
+  toPolyChain,
+  refreshFlag
 }: BridgeDataProps) => {
   const account = useSelector(getAccount)
 
@@ -52,7 +54,7 @@ const useBridgeData = ({
     setAllowance(weiToString(_allowance))
     setBalance(weiToString(_balance))
     setFee(_fee)
-  }, [account, fromPolyChain, toPolyChain])
+  }, [account, refreshFlag, fromPolyChain, toPolyChain])
 
   useEffect(() => {
     fetchData()

@@ -58,7 +58,7 @@ const LpAmountInputModal: React.FC<LpAmountInputModalStatus> = ({
           max={maxAvailable}
           decimalPlaces={18}
           inputValue={inputValue}
-          inputValueSetter={setInputValue}
+          setInputValue={setInputValue}
           allowClear={true}
         />
         <span className="dows">{unit}</span>

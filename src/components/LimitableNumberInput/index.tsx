@@ -1,6 +1,6 @@
 import { Input, message } from 'antd'
 import { InputProps } from 'antd/lib/input/Input'
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import assert from 'assert'
 
@@ -8,7 +8,7 @@ interface LimitableNumberInputProp extends InputProps {
   max?: string
   min?: string
   inputValue: string
-  inputValueSetter: Dispatch<SetStateAction<string>>
+  setInputValue: Dispatch<SetStateAction<string>>
   decimalPlaces?: number
 }
 
@@ -16,53 +16,52 @@ const LimitableNumberInput: React.FC<LimitableNumberInputProp> = ({
   min,
   max,
   inputValue,
-  inputValueSetter,
+  setInputValue,
   decimalPlaces,
   ...inputProps
 }) => {
+  // ^([0]|([^0]\d*))(\.\d*)?$
   const reg = decimalPlaces ? new RegExp(`^\\d+(\\.\\d{0,${decimalPlaces}})?$`) : /^\d+(.\d+)?$/
 
-  if (min) {
-    assert(min.length === 0 || reg.test(min))
-  }
-  if (max) {
-    assert(max.length === 0 || reg.test(max))
-  }
+  assert(!min || min.length === 0 || reg.test(min))
+  assert(!max || max.length === 0 || reg.test(max))
 
-  const onKeyPress = (e: { key: string; preventDefault: () => void }) => {
-    if (!/[.\d]/.test(e.key)) {
-      e.preventDefault()
+  const onKeyPress = (event: any) => {
+    if (!/[.\d]/.test(event.key)) {
+      event.preventDefault()
     }
   }
 
-  const onChange = (e: { target: { value: string } }) => {
+  const onChange = (e: any) => {
     if (!e.target.value) {
-      inputValueSetter('')
+      setInputValue('')
       return
     }
 
-    if (decimalPlaces && !reg.test(e.target.value)) {
-      message.warning(`The input value is up to ${decimalPlaces}th decimal place`, 0.5)
+    if (!reg.test(e.target.value)) {
+      if (decimalPlaces && new RegExp(`^\\d+(\\.\\d{${decimalPlaces + 1},})?$`).test(e.target.value)) {
+        message.warning(`The input value is up to ${decimalPlaces}th decimal place`, 0.5)
+      }
       return
     }
 
-    inputValueSetter(e.target.value)
-    if (max) {
-      if (new BigNumber(e.target.value).lt(new BigNumber(max))) {
-        inputValueSetter(e.target.value)
-      } else {
-        inputValueSetter(max.toString())
-      }
-    }
-
-    if (min) {
-      if (new BigNumber(e.target.value).gt(new BigNumber(min))) {
-        inputValueSetter(e.target.value)
-      } else {
-        inputValueSetter(min.toString())
-      }
-    }
+    setInputValue(
+      e.target
+        .value
+        .replace(/^0([1-9]+)$/, '$1')
+        .replace(/^0+$/, '0')
+    )
   }
+
+  useEffect(() => {
+    if (max && new BigNumber(inputValue).gt(new BigNumber(max))) {
+      setInputValue(max)
+    }
+
+    if (min && new BigNumber(inputValue).lt(new BigNumber(min))) {
+      setInputValue(min)
+    }
+  }, [max, min, inputValue])
 
   return (
     <Input

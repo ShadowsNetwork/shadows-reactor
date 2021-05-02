@@ -50,13 +50,13 @@ const BridgeMain: React.FC<BridgeProps> = ({
   fromPolyChain,
   toPolyChain
 }) => {
-  const account = useSelector(getAccount)
-
   const { dowsTokenAddress, lockContractAddress } = fromPolyChain
 
+  const account = useSelector(getAccount)
   const [amount, setAmount] = useState<string>('')
+  const [refreshFlag, setRefreshFlag] = useState(0)
 
-  const { allowance, balance, fee } = useBridgeData({ fromPolyChain, toPolyChain })
+  const { allowance, balance, fee } = useBridgeData({ fromPolyChain, toPolyChain, refreshFlag })
 
   const allowanceEnough = () => {
     return allowance && new BigNumber(amount).lt(new BigNumber(allowance))
@@ -79,13 +79,17 @@ const BridgeMain: React.FC<BridgeProps> = ({
   }
 
   const confirm = async () => {
-    await dowsJSConnector.dowsJs.Bridge.lock({
+    const lockResult = await dowsJSConnector.dowsJs.Bridge.lock({
       lockContractAddress,
       fromAsset: dowsTokenAddress,
       toChainId: toPolyChain.polyChainId,
       toAddress: account,
       amount: toWei(amount),
       fee: toWei(fee!)
+    })
+
+    lockResult.wait().then(() => {
+      setRefreshFlag(refreshFlag + 1)
     })
   }
 
@@ -100,7 +104,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
         <LimitableNumberInput
           decimalPlaces={18}
           inputValue={amount}
-          inputValueSetter={setAmount}
+          setInputValue={setAmount}
           max={balance}
         />
         <div className="DOWS">DOWS</div>
