@@ -1,12 +1,77 @@
 .bridge {
   position: absolute;
-  top: 9.4rem;
+  top: 8.4rem;
   left: 25.4rem;
-
   color: white;
+  width: 39.1rem;
+  background: #121725;
+  border-radius: 3.757rem;
+  padding-bottom: 2.343rem;
+  .title {
+    display: flex;
+    align-items: center;
+    margin-top: 1.6rem;
+    padding: 0 2.4rem;
+
+    .bridgeImg {
+      width: 3rem;
+    }
+
+    span {
+      display: inline-block;
+      font-size: 1.8rem;
+      margin-left: 1rem;
+      font-weight: bold;
+    }
+  }
 
   .chain-container {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4.0rem;
+
+    .chain {
+      width: 10rem;
+      height: 13.1rem;
+
+      p {
+        display: block;
+        width: 100%;
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: bold;
+      }
+      .chainContent {
+        width: 100%;
+        height: 10rem;
+        background: #182037;
+        border-radius: 10px;
+        margin-top: 0.7rem;
+        letter-spacing: -0.2px;
+      }
+      img {
+        width: 3.6rem;
+        margin-left: calc((100% - 3.6rem) / 2);
+        margin-top: 1.1rem;
+      }
+      span {
+        display: block;
+        text-align: center;
+        margin-top: 0.4rem;
+        font-size: 1.4rem;
+        font-weight: bold;
+        width: 5.7rem;
+        margin-left: calc((100% - 5.7rem) / 2);
+      }
+    }
+    .switch {
+      width: 4rem;
+      height: 2.8rem;
+      margin-top: 5rem;
+      margin-left: 2.3rem;
+      margin-right: 2.3rem;
+    }
 
   }
 
@@ -18,6 +83,74 @@
 
   .error-hint {
     color: red;
+    text-align: center;
   }
 }
+
+
+.available {
+  margin-top: 3.3rem;
+  padding-right: 5.2rem;
+  text-align: center;
+  margin-left: 9rem;
+}
+.input-row {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+
+  input.ant-input {
+    width: 19.2rem;
+    height: 3.8rem;
+    background: #363636;
+    border-radius: 3.8rem;
+    border: none;
+    outline: none;
+    margin-left: 1.9rem;
+  }
+
+  .DOWS {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #63CCA9;
+    margin-left: 2rem;
+  }
+  Button {
+    width: 8.567rem;
+    height: 3.757rem;
+    border-radius: 2rem;
+    color: #FFFEFE !important;
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: #63CCA9 !important;
+    border: none;
+    margin-left: 1.8rem;
+  }
+}
+.fee {
+  margin-left:1.9rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #63CCA9;
+  margin-top: 0.5rem;
+}
+.Bridge-Confirmbutton {
+
+  Button {
+    width: 15.979rem;
+    height: 3.757rem;
+    border-radius: 2rem;
+    color: #FFFEFE !important;
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: #63CCA9 !important;
+    border: none;
+    margin-top: 2rem;
+    margin-left: calc((100% - 15.979rem) / 2);
+  }
+}
+
+
+
+
 
