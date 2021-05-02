@@ -168,13 +168,11 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
 }
 
 export function useSetupNetwork(providerInitialized: boolean, params: EthereumChainParams): boolean {
-  const dispatch = useDispatch()
-
   const chainId = parseInt(params.chainId, 16)
   const [RPCUrl] = params.rpcUrls
 
+  const dispatch = useDispatch()
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
-
   const [ready, setReady] = useState(false)
 
   const setup = useCallback(async () => {
@@ -201,7 +199,6 @@ export function useSetupNetwork(providerInitialized: boolean, params: EthereumCh
 
     // WalletConnect couldn't use this method because not enable() before
     web3Provider?.ready?.then(async network => {
-      console.log(`ready: ${network.chainId}, target chain id: ${parseInt(params.chainId, 16)}`)
       if (network.chainId === parseInt(params.chainId, 16)) {
         setReady(true)
         return

@@ -41,8 +41,8 @@ const LimitableNumberInput: React.FC<LimitableNumberInputProp> = ({
       return
     }
 
-    if (!reg.test(e.target.value)) {
-      message.warning('The input value is up to 18th decimal place', 0.5)
+    if (decimalPlaces && !reg.test(e.target.value)) {
+      message.warning(`The input value is up to ${decimalPlaces}th decimal place`, 0.5)
       return
     }
 

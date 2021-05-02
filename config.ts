@@ -6,7 +6,5 @@ export type ConfigType = {
   },
   bridge: {
     apiBaseUrl: string,
-    ethereumChainId: number,
-    binanceSmartChainId: number
   }
 }

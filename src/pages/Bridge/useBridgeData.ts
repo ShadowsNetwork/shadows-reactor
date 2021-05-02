@@ -10,7 +10,6 @@ import { PolyChain } from '@/ShadowsJs/contracts/Bridge/constant'
 const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 
 type BridgeDataProps = {
-  providerInitialized: boolean
   fromPolyChain: PolyChain
   toPolyChain: PolyChain
 }
@@ -30,18 +29,17 @@ const getBridgeFee = async (SrcChainId, Hash, DstChainId) => {
 }
 
 const useBridgeData = ({
-  providerInitialized,
   fromPolyChain,
   toPolyChain
 }: BridgeDataProps) => {
   const account = useSelector(getAccount)
 
-  const [allowance, setAllowance] = useState('')
-  const [balance, setBalance] = useState('')
-  const [fee, setFee] = useState('')
+  const [allowance, setAllowance] = useState<string>()
+  const [balance, setBalance] = useState<string>()
+  const [fee, setFee] = useState<string>()
 
   const fetchData = useCallback(async () => {
-    if (!providerInitialized || !account) {
+    if (!account) {
       return
     }
 
@@ -54,7 +52,7 @@ const useBridgeData = ({
     setAllowance(weiToString(_allowance))
     setBalance(weiToString(_balance))
     setFee(_fee)
-  }, [account, fromPolyChain, toPolyChain, providerInitialized])
+  }, [account, fromPolyChain, toPolyChain])
 
   useEffect(() => {
     fetchData()

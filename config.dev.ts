@@ -8,8 +8,6 @@ const DOWSIcon = lazy(() => import('./src/img/dows-info/dows.png'))
 const config: ConfigType = {
   bridge: {
     apiBaseUrl: 'https://bridge.poly.network/testnet/v1',
-    ethereumChainId: 3,
-    binanceSmartChainId: 97
   },
   liquidityProvider: {
     supportedPools: [

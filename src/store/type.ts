@@ -4,9 +4,14 @@ import { TransactionHistory } from '@/types/TransactionHistory'
 export type State = {
   app: AppState
   wallet: WalletState
+  bridge: BridgeState
 }
 
 export type AppState = {
+}
+
+export type BridgeState = {
+  sourcePolyChainId: number
 }
 
 export type WalletState = {
