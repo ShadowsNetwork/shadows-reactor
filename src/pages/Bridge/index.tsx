@@ -18,6 +18,7 @@ import TransactionStatusModal, { TransactionStatusModalProps } from '@/component
 import {
   beginTransaction, rejectTransaction, submitTransaction
 } from '@/components/TransactionStatusModal/event'
+import switchImg from '@/img/bridge/switch.png'
 
 type BridgeProps = {
   fromPolyChain: PolyChain
@@ -37,15 +38,19 @@ const ChainBridge: React.FC<ChainBridgeProps> = ({
 }) => (
   <div className="chain-container">
     <div className="chain">
-      <p className="label">from</p>
-      <img src={fromPolyChain.icon} alt="" />
-      {fromPolyChain.ethereumChain.chainName}
+      <p className="label">From</p>
+      <div className="chainContent">
+        <img src={fromPolyChain.icon} alt="" />
+        <span>{fromPolyChain.ethereumChain.chainName}</span>
+      </div>
     </div>
-    <Button onClick={onSwitch}>SWITCH</Button>
+    <img className="switch" onClick={onSwitch} src={switchImg} style={{ cursor: 'pointer' }} alt="switch" />
     <div className="chain">
-      <p className="label">to</p>
-      <img src={toPolyChain.icon} alt="" />
-      {toPolyChain.ethereumChain.chainName}
+      <p className="label">To</p>
+      <div className="chainContent">
+        <img src={toPolyChain.icon} alt="" />
+        <span>{toPolyChain.ethereumChain.chainName}</span>
+      </div>
     </div>
   </div>
 )
@@ -133,7 +138,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
   return (
     <div className="bridge-main">
       <div className="balance-row">
-        <div>
+        <div className="available">
           {balance ?? '-'} DOWS Available
         </div>
       </div>
@@ -150,7 +155,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
       <div className="fee">
         Fee: {fee ?? '-'}
       </div>
-      <div className="button">
+      <div className="Bridge-Confirmbutton">
         {
           amount && (
             allowanceEnough() ?
@@ -187,7 +192,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
 const EmptyBridgeMain: React.FC = () => (
   <div className="bridge-main">
     <div className="balance-row">
-      <div>
+      <div className="available">
         - DOWS Available
       </div>
     </div>
@@ -199,7 +204,7 @@ const EmptyBridgeMain: React.FC = () => (
     <div className="fee">
       Fee: -
     </div>
-    <div className="button">
+    <div className="Bridge-Confirmbutton">
       <Button disabled={true}>
         Confirm
       </Button>
@@ -231,8 +236,8 @@ const Bridge: React.FC = () => {
   return (
     <div className="bridge">
       <div className="title">
-        <img src={DOWSIcon} alt="dows" />
-        DOWS Bridge
+        <img className="bridgeImg" src={DOWSIcon} alt="dows" />
+        <span>DOWS Bridge</span>
       </div>
       <ChainBridge
         fromPolyChain={fromPolyChain}

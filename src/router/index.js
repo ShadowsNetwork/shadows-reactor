@@ -4,6 +4,7 @@ import FlowStep from '@/pages/Liquidity/FlowStep'
 import LiquidityImage from '@/img/background/liquidity.jpg'
 import money from '@/img/slideBarIcon/money-bill-stack.png'
 import Bridge from '@/pages/Bridge'
+import leaderboard from '@/img/slideBarIcon/leaderboard.png'
 
 // import { lazy } from 'react'
 // const Welcome = lazy(() => import('@/pages/Welcome'))
@@ -91,7 +92,7 @@ const routers = [
     key: 'bridge',
     title: 'Bridge',
     component: Bridge,
-    image: money,
+    image: leaderboard,
   },
 
   /** hidden routers */
