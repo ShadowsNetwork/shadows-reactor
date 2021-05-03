@@ -20,7 +20,6 @@ class ShadowsJsBase {
 
     this.contractSettings = contractSettings
     const { network } = contractSettings
-    console.log('network:', network)
     this.network = network
     const contractForEnv = contracts[network]
     Object.keys(contractForEnv)

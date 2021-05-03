@@ -1,3 +1,4 @@
+import { lazy } from 'react'
 import { ConfigType } from './config'
 // @ts-ignore
 const BNBIcon = lazy(() => import('./src/img/liquidityProvider/bnb.png'))
@@ -18,20 +19,22 @@ const config: ConfigType = {
           name: 'BNB',
           icon: BNBIcon
         },
-        lpTokenContractAddress: '0xA327906d3407e1ba1276eB1cBEeaBBF5F33cCb3F',
-        farmContractAddress: '0xE86F343E3F5f988eDc6007494127A8B7c7F4E61c',
-        poolType: 'pair'
+        lpTokenContractAddress: '0x6d611e5eb40e8a36f97cda481612688025d8cb0e',
+        farmContractAddress: '0x51B9234182155287B9311f77cF4077B2EaDA442A',
+        poolType: 'pair',
+        lpMultiplier: 50.3698,
       },
       {
-        poolNumber: 0,
+        poolNumber: 1,
         poolName: 'Single Token Yield',
         rightCurrency: {
           name: 'DOWS',
           icon: DOWSIcon
         },
-        lpTokenContractAddress: '0x40D34A92435c7699E63C20A79F95eE3b226b67f6',
-        farmContractAddress: '0x5FE75A88999b8b58f98bF458c8252209CA1f332d',
-        poolType: 'single'
+        lpTokenContractAddress: '0xfb7400707df3d76084fbeae0109f41b178f71c02',
+        farmContractAddress: '0x51B9234182155287B9311f77cF4077B2EaDA442A',
+        poolType: 'single',
+        lpMultiplier: 1,
       }
     ]
   }

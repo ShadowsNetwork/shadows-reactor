@@ -40,7 +40,7 @@ const SideBar: React.FC = () => {
           </Menu.Item>
           <Menu.Item>
             <img style={{width:'2.4rem',marginRight:'1.6rem'}} src={viewList}/>
-            <a href={'https://exchange.pancakeswap.finance/#/pool'} target='_blank' rel="noreferrer">Provide liquidity</a>
+            <a href={'https://exchange.pancakeswap.finance/#/add/0xfb7400707dF3D76084FBEae0109f41b178f71c02/BNB'} target='_blank' rel="noreferrer">Provide liquidity</a>
           </Menu.Item>
         </Menu>
       </div>

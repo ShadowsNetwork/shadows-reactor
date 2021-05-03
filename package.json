@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env UMI_ENV=dev port=8000 umi dev",
+    "start:prod": "cross-env UMI_ENV=prod port=8000 umi dev",
     "build": "cross-env UMI_ENV=prop umi build",
     "build:dev": "cross-env UMI_ENV=dev umi build",
     "postinstall": "umi generate tmp",
