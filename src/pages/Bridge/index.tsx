@@ -2,7 +2,7 @@ import LimitableNumberInput from '@/components/LimitableNumberInput'
 import React, { useState } from 'react'
 
 import './index.less'
-import { useInitializeProvider, useSetupNetwork } from '@/hooks'
+import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
 import { Button, Input } from 'antd'
 import BigNumber from 'bignumber.js'
 import useBridgeData from '@/pages/Bridge/useBridgeData'
@@ -14,6 +14,10 @@ import { PolyChain } from '@/ShadowsJs/contracts/Bridge/constant'
 import { getPolyChainById, getToPolyChainByFromPolyChain } from '@/ShadowsJs/contracts/Bridge/utils'
 import { getSourcePolyChainId, setSourcePolyChainId } from '@/store/bridge'
 import DOWSIcon from '@/img/dows-info/dows.png'
+import TransactionStatusModal, { TransactionStatusModalProps } from '@/components/TransactionStatusModal'
+import {
+  beginTransaction, rejectTransaction, submitTransaction
+} from '@/components/TransactionStatusModal/event'
 
 type BridgeProps = {
   fromPolyChain: PolyChain
@@ -52,11 +56,25 @@ const BridgeMain: React.FC<BridgeProps> = ({
 }) => {
   const { dowsTokenAddress, lockContractAddress } = fromPolyChain
 
+  const getErrorMessage = useErrorMessage()
   const account = useSelector(getAccount)
   const [amount, setAmount] = useState<string>('')
   const [refreshFlag, setRefreshFlag] = useState(0)
 
   const { allowance, balance, fee } = useBridgeData({ fromPolyChain, toPolyChain, refreshFlag })
+
+  const [transactionStatusModalProps, setTransactionStatusModalProps] = useState<TransactionStatusModalProps>({
+    onClose: undefined,
+    status: undefined,
+    visible: false
+  })
+
+  const closeTransactionStatusModal = () => {
+    setTransactionStatusModalProps({
+      ...transactionStatusModalProps,
+      visible: false
+    })
+  }
 
   const allowanceEnough = () => {
     return allowance && new BigNumber(amount).lt(new BigNumber(allowance))
@@ -71,26 +89,45 @@ const BridgeMain: React.FC<BridgeProps> = ({
   }
 
   const approve = async () => {
-    const approveResult = await dowsJSConnector.dowsJs.Bridge.approve(dowsTokenAddress, lockContractAddress)
-    approveResult.wait()
-      .then(() => {
-        window.location.reload()
-      })
+    try {
+      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      const approveResult = await dowsJSConnector.dowsJs.Bridge.approve(dowsTokenAddress, lockContractAddress)
+      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      approveResult.wait()
+        .then(() => {
+          window.location.reload()
+        })
+    } catch (e) {
+      rejectTransaction(transactionStatusModalProps,
+        setTransactionStatusModalProps,
+        getErrorMessage(e)
+      )
+    }
   }
 
   const confirm = async () => {
-    const lockResult = await dowsJSConnector.dowsJs.Bridge.lock({
-      lockContractAddress,
-      fromAsset: dowsTokenAddress,
-      toChainId: toPolyChain.polyChainId,
-      toAddress: account,
-      amount: toWei(amount),
-      fee: toWei(fee!)
-    })
+    try {
+      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      const lockResult = await dowsJSConnector.dowsJs.Bridge.lock({
+        lockContractAddress,
+        fromAsset: dowsTokenAddress,
+        toChainId: toPolyChain.polyChainId,
+        toAddress: account,
+        amount: toWei(amount),
+        fee: toWei(fee!)
+      })
+      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
-    lockResult.wait().then(() => {
-      setRefreshFlag(refreshFlag + 1)
-    })
+      lockResult.wait()
+        .then(() => {
+          setRefreshFlag(refreshFlag + 1)
+        })
+    } catch (e) {
+      rejectTransaction(transactionStatusModalProps,
+        setTransactionStatusModalProps,
+        getErrorMessage(e)
+      )
+    }
   }
 
   return (
@@ -139,6 +176,10 @@ const BridgeMain: React.FC<BridgeProps> = ({
           </div>
         }
       </div>
+      <TransactionStatusModal
+        {...transactionStatusModalProps}
+        onClose={closeTransactionStatusModal}
+      />
     </div>
   )
 }
@@ -212,8 +253,8 @@ const Bridge: React.FC = () => {
           Please make sure your network is setup to correct
         </div>
       }
-    </div>)
-
+    </div>
+  )
 }
 
 export default Bridge
