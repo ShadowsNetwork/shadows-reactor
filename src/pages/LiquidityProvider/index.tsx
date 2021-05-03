@@ -20,7 +20,7 @@ import {
 } from '@/types/TransactionHistory'
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
 import { notifyTransactionFailed, notifyTransactionSuccess } from '@/utils/TransactionNotifycation'
-import { useErrorMessage, useInitializeProvider } from '@/hooks'
+import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
 import RedeemModal, { RedeemModalStatus } from '@/pages/LiquidityProvider/RedeemModal'
 import { usePoolData } from '@/pages/LiquidityProvider/usePoolData'
 import { PoolConfig } from '@/types/LiquidityProvider'
@@ -378,13 +378,22 @@ const Pool: React.FC<PoolConfig> = ({
 }
 
 const LiquidityProvider: React.FC = () => {
-  const providerInitialized = useInitializeProvider()
+  const chainId = parseInt(process.env.CHAIN_ID!, 16)
+  const RPCUrl = process.env.RPC_URL!
+
+  const providerInitialized = useInitializeProvider(chainId, RPCUrl)
+  const networkReady = useSetupNetwork(providerInitialized, {
+    blockExplorerUrls: [process.env.BLOCK_EXPLORER_URL!],
+    chainName: process.env.NETWORK_NAME!,
+    chainId: process.env.CHAIN_ID!,
+    rpcUrls: [RPCUrl]
+  })
 
   return (
     <div className="liquidity-provider">
       {
         config.liquidityProvider.supportedPools.map((pool, index) =>
-          providerInitialized
+          providerInitialized && networkReady
             ? <Pool {...pool} key={index} />
             : <EmptyPool {...pool} key={index} />
         )

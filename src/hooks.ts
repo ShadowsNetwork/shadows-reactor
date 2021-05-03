@@ -8,6 +8,10 @@ import { providers } from 'ethers'
 import { getWeb3ProviderByWallet, WalletNames } from '@/web3/wallets'
 import ContractSettings from '@/ShadowsJs/ContractSettings'
 import WalletConnectProvider from '@walletconnect/web3-provider'
+import {
+  EthereumChainParams, setupBSCNetwork, setupMetamaskNetwork, setupWalletConnectNetwork
+} from '@/ShadowsJs/networkHelper'
+import { Web3Provider } from '@ethersproject/providers'
 
 export function useLocation(): Location {
   const [location, setLocation] = useState(window.location)
@@ -77,15 +81,15 @@ export function useDynamicBackgroundImage(): string {
   return background
 }
 
-export function useInitializeProvider(): boolean {
+export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean {
   const dispatch = useDispatch()
   const [initialized, setInitialized] = useState(false)
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
 
-  const setup = useCallback(async () => {
+  const initialize = useCallback(async () => {
     let provider: providers.Web3Provider | undefined
     try {
-      provider = await getWeb3ProviderByWallet(selectedWallet)
+      provider = await getWeb3ProviderByWallet({ chainId, RPCUrl }, selectedWallet)
 
       if (!selectedWallet || !provider) {
         setInitialized(false)
@@ -94,9 +98,6 @@ export function useInitializeProvider(): boolean {
 
       if (selectedWallet === 'WalletConnect') {
         const walletConnectProvider = provider.provider as WalletConnectProvider
-
-        console.log(walletConnectProvider.wc.connected)
-        await walletConnectProvider.enable()
 
         const handleAccountChange = (accounts: string[]) => {
           const [account] = accounts
@@ -113,11 +114,17 @@ export function useInitializeProvider(): boolean {
           walletConnectProvider.removeListener('accountsChanged', handleAccountChange)
         }
 
+        const handleChainChanged = (_, __) => {
+          console.log(_, __)
+        }
+
         walletConnectProvider.removeListener('disconnect', handleDisconnect)
         walletConnectProvider.removeListener('accountsChanged', handleAccountChange)
+        walletConnectProvider.removeListener('chainChanged', handleChainChanged)
 
         walletConnectProvider.on('disconnect', handleDisconnect)
         walletConnectProvider.on('accountsChanged', handleAccountChange)
+        walletConnectProvider.on('chainChanged', handleChainChanged)
       } else if (selectedWallet === 'Metamask' || selectedWallet === 'BSC') {
         // @ts-ignore
         await provider.provider.enable()
@@ -132,6 +139,12 @@ export function useInitializeProvider(): boolean {
             dispatch(setAccount(newAccount[0]))
           }
         })
+
+        // @ts-ignore
+        provider.provider.on('chainChanged', async (newChain, oldChain) => {
+          console.log(newChain, oldChain)
+          window.location.reload()
+        })
       }
     } catch (e) {
       dispatch(setAccount(null))
@@ -142,74 +155,74 @@ export function useInitializeProvider(): boolean {
     dowsJSConnector.setContractSettings(new ContractSettings(
       provider,
       provider.getSigner ? provider.getSigner() : null,
-      parseInt(process.env.CHAIN_ID!, 16)
+      chainId
     ))
     setInitialized(true)
-  }, [selectedWallet])
+  }, [selectedWallet, chainId, RPCUrl])
+
+  useEffect(() => {
+    initialize()
+  }, [initialize])
+
+  return initialized
+}
+
+export function useSetupNetwork(providerInitialized: boolean, params: EthereumChainParams): boolean {
+  const chainId = parseInt(params.chainId, 16)
+  const [RPCUrl] = params.rpcUrls
+
+  const dispatch = useDispatch()
+  const selectedWallet = useSelector(getSelectedWallet) as WalletNames
+  const [ready, setReady] = useState(false)
+
+  const setup = useCallback(async () => {
+    if (!selectedWallet || !providerInitialized) {
+      setReady(false)
+      return
+    }
+
+    const web3Provider = await getWeb3ProviderByWallet({
+      chainId, RPCUrl
+    }, selectedWallet) as unknown as Web3Provider
+
+    if (selectedWallet === 'WalletConnect') {
+      if (await setupWalletConnectNetwork(params, web3Provider)) {
+        setReady(true)
+      } else {
+        setReady(false)
+        dispatch(setAccount(''))
+        dispatch(setSelectedWallet(''))
+      }
+      return
+    }
+
+    // WalletConnect couldn't use this method because not enable() before
+    web3Provider?.ready?.then(async network => {
+      if (network.chainId === parseInt(params.chainId, 16)) {
+        setReady(true)
+        return
+      }
+
+      if (selectedWallet === 'Metamask') {
+        setReady(await setupMetamaskNetwork(params))
+      } else if (selectedWallet === 'BSC') {
+        setReady(await setupBSCNetwork(params))
+      }
+    }).catch(async () => {
+      if (selectedWallet === 'Metamask') {
+        setReady(await setupMetamaskNetwork(params))
+      } else if (selectedWallet === 'BSC') {
+        setReady(await setupBSCNetwork(params))
+      }
+    })
+  }, [selectedWallet, providerInitialized, params])
 
   useEffect(() => {
     setup()
   }, [setup])
 
-  /*useEffect(() => {
-    if (!selectedWallet || !provider) {
-      setInitialized(false)
-      return
-    }
-    const initProvider = async () => {
-      // const web3Provider = new ethers.providers.Web3Provider(provider, 'any')
-
-      // setSigner({
-      //   networkId: 97,
-      //   signer: web3Provider.getSigner()
-      // })
-      dowsJSConnector.setContractSettings({
-        networkId: 97,
-        provider: provider,
-        // signer: provider.getSigner?.()
-      })
-      setInitialized(true)
-      /!*provider.ready.then(network => {
-        console.log('ready, network: ', network)
-        const { chainId } = network
-        if (!chainSupported(chainId)) {
-          setupNetwork()
-        }
-
-        // setSigner({
-        //   networkId: 97,
-        //   signer: web3Provider.getSigner()
-        // })
-        // setInitialized(true)
-      })*!/
-
-      provider.on('network', (newNetwork, oldNetwork) => {
-        // When a Provider makes its initial connection, it emits a "network"
-        // event with a null oldNetwork along with the newNetwork. So, if the
-        // oldNetwork exists, it represents a changing network
-        if (oldNetwork) {
-          window.location.reload()
-        }
-      })
-    }
-    initProvider()
-  }, [selectedWallet, provider])*/
-  return initialized
+  return ready
 }
-
-/*export function useAccount(): string | undefined {
-  const selectedWallet = useSelector(getSelectedWallet) as WalletNames | undefined
-  if (!selectedWallet) {
-    return undefined
-  }
-  const provider = getWeb3ProviderByWallet(selectedWallet) as providers.Web3Provider
-  switch (selectedWallet) {
-  case 'Metamask':
-    return (window as WindowChain).ethereum?.selectedAddress
-  default:
-    return undefined
-  }
-}*/
 
 export function useErrorMessage(): any {
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames | undefined

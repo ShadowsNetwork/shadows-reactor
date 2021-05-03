@@ -3,7 +3,6 @@ import BSCIcon from '@/img/wallet/bsc.png'
 import WalletConnectIcon from '@/img/wallet/walletconnect.svg'
 import { setAccount, setSelectedWallet } from '@/store/wallet'
 import { providers } from 'ethers'
-import { chainSupported, setupNetwork } from '@/ShadowsJs/networkHelper'
 import { Dispatch } from 'redux'
 import { MetamaskWeb3Provider } from './providers/Metamask'
 import { WalletConnectWeb3Provider } from './providers/WalletConnect'
@@ -15,10 +14,12 @@ export type WalletNames = 'Metamask' | 'BSC' | 'WalletConnect'
 export interface Wallet {
   name: string
   icon: string,
-  handleConnect: (_dispatch: Dispatch<any>) => void
+  handleConnect: (_dispatch: Dispatch<any>, _chainId: number, _RPCUrl?: string) => void
 }
 
-export async function getWeb3ProviderByWallet(walletName?: WalletNames): Promise<providers.Web3Provider | undefined> {
+export async function getWeb3ProviderByWallet(
+  { chainId, RPCUrl }, walletName?: WalletNames
+): Promise<providers.Web3Provider | undefined> {
   if (!walletName) {
     return undefined
   }
@@ -27,30 +28,28 @@ export async function getWeb3ProviderByWallet(walletName?: WalletNames): Promise
     ['Metamask', MetamaskWeb3Provider],
     ['BSC', BscWeb3Provider],
     ['WalletConnect', WalletConnectWeb3Provider]
-  ]).get(walletName))()
-}
-
-const connectToMetamask = async (dispatch: Dispatch<any>): Promise<void> => {
-  const provider = await getWeb3ProviderByWallet('Metamask') as providers.Web3Provider
-
-  provider.ready.then(async network => {
-    const { chainId } = network
-    if (!chainSupported(chainId)) {
-      await setupNetwork()
-    }
-
-    provider.provider.request?.({ method: 'eth_requestAccounts' })
-      .then(accounts => {
-        console.log('on request eth_requestAccounts callback, ', accounts)
-        const [account] = accounts
-        dispatch(setAccount(account))
-        dispatch(setSelectedWallet('Metamask'))
-      })
+  ]).get(walletName))({
+    chainId, RPCUrl
   })
 }
 
-const connectToBSC = async (dispatch: Dispatch<any>): Promise<void> => {
-  const web3Provider = await getWeb3ProviderByWallet('BSC') as providers.Web3Provider
+const connectToMetamask = async (dispatch: Dispatch<any>, chainId: number, RPCUrl?: string): Promise<void> => {
+  const provider = await getWeb3ProviderByWallet({
+    chainId, RPCUrl
+  }, 'Metamask') as providers.Web3Provider
+
+  provider.provider.request?.({ method: 'eth_requestAccounts' })
+    .then(accounts => {
+      const [account] = accounts
+      dispatch(setAccount(account))
+      dispatch(setSelectedWallet('Metamask'))
+    })
+}
+
+const connectToBSC = async (dispatch: Dispatch<any>, chainId: number, RPCUrl?: string): Promise<void> => {
+  const web3Provider = await getWeb3ProviderByWallet({
+    chainId, RPCUrl
+  }, 'BSC') as providers.Web3Provider
 
   const bscProvider = web3Provider.provider
   // @ts-ignore
@@ -58,41 +57,42 @@ const connectToBSC = async (dispatch: Dispatch<any>): Promise<void> => {
   const [account] = accounts
   dispatch(setAccount(account))
   dispatch(setSelectedWallet('BSC'))
-  /*bscConnector.activate()
-    .then(async r => {
-      const { account, provider } = r
-      const web3Provider = new ethers.providers.Web3Provider(provider, 'any')
-      dispatch(setAccount(account))
-      dispatch(setSelectedWallet('BSC'))
-
-      setSigner({
-        networkId: 97,
-        signer: web3Provider.getSigner()
-      })
-    })*/
 }
 
-const connectToWalletConnect = async (dispatch: Dispatch<any>): Promise<void> => {
-  const web3Provider = await getWeb3ProviderByWallet('WalletConnect') as providers.Web3Provider
+const connectToWalletConnect = async (dispatch: Dispatch<any>, chainId: number, RPCUrl?: string): Promise<void> => {
+  const web3Provider = await getWeb3ProviderByWallet({
+    chainId, RPCUrl
+  }, 'WalletConnect') as providers.Web3Provider
 
   const walletConnectProvider = web3Provider.provider as WalletConnectProvider
 
+  console.log(`wc connected: ${walletConnectProvider.wc.connected}`)
   if (!walletConnectProvider.wc.connected) {
-    await walletConnectProvider.wc.createSession({ chainId: Number(Object.keys(walletConnectProvider.rpc!)[0]) })
+    walletConnectProvider.wc.connect({ chainId })
+      .then(r => {
+        console.log(r)
+        const [account] = r.accounts
+        dispatch(setAccount(account))
+        dispatch(setSelectedWallet('WalletConnect'))
+        /*const connectedChainId = r.chainId
+        if (connectedChainId !== chainId) {
+          message.warn('Not in correct network!')
+        }*/
+      })
   }
   // if (walletConnectProvider.connected || walletConnectProvider.wc.connected) {
   //   await walletConnectProvider.wc.killSession()
   // }
 
-  walletConnectProvider.enable()
-    .then(accounts => {
-      const [account] = accounts
-      dispatch(setAccount(account))
-      dispatch(setSelectedWallet('WalletConnect'))
-    })
-    .catch(error => {
-      console.log(error)
-    })
+  // walletConnectProvider.enable()
+  //   .then(accounts => {
+  //     const [account] = accounts
+  //     dispatch(setAccount(account))
+  //     dispatch(setSelectedWallet('WalletConnect'))
+  //   })
+  //   .catch(error => {
+  //     console.log(error)
+  //   })
 }
 
 export const SUPPORT_WALLETS: Wallet[] = [

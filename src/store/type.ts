@@ -11,6 +11,8 @@ export type AppState = {
 
 export type WalletState = {
   selectedWallet?: WalletNames
-  account?: string,
+  account?: string
   transactionHistoryList: Array<TransactionHistory>
+  chainId?: number
+  rpcUrl?: string
 }
