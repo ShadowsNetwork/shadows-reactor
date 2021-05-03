@@ -166,9 +166,6 @@ export async function setupMetamaskNetwork(params: EthereumChainParams) {
 
       if (error.message.includes('User rejected the request.')) {
         message.warn('Please allow switching network in Metamask')
-        setTimeout(() => {
-          setupMetamaskNetwork(params)
-        }, 1000)
       }
       return false
     }
@@ -181,13 +178,13 @@ export async function setupMetamaskNetwork(params: EthereumChainParams) {
 export async function setupWalletConnectNetwork(params: EthereumChainParams, web3Provider: Web3Provider) {
   const provider = web3Provider.provider as WalletConnectProvider
   if (provider.wc.chainId !== parseInt(params.chainId, 16)) {
-    message.warn(`Please manually switch to the ${params.chainName} in your WalletConnect App, and then try to re-connect.`, 5)
+    message.warn(`Please manually switch to the ${params.chainName} in your WalletConnect App, and then try to re-connect.`, 3)
     provider.wc.killSession()
     provider.close()
 
     setTimeout(() => {
       window.location.reload()
-    }, 5000)
+    }, 3000)
 
     return false
   } else {
@@ -196,7 +193,7 @@ export async function setupWalletConnectNetwork(params: EthereumChainParams, web
   }
 }
 
-export async function setupBSCNetwork(params: EthereumChainParams) {
+export async function setupBinanceWalletNetwork(params: EthereumChainParams) {
   const supportChainIdList = [parseInt(process.env.CHAIN_ID!, 16)]
 
   if (!supportChainIdList.includes(parseInt(params.chainId, 16))) {

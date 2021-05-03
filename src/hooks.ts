@@ -9,7 +9,7 @@ import { getWeb3ProviderByWallet, WalletNames } from '@/web3/wallets'
 import ContractSettings from '@/ShadowsJs/ContractSettings'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import {
-  EthereumChainParams, setupBSCNetwork, setupMetamaskNetwork, setupWalletConnectNetwork
+  EthereumChainParams, setupBinanceWalletNetwork, setupMetamaskNetwork, setupWalletConnectNetwork
 } from '@/ShadowsJs/networkHelper'
 import { Web3Provider } from '@ethersproject/providers'
 
@@ -208,13 +208,13 @@ export function useSetupNetwork(providerInitialized: boolean, params: EthereumCh
       if (selectedWallet === 'Metamask') {
         setReady(await setupMetamaskNetwork(params))
       } else if (selectedWallet === 'BSC') {
-        setReady(await setupBSCNetwork(params))
+        setReady(await setupBinanceWalletNetwork(params))
       }
     }).catch(async () => {
       if (selectedWallet === 'Metamask') {
         setReady(await setupMetamaskNetwork(params))
       } else if (selectedWallet === 'BSC') {
-        setReady(await setupBSCNetwork(params))
+        setReady(await setupBinanceWalletNetwork(params))
       }
     })
   }, [selectedWallet, providerInitialized, params])
