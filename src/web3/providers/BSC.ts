@@ -5,7 +5,6 @@ export const BscWeb3Provider = async ({ chainId }) => new Promise((resolve, reje
   const bscConnector = new BscConnector({
     supportedChainIds: [
       chainId
-      // parseInt(process.env.CHAIN_ID!, 16)
     ]
   })
   bscConnector.getProvider()

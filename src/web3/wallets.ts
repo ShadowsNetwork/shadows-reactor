@@ -58,18 +58,6 @@ const connectToBSC = async (dispatch: Dispatch<any>, chainId: number, RPCUrl?: s
   const [account] = accounts
   dispatch(setAccount(account))
   dispatch(setSelectedWallet('BSC'))
-  /*bscConnector.activate()
-    .then(async r => {
-      const { account, provider } = r
-      const web3Provider = new ethers.providers.Web3Provider(provider, 'any')
-      dispatch(setAccount(account))
-      dispatch(setSelectedWallet('BSC'))
-
-      setSigner({
-        networkId: 97,
-        signer: web3Provider.getSigner()
-      })
-    })*/
 }
 
 const connectToWalletConnect = async (dispatch: Dispatch<any>, chainId: number, RPCUrl?: string): Promise<void> => {
@@ -93,9 +81,6 @@ const connectToWalletConnect = async (dispatch: Dispatch<any>, chainId: number, 
         }
       })
   }
-  // if (walletConnectProvider.connected || walletConnectProvider.wc.connected) {
-  //   await walletConnectProvider.wc.killSession()
-  // }
 
   // walletConnectProvider.enable()
   //   .then(accounts => {

@@ -1,7 +1,7 @@
 // import { NETWORK_SPEEDS_TO_KEY, GWEI_UNIT, GAS_LIMIT_BUFFER_PERCENTAGE } from '../constants/network'
 
-import { message } from 'antd'
 import { Web3Provider } from '@ethersproject/providers'
+import { message } from 'antd'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 
 export const SUPPORTED_NETWORKS = {
@@ -141,7 +141,7 @@ const defaultNetwork = {
 export type EthereumChainParams = {
   chainId: string,
   chainName: string,
-  nativeCurrency: {
+  nativeCurrency?: {
     name: string,
     symbol: string,
     decimals: number
@@ -187,7 +187,7 @@ export async function setupWalletConnectNetwork(params: EthereumChainParams, web
 
     setTimeout(() => {
       window.location.reload()
-    }, 3000)
+    }, 5000)
 
     return false
   } else {
@@ -197,8 +197,8 @@ export async function setupWalletConnectNetwork(params: EthereumChainParams, web
 }
 
 export async function setupBSCNetwork(params: EthereumChainParams) {
-  // TODO
-  const supportChainIdList = [97]
+  const supportChainIdList = [parseInt(process.env.CHAIN_ID!, 16)]
+
   if (!supportChainIdList.includes(parseInt(params.chainId, 16))) {
     message.warn(`Binance Chain Wallet does NOT support for ${params.chainName}`)
     return false

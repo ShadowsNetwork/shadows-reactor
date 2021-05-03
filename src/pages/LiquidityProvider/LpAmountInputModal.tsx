@@ -32,7 +32,7 @@ const LpAmountInputModal: React.FC<LpAmountInputModalStatus> = ({
 
   const handleConfirm = () => {
     if (new BigNumber(inputValue).lte(new BigNumber('0'))) {
-      message.error('Value should gather than zero!')
+      message.error('Value should greater than 0!')
       return
     }
 
@@ -54,7 +54,7 @@ const LpAmountInputModal: React.FC<LpAmountInputModalStatus> = ({
       <span className="available">{numberWithCommas(maxAvailable)} {unit} Available</span>
       <span className="input-dows">
         <LimitableNumberInput
-          min={0}
+          min={'0'}
           max={maxAvailable}
           decimalPlaces={18}
           inputValue={inputValue}

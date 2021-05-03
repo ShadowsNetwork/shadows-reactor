@@ -23,19 +23,21 @@ const config: ConfigType = {
           icon: BNBIcon
         },
         lpTokenContractAddress: '0xA327906d3407e1ba1276eB1cBEeaBBF5F33cCb3F',
-        farmContractAddress: '0xE86F343E3F5f988eDc6007494127A8B7c7F4E61c',
-        poolType: 'pair'
+        farmContractAddress: '0x5C0b69BeE27f5F4e1eF654c1E5eEc106A33f2eA5',
+        poolType: 'pair',
+        lpMultiplier: 2,
       },
       {
-        poolNumber: 0,
+        poolNumber: 1,
         poolName: 'Single Token Yield',
         rightCurrency: {
           name: 'DOWS',
           icon: DOWSIcon
         },
         lpTokenContractAddress: '0x40D34A92435c7699E63C20A79F95eE3b226b67f6',
-        farmContractAddress: '0x5FE75A88999b8b58f98bF458c8252209CA1f332d',
-        poolType: 'single'
+        farmContractAddress: '0x5C0b69BeE27f5F4e1eF654c1E5eEc106A33f2eA5',
+        poolType: 'single',
+        lpMultiplier: 1,
       }
     ]
   }

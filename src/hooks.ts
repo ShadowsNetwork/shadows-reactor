@@ -99,6 +99,8 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
       if (selectedWallet === 'WalletConnect') {
         const walletConnectProvider = provider.provider as WalletConnectProvider
 
+        await walletConnectProvider.enable()
+
         const handleAccountChange = (accounts: string[]) => {
           const [account] = accounts
           dispatch(setAccount(account))
@@ -185,7 +187,6 @@ export function useSetupNetwork(providerInitialized: boolean, params: EthereumCh
       chainId, RPCUrl
     }, selectedWallet) as unknown as Web3Provider
 
-
     if (selectedWallet === 'WalletConnect') {
       if (await setupWalletConnectNetwork(params, web3Provider)) {
         setReady(true)
@@ -223,25 +224,7 @@ export function useSetupNetwork(providerInitialized: boolean, params: EthereumCh
   }, [setup])
 
   return ready
-  // const { chainId } = network
-  // if (!chainSupported(chainId)) {
-  //   await setupNetwork()
-  // }
 }
-
-/*export function useAccount(): string | undefined {
-  const selectedWallet = useSelector(getSelectedWallet) as WalletNames | undefined
-  if (!selectedWallet) {
-    return undefined
-  }
-  const provider = getWeb3ProviderByWallet(selectedWallet) as providers.Web3Provider
-  switch (selectedWallet) {
-  case 'Metamask':
-    return (window as WindowChain).ethereum?.selectedAddress
-  default:
-    return undefined
-  }
-}*/
 
 export function useErrorMessage(): any {
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames | undefined
