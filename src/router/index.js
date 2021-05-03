@@ -35,7 +35,7 @@ export const routerLabelMapper = {
   person: { title: 'person.title' },
   synthesis: { title: 'synthesis.title' },
   transaction: { title: 'transaction.title' },
-  liquidity: { title: 'liquidity.title' },
+  staking: { title: 'liquidity.title' },
   destroy: { title: 'destroy.title' },
   reward: { title: 'reward.title' },
   transfer: { title: 'transfer.title' }
@@ -95,8 +95,8 @@ const routers = [
     backgroundImage: LiquidityImage
   },*/
   {
-    path: '/liquidity',
-    key: 'liquidity',
+    path: '/staking',
+    key: 'staking',
     component: Pool,
     image: money,
   },

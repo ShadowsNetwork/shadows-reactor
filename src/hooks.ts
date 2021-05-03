@@ -16,7 +16,7 @@ export function useLocation(): Location {
     const { hash } = window.location
     console.log(hash)
     if (hash === '#/') {
-      window.location.hash = '#/liquidity'
+      window.location.hash = '#/staking'
     }
     setLocation(window.location)
   }
