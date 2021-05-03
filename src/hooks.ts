@@ -99,6 +99,8 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
       if (selectedWallet === 'WalletConnect') {
         const walletConnectProvider = provider.provider as WalletConnectProvider
 
+        await walletConnectProvider.enable()
+
         const handleAccountChange = (accounts: string[]) => {
           const [account] = accounts
           dispatch(setAccount(account))

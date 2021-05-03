@@ -66,33 +66,19 @@ const connectToWalletConnect = async (dispatch: Dispatch<any>, chainId: number, 
 
   const walletConnectProvider = web3Provider.provider as WalletConnectProvider
 
-  console.log(`wc connected: ${walletConnectProvider.wc.connected}`)
   if (!walletConnectProvider.wc.connected) {
-    walletConnectProvider.wc.connect({ chainId })
-      .then(r => {
-        console.log(r)
-        const [account] = r.accounts
-        dispatch(setAccount(account))
-        dispatch(setSelectedWallet('WalletConnect'))
-        /*const connectedChainId = r.chainId
-        if (connectedChainId !== chainId) {
-          message.warn('Not in correct network!')
-        }*/
-      })
+    await walletConnectProvider.wc.createSession({ chainId: Number(Object.keys(walletConnectProvider.rpc!)[0]) })
   }
-  // if (walletConnectProvider.connected || walletConnectProvider.wc.connected) {
-  //   await walletConnectProvider.wc.killSession()
-  // }
 
-  // walletConnectProvider.enable()
-  //   .then(accounts => {
-  //     const [account] = accounts
-  //     dispatch(setAccount(account))
-  //     dispatch(setSelectedWallet('WalletConnect'))
-  //   })
-  //   .catch(error => {
-  //     console.log(error)
-  //   })
+  walletConnectProvider.enable()
+    .then(accounts => {
+      const [account] = accounts
+      dispatch(setAccount(account))
+      dispatch(setSelectedWallet('WalletConnect'))
+    })
+    .catch(error => {
+      console.log(error)
+    })
 }
 
 export const SUPPORT_WALLETS: Wallet[] = [
