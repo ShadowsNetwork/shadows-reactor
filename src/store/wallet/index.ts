@@ -5,13 +5,21 @@ import { State, WalletState } from '@/store/type'
 const initialState: WalletState = {
   selectedWallet: undefined,
   account: undefined,
-  transactionHistoryList: new Array<TransactionHistory>()
+  transactionHistoryList: new Array<TransactionHistory>(),
+  chainId: undefined,
+  rpcUrl: undefined
 }
 
 export const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers: {
+    setChainId: (state, action) => {
+      state.chainId = action.payload
+    },
+    setRpcUrl: (state, action) => {
+      state.rpcUrl = action.payload
+    },
     setAccount: (state, action) => {
       if (!action.payload) {
         console.error('set account null')
@@ -48,12 +56,20 @@ export const walletSlice = createSlice({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         state.transactionHistoryList.push(state.transactionHistoryList.pop()!)
       }
-    },
+    }
   }
 })
 
 export function getTransactionHistoryList(state: State): Array<TransactionHistory> {
   return state.wallet.transactionHistoryList ?? []
+}
+
+export function getChainId(state: State): number | undefined {
+  return state.wallet.chainId
+}
+
+export function getRpcUrl(state: State): string | undefined {
+  return state.wallet.rpcUrl
 }
 
 export function getAccount(state: State): string | undefined {
@@ -65,6 +81,8 @@ export function getSelectedWallet(state: State): string | undefined {
 }
 
 export const {
+  setRpcUrl,
+  setChainId,
   setAccount,
   setSelectedWallet,
   appendTransactionHistory,

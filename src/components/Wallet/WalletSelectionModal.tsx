@@ -1,8 +1,9 @@
 import React from 'react'
 import { SUPPORT_WALLETS, Wallet } from '@/web3/wallets'
 import { Modal } from 'antd'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import './index.less'
+import { getChainId, getRpcUrl } from '@/store/wallet'
 
 type WalletCardProps = {
   wallet: Wallet
@@ -17,9 +18,15 @@ const WalletCard: React.FC<WalletCardProps> = ({ wallet }) => {
   const { name, icon, handleConnect } = wallet
   const dispatch = useDispatch()
 
+  const chainId = useSelector(getChainId)
+  const RPCUrl = useSelector(getRpcUrl)
+
   return (
     <div className="wallet-card">
-      <div className="walletItem" onClick={() => handleConnect(dispatch)}>
+      <div
+        className="walletItem"
+        onClick={() => chainId && RPCUrl && handleConnect(dispatch, chainId, RPCUrl)}
+      >
         <span className="wallet-name">
           {name}
         </span>

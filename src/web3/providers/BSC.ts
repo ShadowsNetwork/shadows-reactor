@@ -1,10 +1,10 @@
 import { providers } from 'ethers'
 import { BscConnector, NoBscProviderError } from '@binance-chain/bsc-connector'
 
-export const BscWeb3Provider: any = async () => new Promise((resolve, reject) => {
+export const BscWeb3Provider = async ({ chainId }) => new Promise((resolve, reject) => {
   const bscConnector = new BscConnector({
     supportedChainIds: [
-      parseInt(process.env.CHAIN_ID!, 16)
+      chainId
     ]
   })
   bscConnector.getProvider()
