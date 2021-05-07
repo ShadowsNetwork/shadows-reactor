@@ -1,7 +1,10 @@
 /* eslint-disable no-unused-vars */
-import { POLY_CHAIN_EXPLORER_URL, PolyChain } from '@/ShadowsJs/contracts/Bridge/constant'
-import { getPolyChainByChainName, getPolyChainById } from '@/ShadowsJs/contracts/Bridge/utils'
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
+import { getPolyChainByChainName, getPolyChainById } from '@/utils/bridgeUtils'
+import { PolyChain } from '@/types/PolyChain'
+import { ConfigType } from '../../config'
+
+const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 
 export enum TransactionStatus {
   /**
@@ -157,7 +160,7 @@ export class BridgeDows extends TransactionHistory {
 
     // PolyChainId === 0  =>  PolyChain
     if (this.lastTransactionPolyChainId === 0) {
-      return `${POLY_CHAIN_EXPLORER_URL}/tx/${this.lastTransactionHash}`
+      return `${config.bridge.polyChainExplorerUrl}/tx/${this.lastTransactionHash}`
     }
 
     const polyChain: PolyChain = getPolyChainById(this.lastTransactionPolyChainId!)!

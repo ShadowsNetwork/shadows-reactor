@@ -1,14 +1,9 @@
-import { lazy } from 'react'
 import { ConfigType } from './config'
-// @ts-ignore
-const BNBIcon = lazy(() => import('./src/img/liquidityProvider/bnb.png'))
-// @ts-ignore
-const DOWSIcon = lazy(() => import('./src/img/dows-info/dows.png'))
+
+import bridgeConfig from './config/bridge.config.dev'
 
 const config: ConfigType = {
-  bridge: {
-    apiBaseUrl: 'https://bridge.poly.network/testnet/v1',
-  },
+  bridge: bridgeConfig,
   liquidityProvider: {
     supportedPools: [
       {
@@ -17,16 +12,16 @@ const config: ConfigType = {
         tokenName: 'LPPair',
         leftCurrency: {
           name: 'DOWS',
-          icon: DOWSIcon
+          icon: 'https://i.loli.net/2021/05/08/ZP9Xg4LszRTiIcV.png'
         },
         rightCurrency: {
           name: 'BNB',
-          icon: BNBIcon
+          icon: 'https://i.loli.net/2021/05/08/34N7vOpUnADeEy2.png'
         },
         lpTokenContractAddress: '0xA327906d3407e1ba1276eB1cBEeaBBF5F33cCb3F',
         farmContractAddress: '0x5C0b69BeE27f5F4e1eF654c1E5eEc106A33f2eA5',
         poolType: 'pair',
-        lpMultiplier: 2,
+        lpMultiplier: 2
       },
       {
         poolNumber: 1,
@@ -34,12 +29,12 @@ const config: ConfigType = {
         tokenName: 'DOWS',
         rightCurrency: {
           name: 'DOWS',
-          icon: DOWSIcon
+          icon: 'https://i.loli.net/2021/05/08/ZP9Xg4LszRTiIcV.png'
         },
         lpTokenContractAddress: '0x40D34A92435c7699E63C20A79F95eE3b226b67f6',
         farmContractAddress: '0x5C0b69BeE27f5F4e1eF654c1E5eEc106A33f2eA5',
         poolType: 'single',
-        lpMultiplier: 1,
+        lpMultiplier: 1
       }
     ]
   }

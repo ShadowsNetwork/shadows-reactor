@@ -1,24 +1,22 @@
-import { lazy } from 'react'
 import { ConfigType } from './config'
-// @ts-ignore
-const BNBIcon = lazy(() => import('./src/img/liquidityProvider/bnb.png'))
-// @ts-ignore
-const DOWSIcon = lazy(() => import('./src/img/dows-info/dows.png'))
+
+import bridgeConfig from './config/bridge.config.prod'
 
 const config: ConfigType = {
-  bridge: { apiBaseUrl: 'https://bridge.poly.network/v1' },
+  bridge: bridgeConfig,
   liquidityProvider: {
     supportedPools: [
       {
         poolNumber: 0,
         poolName: 'Pancake Swap LP',
+        tokenName: 'LPPair',
         leftCurrency: {
           name: 'DOWS',
-          icon: DOWSIcon
+          icon: 'https://i.loli.net/2021/05/08/ZP9Xg4LszRTiIcV.png'
         },
         rightCurrency: {
           name: 'BNB',
-          icon: BNBIcon
+          icon: 'https://i.loli.net/2021/05/08/34N7vOpUnADeEy2.png'
         },
         lpTokenContractAddress: '0x6d611e5eb40e8a36f97cda481612688025d8cb0e',
         farmContractAddress: '0x51B9234182155287B9311f77cF4077B2EaDA442A',
@@ -28,9 +26,10 @@ const config: ConfigType = {
       {
         poolNumber: 1,
         poolName: 'Single Token Yield',
+        tokenName: 'DOWS',
         rightCurrency: {
           name: 'DOWS',
-          icon: DOWSIcon
+          icon: 'https://i.loli.net/2021/05/08/ZP9Xg4LszRTiIcV.png'
         },
         lpTokenContractAddress: '0xfb7400707df3d76084fbeae0109f41b178f71c02',
         farmContractAddress: '0x51B9234182155287B9311f77cF4077B2EaDA442A',

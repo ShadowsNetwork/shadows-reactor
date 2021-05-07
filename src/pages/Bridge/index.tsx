@@ -13,8 +13,6 @@ import {
   appendTransactionHistory, getAccount, getTransactionHistoryList, setChainId, setRpcUrl,
   updateTransactionHistoryStatus
 } from '@/store/wallet'
-import { PolyChain } from '@/ShadowsJs/contracts/Bridge/constant'
-import { getPolyChainById, getToPolyChainByFromPolyChain } from '@/ShadowsJs/contracts/Bridge/utils'
 import { getSourcePolyChainId, setSourcePolyChainId } from '@/store/bridge'
 import DOWSIcon from '@/img/dows-info/dows.png'
 import TransactionStatusModal, { TransactionStatusModalProps } from '@/components/TransactionStatusModal'
@@ -29,6 +27,8 @@ import {
 import axios from 'axios'
 import { notifyTransactionSuccess } from '@/utils/TransactionNotifycation'
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
+import { PolyChain } from '@/types/PolyChain'
+import { getPolyChainById, getToPolyChainByFromPolyChain } from '@/utils/bridgeUtils'
 
 type BridgeProps = {
   fromPolyChain: PolyChain
@@ -54,8 +54,13 @@ const ChainBridge: React.FC<ChainBridgeProps> = ({
         <span>{fromPolyChain.ethereumChain.chainName}</span>
       </div>
     </div>
-    <img className="switch" onClick={onSwitch} src={switchImg} style={{ cursor: 'pointer' }}
-      alt="switch" />
+    <img
+      className="switch"
+      onClick={onSwitch}
+      src={switchImg}
+      style={{ cursor: 'pointer' }}
+      alt="switch"
+    />
     <div className="chain">
       <p className="label">To</p>
       <div className="chainContent">
@@ -282,7 +287,7 @@ const Bridge: React.FC = () => {
   const fromPolyChain = getPolyChainById(fromPolyChainId)!
   const toPolyChain = getToPolyChainByFromPolyChain(fromPolyChain)
 
-  dispatch(setChainId(fromPolyChain.networkChainId))
+  dispatch(setChainId(parseInt(fromPolyChain.ethereumChain.chainId, 16)))
   dispatch(setRpcUrl(fromPolyChain.ethereumChain.rpcUrls[0]))
 
   const providerInitialized = useInitializeProvider(
