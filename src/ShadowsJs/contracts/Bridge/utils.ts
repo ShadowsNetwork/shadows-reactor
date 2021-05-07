@@ -4,6 +4,10 @@ export function getPolyChainById(polyChainId: number): PolyChain | undefined {
   return POLY_CHAINS.filter(c => c.polyChainId === polyChainId)?.[0]
 }
 
+export function getPolyChainByChainName(chainName: string): PolyChain | undefined {
+  return POLY_CHAINS.filter(c => c.ethereumChain.chainName === chainName)?.[0]
+}
+
 // export function getPolyChainByNetworkChainId(networkChainId: number): PolyChain | undefined {
 //   return POLY_CHAINS.filter(c => c.networkChainId === networkChainId)?.[0]
 // }

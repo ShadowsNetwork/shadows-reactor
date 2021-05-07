@@ -2,6 +2,7 @@ import React from 'react'
 import { Button, Modal } from 'antd'
 import dowsIcon from '@/img/dows-info/dows.png'
 import BigNumber from 'bignumber.js'
+import './index.less'
 
 export type RedeemModalStatus = {
   visible: boolean
@@ -18,6 +19,7 @@ const RedeemModal: React.FC<RedeemModalStatus> = ({
 }) => {
   return (
     <Modal
+      wrapClassName="redeem-modal"
       zIndex={1}
       title="Redeem Reward"
       visible={visible}

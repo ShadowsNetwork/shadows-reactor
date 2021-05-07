@@ -14,6 +14,7 @@ const config: ConfigType = {
       {
         poolNumber: 0,
         poolName: 'Pancake Swap LP',
+        tokenName: 'LPPair',
         leftCurrency: {
           name: 'DOWS',
           icon: DOWSIcon
@@ -30,6 +31,7 @@ const config: ConfigType = {
       {
         poolNumber: 1,
         poolName: 'Single Token Yield',
+        tokenName: 'DOWS',
         rightCurrency: {
           name: 'DOWS',
           icon: DOWSIcon

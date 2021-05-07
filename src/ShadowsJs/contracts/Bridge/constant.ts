@@ -24,7 +24,7 @@ export const POLY_CHAINS: PolyChain[] = [
     networkChainId: 3,
     explorerUrl: /*TARGET_MAINNET
       ? 'https://etherscan.io/tx/0x{txHash}'
-      : */'https://ropsten.etherscan.io/tx/0x{txHash}',
+      : */'https://ropsten.etherscan.io',
     lockContractAddress: /*TARGET_MAINNET
       ? '0x2aA63cd0b28FB4C31fA8e4E95Ec11815Be07b9Ac'
       : */'0xe498fb7D00468a67A79dE5D4Ca264d3350165280',
@@ -47,7 +47,7 @@ export const POLY_CHAINS: PolyChain[] = [
     networkChainId: 97,
     explorerUrl: /*TARGET_MAINNET
       ? 'https://bscscan.com/tx/0x{txHash}'
-      : */'https://testnet.bscscan.com/tx/0x{txHash}',
+      : */'https://testnet.bscscan.com',
     lockContractAddress: /*TARGET_MAINNET
       ? '0xE3D0FB6E3cB5DA61EB18b06D035052441009d1E6'
       : */'0xCed7997C3e807Fcdc5ac18fFC0B8af93a15a9eE5',
@@ -66,3 +66,5 @@ export const POLY_CHAINS: PolyChain[] = [
     }
   }
 ]
+
+export const POLY_CHAIN_EXPLORER_URL = 'https://explorer.poly.network/testnet'

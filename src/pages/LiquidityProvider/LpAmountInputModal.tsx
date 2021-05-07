@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import { Button, message, Modal } from 'antd'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
 import { numberWithCommas } from '@/utils'
-import './amount-input-modal.css'
+import './index.less'
 
 export type LpAmountInputModalStatus = {
   visible: boolean,
@@ -45,6 +45,7 @@ const LpAmountInputModal: React.FC<LpAmountInputModalStatus> = ({
 
   return (
     <Modal
+      wrapClassName="amount-input-modal"
       zIndex={1}
       title={title}
       visible={visible}

@@ -4,7 +4,6 @@ import React from 'react'
 import '../app.less'
 import routers from '@/router'
 import { useLocation } from '@/hooks'
-import leaderboard from '@/img/slideBarIcon/leaderboard.png'
 import viewList from '@/img/slideBarIcon/view-list.png'
 
 const SideBar: React.FC = () => {
@@ -12,7 +11,7 @@ const SideBar: React.FC = () => {
 
   return (
     <div className="App">
-      <div style={{ position:'fixed' }}>
+      <div style={{ position: 'fixed' }}>
         <Menu
           defaultSelectedKeys={[hash.slice(1)]}
           mode="inline"
@@ -32,12 +31,14 @@ const SideBar: React.FC = () => {
               ))
           }
           <Menu.Item>
-            <img style={{width:'2.4rem',marginRight:'1.6rem'}} src={leaderboard} alt="bridge"/>
-            <a href={'https://bridge.poly.network/'} target='_blank' rel="noreferrer">Bridge</a>
-          </Menu.Item>
-          <Menu.Item>
-            <img style={{width:'2.4rem',marginRight:'1.6rem'}} src={viewList} alt="pancake" />
-            <a href={'https://exchange.pancakeswap.finance/#/add/0xfb7400707dF3D76084FBEae0109f41b178f71c02/BNB'} target='_blank' rel="noreferrer">Provide liquidity</a>
+            <img className="slideIcon" src={viewList} alt="pancake" />
+            <a
+              href={'https://exchange.pancakeswap.finance/#/add/0xfb7400707dF3D76084FBEae0109f41b178f71c02/BNB'}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Provide Liquidity
+            </a>
           </Menu.Item>
         </Menu>
       </div>

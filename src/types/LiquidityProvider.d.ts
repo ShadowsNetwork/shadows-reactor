@@ -5,6 +5,7 @@ export type PoolConfig = {
   poolName: string,
   poolType: PoolType,
   lpMultiplier: number,
+  tokenName: string,
   leftCurrency?: {
     name: string,
     icon: any,

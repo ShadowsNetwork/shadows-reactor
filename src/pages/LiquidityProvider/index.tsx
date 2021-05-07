@@ -16,6 +16,7 @@ import {
   beginTransaction, rejectTransaction, submitTransaction
 } from '@/components/TransactionStatusModal/event'
 import {
+  ApproveToken,
   LockLPToken, RedeemDows, TransactionHistory, TransactionStatus, UnlockLPToken
 } from '@/types/TransactionHistory'
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
@@ -78,6 +79,7 @@ const Pool: React.FC<PoolConfig> = ({
   poolNumber,
   poolName,
   poolType,
+  tokenName,
   lpMultiplier,
   leftCurrency,
   rightCurrency,
@@ -159,8 +161,14 @@ const Pool: React.FC<PoolConfig> = ({
       const approveResult: TransactionResponse = await dowsJSConnector.dowsJs.LpERC20Token.approve(lpTokenContractAddress, farmContractAddress)
       submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
+      const transactionHistory = new ApproveToken(approveResult.hash, tokenName, process.env.BLOCK_EXPLORER_URL, TransactionStatus.Submitted)
+      dispatch(appendTransactionHistory(transactionHistory))
+
       approveResult.wait()
         .then(() => {
+          transactionHistory.complete()
+          dispatch(updateTransactionHistoryStatus(transactionHistory))
+          notifyTransactionSuccess(transactionHistory)
           forceRefreshData()
         })
         .catch(() => {

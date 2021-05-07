@@ -37,7 +37,7 @@ export function notifyTransactionSuccess(transactionHistory: TransactionHistory)
     ),
     style: {
       top: 60,
-      width: 440
+      width: 'fit-content'
     }
   })
 }

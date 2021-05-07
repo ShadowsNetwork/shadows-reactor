@@ -18,10 +18,10 @@ export function useLocation(): Location {
 
   const listenToPopstate = () => {
     const { hash } = window.location
-    console.log(hash)
     if (hash === '#/') {
       window.location.hash = '#/liquidity'
     }
+
     setLocation(window.location)
   }
 
@@ -34,37 +34,6 @@ export function useLocation(): Location {
   }, [])
 
   return location
-}
-
-export function useSetupProvider(): void {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    const ethereum = (window as WindowChain).ethereum
-    if (ethereum) {
-      const { selectedAddress } = ethereum
-      dispatch(setAccount(selectedAddress))
-
-      ethereum.on('accountsChanged', async (newAccount, oldAccount) => {
-        console.log('on accounts changed: ', newAccount, oldAccount)
-        if (!newAccount.length) {
-          dispatch(setAccount(null))
-          dispatch(setSelectedWallet(null))
-        } else {
-          dispatch(setAccount(newAccount[0]))
-        }
-      })
-    }
-
-    return () => {
-      const ethereum = (window as WindowChain).ethereum
-      if (ethereum) {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        ethereum.removeListener('accountsChanged', () => {
-        })
-      }
-    }
-  }, [dispatch])
 }
 
 export function useDynamicBackgroundImage(): string {
@@ -210,13 +179,14 @@ export function useSetupNetwork(providerInitialized: boolean, params: EthereumCh
       } else if (selectedWallet === 'BSC') {
         setReady(await setupBinanceWalletNetwork(params))
       }
-    }).catch(async () => {
-      if (selectedWallet === 'Metamask') {
-        setReady(await setupMetamaskNetwork(params))
-      } else if (selectedWallet === 'BSC') {
-        setReady(await setupBinanceWalletNetwork(params))
-      }
     })
+      .catch(async () => {
+        if (selectedWallet === 'Metamask') {
+          setReady(await setupMetamaskNetwork(params))
+        } else if (selectedWallet === 'BSC') {
+          setReady(await setupBinanceWalletNetwork(params))
+        }
+      })
   }, [selectedWallet, providerInitialized, params])
 
   useEffect(() => {

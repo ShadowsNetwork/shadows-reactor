@@ -5,14 +5,18 @@ import {
   getAccount, getSelectedWallet, getTransactionHistoryList, setAccount, setSelectedWallet
 } from '@/store/wallet'
 import './index.less'
-import { Button, Modal } from 'antd'
-import { TransactionHistory, TransactionStatus } from '@/types/TransactionHistory'
+import { Button, Modal, Tooltip } from 'antd'
+import {
+  BridgeDows,
+  TransactionHistory, TransactionHistoryImplementationClassType, TransactionStatus
+} from '@/types/TransactionHistory'
 import WalletSelectionModal from '@/components/Wallet/WalletSelectionModal'
 import { ReactComponent as LinkIcon } from '@/img/link.svg'
 import Jazzicon from 'jazzicon'
 import { CloseOutlined, LoadingOutlined } from '@ant-design/icons'
 import { getWeb3ProviderByWallet, WalletNames } from '@/web3/wallets'
 import WalletConnectProvider from '@walletconnect/web3-provider'
+import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
 
 type CurrentAccountProps = {
   account: string
@@ -43,9 +47,6 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
   account,
   transactionHistoryList
 }) => {
-  const chainId: number = parseInt(process.env.CHAIN_ID!, 16)
-  const RPCUrl: string = process.env.RPC_URL!
-
   const dispatch = useDispatch()
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
 
@@ -54,6 +55,8 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
     dispatch(setAccount(null))
 
     if (selectedWallet === 'WalletConnect') {
+      const chainId: number = parseInt(process.env.CHAIN_ID!, 16)
+      const RPCUrl: string = process.env.RPC_URL!
       const provider = await getWeb3ProviderByWallet({ chainId, RPCUrl }, selectedWallet)
       const walletConnectProvider = provider?.provider as WalletConnectProvider
       walletConnectProvider.disconnect()
@@ -64,12 +67,14 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
     <div className="wallet-modal-content">
       <div className="walletModal-Title">{account}</div>
       <div className="bscScan">
-        <span>View on BscScan</span>
-        <LinkIcon
-          fill="#63CCA9"
-          className="link-icon"
-          onClick={() => window.open(`${process.env.BLOCK_EXPLORER_URL}/address/${account}`)}
-        />
+        <div>
+          <span className="text-label">View on BscScan</span>
+          <LinkIcon
+            fill="#63CCA9"
+            className="link-icon"
+            onClick={() => window.open(`${process.env.BLOCK_EXPLORER_URL}/address/${account}`)}
+          />
+        </div>
         <Button
           type="text"
           onClick={disconnect}
@@ -92,16 +97,24 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
                 <span className="transaction-history-string">
                   {tx.toString()}
                 </span>
-                {' '}
-                <span className="transaction-history-status">
-                  {icon}
-                </span>
-                {' '}
-                <LinkIcon
-                  fill={color}
-                  className="transaction-history-link"
-                  onClick={() => window.open(`${process.env.BLOCK_EXPLORER_URL}/tx/${tx.hash}`)}
-                />
+                <div>
+                  {
+                    tx.TYPE === TransactionHistoryImplementationClassType.Bridge && (tx as BridgeDows).state !== PolyTransactionStatus.FINISHED ?
+                      <Tooltip title={(tx as BridgeDows).hint}>
+                        <span className="transaction-history-status">
+                          {icon}
+                        </span>
+                      </Tooltip>
+                      : <span className="transaction-history-status">
+                        {icon}
+                      </span>
+                  }
+                  <LinkIcon
+                    fill={color}
+                    className="transaction-history-link"
+                    onClick={() => window.open(tx.url)}
+                  />
+                </div>
               </div>
             )
           })
@@ -157,6 +170,7 @@ const CurrentAccount: React.FC<CurrentAccountProps> = ({ account }) => {
       }
       <Modal
         style={{ top: 20 }}
+        wrapClassName="wallet-modal-wrapper"
         closable={false}
         maskClosable={false}
         title="Your Wallet"

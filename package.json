@@ -12,9 +12,6 @@
     "deploy": "npm run build && node -r dotenv/config scripts/oss/upload-dir.js --sourceDir=./dist --targetDir=/ --bucketName=shadows-app",
     "deploy:dev": "npm run build:dev && node -r dotenv/config scripts/oss/upload-dir.js --sourceDir=./dist --targetDir=/ --bucketName=shadows-staking"
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
   "lint-staged": {
     "*.{js,jsx,less,md,json}": [
       "prettier --write"
