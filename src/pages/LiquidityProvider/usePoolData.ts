@@ -9,34 +9,44 @@ import { PoolType } from '@/types/LiquidityProvider'
 
 const ALLOWANCE_THRESHOLD_VALUE = new BigNumber('2').pow(128)
 
-const isAllowanceEnough = (allowance: string): boolean => {
+function isAllowanceEnough(allowance: string): boolean {
   return new BigNumber(allowance).gt(ALLOWANCE_THRESHOLD_VALUE)
 }
 
-const getAPY = async (account: string, lpTokenAddress: string, farmAddress: string, poolType: PoolType, poolNumber: number, lpMultiplier:number) => {
-
+async function getAPY(
+  account: string,
+  lpTokenAddress: string,
+  farmAddress: string,
+  poolType: PoolType,
+  poolNumber: number,
+  lpMultiplier: number
+): Promise<string> {
   const [_rewardPerBlock, _BONUS_MULTIPLIER, _staked, _poolInfo, _totalAllocPoint] = await Promise.all([
     dowsJSConnector.dowsJs.Farm.rewardPerBlock(farmAddress),
-    dowsJSConnector.dowsJs.Farm.muliplier(farmAddress),
+    dowsJSConnector.dowsJs.Farm.multiplier(farmAddress),
     dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenAddress, farmAddress),
     dowsJSConnector.dowsJs.Farm.poolInfo(farmAddress, poolNumber),
-    dowsJSConnector.dowsJs.Farm.totalAllocPoint(farmAddress),
+    dowsJSConnector.dowsJs.Farm.totalAllocPoint(farmAddress)
   ])
   const rewardPerBlock = weiToBigNumber(_rewardPerBlock)
 
   const BONUS_MULTIPLIER = _BONUS_MULTIPLIER.toString()
 
-  const staked = weiToBigNumber(_staked).multipliedBy(lpMultiplier)
+  const staked = weiToBigNumber(_staked)
+    .multipliedBy(lpMultiplier)
 
-  if(staked.eq(0)){
-    return new BigNumber('0');
+  if (staked.eq(0)) {
+    return '0'
   }
 
   const allocPoint = _poolInfo.allocPoint.toString()
 
   const totalAllocPoint = _totalAllocPoint.toString()
 
-  const rewardPerYear = rewardPerBlock.multipliedBy(BONUS_MULTIPLIER).multipliedBy(allocPoint).dividedBy(totalAllocPoint).multipliedBy('10368000')
+  const rewardPerYear = rewardPerBlock.multipliedBy(BONUS_MULTIPLIER)
+    .multipliedBy(allocPoint)
+    .dividedBy(totalAllocPoint)
+    .multipliedBy('10368000')
 
   const APR = rewardPerYear.dividedBy(staked)
 
@@ -125,7 +135,8 @@ export const usePoolData = ({
       .toFixed(2)
     )
 
-    setDowsEarned(weiToBigNumber(_dowsEarned).toFixed(2))
+    setDowsEarned(weiToBigNumber(_dowsEarned)
+      .toFixed(2))
 
     setAllowanceEnough(isAllowanceEnough(weiToString(_lpTokenAllowance)))
 

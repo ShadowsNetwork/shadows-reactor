@@ -98,7 +98,11 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
         walletConnectProvider.on('chainChanged', handleChainChanged)
       } else if (selectedWallet === 'Metamask' || selectedWallet === 'BSC') {
         // @ts-ignore
-        await provider.provider.enable()
+        provider.provider.request({ method: 'eth_requestAccounts' })
+          .then(accounts => {
+            const [account] = accounts
+            dispatch(setAccount(account))
+          })
 
         // @ts-ignore
         provider.provider.on('accountsChanged', async (newAccount, oldAccount) => {

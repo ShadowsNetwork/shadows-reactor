@@ -1,21 +1,8 @@
 import Pool from '@/pages/LiquidityProvider'
-import FlowStep from '@/pages/Liquidity/FlowStep'
-
-import LiquidityImage from '@/img/background/liquidity.jpg'
-import money from '@/img/slideBarIcon/money-bill-stack.png'
 import Bridge from '@/pages/Bridge'
-import leaderboard from '@/img/slideBarIcon/leaderboard.png'
 
-// import { lazy } from 'react'
-// const Welcome = lazy(() => import('@/pages/Welcome'))
-// const Personal = lazy(() => import('@/pages/Personal'))
-// const Synthesis = lazy(() => import('@/pages/Synthesis'))
-// const Transaction = lazy(() => import('@/pages/Transaction'))
-// const LiquidityProvider = lazy(() => import('@/pages/LiquidityProvider'))
-// const Burn = lazy(() => import('@/pages/Burn'))
-// const Reward = lazy(() => import('@/pages/Reward'))
-// const FlowStep = lazy(() => import('@/pages/Liquidity/FlowStep'))
-// const Transfer = lazy(() => import('@/pages/Transfer'))
+import money from '@/img/slideBarIcon/money-bill-stack.png'
+import leaderboard from '@/img/slideBarIcon/leaderboard.png'
 
 export const routerLabelMapper = {
   person: { title: 'person.title' },
@@ -85,24 +72,24 @@ const routers = [
     path: '/staking',
     title: 'Staking',
     component: Pool,
-    image: money,
+    image: money
   },
   {
     path: '/bridge',
     key: 'bridge',
     title: 'Bridge',
     component: Bridge,
-    image: leaderboard,
-  },
+    image: leaderboard
+  }
 
   /** hidden routers */
-  {
+  /*{
     path: '/FlowStep',
     key: 'flowstep',
     component: FlowStep,
     hide: true,
     backgroundImage: LiquidityImage
-  }
+  }*/
 ]
 
 export default routers

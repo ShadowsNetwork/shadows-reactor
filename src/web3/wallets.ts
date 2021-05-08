@@ -35,16 +35,12 @@ export async function getWeb3ProviderByWallet(
 }
 
 const connectToMetamask = async (dispatch: Dispatch<any>, chainId: number, RPCUrl?: string): Promise<void> => {
-  const provider = await getWeb3ProviderByWallet({
+  const web3Provider = await getWeb3ProviderByWallet({
     chainId, RPCUrl
   }, 'Metamask') as providers.Web3Provider
 
-  provider.provider.request?.({ method: 'eth_requestAccounts' })
-    .then(accounts => {
-      const [account] = accounts
-      dispatch(setAccount(account))
-      dispatch(setSelectedWallet('Metamask'))
-    })
+  await web3Provider.provider.request?.({ method: 'eth_requestAccounts' })
+  dispatch(setSelectedWallet('Metamask'))
 }
 
 const connectToBSC = async (dispatch: Dispatch<any>, chainId: number, RPCUrl?: string): Promise<void> => {
@@ -52,11 +48,7 @@ const connectToBSC = async (dispatch: Dispatch<any>, chainId: number, RPCUrl?: s
     chainId, RPCUrl
   }, 'BSC') as providers.Web3Provider
 
-  const bscProvider = web3Provider.provider
-  // @ts-ignore
-  const accounts = await bscProvider.enable()
-  const [account] = accounts
-  dispatch(setAccount(account))
+  await web3Provider.provider.request?.({ method: 'eth_requestAccounts' })
   dispatch(setSelectedWallet('BSC'))
 }
 
