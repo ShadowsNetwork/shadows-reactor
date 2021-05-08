@@ -1,5 +1,6 @@
 import ShadowsJS from '@/ShadowsJs/index'
 import ContractSettings from '@/ShadowsJs/ContractSettings'
+import { Web3Provider } from '@ethersproject/providers'
 /* import { providers } from 'ethers'
  import { INFURA_PROJECT_ID, NETWORK_NAMES, SUPPORTED_WALLETS_MAP } from '@/ShadowsJs/networkHelper'
  import {
@@ -35,7 +36,7 @@ type DowsJSConnector = {
   dowsJs: ShadowsJS,
   synths?: unknown,
   signer?: unknown,
-  provider?: unknown,
+  provider?: Web3Provider,
   web3Utils?: unknown,
   ethersUtils?: unknown,
   setContractSettings: (_: ContractSettings) => void

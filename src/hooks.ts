@@ -1,6 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useCallback, useEffect, useState } from 'react'
-import { getSelectedWallet, setAccount, setSelectedWallet } from '@/store/wallet'
+import {
+  getSelectedWallet, getTransactionHistoryList, setAccount, setSelectedWallet,
+  updateTransactionHistoryStatus
+} from '@/store/wallet'
 import routers from '@/router'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 
@@ -12,6 +15,11 @@ import {
   EthereumChainParams, setupBinanceWalletNetwork, setupMetamaskNetwork, setupWalletConnectNetwork
 } from '@/ShadowsJs/networkHelper'
 import { Web3Provider } from '@ethersproject/providers'
+import {
+  BridgeDows, TransactionHistoryImplementationClassType, TransactionStatus
+} from '@/types/TransactionHistory'
+import axios from 'axios'
+import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
 
 export function useLocation(): Location {
   const [location, setLocation] = useState(window.location)
@@ -218,3 +226,59 @@ export function useErrorMessage(): any {
     }
   }, [selectedWallet])
 }
+
+export function useListenBridgeTransactionStatus() {
+  const dispatch = useDispatch()
+  const transactionList = useSelector(getTransactionHistoryList)
+
+  const task = bridgeTransactions => {
+    bridgeTransactions.forEach(async (t: BridgeDows) => {
+      const { hash } = t
+
+      await axios.post('https://bridge.poly.network/testnet/v1/transactionofhash', {
+        hash: hash.substring(2)
+      })
+        .then(r => {
+          const state = r.data.State
+          const transactionsWithHash = r.data.TransactionState.filter(s => s.Hash)
+          const lastTransaction = transactionsWithHash[transactionsWithHash.length - 1]
+
+          if (t.state !== state) {
+            t.state = state
+            t.lastTransactionHash = lastTransaction.Hash
+            t.lastTransactionPolyChainId = lastTransaction.ChainId
+
+            if (state === PolyTransactionStatus.FINISHED) {
+              t.complete()
+              dispatch(updateTransactionHistoryStatus(t))
+            }
+            dispatch(updateTransactionHistoryStatus(t))
+          }
+        })
+        .catch(async _ => {
+          const receipt = await dowsJSConnector.provider!.waitForTransaction(hash, 0)
+          if (!receipt.status) {
+            t.fail()
+            dispatch(updateTransactionHistoryStatus(t))
+          }
+        })
+    })
+  }
+
+  useEffect(() => {
+    const bridgeTransactions: BridgeDows[] = transactionList.filter(t =>
+      t.TYPE === TransactionHistoryImplementationClassType.Bridge
+      && t.status !== TransactionStatus.Completed
+      && t.status !== TransactionStatus.Failed
+    ) as BridgeDows[]
+
+    if (bridgeTransactions.length === 0) {
+      return
+
+    }
+    const intervalId = setInterval(() => task(bridgeTransactions), 5000)
+
+    return () => clearInterval(intervalId)
+  }, [transactionList])
+}
+

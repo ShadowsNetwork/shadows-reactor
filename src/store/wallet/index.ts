@@ -24,6 +24,11 @@ export const walletSlice = createSlice({
       if (!action.payload) {
         console.error('set account null')
       }
+
+      if (state.account === action.payload) {
+        return
+      }
+
       state.account = action.payload
       state.transactionHistoryList = []
     },
@@ -51,6 +56,7 @@ export const walletSlice = createSlice({
         console.error('no matched transaction history')
       } else {
         const index = state.transactionHistoryList.indexOf(filtered[0])
+
         state.transactionHistoryList[index] = target
         // !!force state update
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

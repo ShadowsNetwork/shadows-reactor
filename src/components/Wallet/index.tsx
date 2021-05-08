@@ -7,13 +7,12 @@ import {
 import './index.less'
 import { Button, Modal, Tooltip } from 'antd'
 import {
-  BridgeDows,
-  TransactionHistory, TransactionHistoryImplementationClassType, TransactionStatus
+  BridgeDows, TransactionHistory, TransactionHistoryImplementationClassType, TransactionStatus
 } from '@/types/TransactionHistory'
 import WalletSelectionModal from '@/components/Wallet/WalletSelectionModal'
 import { ReactComponent as LinkIcon } from '@/img/link.svg'
 import Jazzicon from 'jazzicon'
-import { CloseOutlined, LoadingOutlined } from '@ant-design/icons'
+import { CheckOutlined, CloseOutlined, LoadingOutlined } from '@ant-design/icons'
 import { getWeb3ProviderByWallet, WalletNames } from '@/web3/wallets'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
@@ -34,7 +33,7 @@ const mapTransactionStatusToIconAndLabel = new Map([
     color: '#63cca9'
   }],
   [TransactionStatus.Completed.valueOf(), {
-    // icon: <CheckOutlined />,
+    icon: <CheckOutlined />,
     color: '#63cca9'
   }],
   [TransactionStatus.Failed.valueOf(), {
@@ -83,7 +82,7 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
           Disconnect
         </Button>
       </div>
-      <div className="transactionContent">
+      <div className="transaction-history-container">
         {
           transactionHistoryList.map(tx => {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -97,10 +96,12 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
                 <span className="transaction-history-string">
                   {tx.toString()}
                 </span>
-                <div>
+                <div className="right-box">
                   {
-                    tx.TYPE === TransactionHistoryImplementationClassType.Bridge && (tx as BridgeDows).state !== PolyTransactionStatus.FINISHED ?
-                      <Tooltip title={(tx as BridgeDows).hint}>
+                    tx.TYPE === TransactionHistoryImplementationClassType.Bridge
+                    && (tx as BridgeDows).state !== PolyTransactionStatus.FINISHED
+                    && tx.status !== TransactionStatus.Failed
+                      ? <Tooltip title={(tx as BridgeDows).hint}>
                         <span className="transaction-history-status">
                           {icon}
                         </span>

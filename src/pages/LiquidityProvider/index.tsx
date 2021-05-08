@@ -16,11 +16,9 @@ import {
   beginTransaction, rejectTransaction, submitTransaction
 } from '@/components/TransactionStatusModal/event'
 import {
-  ApproveToken,
-  LockLPToken, RedeemDows, TransactionHistory, TransactionStatus, UnlockLPToken
+  ApproveToken, LockLPToken, RedeemDows, TransactionHistory, TransactionStatus, UnlockLPToken
 } from '@/types/TransactionHistory'
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
-import { notifyTransactionFailed, notifyTransactionSuccess } from '@/utils/TransactionNotifycation'
 import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
 import RedeemModal, { RedeemModalStatus } from '@/pages/LiquidityProvider/RedeemModal'
 import { usePoolData } from '@/pages/LiquidityProvider/usePoolData'
@@ -168,7 +166,6 @@ const Pool: React.FC<PoolConfig> = ({
         .then(() => {
           transactionHistory.complete()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
-          notifyTransactionSuccess(transactionHistory)
           forceRefreshData()
         })
         .catch(() => {
@@ -208,13 +205,11 @@ const Pool: React.FC<PoolConfig> = ({
         .then(() => {
           transactionHistory.complete()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
-          notifyTransactionSuccess(transactionHistory)
           forceRefreshData()
         })
         .catch(() => {
           transactionHistory.fail()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
-          notifyTransactionFailed(transactionHistory)
         })
     } catch (e) {
       rejectTransaction(transactionStatusModalProps,
@@ -240,13 +235,11 @@ const Pool: React.FC<PoolConfig> = ({
         .then(() => {
           transactionHistory.complete()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
-          notifyTransactionSuccess(transactionHistory)
           forceRefreshData()
         })
         .catch(() => {
           transactionHistory.fail()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
-          notifyTransactionFailed(transactionHistory)
         })
     } catch (e) {
       rejectTransaction(
@@ -272,13 +265,11 @@ const Pool: React.FC<PoolConfig> = ({
         .then(() => {
           transactionHistory.complete()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
-          notifyTransactionSuccess(transactionHistory)
           forceRefreshData()
         })
         .catch(() => {
           transactionHistory.fail()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
-          notifyTransactionFailed(transactionHistory)
         })
     } catch (e) {
       rejectTransaction(

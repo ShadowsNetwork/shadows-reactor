@@ -1,5 +1,5 @@
 import LimitableNumberInput from '@/components/LimitableNumberInput'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import './index.less'
 import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
@@ -10,8 +10,7 @@ import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toWei } from '@/web3/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  appendTransactionHistory, getAccount, getTransactionHistoryList, setChainId, setRpcUrl,
-  updateTransactionHistoryStatus
+  appendTransactionHistory, getAccount, setChainId, setRpcUrl, updateTransactionHistoryStatus
 } from '@/store/wallet'
 import { getSourcePolyChainId, setSourcePolyChainId } from '@/store/bridge'
 import DOWSIcon from '@/img/dows-info/dows.png'
@@ -20,13 +19,7 @@ import {
   beginTransaction, rejectTransaction, submitTransaction
 } from '@/components/TransactionStatusModal/event'
 import switchImg from '@/img/bridge/switch.png'
-import {
-  ApproveToken,
-  BridgeDows, TransactionHistoryImplementationClassType, TransactionStatus
-} from '@/types/TransactionHistory'
-import axios from 'axios'
-import { notifyTransactionSuccess } from '@/utils/TransactionNotifycation'
-import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
+import { ApproveToken, BridgeDows, TransactionStatus } from '@/types/TransactionHistory'
 import { PolyChain } from '@/types/PolyChain'
 import { getPolyChainById, getToPolyChainByFromPolyChain } from '@/utils/bridgeUtils'
 
@@ -110,6 +103,10 @@ const BridgeMain: React.FC<BridgeProps> = ({
     setAmount(balance!)
   }
 
+  const forceRefreshData = () => {
+    setRefreshFlag(new Date().getMilliseconds())
+  }
+
   const approve = async () => {
     try {
       beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
@@ -123,7 +120,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
         .then(() => {
           transactionHistory.complete()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
-          notifyTransactionSuccess(transactionHistory)
+          forceRefreshData()
         })
     } catch (e) {
       rejectTransaction(transactionStatusModalProps,
@@ -133,7 +130,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
     }
   }
 
-  const confirm = async () => {
+  const convert = async () => {
     try {
       beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
       const lockResult = await dowsJSConnector.dowsJs.Bridge.lock({
@@ -151,7 +148,8 @@ const BridgeMain: React.FC<BridgeProps> = ({
 
       lockResult.wait()
         .then(() => {
-          setRefreshFlag(refreshFlag + 1)
+          setAmount('')
+          forceRefreshData()
         })
     } catch (e) {
       rejectTransaction(transactionStatusModalProps,
@@ -179,13 +177,13 @@ const BridgeMain: React.FC<BridgeProps> = ({
         <Button onClick={setAmountToMax}>MAX</Button>
       </div>
       <div className="fee">
-        Fee: {fee ?? '-'}
+        Fee: {fee ?? '-'} DOWS
       </div>
       <div className="convert-button">
         {
           amount && (
             allowanceEnough()
-              ? <Button onClick={confirm} disabled={!isAmountLegal()}>
+              ? <Button onClick={convert} disabled={!isAmountLegal()}>
                 Convert
               </Button>
               : <Button onClick={approve}>
@@ -238,49 +236,7 @@ const EmptyBridgeMain: React.FC = () => (
   </div>
 )
 
-const useListenBridgeTransactionStatus = () => {
-  const dispatch = useDispatch()
-  const transactionList = useSelector(getTransactionHistoryList)
-
-  useEffect(() => {
-    const bridgeTransactions: BridgeDows[] = transactionList.filter(t => t.TYPE === TransactionHistoryImplementationClassType.Bridge
-      && t.status !== TransactionStatus.Completed) as BridgeDows[]
-
-    const task = () => {
-      bridgeTransactions.forEach(async (t: BridgeDows) => {
-        const r = await axios.post('https://bridge.poly.network/testnet/v1/transactionofhash', {
-          hash: t.hash.substring(2)
-        })
-        const state = r.data.State
-        const transactionsWithHash = r.data.TransactionState.filter(s => s.Hash)
-        const lastTransaction = transactionsWithHash[transactionsWithHash.length - 1]
-
-        if (t.state !== state) {
-          t.state = state
-          t.lastTransactionHash = lastTransaction.Hash
-          t.lastTransactionPolyChainId = lastTransaction.ChainId
-
-          if (state === PolyTransactionStatus.FINISHED) {
-            notifyTransactionSuccess(t)
-            t.complete()
-          }
-          dispatch(updateTransactionHistoryStatus(t))
-        }
-      })
-    }
-    task()
-
-    const intervalId = setInterval(task, 5000)
-
-    return () => {
-      clearInterval(intervalId)
-    }
-  }, [transactionList])
-}
-
 const Bridge: React.FC = () => {
-  useListenBridgeTransactionStatus()
-
   const dispatch = useDispatch()
   const fromPolyChainId = useSelector(getSourcePolyChainId)
 

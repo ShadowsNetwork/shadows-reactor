@@ -3,6 +3,7 @@ import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
 import { getPolyChainByChainName, getPolyChainById } from '@/utils/bridgeUtils'
 import { PolyChain } from '@/types/PolyChain'
 import { ConfigType } from '../../config'
+import { notifyTransactionFailed, notifyTransactionSuccess } from '@/utils/TransactionNotifycation'
 
 const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 
@@ -64,10 +65,18 @@ export abstract class TransactionHistory {
   }
 
   complete(): void {
+    if (this._status !== TransactionStatus.Completed) {
+      notifyTransactionSuccess(this)
+    }
+
     this._status = TransactionStatus.Completed
   }
 
   fail(): void {
+    if (this._status !== TransactionStatus.Failed) {
+      notifyTransactionFailed(this)
+    }
+
     this._status = TransactionStatus.Failed
   }
 

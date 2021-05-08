@@ -4,7 +4,7 @@ import SideBar from '@/layouts/components/Sidebar'
 import { Route } from 'react-router-dom'
 import TopBar from '@/layouts/components/TopBar'
 import DowsInfo from '@/layouts/components/DowsInfo'
-import { useDynamicBackgroundImage } from '@/hooks'
+import { useDynamicBackgroundImage, useListenBridgeTransactionStatus } from '@/hooks'
 import { useDispatch } from 'react-redux'
 import { setChainId, setRpcUrl } from '@/store/wallet'
 
@@ -13,6 +13,8 @@ const App: React.FC = () => {
   const dispatch = useDispatch()
   dispatch(setChainId(parseInt(process.env.CHAIN_ID!, 16)))
   dispatch(setRpcUrl(process.env.RPC_URL!))
+
+  useListenBridgeTransactionStatus()
 
   return (
     <div
