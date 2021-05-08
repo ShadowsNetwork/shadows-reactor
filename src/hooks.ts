@@ -19,7 +19,7 @@ export function useLocation(): Location {
   const listenToPopstate = () => {
     const { hash } = window.location
     if (hash === '#/') {
-      window.location.hash = '#/liquidity'
+      window.location.hash = '#/staking'
     }
 
     setLocation(window.location)

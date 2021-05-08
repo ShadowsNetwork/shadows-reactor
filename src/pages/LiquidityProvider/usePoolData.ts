@@ -28,6 +28,10 @@ const getAPY = async (account: string, lpTokenAddress: string, farmAddress: stri
 
   const staked = weiToBigNumber(_staked).multipliedBy(lpMultiplier)
 
+  if(staked.eq(0)){
+    return new BigNumber('0');
+  }
+
   const allocPoint = _poolInfo.allocPoint.toString()
 
   const totalAllocPoint = _totalAllocPoint.toString()
