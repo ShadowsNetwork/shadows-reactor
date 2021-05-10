@@ -258,30 +258,41 @@ const Bridge: React.FC = () => {
   }
 
   return (
-    <div className="bridge">
-      <div className="title">
-        <img className="bridgeImg" src={DOWSIcon} alt="dows" />
-        <span>DOWS Bridge</span>
-      </div>
-      <ChainBridge
-        fromPolyChain={fromPolyChain}
-        toPolyChain={toPolyChain}
-        onSwitch={onSwitch}
-      />
-      {
-        providerInitialized && networkReady ?
-          <BridgeMain
-            fromPolyChain={fromPolyChain}
-            toPolyChain={toPolyChain}
-          /> :
-          <EmptyBridgeMain />
-      }
-      {
-        !networkReady &&
-        <div className="error-hint">
-          Please make sure your network is setup to correct!
+    <div className="bridge-container">
+      <div className="bridge">
+        <div className="title">
+          <img className="bridgeImg" src={DOWSIcon} alt="dows" />
+          <span>DOWS Bridge</span>
         </div>
-      }
+        <ChainBridge
+          fromPolyChain={fromPolyChain}
+          toPolyChain={toPolyChain}
+          onSwitch={onSwitch}
+        />
+        {
+          providerInitialized && networkReady ?
+            <BridgeMain
+              fromPolyChain={fromPolyChain}
+              toPolyChain={toPolyChain}
+            /> :
+            <EmptyBridgeMain />
+        }
+        {
+          !networkReady &&
+          <div className="error-hint">
+            Please make sure your network is setup to correct!
+          </div>
+        }
+        <p className="copyright">
+          Powered By
+          <span
+            onClick={() => window.open('https://poly.network')}
+            className="link"
+          >
+            Poly.Network
+          </span>
+        </p>
+      </div>
     </div>
   )
 }

@@ -1,165 +1,186 @@
-.bridge {
-  position: absolute;
-  top: 8.4rem;
-  left: 25.4rem;
-  color: white;
-  width: 39.1rem;
-  background: #121725;
-  border-radius: 3.757rem;
-  padding-bottom: 2.343rem;
+.bridge-container {
+  width: 100%;
+  height: fit-content;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  //justify-content: center;
 
-  .title {
+  .bridge {
+    align-self: center;
+    justify-self: center;
+    color: white;
+    width: 39.1rem;
+    background: #121725;
+    border-radius: 3.757rem;
+    padding-bottom: 2.343rem;
     display: flex;
-    align-items: center;
-    margin-top: 1.6rem;
-    padding: 0 2.4rem;
+    flex-direction: column;
+    height: fit-content;
 
-    .bridgeImg {
-      width: 3rem;
-    }
+    .title {
+      display: flex;
+      align-items: center;
+      margin-top: 1.6rem;
+      padding: 0 2.4rem;
 
-    span {
-      display: inline-block;
-      font-size: 1.8rem;
-      margin-left: 1rem;
-      font-weight: bold;
-    }
-  }
-
-  .chain-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 4.0rem;
-
-    .chain {
-      width: 10rem;
-      height: 13.1rem;
-
-      p {
-        display: block;
-        width: 100%;
-        text-align: center;
-        font-size: 1.8rem;
-        font-weight: bold;
-      }
-
-      .chainContent {
-        width: 100%;
-        height: 10rem;
-        background: #182037;
-        border-radius: 10px;
-        margin-top: 0.7rem;
-        letter-spacing: -0.2px;
-      }
-
-      img {
-        width: 3.6rem;
-        margin-left: calc((100% - 3.6rem) / 2);
-        margin-top: 1.1rem;
+      .bridgeImg {
+        width: 3rem;
       }
 
       span {
-        display: block;
-        text-align: center;
-        margin-top: 0.4rem;
-        font-size: 1.4rem;
+        display: inline-block;
+        font-size: 1.8rem;
+        margin-left: 1rem;
         font-weight: bold;
-        width: 5.7rem;
-        margin-left: calc((100% - 5.7rem) / 2);
       }
     }
 
-    .switch {
-      width: 4rem;
-      height: 2.8rem;
-      margin-top: 5rem;
-      margin-left: 2.3rem;
-      margin-right: 2.3rem;
-    }
-
-  }
-
-  &-main {
-    padding: 0 1.4rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    .available {
-      color: #63CCA9;
-      font-weight: bold;
-      margin-top: 3.3rem;
-      text-align: end;
-      margin-right: 0.3rem;
-    }
-
-    .input-row {
+    .chain-container {
       display: flex;
+      justify-content: center;
       align-items: center;
-      margin-top: 1rem;
+      margin-top: 4.0rem;
 
-      input.ant-input {
-        width: 19.2rem;
-        height: 3.8rem;
-        background: #363636;
-        border-radius: 3.8rem;
-        border: none;
-        outline: none;
+      .chain {
+        width: 10rem;
+        height: 13.1rem;
+
+        p {
+          display: block;
+          width: 100%;
+          text-align: center;
+          font-size: 1.8rem;
+          font-weight: bold;
+        }
+
+        .chainContent {
+          width: 100%;
+          height: 10rem;
+          background: #182037;
+          border-radius: 10px;
+          margin-top: 0.7rem;
+          letter-spacing: -0.2px;
+        }
+
+        img {
+          width: 3.6rem;
+          margin-left: calc((100% - 3.6rem) / 2);
+          margin-top: 1.1rem;
+        }
+
+        span {
+          display: block;
+          text-align: center;
+          margin-top: 0.4rem;
+          font-size: 1.4rem;
+          font-weight: bold;
+          width: 5.7rem;
+          margin-left: calc((100% - 5.7rem) / 2);
+        }
       }
 
-      .DOWS {
+      .switch {
+        width: 4rem;
+        height: 2.8rem;
+        margin-top: 5rem;
+        margin-left: 2.3rem;
+        margin-right: 2.3rem;
+      }
+
+    }
+
+    &-main {
+      padding: 0 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .available {
+        color: #63CCA9;
+        font-weight: bold;
+        margin-top: 3.3rem;
+        text-align: end;
+        margin-right: 0.3rem;
+      }
+
+      .input-row {
+        display: flex;
+        align-items: center;
+        margin-top: 1rem;
+
+        input.ant-input {
+          width: 19.2rem;
+          height: 3.8rem;
+          background: #363636;
+          border-radius: 3.8rem;
+          border: none;
+          outline: none;
+        }
+
+        .DOWS {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: #63CCA9;
+          margin-left: 2rem;
+        }
+
+        Button {
+          width: 8.567rem;
+          height: 3.757rem;
+          border-radius: 2rem;
+          color: #FFFEFE !important;
+          font-size: 1.5rem;
+          font-weight: bold;
+          background: #63CCA9 !important;
+          border: none;
+          margin-left: 1.8rem;
+        }
+      }
+
+      .fee {
         font-size: 1.5rem;
         font-weight: bold;
         color: #63CCA9;
-        margin-left: 2rem;
+        margin-top: 3.5rem;
+        margin-bottom: 0.4rem;
+        text-align: center;
       }
 
-      Button {
-        width: 8.567rem;
-        height: 3.757rem;
-        border-radius: 2rem;
-        color: #FFFEFE !important;
-        font-size: 1.5rem;
-        font-weight: bold;
-        background: #63CCA9 !important;
-        border: none;
-        margin-left: 1.8rem;
+      .convert-button {
+        Button {
+          width: 15.979rem;
+          height: 3.757rem;
+          border-radius: 2rem;
+          color: #FFFEFE !important;
+          font-size: 1.5rem;
+          font-weight: bold;
+          background: #63CCA9 !important;
+          border: none;
+          margin-left: calc((100% - 15.979rem) / 2);
+        }
       }
     }
 
-    .fee {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #63CCA9;
-      margin-top: 3.5rem;
-      margin-bottom: 0.4rem;
+    .error-hint {
+      margin-top: 2rem;
+      color: red;
       text-align: center;
     }
 
-    .convert-button {
-      Button {
-        width: 15.979rem;
-        height: 3.757rem;
-        border-radius: 2rem;
-        color: #FFFEFE !important;
-        font-size: 1.5rem;
-        font-weight: bold;
-        background: #63CCA9 !important;
-        border: none;
-        margin-left: calc((100% - 15.979rem) / 2);
+    .copyright {
+      color: #8d96af;
+      text-align: center;
+      position: relative;
+      top: 5rem;
+      height: 0;
+
+      .link {
+        cursor: pointer;
+        margin-left: 0.3rem;
       }
     }
-  }
 
-  .error-hint {
-    margin-top: 2rem;
-    color: red;
-    text-align: center;
   }
-
 }
 
 
