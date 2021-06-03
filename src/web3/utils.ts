@@ -1,5 +1,6 @@
 import Web3 from 'web3'
 import BigNumber from 'bignumber.js'
+import BN from 'bn.js'
 
 export const web3Utils = new Web3().utils
 
@@ -7,13 +8,12 @@ export function toBigNumber(value: string | number): BigNumber {
   return new BigNumber(value)
 }
 
-export function weiToBigNumber(value: string | number, decimalPlaces = 18): BigNumber {
+export function weiToBigNumber(value: string | number | BN, decimalPlaces = 18): BigNumber {
   return new BigNumber(web3Utils.fromWei(value.toString())).dp(decimalPlaces, BigNumber.ROUND_DOWN)
 }
 
-export function weiToString(value: string | number, decimalPlaces = 18): string {
-  return weiToBigNumber(value, decimalPlaces)
-    .toString()
+export function weiToString(value: string | number | BN, decimalPlaces = 18): string {
+  return weiToBigNumber(value, decimalPlaces).toFixed(decimalPlaces)
 }
 
 export function toWei(amount: number | string): string {

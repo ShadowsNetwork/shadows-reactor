@@ -3,6 +3,29 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
 import { createChart, CrosshairMode } from 'lightweight-charts'
+import {
+  KeyPair, useCurrencyBalance, usePairData, useSynthAssetsData
+} from '@/pages/Trade/TradeDataHooks'
+import { useInitializeProvider, useSetupNetwork } from '@/hooks'
+import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
+import AmountInputModal, { AmountInputModalStatus } from '@/pages/LiquidityProvider/AmountInputModal'
+import { toBigNumber, toByte32, toWei, weiToString } from '@/web3/utils'
+import { useSelector } from 'react-redux'
+import { getAccount } from '@/store/wallet'
+
+type PairInfoProps = {
+  onSelectedKeyPairChanged: (_selectedKeyPair: KeyPair) => void
+  selectedKeyPair?: KeyPair
+}
+
+type BuySellPanelProps = {
+  type: 'Buy' | 'Sell'
+  color: string
+  keyPair?: KeyPair,
+  balanceByCurrency: { [key: string]: string }
+  onComplete: () => void
+}
+
 const TradePageContainer = styled.div`
   display: flex;
 `
@@ -20,7 +43,7 @@ const Column = styled.div`
 
 const CandlestickContainer = styled.div`
   height: 46.5rem;
-  margin-bottom: 15px;
+  margin-bottom: 1.5rem;
   background-color: #121725;
   padding: 1.5rem 1.5rem;
 
@@ -103,7 +126,7 @@ const CandlestickContainer = styled.div`
 `
 
 const StatsContainer = styled.div`
-  height: 88px;
+  height: 8.8rem;
   display: flex;
   align-items: center;
   background-color: #1C1C1C;
@@ -114,20 +137,20 @@ const StatsContainer = styled.div`
 
     .title {
       color: #939393;
-      margin-bottom: 4px;
-      font: 12px bold;
+      margin-bottom: 0.4rem;
+      font: 1.2rem bold;
     }
 
     .value {
       color: white;
-      font: 20px bold;
+      font: 2rem bold;
     }
   }
 `
 
 const ContainerForDowsAndPair = styled.div`
-  height: 368px;
-  margin-bottom: 9px;
+  height: 36.8rem;
+  margin-bottom: 0.9rem;
   background-color: #121725;
 `
 
@@ -144,7 +167,7 @@ const ContainerForBuyAndSell = styled.div`
 
   .input {
     height: 3.757rem;
-    border-radius: 20px;
+    border-radius: 2rem;
     background-color: #363636;
   }
 
@@ -171,95 +194,106 @@ const ContainerForBuyAndSell = styled.div`
     margin-top: 0.8rem;
     width: 100%;
     height: 3.757rem;
-    border-radius: 10px;
+    border-radius: 1rem;
     color: white;
     font: 1.5rem bold;
   }
 `
 
 const DowsInfoContainer = styled.div`
+  width: 100%;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   .header {
-    margin-left: 14px;
-    margin-top: 20px;
-    margin-bottom: 24px;
+    width: 100%;
+    margin-bottom: 2.4rem;
     display: flex;
+    justify-content: space-around;
 
     .item {
-      margin-right: 70px;
       font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
       .title {
         white-space: nowrap;
         color: #63CCA9;
-        font-size: 12px;
+        font-size: 1.2rem;
       }
 
       .value {
         color: white;
-        font-size: 20px;
+        font-size: 2rem;
       }
-
     }
   }
 
   .button-row {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 27px;
-    margin-left: 6px;
-    margin-right: 6px;
+    justify-content: space-around;
+    margin: 0 0.6rem 2.7rem 0.6rem;
 
     .button {
+      width: 45%;
       color: white;
-      height: 37.57px;
-      border-radius: 10px;
-      width: 49%;
-      font-size: 15px;
+      height: 3.757rem;
+      border-radius: 1rem;
+      font-size: 1.5rem;
       font-weight: bold;
-      border-width: 2px;
+      border-width: 0.2rem;
       border-color: #979797;
     }
   }
 
   .text-container {
+    width: 85%;
     color: white;
-    font-size: 12px;
+    font-size: 1.2rem;
     font-weight: bold;
     line-height: 0.6;
-    margin-bottom: 24px;
-    margin-left: 12px;
+    margin-bottom: 2.0rem;
 
     .bold {
-      font-size: 13px;
+      font-size: 1.3rem;
       color: #979797;
+    }
+
+    p {
+      display: flex;
+      justify-content: space-between;
     }
   }
 
   .redeem-btn {
-    margin-left: 12px;
-    width: 140px;
-    height: 37.57px;
+    margin: 0 auto;
+    width: 14rem;
+    height: 3.757rem;
     color: white;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 1.5rem;
 
-    border-width: 2px;
-    border-radius: 10px;
+    border-width: 0.2rem;
+    border-radius: 1rem;
     border-color: #979797;
   }
 `
 
 const PairsInfoContainer = styled.div`
-  padding: 18px 12px;
+  padding: 1.8rem 1.2rem;
 
   .button-group {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 1.2rem;
   }
 
   .list {
-    margin: 0 12px;
+    margin: 0 1.2rem;
     font-weight: bold;
 
     .item, .header {
@@ -269,30 +303,42 @@ const PairsInfoContainer = styled.div`
 
     .item {
       color: white;
-      font-size: 14px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      user-select: none;
     }
 
     .header {
       color: #979797 !important;
-      font-size: 12px;
+      font-size: 1.2rem;
+      user-select: none;
     }
   }
 `
 
-type TradePageProps = {
-  // none
-}
+const CustomizedSlider = styled.div`
+  .ant-slider-dot {
+    background-color: #cccccc;
+  }
 
-const PairInfo: React.FC = () => {
+  .ant-slider-dot-active {
+    border-color: ${props => props.color};
+    background-color: white;
+  }
+
+  .ant-slider-with-marks {
+    margin: 1.6rem 0;
+  }
+
+  .ant-slider-handle {
+    background-color: white;
+  }
+`
+
+const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedKeyPair }) => {
   const [selectedType, setSelectedType] = useState('All')
 
-  const data = [
-    { symbol: 'xETH/xUSD', lastPrice: '1.00' },
-    { symbol: 'xETH/xUSD', lastPrice: '1.00' },
-    { symbol: 'xETH/xUSD', lastPrice: '1.00' },
-    { symbol: 'xETH/xUSD', lastPrice: '1.00' },
-    { symbol: 'xETH/xUSD', lastPrice: '1.00' }
-  ]
+  const { keyPairs } = usePairData()
 
   const StatefulButton = ({ name }: { name: string }) => {
     const handleClick = () => {
@@ -318,6 +364,18 @@ const PairInfo: React.FC = () => {
     )
   }
 
+  const handleSelectKeyPair = (keypair: KeyPair) => {
+    onSelectedKeyPairChanged(keypair)
+  }
+
+  useEffect(() => {
+    if (keyPairs?.length) {
+      handleSelectKeyPair(keyPairs[0])
+    }
+  }, [keyPairs])
+
+  const isKeyPairSelected = (keyPair: KeyPair) => selectedKeyPair?.symbol === keyPair.symbol
+
   return (
     <PairsInfoContainer>
       <div className="button-group">
@@ -333,12 +391,22 @@ const PairInfo: React.FC = () => {
           <div className="value">Last Price</div>
         </div>
         {
-          data.map(item => (
-            <div className="item" key={item.symbol}>
-              <div className="key">{item.symbol}</div>
-              <div className="value">{`$${item.lastPrice}`}</div>
-            </div>
-          ))
+          keyPairs?.map((keyPair, index) => {
+            const { symbol, lastPrice } = keyPair
+            return (
+              <div
+                className="item"
+                key={index}
+                onClick={() => handleSelectKeyPair(keyPair)}
+                style={{ color: isKeyPairSelected(keyPair) ? '#63cca9' : '' }}
+              >
+                <div className="key">
+                  {`${symbol[0]} / ${symbol[1]}`}
+                </div>
+                <div className="value">{lastPrice}</div>
+              </div>
+            )
+          })
         }
       </div>
     </PairsInfoContainer>
@@ -346,33 +414,16 @@ const PairInfo: React.FC = () => {
 
 }
 
-const CustomizedSlider = styled.div`
-  .ant-slider-dot {
-    background-color: #cccccc;
-  }
-
-  .ant-slider-dot-active {
-    border-color: ${props => props.color};
-    background-color: white;
-  }
-
-  .ant-slider-with-marks {
-    margin: 1.6rem 0;
-  }
-
-  .ant-slider-handle {
-    background-color: white;
-  }
-`
-
 const BuySellPanel: React.FC<BuySellPanelProps> = ({
-  buttonText,
+  type,
   color,
-  handler,
-  unit,
-  available
+  keyPair,
+  balanceByCurrency,
+  onComplete
 }) => {
-  const [value, setValue] = useState('')
+  const [inputValue, setInputValue] = useState('')
+
+  const [sliderValue, setSliderValue] = useState(0)
 
   const sliderMarks = {
     0: '',
@@ -383,20 +434,58 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
     100: ''
   }
 
+  const unit = keyPair?.symbol[type === 'Buy' ? 1 : 0]
+
+
+  const available = weiToString((unit && balanceByCurrency[unit]) ?? '0', 6)
+
+  const onSliderChange = value => {
+    setSliderValue(value)
+    setInputValue(toBigNumber(available)
+      .multipliedBy(toBigNumber(value))
+      .dividedBy(100)
+      .toFixed(6))
+  }
+
+  const handleExchange = async () => {
+    if (toBigNumber(inputValue).lte(0)) {
+      return
+    }
+
+    const sourceCurrencyKey = toByte32(keyPair!.symbol[type === 'Buy' ? 1 : 0])
+    const destinationCurrencyKey = toByte32(keyPair!.symbol[type === 'Buy' ? 0 : 1])
+    const sourceAmount = toWei(inputValue)
+
+    const tx = await dowsJSConnector.dowsJs.Synthesizer.exchange(sourceCurrencyKey, sourceAmount, destinationCurrencyKey)
+
+    tx.wait().then(onComplete)
+  }
+
+  useEffect(() => {
+    setSliderValue(toBigNumber(inputValue)
+      .dividedBy(toBigNumber(available))
+      .multipliedBy(100)
+      .toNumber())
+  }, [inputValue])
+
   return (
     <div className="panel">
       <div className="row">
         <LimitableNumberInput
-          inputValue={value}
-          setInputValue={setValue}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
           className="input"
+          maximum={available}
         />
         <span className="unit" style={{ color }}>{unit}</span>
       </div>
       <CustomizedSlider color={color}>
         <Slider
+          disabled={toBigNumber(available)
+            .eq(0)}
           marks={sliderMarks}
-          defaultValue={0}
+          value={sliderValue}
+          onChange={onSliderChange}
           trackStyle={{ backgroundColor: color }}
           handleStyle={{ borderColor: color, color: '#cecece' }}
         />
@@ -411,21 +500,13 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
       </div>
       <Button
         className="btn"
-        onClick={handler}
+        onClick={handleExchange}
         style={{ backgroundColor: color }}
       >
-        {buttonText}
+        {type}
       </Button>
     </div>
   )
-}
-
-type BuySellPanelProps = {
-  buttonText: string
-  color: string
-  handler: () => void
-  unit: string
-  available: string
 }
 
 const Stats: React.FC = () => {
@@ -448,38 +529,131 @@ const Stats: React.FC = () => {
 }
 
 const DowsInfo: React.FC = () => {
+  const account = useSelector(getAccount)
+
+  const {
+    myRatio, targetRatio,
+    totalDows, availableDows, lockedDows,
+    totalReward, escrowedReward, redeemableReward,
+    refresh
+  } = useSynthAssetsData()
+
+  const [amountInputModalStatus, setAmountInputModalStatus] = useState<AmountInputModalStatus>({
+    visible: false,
+    title: '',
+    confirmCallback: undefined,
+    maxAvailable: '',
+    unit: 'DOWS'
+  })
+
+  const closeAmountInputModal = () => {
+    setAmountInputModalStatus({
+      ...amountInputModalStatus,
+      visible: false,
+      title: '',
+      confirmCallback: undefined,
+      maxAvailable: '',
+      unit: 'DOWS'
+    })
+  }
+
+  const handleRedeem = () => {
+    dowsJSConnector.dowsJs.FeePool.claimFees()
+  }
+
+  const handleMintXusd = async () => {
+    const issueSynth = async amount => {
+      const result = await dowsJSConnector.dowsJs.Synthesizer.issueSynths(toWei(amount))
+
+      result.wait()
+        .then(refresh)
+    }
+
+    const [remainingIssuableSynths] = await dowsJSConnector.dowsJs.Synthesizer.remainingIssuableSynths(account)
+
+    setAmountInputModalStatus({
+      ...amountInputModalStatus,
+      visible: true,
+      title: 'Mint xUSD',
+      maxAvailable: weiToString(remainingIssuableSynths),
+      cancelCallback: closeAmountInputModal,
+      confirmCallback: issueSynth,
+      unit: 'xUSD'
+    })
+  }
+
+  const handleBurnXusd = async () => {
+    const burnSynths = async amount => {
+      const result = await dowsJSConnector.dowsJs.Synthesizer.burnSynths(toWei(amount))
+
+      result.wait()
+        .then(refresh)
+    }
+
+    const debtBalance = weiToString(await dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('xUSD')))
+
+    setAmountInputModalStatus({
+      ...amountInputModalStatus,
+      visible: true,
+      title: 'Burn xUSD',
+      maxAvailable: debtBalance,
+      cancelCallback: closeAmountInputModal,
+      confirmCallback: burnSynths,
+      unit: 'xUSD'
+    })
+  }
+
   return (
     <DowsInfoContainer>
       <div className="header">
         <div className="item">
           <div className="title">Current Collateral</div>
-          <div className="value">820.53%</div>
+          <div className="value">{myRatio}</div>
         </div>
         <div className="item">
           <div className="title">Target Collateral</div>
-          <div className="value">800.00%</div>
+          <div className="value">{targetRatio}</div>
         </div>
       </div>
       <div className="button-row">
-        <Button className="button">
+        <Button className="button" onClick={handleMintXusd}>
           Mint xUSD
         </Button>
-        <Button className="button">
+        <Button className="button" onClick={handleBurnXusd}>
           Burn xUSD
         </Button>
       </div>
       <div className="text-container">
-        <p className="bold">Total DOWS: 2093</p>
-        <p>Available: 0</p>
-        <p>Locked: 2043</p>
-        <p>Staked: 2043</p>
+        <p className="bold">
+          <span>Total DOWS</span>
+          <span>{totalDows}</span>
+        </p>
+        <p>
+          <span>Available</span>
+          <span>{availableDows}</span>
+        </p>
+        <p>
+          <span>Locked</span>
+          <span>{lockedDows}</span>
+        </p>
       </div>
       <div className="text-container">
-        <p className="bold">Total Rewards: 75.1</p>
-        <p>Escrowed: 50.1</p>
-        <p>Redeemable: 20.5</p>
+        <p className="bold">
+          <span>Total Rewards</span>
+          <span>{totalReward}</span>
+        </p>
+        <p>
+          <span>Escrowed</span>
+          <span>{escrowedReward}</span>
+        </p>
+        <p>
+          <span>Redeemable</span>
+          <span>{redeemableReward}</span>
+        </p>
       </div>
-      <Button className="redeem-btn">Redeem</Button>
+      <Button className="redeem-btn" onClick={handleRedeem}>Redeem</Button>
+
+      <AmountInputModal {...amountInputModalStatus} />
     </DowsInfoContainer>
   )
 }
@@ -495,31 +669,31 @@ const TradingView: React.FC = () => {
       height: 280,
       layout: {
         backgroundColor: '#000000',
-        textColor: 'rgba(255, 255, 255, 0.9)',
+        textColor: 'rgba(255, 255, 255, 0.9)'
       },
       grid: {
         vertLines: {
-          color: 'rgba(197, 203, 206, 0.5)',
+          color: 'rgba(197, 203, 206, 0.5)'
         },
         horzLines: {
-          color: 'rgba(197, 203, 206, 0.5)',
-        },
+          color: 'rgba(197, 203, 206, 0.5)'
+        }
       },
       crosshair: {
-        mode: CrosshairMode.Normal,
+        mode: CrosshairMode.Normal
       },
       rightPriceScale: {
-        borderColor: 'rgba(197, 203, 206, 0.8)',
+        borderColor: 'rgba(197, 203, 206, 0.8)'
       },
       timeScale: {
-        borderColor: 'rgba(197, 203, 206, 0.8)',
-      },
+        borderColor: 'rgba(197, 203, 206, 0.8)'
+      }
     })
     const candleSeries = chart.addCandlestickSeries({
       upColor: '#63cca9',
       downColor: '#DB5E56',
       wickDownColor: 'rgba(255, 144, 0, 1)',
-      wickUpColor: 'rgba(255, 144, 0, 1)',
+      wickUpColor: 'rgba(255, 144, 0, 1)'
     })
     candleSeries.setData([
       { time: '2018-10-19', open: 180.34, high: 180.99, low: 178.57, close: 179.85 },
@@ -670,7 +844,7 @@ const TradingView: React.FC = () => {
       { time: '2019-05-21', open: 187.13, high: 192.52, low: 186.34, close: 191.45 },
       { time: '2019-05-22', open: 190.49, high: 192.22, low: 188.05, close: 188.91 },
       { time: '2019-05-23', open: 188.45, high: 192.54, low: 186.27, close: 192.00 },
-      { time: '2019-05-24', open: 192.54, high: 193.86, low: 190.41, close: 193.59 },
+      { time: '2019-05-24', open: 192.54, high: 193.86, low: 190.41, close: 193.59 }
     ])
   }, [])
 
@@ -739,7 +913,15 @@ const CandleStickView: React.FC = () => {
   )
 }
 
-const TradePage: React.FC<TradePageProps> = () => {
+const TradePageWrapper: React.FC = () => {
+  const [selectedKeyPair, setSelectedKeyPair] = useState<KeyPair | undefined>()
+
+  const handleSelectedKeyPairChanged = (keyPair: KeyPair) => {
+    setSelectedKeyPair(keyPair)
+  }
+
+  const { balanceByCurrency, refresh } = useCurrencyBalance()
+
   return (
     <TradePageContainer>
       <Column width="53.6rem" marginRight="1.5rem">
@@ -752,30 +934,50 @@ const TradePage: React.FC<TradePageProps> = () => {
         </ContainerForDowsAndPair>
         <ContainerForBuyAndSell>
           <BuySellPanel
-            available="$2512.2"
-            handler={() => null}
-            unit="xUSD"
+            balanceByCurrency={balanceByCurrency}
+            onComplete={refresh}
             color="#63cca9"
-            buttonText="Buy"
+            type="Buy"
+            keyPair={selectedKeyPair}
           />
         </ContainerForBuyAndSell>
       </Column>
-      <Column width="307px">
+      <Column width="30.7rem">
         <ContainerForDowsAndPair>
-          <PairInfo />
+          <PairInfo
+            onSelectedKeyPairChanged={handleSelectedKeyPairChanged}
+            selectedKeyPair={selectedKeyPair}
+          />
         </ContainerForDowsAndPair>
         <ContainerForBuyAndSell>
           <BuySellPanel
-            available="12.23"
-            handler={() => null}
-            unit="xETH"
+            balanceByCurrency={balanceByCurrency}
+            onComplete={refresh}
             color="#DB5E56"
-            buttonText="Sell"
+            type="Sell"
+            keyPair={selectedKeyPair}
           />
         </ContainerForBuyAndSell>
       </Column>
     </TradePageContainer>
   )
+}
+
+const TradePage: React.FC = () => {
+  const chainId = parseInt(process.env.CHAIN_ID!, 16)
+  const RPCUrl = process.env.RPC_URL!
+
+  const providerInitialized = useInitializeProvider(chainId, RPCUrl)
+  const networkReady = useSetupNetwork(providerInitialized, {
+    blockExplorerUrls: [process.env.BLOCK_EXPLORER_URL!],
+    chainName: process.env.NETWORK_NAME!,
+    chainId: process.env.CHAIN_ID!,
+    rpcUrls: [RPCUrl]
+  })
+
+  return providerInitialized && networkReady
+    ? (<TradePageWrapper />)
+    : (<></>)
 }
 
 export default TradePage

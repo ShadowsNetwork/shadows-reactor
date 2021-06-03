@@ -5,22 +5,22 @@ import LimitableNumberInput from '@/components/LimitableNumberInput'
 import { numberWithCommas } from '@/utils'
 import './index.less'
 
-export type LpAmountInputModalStatus = {
+export type AmountInputModalStatus = {
   visible: boolean,
   title: string,
   confirmCallback?: (_: string) => void,
   cancelCallback?: () => void
-  maxAvailable: string,
+  maxAvailable: string | number | BigNumber,
   unit: string
 }
 
-const LpAmountInputModal: React.FC<LpAmountInputModalStatus> = ({
+const AmountInputModal: React.FC<AmountInputModalStatus> = ({
   title,
   unit,
   visible,
   maxAvailable,
   confirmCallback,
-  cancelCallback
+  cancelCallback,
 }) => {
   const [inputValue, setInputValue] = useState<string>('')
 
@@ -43,34 +43,38 @@ const LpAmountInputModal: React.FC<LpAmountInputModalStatus> = ({
     confirmCallback?.(inputValue)
   }
 
+  const handleCancel = () => {
+    cancelCallback && cancelCallback()
+  }
+
   return (
     <Modal
       wrapClassName="amount-input-modal"
-      zIndex={1}
+      zIndex={999}
       title={title}
       visible={visible}
       onCancel={cancelCallback}
       footer={null}
     >
-      <span className="available">{numberWithCommas(maxAvailable)} {unit} Available</span>
+      <span className="available">{`${numberWithCommas(maxAvailable, 18)} ${unit} Available`}</span>
       <span className="input-dows">
         <LimitableNumberInput
-          min={'0'}
-          max={maxAvailable}
+          minimum="0"
+          maximum={maxAvailable}
           decimalPlaces={18}
           inputValue={inputValue}
           setInputValue={setInputValue}
           allowClear={true}
         />
         <span className="dows">{unit}</span>
-        <Button onClick={() => setInputValue(maxAvailable)}>MAX</Button>
+        <Button onClick={() => setInputValue(maxAvailable.toString())}>MAX</Button>
       </span>
       <div className="stakeButton">
-        <Button onClick={cancelCallback}>Cancel</Button>
+        <Button onClick={handleCancel}>Cancel</Button>
         <Button onClick={handleConfirm} disabled={inputValue.length === 0}>Confirm</Button>
       </div>
     </Modal>
   )
 }
 
-export default LpAmountInputModal
+export default AmountInputModal

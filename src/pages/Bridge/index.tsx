@@ -171,7 +171,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
           decimalPlaces={18}
           inputValue={amount}
           setInputValue={setAmount}
-          max={balance}
+          maximum={balance}
         />
         <div className="DOWS">DOWS</div>
         <Button onClick={setAmountToMax}>MAX</Button>
@@ -182,11 +182,11 @@ const BridgeMain: React.FC<BridgeProps> = ({
       <div className="convert-button">
         {
           amount && (
-            allowanceEnough()
-              ? <Button onClick={convert} disabled={!isAmountLegal()}>
+            allowanceEnough() ?
+              <Button onClick={convert} disabled={!isAmountLegal()}>
                 Convert
-              </Button>
-              : <Button onClick={approve}>
+              </Button> :
+              <Button onClick={approve}>
                 Approve
               </Button>
           )

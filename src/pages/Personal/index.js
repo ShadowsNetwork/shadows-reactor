@@ -22,7 +22,7 @@ function Personal() {
   const fetchRatio = useCallback(async () => {
     const [collateralisationRatio, issuanceRatio] = await Promise.all([
       dowsJSConnector.dowsJs.Shadows.collateralisationRatio(account),
-      dowsJSConnector.dowsJs.ShadowsState.issuanceRatio()
+      dowsJSConnector.dowsJs.Synthesizer.issuanceRatio()
     ])
 
     setMyRatio(weiToString(collateralisationRatio))

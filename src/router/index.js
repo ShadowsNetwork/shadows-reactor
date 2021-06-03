@@ -5,7 +5,7 @@ import money from '@/img/slideBarIcon/money-bill-stack.png'
 import leaderboard from '@/img/slideBarIcon/leaderboard.png'
 import TradePage from '@/pages/Trade'
 
-export const routerLabelMapper = {
+/*export const routerLabelMapper = {
   person: { title: 'person.title' },
   synthesis: { title: 'synthesis.title' },
   transaction: { title: 'transaction.title' },
@@ -13,7 +13,7 @@ export const routerLabelMapper = {
   destroy: { title: 'destroy.title' },
   reward: { title: 'reward.title' },
   transfer: { title: 'transfer.title' }
-}
+}*/
 
 const routers = [
   /** index page */

@@ -9,7 +9,7 @@ import { PlusOutlined } from '@ant-design/icons'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toWei } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
-import LpAmountInputModal, { LpAmountInputModalStatus } from './LpAmountInputModal'
+import AmountInputModal, { AmountInputModalStatus } from './AmountInputModal'
 import { numberWithCommas } from '@/utils'
 import TransactionStatusModal, { TransactionStatusModalProps } from '@/components/TransactionStatusModal'
 import {
@@ -88,7 +88,7 @@ const Pool: React.FC<PoolConfig> = ({
 
   const [refreshFlag, setRefreshFlag] = useState(0)
 
-  const [amountInputModalStatus, setAmountInputModalStatus] = useState<LpAmountInputModalStatus>({
+  const [amountInputModalStatus, setAmountInputModalStatus] = useState<AmountInputModalStatus>({
     visible: false,
     title: '',
     confirmCallback: undefined,
@@ -313,8 +313,8 @@ const Pool: React.FC<PoolConfig> = ({
         </div>
         <div className="button-container">
           {
-            allowanceEnough
-              ? <>
+            allowanceEnough ?
+              <>
                 <Button
                   className="lock"
                   onClick={() => {
@@ -345,8 +345,8 @@ const Pool: React.FC<PoolConfig> = ({
                 >
                   Unlock
                 </Button>
-              </>
-              : <Button onClick={approve} className="approve">
+              </> :
+              <Button onClick={approve} className="approve">
                 Approve
               </Button>
           }
@@ -366,7 +366,7 @@ const Pool: React.FC<PoolConfig> = ({
           </Button>
         </div>
       </div>
-      <LpAmountInputModal {...amountInputModalStatus} />
+      <AmountInputModal {...amountInputModalStatus} />
       <RedeemModal {...redeemModalStatus} />
       <TransactionStatusModal
         {...transactionStatusModalProps}
