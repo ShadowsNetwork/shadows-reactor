@@ -1,6 +1,6 @@
 import { JsonFragment } from '@ethersproject/abi'
 
-type Target = {
+export type Target = {
   name: string;
   address: string;
   source: string;
@@ -9,17 +9,6 @@ type Target = {
   txn: string;
   network: string;
 }
-
-/*type Abi = {
-  constant: boolean,
-  inputs: unknown[],
-  name: string,
-  outputs: any[]
-  payable: boolean,
-  stateMutability: string,
-  type: string,
-  signature: string
-}*/
 
 type Source = {
   bytecode: string,
@@ -42,24 +31,33 @@ type Synth = {
 }
 
 /**
- * Converts a string into a hex representation of bytes32, with right padding
+ * @deprecated
  */
 function loadDeploymentFile(network: string): Deployment {
   return require(`../../../contract/publish/deployed/${network}/deployment.json`)
 }
 
+/**
+ * @deprecated
+ */
 function getTarget(network = 'mainnet', contract: string): Target | Target[] {
   const deployment: Deployment = loadDeploymentFile(network)
   if (contract) return deployment.targets[contract]
   return deployment.targets
 }
 
+/**
+ * @deprecated
+ */
 const getSource = (network = 'mainnet', contract: string): Source | undefined => {
   const deployment = loadDeploymentFile(network)
   if (contract) return deployment.sources[contract]
   return deployment.sources
 }
 
+/**
+ * @deprecated
+ */
 const getSynths = ({ network = 'mainnet' } = {}): Synth[] => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const synths: Synth[] = require(`../../../contract/publish/deployed/${network}/synths.json`)
@@ -80,6 +78,25 @@ const getSynths = ({ network = 'mainnet' } = {}): Synth[] => {
   })
 }
 
+type ContractConfig = {
+  address: string,
+  abi: Array<JsonFragment>
+}
+
+function getContractConfig(network: string, contractName: string): ContractConfig {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const config = require(`../../../contract/publish/deployed/${network}/config.json`)
+    const { contracts } = config
+    return contracts[contractName]
+  } catch (e) {
+    return {
+      address: '',
+      abi: []
+    }
+  }
+}
+
 export {
-  getTarget, getSource, getSynths
+  getTarget, getSource, getSynths, getContractConfig
 }
