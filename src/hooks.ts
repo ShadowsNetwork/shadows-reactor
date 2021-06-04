@@ -235,7 +235,7 @@ export function useListenBridgeTransactionStatus() {
     bridgeTransactions.forEach(async (t: BridgeDows) => {
       const { hash } = t
 
-      await axios.post('https://bridge.poly.network/testnet/v1/transactionofhash', {
+      await axios.post('https://bridge.poly.network/v1/transactionofhash', {
         hash: hash.substring(2)
       })
         .then(r => {
