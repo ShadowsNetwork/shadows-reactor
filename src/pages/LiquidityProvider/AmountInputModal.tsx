@@ -71,7 +71,7 @@ const AmountInputModal: React.FC<AmountInputModalStatus> = ({
       </span>
       <div className="stakeButton">
         <Button onClick={handleCancel}>Cancel</Button>
-        <Button onClick={handleConfirm} disabled={inputValue.length === 0}>Confirm</Button>
+        <Button onClick={handleConfirm} disabled={new BigNumber(inputValue).lte(0)}>Confirm</Button>
       </div>
     </Modal>
   )

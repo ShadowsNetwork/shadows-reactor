@@ -1,26 +1,26 @@
 import BigNumber from 'bignumber.js'
 
 export function numberWithCommas(x: string | number | BigNumber, decimalPlace = 2): string {
-  if (!x) {
-    return numberWithCommas('0')
-  }
+  // if (!x) {
+  //   return numberWithCommas('0')
+  // }
 
   const trimTrailingZero = (x: string) => {
-    if (x.length <= 2) {
-      return x.padEnd(2, '0')
+    if (x.length <= decimalPlace) {
+      return x.padEnd(decimalPlace, '0')
     }
 
     return x[x.length - 1] !== '0' ? x : trimTrailingZero(x.substring(0, length - 1))
   }
 
-  const parts: string[] = x.toString().split('.')
+  const parts: string[] = new BigNumber(x).toFixed(decimalPlace).split('.')
 
   parts[0] = (parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')) ?? '0'
 
   if (!parts[1]) {
     parts[1] = '0'.repeat(decimalPlace)
   } else {
-    parts[1] = trimTrailingZero(parts[1]).substring(0, Math.min(parts[1].length, decimalPlace))
+    parts[1] = trimTrailingZero(parts[1])
   }
 
   return parts.join('.')
@@ -45,12 +45,4 @@ export function dateFormat(date: Date, format: string): string {
     }
   }
   return format
-}
-
-export function safeRequire(path: string) {
-  try {
-    return require(path)
-  } catch (e) {
-    return undefined
-  }
 }

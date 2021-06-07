@@ -6,18 +6,63 @@ import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
 import { toBigNumber, toByte32, weiToBigNumber } from '@/web3/utils'
 import BN from 'bn.js'
 import { usePairData } from '@/pages/Trade/TradeDataHooks'
-import { useFetch } from '@/hooks'
 import BigNumber from 'bignumber.js'
 
-export const useHomeData = () => {
+const useAssetsBalance = () => {
   const account = useSelector(getAccount)
   const { keyList } = usePairData()
+  const { data: dowsPrice } = useDowsPriceQuery()
+
+  const [assetsBalanceList, setAssetsBalanceList] = useState<Array<{ key: string, quantity: BigNumber, value: BigNumber }>>([])
+
+  const fetch = useCallback(async () => {
+    if (!account || !dowsPrice) {
+      return
+    }
+
+    if (keyList.length > 0 && account) {
+      const balanceList: BN[] = await Promise.all(keyList.map(key => dowsJSConnector.dowsJs.Synth.balanceOf(key, account)))
+      const rates = await Promise.all(keyList.map(key => dowsJSConnector.dowsJs.Oracle.rateForCurrency(key)))
+
+      const rateByCurrencyKey = []
+      rates.map(v => weiToBigNumber(v)).forEach((rate: BigNumber, index) => {
+        rateByCurrencyKey[keyList[index]] = rate
+      })
+
+      // DOWS / xUSD
+      // const rateForDows = weiToBigNumber(await dowsJSConnector.dowsJs.Oracle.rateForCurrency('DOWS'))
+
+      setAssetsBalanceList(
+        balanceList
+          .map(v => weiToBigNumber(v))
+          .map((balance, index) => {
+            return ({
+              key: keyList[index],
+              quantity: balance,
+              // TODO
+              value: new BigNumber(0)
+              // value: balance.multipliedBy(rateForDows).multipliedBy(rateByCurrencyKey[keyList[index]]).multipliedBy(new BigNumber(dowsPrice))
+            })
+          })
+          .filter(v => v.quantity.gt(0))
+      )
+    }
+  }, [account, dowsPrice, keyList])
+
+  useEffect(() => {
+    fetch()
+  }, [fetch])
+
+  return { assetsBalanceList }
+}
+
+const useBalance = () => {
+  const account = useSelector(getAccount)
   const { data: dowsPrice } = useDowsPriceQuery()
 
   const [yourBalance, setYourBalance] = useState('')
   const [assetsBalance, setAssetsBalance] = useState('')
   const [debtPool, setDebtPool] = useState('')
-  const [assetsBalanceList, setAssetsBalanceList] = useState<Array<{ key: string, quantity: BigNumber, value: BigNumber }>>([])
 
   const fetch = useCallback(async () => {
     if (!account || !dowsPrice) {
@@ -31,42 +76,29 @@ export const useHomeData = () => {
         dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('DOWS'))
       ]))
       .map((value: BN) => weiToBigNumber(value))
-      .map(value => value.multipliedBy(toBigNumber(dowsPrice))
-        .toString())
+      .map((value: BigNumber) =>
+        value.multipliedBy(toBigNumber(dowsPrice))
+          .toString()
+      )
 
     setYourBalance(_balanceOf)
     setAssetsBalance(_transferableShadows)
     setDebtPool(_debtBalanceOf)
-    /*
-    console.log(lines);
-    const coinArr = ['USDT', 'BTC', 'ETH'];
-    const ratesForCurrencies = await read('Oracle', {}, 'ratesForCurrencies', coinArr.map(item => toBytes32(item)))
-    ratesForCurrencies.map((item, index) => {
-      console.log(`Asset : ${coinArr[index]}, Qty: 0, Value: $${fromUnit(item.toString())}`)
-    });*/
   }, [account, dowsPrice])
 
   useEffect(() => {
     fetch()
   }, [])
 
-  useFetch(async () => {
-    if (!account || !dowsPrice) {
-      return
-    }
+  return {
+    yourBalance, assetsBalance, debtPool
+  }
+}
 
-    if (keyList.length > 0 && account) {
-      const balanceList = await Promise.all(keyList.map(key => dowsJSConnector.dowsJs.Synth.balanceOf(key, account)))
+export const useHomeData = () => {
+  const { assetsBalanceList } = useAssetsBalance()
 
-      setAssetsBalanceList(
-        balanceList.map((balance, index) => ({
-          key: keyList[index],
-          quantity: weiToBigNumber(balance),
-          value: toBigNumber(dowsPrice).multipliedBy(weiToBigNumber(balance))
-        }))
-      )
-    }
-  }, [keyList, account])
+  const { yourBalance, assetsBalance, debtPool } = useBalance()
 
   return {
     yourBalance,

@@ -3,16 +3,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
 import { createChart, CrosshairMode, ISeriesApi } from 'lightweight-charts'
-import {
-  KeyPair, useCurrencyBalance, usePairData, useSynthAssetsData
-} from '@/pages/Trade/TradeDataHooks'
+import { KeyPair, useCurrencyBalance, usePairData } from '@/pages/Trade/TradeDataHooks'
 import { useInitializeProvider, useSetupNetwork } from '@/hooks'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import AmountInputModal, { AmountInputModalStatus } from '@/pages/LiquidityProvider/AmountInputModal'
-import { toBigNumber, toByte32, toWei, weiToString } from '@/web3/utils'
-import { useSelector } from 'react-redux'
-import { getAccount } from '@/store/wallet'
+import { toBigNumber, toByte32, toWei } from '@/web3/utils'
 import useTradingDataQuery from '@/queries/useTradingDataQuery'
+import BigNumber from 'bignumber.js'
+import DowsSynthesizer from '@/components/DowsSynthesizer'
 
 type PairInfoProps = {
   onSelectedKeyPairChanged: (_selectedKeyPair: KeyPair) => void
@@ -23,7 +20,7 @@ type BuySellPanelProps = {
   type: 'Buy' | 'Sell'
   color: string
   keyPair?: KeyPair,
-  balanceByCurrency: { [key: string]: string }
+  balanceByCurrency: { [key: string]: BigNumber }
   onComplete: () => void
 }
 
@@ -201,89 +198,6 @@ const ContainerForBuyAndSell = styled.div`
   }
 `
 
-const DowsInfoContainer = styled.div`
-  width: 100%;
-  padding: 2rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .header {
-    width: 100%;
-    margin-bottom: 2.4rem;
-    display: flex;
-    justify-content: space-around;
-
-    .item {
-      font-weight: bold;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .title {
-        white-space: nowrap;
-        color: #63CCA9;
-        font-size: 1.2rem;
-      }
-
-      .value {
-        color: white;
-        font-size: 2rem;
-      }
-    }
-  }
-
-  .button-row {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    margin: 0 0.6rem 2.7rem 0.6rem;
-
-    .button {
-      width: 45%;
-      color: white;
-      height: 3.757rem;
-      border-radius: 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-      border-width: 0.2rem;
-      border-color: #979797;
-    }
-  }
-
-  .text-container {
-    width: 85%;
-    color: white;
-    font-size: 1.2rem;
-    font-weight: bold;
-    line-height: 0.6;
-    margin-bottom: 2.0rem;
-
-    .bold {
-      font-size: 1.3rem;
-      color: #979797;
-    }
-
-    p {
-      display: flex;
-      justify-content: space-between;
-    }
-  }
-
-  .redeem-btn {
-    margin: 0 auto;
-    width: 14rem;
-    height: 3.757rem;
-    color: white;
-    font-weight: bold;
-    font-size: 1.5rem;
-
-    border-width: 0.2rem;
-    border-radius: 1rem;
-    border-color: #979797;
-  }
-`
-
 const PairsInfoContainer = styled.div`
   padding: 1.8rem 1.2rem;
 
@@ -333,6 +247,7 @@ const CustomizedSlider = styled.div`
 
   .ant-slider-handle {
     background-color: white;
+    border-width: 3.3px;
   }
 `
 
@@ -437,19 +352,22 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
 
   const unit = keyPair?.symbol[type === 'Buy' ? 1 : 0]
 
-
-  const available = weiToString((unit && balanceByCurrency[unit]) ?? '0', 6)
+  const available: BigNumber = (unit && balanceByCurrency[unit]) || new BigNumber('0')
 
   const onSliderChange = value => {
     setSliderValue(value)
-    setInputValue(toBigNumber(available)
-      .multipliedBy(toBigNumber(value))
-      .dividedBy(100)
-      .toFixed(6))
+
+    setInputValue(
+      available
+        .multipliedBy(toBigNumber(value))
+        .dividedBy(100)
+        .toString(10)
+    )
   }
 
   const handleExchange = async () => {
-    if (toBigNumber(inputValue).lte(0)) {
+    if (toBigNumber(inputValue)
+      .lte(0)) {
       return
     }
 
@@ -459,14 +377,17 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
 
     const tx = await dowsJSConnector.dowsJs.Synthesizer.exchange(sourceCurrencyKey, sourceAmount, destinationCurrencyKey)
 
-    tx.wait().then(onComplete)
+    tx.wait()
+      .then(onComplete)
   }
 
   useEffect(() => {
-    setSliderValue(toBigNumber(inputValue)
-      .dividedBy(toBigNumber(available))
-      .multipliedBy(100)
-      .toNumber())
+    setSliderValue(
+      toBigNumber(inputValue)
+        .dividedBy(available)
+        .multipliedBy(100)
+        .toNumber()
+    )
   }, [inputValue])
 
   return (
@@ -482,8 +403,7 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
       </div>
       <CustomizedSlider color={color}>
         <Slider
-          disabled={toBigNumber(available)
-            .eq(0)}
+          disabled={available.eq(0)}
           marks={sliderMarks}
           value={sliderValue}
           onChange={onSliderChange}
@@ -497,7 +417,7 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
       </div>
       <div className="row info-row">
         <span>Available</span>
-        <span>{available}</span>
+        <span>{available.toFixed(6)}</span>
       </div>
       <Button
         className="btn"
@@ -529,138 +449,8 @@ const Stats: React.FC = () => {
   )
 }
 
-const DowsInfo: React.FC = () => {
-  const account = useSelector(getAccount)
-
-  const {
-    myRatio, targetRatio,
-    totalDows, availableDows, lockedDows,
-    totalReward, escrowedReward, redeemableReward,
-    refresh
-  } = useSynthAssetsData()
-
-  const [amountInputModalStatus, setAmountInputModalStatus] = useState<AmountInputModalStatus>({
-    visible: false,
-    title: '',
-    confirmCallback: undefined,
-    maxAvailable: '',
-    unit: 'DOWS'
-  })
-
-  const closeAmountInputModal = () => {
-    setAmountInputModalStatus({
-      ...amountInputModalStatus,
-      visible: false,
-      title: '',
-      confirmCallback: undefined,
-      maxAvailable: '',
-      unit: 'DOWS'
-    })
-  }
-
-  const handleRedeem = () => {
-    dowsJSConnector.dowsJs.FeePool.claimFees()
-  }
-
-  const handleMintXusd = async () => {
-    const issueSynth = async amount => {
-      const result = await dowsJSConnector.dowsJs.Synthesizer.issueSynths(toWei(amount))
-
-      result.wait()
-        .then(refresh)
-    }
-
-    const [remainingIssuableSynths] = await dowsJSConnector.dowsJs.Synthesizer.remainingIssuableSynths(account)
-
-    setAmountInputModalStatus({
-      ...amountInputModalStatus,
-      visible: true,
-      title: 'Mint xUSD',
-      maxAvailable: weiToString(remainingIssuableSynths),
-      cancelCallback: closeAmountInputModal,
-      confirmCallback: issueSynth,
-      unit: 'xUSD'
-    })
-  }
-
-  const handleBurnXusd = async () => {
-    const burnSynths = async amount => {
-      const result = await dowsJSConnector.dowsJs.Synthesizer.burnSynths(toWei(amount))
-
-      result.wait()
-        .then(refresh)
-    }
-
-    const debtBalance = weiToString(await dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('xUSD')))
-
-    setAmountInputModalStatus({
-      ...amountInputModalStatus,
-      visible: true,
-      title: 'Burn xUSD',
-      maxAvailable: debtBalance,
-      cancelCallback: closeAmountInputModal,
-      confirmCallback: burnSynths,
-      unit: 'xUSD'
-    })
-  }
-
-  return (
-    <DowsInfoContainer>
-      <div className="header">
-        <div className="item">
-          <div className="title">Current Collateral</div>
-          <div className="value">{myRatio}</div>
-        </div>
-        <div className="item">
-          <div className="title">Target Collateral</div>
-          <div className="value">{targetRatio}</div>
-        </div>
-      </div>
-      <div className="button-row">
-        <Button className="button" onClick={handleMintXusd}>
-          Mint xUSD
-        </Button>
-        <Button className="button" onClick={handleBurnXusd}>
-          Burn xUSD
-        </Button>
-      </div>
-      <div className="text-container">
-        <p className="bold">
-          <span>Total DOWS</span>
-          <span>{totalDows}</span>
-        </p>
-        <p>
-          <span>Available</span>
-          <span>{availableDows}</span>
-        </p>
-        <p>
-          <span>Locked</span>
-          <span>{lockedDows}</span>
-        </p>
-      </div>
-      <div className="text-container">
-        <p className="bold">
-          <span>Total Rewards</span>
-          <span>{totalReward}</span>
-        </p>
-        <p>
-          <span>Escrowed</span>
-          <span>{escrowedReward}</span>
-        </p>
-        <p>
-          <span>Redeemable</span>
-          <span>{redeemableReward}</span>
-        </p>
-      </div>
-      <Button className="redeem-btn" onClick={handleRedeem}>Redeem</Button>
-
-      <AmountInputModal {...amountInputModalStatus} />
-    </DowsInfoContainer>
-  )
-}
-
 const TradingView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
-  const [candleSeries, setCandleSeries] = useState<ISeriesApi<'Candlestick'>| undefined>()
+  const [candleSeries, setCandleSeries] = useState<ISeriesApi<'Candlestick'> | undefined>()
   const ref = useRef()
 
   const { data } = useTradingDataQuery('price', keyPair?.symbol[0])
@@ -692,7 +482,7 @@ const TradingView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
         },
         timeScale: {
           borderColor: 'rgba(197, 203, 206, 0.8)'
-        },
+        }
       })
 
       setCandleSeries(chart.addCandlestickSeries({
@@ -867,38 +657,50 @@ const TradingView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
 
   }, [data])
 
-
   // @ts-ignore
   return <div ref={ref} id="chart" />
 }
 
 const CandleStickView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
-  const availableTimeRange = [
-    { key: '1m', value: 1 },
-    { key: '5m', value: 5 },
-    { key: '1h', value: 60 }
-  ]
+  // const availableTimeRange = [
+  //   { key: '1m', value: 1 },
+  //   { key: '5m', value: 5 },
+  //   { key: '1h', value: 60 }
+  // ]
 
   const availableMode = [
     { key: 'Price', value: 1 },
-    { key: 'Volume', value: 2 },
-    { key: 'Liquidity', value: 3 }
+    { key: 'Volume', value: 2 }
+    // { key: 'Liquidity', value: 3 }
   ]
 
-  const [selectedTimeRange, setSelectedTimeRange] = useState('1m')
+  // const [selectedTimeRange, setSelectedTimeRange] = useState('1m')
   const [selectedModel, setSelectedModel] = useState('Price')
 
   return (
     <CandlestickContainer>
       <div className="title">
-        <img src={require('@/img/trade/ethers.png')} alt="" />
-        xETH/xUSD
+        {
+          keyPair?.symbol[0] && (
+            <img
+              src={require(`@/img/tokens/${keyPair?.symbol[0]}.svg`)}
+              alt=""
+              style={{ borderColor: 'white', borderWidth: '1px' }}
+            />
+          )
+        }
+        {
+          keyPair ? `${keyPair.symbol[0] || ''} / ${keyPair.symbol[1] || ''}` : ' '
+        }
       </div>
       <div className="price-info">
-        <div className="current">$1,833.02</div>
+        <div className="current">
+          $
+          {keyPair?.lastPrice || '-'}
+        </div>
         <div className="change" style={{ color: '#63cca9' }}>+4.78%</div>
       </div>
-      <div className="time-select-btn-group">
+      {/*<div className="time-select-btn-group">
         {
           availableTimeRange.map(time => (
             <Button
@@ -911,7 +713,8 @@ const CandleStickView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
             </Button>
           ))
         }
-      </div>
+      </div>*/}
+      <div style={{ height: '3.1rem' }} />
       <div className="trading-view-container">
         <TradingView keyPair={keyPair} />
       </div>
@@ -950,7 +753,7 @@ const TradePageWrapper: React.FC = () => {
       </Column>
       <Column width="33.1rem" marginRight="0.8rem">
         <ContainerForDowsAndPair>
-          <DowsInfo />
+          <DowsSynthesizer />
         </ContainerForDowsAndPair>
         <ContainerForBuyAndSell>
           <BuySellPanel
@@ -982,7 +785,6 @@ const TradePageWrapper: React.FC = () => {
     </TradePageContainer>
   )
 }
-
 
 const TradePage: React.FC = () => {
   const chainId = parseInt(process.env.CHAIN_ID!, 16)

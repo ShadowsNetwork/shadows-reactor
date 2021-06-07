@@ -239,7 +239,7 @@ export const usePairData = (): PairData => {
 export const useCurrencyBalance = () => {
   const { keyList } = usePairData()
   const account = useSelector(getAccount)
-  const [balanceByCurrency, setBalanceByCurrency] = useState<{ [key: string]: string }>({})
+  const [balanceByCurrency, setBalanceByCurrency] = useState<{ [key: string]: BigNumber }>({})
   const [refreshFlag, setRefreshFlag] = useState(0)
 
   const refresh = () => {
@@ -248,7 +248,11 @@ export const useCurrencyBalance = () => {
 
   const fetchBalance = useCallback(async () => {
     if (keyList.length > 0 && account) {
-      const balanceList = await Promise.all(keyList.map(key => dowsJSConnector.dowsJs.Synth.balanceOf(key, account)))
+      let balanceList = await Promise.all(
+        keyList.map(key => dowsJSConnector.dowsJs.Synth.balanceOf(key, account))
+      )
+
+      balanceList = balanceList.map(v => weiToBigNumber(v)) as BigNumber[]
 
       const _balanceByCurrency = {}
       keyList.forEach((key, index) => {
