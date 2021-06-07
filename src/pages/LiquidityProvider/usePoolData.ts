@@ -48,15 +48,17 @@ async function getAPY(
     .dividedBy(totalAllocPoint)
     .multipliedBy('10368000')
 
-  const APR = rewardPerYear.dividedBy(staked)
+  return rewardPerYear.dividedBy(staked).multipliedBy(100).toString(10)
 
   // (1 + APR / 12) ^ 12 - 1
+  /*
   return (new BigNumber(1).plus(
     APR.dividedBy(12)
   )).pow(12)
     .minus(1)
     .multipliedBy(100)
     .toString(10)
+    */
 }
 
 export type PoolData = {
