@@ -4,6 +4,7 @@ import Bridge from '@/pages/Bridge'
 import money from '@/img/slideBarIcon/money-bill-stack.png'
 import leaderboard from '@/img/slideBarIcon/leaderboard.png'
 import TradePage from '@/pages/Trade'
+import HomePage from '@/pages/Home'
 
 /*export const routerLabelMapper = {
   person: { title: 'person.title' },
@@ -68,9 +69,17 @@ const routers = [
     image: shopping,
     backgroundImage: LiquidityImage
   },*/
+
   {
-    key: 'staking',
+    path: '/',
+    key: 'home',
+    title: 'Home',
+    component: HomePage,
+    image: leaderboard
+  },
+  {
     path: '/staking',
+    key: 'staking',
     title: 'Staking',
     component: Pool,
     image: money

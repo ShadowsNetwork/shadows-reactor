@@ -11,7 +11,7 @@ const SideBar: React.FC = () => {
 
   return (
     <Menu
-      defaultSelectedKeys={[hash.slice(1)]}
+      selectedKeys={[hash.slice(1)]}
       mode="inline"
       theme="dark"
     >
@@ -19,7 +19,7 @@ const SideBar: React.FC = () => {
         routers.filter(router => !router.hide)
           .map(router => (
             <Menu.Item
-              key={router.key}
+              key={router.path}
             >
               <img className="slideIcon" src={router.image} alt="" />
               <Link to={router.path} style={{ userSelect: 'none' }}>
@@ -35,7 +35,7 @@ const SideBar: React.FC = () => {
           target="_blank"
           rel="noreferrer"
         >
-              Provide Liquidity
+          Provide Liquidity
         </a>
       </Menu.Item>
     </Menu>

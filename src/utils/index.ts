@@ -1,6 +1,10 @@
 import BigNumber from 'bignumber.js'
 
 export function numberWithCommas(x: string | number | BigNumber, decimalPlace = 2): string {
+  if (!x) {
+    return numberWithCommas('0')
+  }
+
   const trimTrailingZero = (x: string) => {
     if (x.length <= 2) {
       return x.padEnd(2, '0')
@@ -11,7 +15,7 @@ export function numberWithCommas(x: string | number | BigNumber, decimalPlace = 
 
   const parts: string[] = x.toString().split('.')
 
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  parts[0] = (parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')) ?? '0'
 
   if (!parts[1]) {
     parts[1] = '0'.repeat(decimalPlace)
@@ -41,4 +45,12 @@ export function dateFormat(date: Date, format: string): string {
     }
   }
   return format
+}
+
+export function safeRequire(path: string) {
+  try {
+    return require(path)
+  } catch (e) {
+    return undefined
+  }
 }

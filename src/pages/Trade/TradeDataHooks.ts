@@ -139,6 +139,10 @@ const useFeePoolData = (refreshFlag: number): { totalReward: string, escrowedRew
   }
 }
 
+export const useChartData = () => {
+  return {}
+}
+
 export const useSynthAssetsData = (): TradeData => {
   const [refreshFlag, setRefreshFlag] = useState(0)
 

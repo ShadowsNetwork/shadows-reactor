@@ -2,7 +2,7 @@ import { Button, Slider } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
-import { createChart, CrosshairMode } from 'lightweight-charts'
+import { createChart, CrosshairMode, ISeriesApi } from 'lightweight-charts'
 import {
   KeyPair, useCurrencyBalance, usePairData, useSynthAssetsData
 } from '@/pages/Trade/TradeDataHooks'
@@ -12,6 +12,7 @@ import AmountInputModal, { AmountInputModalStatus } from '@/pages/LiquidityProvi
 import { toBigNumber, toByte32, toWei, weiToString } from '@/web3/utils'
 import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
+import useTradingDataQuery from '@/queries/useTradingDataQuery'
 
 type PairInfoProps = {
   onSelectedKeyPairChanged: (_selectedKeyPair: KeyPair) => void
@@ -658,44 +659,53 @@ const DowsInfo: React.FC = () => {
   )
 }
 
-const TradingView: React.FC = () => {
+const TradingView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
+  const [candleSeries, setCandleSeries] = useState<ISeriesApi<'Candlestick'>| undefined>()
   const ref = useRef()
 
+  const { data } = useTradingDataQuery('price', keyPair?.symbol[0])
+
   useEffect(() => {
-    // @ts-ignore
-    const chart = createChart(ref.current)
-    chart.applyOptions({
-      width: 500,
-      height: 280,
-      layout: {
-        backgroundColor: '#000000',
-        textColor: 'rgba(255, 255, 255, 0.9)'
-      },
-      grid: {
-        vertLines: {
-          color: 'rgba(197, 203, 206, 0.5)'
+    if (!candleSeries) {
+      // @ts-ignore
+      const chart = createChart(ref.current)
+      chart.applyOptions({
+        width: 500,
+        height: 280,
+        layout: {
+          backgroundColor: '#000000',
+          textColor: 'rgba(255, 255, 255, 0.9)'
         },
-        horzLines: {
-          color: 'rgba(197, 203, 206, 0.5)'
-        }
-      },
-      crosshair: {
-        mode: CrosshairMode.Normal
-      },
-      rightPriceScale: {
-        borderColor: 'rgba(197, 203, 206, 0.8)'
-      },
-      timeScale: {
-        borderColor: 'rgba(197, 203, 206, 0.8)'
-      }
-    })
-    const candleSeries = chart.addCandlestickSeries({
-      upColor: '#63cca9',
-      downColor: '#DB5E56',
-      wickDownColor: 'rgba(255, 144, 0, 1)',
-      wickUpColor: 'rgba(255, 144, 0, 1)'
-    })
-    candleSeries.setData([
+        grid: {
+          vertLines: {
+            color: 'rgba(197, 203, 206, 0.5)'
+          },
+          horzLines: {
+            color: 'rgba(197, 203, 206, 0.5)'
+          }
+        },
+        crosshair: {
+          mode: CrosshairMode.Normal
+        },
+        rightPriceScale: {
+          borderColor: 'rgba(197, 203, 206, 0.8)'
+        },
+        timeScale: {
+          borderColor: 'rgba(197, 203, 206, 0.8)'
+        },
+      })
+
+      setCandleSeries(chart.addCandlestickSeries({
+        upColor: '#63cca9',
+        downColor: '#DB5E56',
+        wickDownColor: 'rgba(255, 144, 0, 1)',
+        wickUpColor: 'rgba(255, 144, 0, 1)'
+      }))
+
+      return
+    }
+
+    /*candleSeries.setData([
       { time: '2018-10-19', open: 180.34, high: 180.99, low: 178.57, close: 179.85 },
       { time: '2018-10-22', open: 180.82, high: 181.40, low: 177.56, close: 178.75 },
       { time: '2018-10-23', open: 175.77, high: 179.49, low: 175.44, close: 178.53 },
@@ -845,14 +855,24 @@ const TradingView: React.FC = () => {
       { time: '2019-05-22', open: 190.49, high: 192.22, low: 188.05, close: 188.91 },
       { time: '2019-05-23', open: 188.45, high: 192.54, low: 186.27, close: 192.00 },
       { time: '2019-05-24', open: 192.54, high: 193.86, low: 190.41, close: 193.59 }
-    ])
-  }, [])
+    ])*/
+
+  }, [candleSeries])
+
+  useEffect(() => {
+    console.log(data)
+    if (data?.length && candleSeries) {
+      candleSeries.setData(data)
+    }
+
+  }, [data])
+
 
   // @ts-ignore
   return <div ref={ref} id="chart" />
 }
 
-const CandleStickView: React.FC = () => {
+const CandleStickView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   const availableTimeRange = [
     { key: '1m', value: 1 },
     { key: '5m', value: 5 },
@@ -893,7 +913,7 @@ const CandleStickView: React.FC = () => {
         }
       </div>
       <div className="trading-view-container">
-        <TradingView />
+        <TradingView keyPair={keyPair} />
       </div>
       <div className="bottom-btn-group">
         {
@@ -925,7 +945,7 @@ const TradePageWrapper: React.FC = () => {
   return (
     <TradePageContainer>
       <Column width="53.6rem" marginRight="1.5rem">
-        <CandleStickView />
+        <CandleStickView keyPair={selectedKeyPair} />
         <Stats />
       </Column>
       <Column width="33.1rem" marginRight="0.8rem">
@@ -962,6 +982,7 @@ const TradePageWrapper: React.FC = () => {
     </TradePageContainer>
   )
 }
+
 
 const TradePage: React.FC = () => {
   const chainId = parseInt(process.env.CHAIN_ID!, 16)

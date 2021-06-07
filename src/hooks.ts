@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useCallback, useEffect, useState } from 'react'
+import { DependencyList, useCallback, useEffect, useState } from 'react'
 import {
   getSelectedWallet, getTransactionHistoryList, setAccount, setSelectedWallet,
   updateTransactionHistoryStatus
@@ -25,11 +25,6 @@ export function useLocation(): Location {
   const [location, setLocation] = useState(window.location)
 
   const listenToPopstate = () => {
-    const { hash } = window.location
-    if (hash === '#/') {
-      window.location.hash = '#/staking'
-    }
-
     setLocation(window.location)
   }
 
@@ -280,5 +275,13 @@ export function useListenBridgeTransactionStatus() {
 
     return () => clearInterval(intervalId)
   }, [transactionList])
+}
+
+export async function useFetch(fetchMethod: () => void, deps?: DependencyList) {
+  const fetch = useCallback(fetchMethod, [deps])
+
+  return useEffect(() => {
+    fetch()
+  }, [fetch])
 }
 
