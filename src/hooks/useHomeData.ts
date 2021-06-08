@@ -5,12 +5,12 @@ import { getAccount } from '@/store/wallet'
 import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
 import { toBigNumber, toByte32, weiToBigNumber } from '@/web3/utils'
 import BN from 'bn.js'
-import { usePairData } from '@/pages/Trade/TradeDataHooks'
 import BigNumber from 'bignumber.js'
+import { useCurrencyData } from '@/hooks/useTradeData'
 
 const useAssetsBalance = () => {
   const account = useSelector(getAccount)
-  const { keyList } = usePairData()
+  const { keyList } = useCurrencyData()
   const { data: dowsPrice } = useDowsPriceQuery()
 
   const [assetsBalanceList, setAssetsBalanceList] = useState<Array<{ key: string, quantity: BigNumber, value: BigNumber }>>([])
@@ -29,9 +29,6 @@ const useAssetsBalance = () => {
         rateByCurrencyKey[keyList[index]] = rate
       })
 
-      // DOWS / xUSD
-      // const rateForDows = weiToBigNumber(await dowsJSConnector.dowsJs.Oracle.rateForCurrency('DOWS'))
-
       setAssetsBalanceList(
         balanceList
           .map(v => weiToBigNumber(v))
@@ -39,9 +36,7 @@ const useAssetsBalance = () => {
             return ({
               key: keyList[index],
               quantity: balance,
-              // TODO
-              value: new BigNumber(0)
-              // value: balance.multipliedBy(rateForDows).multipliedBy(rateByCurrencyKey[keyList[index]]).multipliedBy(new BigNumber(dowsPrice))
+              value: balance.multipliedBy(rateByCurrencyKey[keyList[index]])
             })
           })
           .filter(v => v.quantity.gt(0))
@@ -65,7 +60,11 @@ const useBalance = () => {
   const [debtPool, setDebtPool] = useState('')
 
   const fetch = useCallback(async () => {
+    console.log('fetch')
     if (!account || !dowsPrice) {
+      setYourBalance('')
+      setAssetsBalance('')
+      setDebtPool('')
       return
     }
 
@@ -88,7 +87,7 @@ const useBalance = () => {
 
   useEffect(() => {
     fetch()
-  }, [])
+  }, [fetch])
 
   return {
     yourBalance, assetsBalance, debtPool

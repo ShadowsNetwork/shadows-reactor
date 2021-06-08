@@ -3,13 +3,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
 import { createChart, CrosshairMode, ISeriesApi } from 'lightweight-charts'
-import { KeyPair, useCurrencyBalance, usePairData } from '@/pages/Trade/TradeDataHooks'
 import { useInitializeProvider, useSetupNetwork } from '@/hooks'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toBigNumber, toByte32, toWei } from '@/web3/utils'
 import useTradingDataQuery from '@/queries/useTradingDataQuery'
 import BigNumber from 'bignumber.js'
 import DowsSynthesizer from '@/components/DowsSynthesizer'
+import { KeyPair, useCurrencyBalance, useCurrencyData } from '@/hooks/useTradeData'
 
 type PairInfoProps = {
   onSelectedKeyPairChanged: (_selectedKeyPair: KeyPair) => void
@@ -254,7 +254,7 @@ const CustomizedSlider = styled.div`
 const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedKeyPair }) => {
   const [selectedType, setSelectedType] = useState('All')
 
-  const { keyPairs } = usePairData()
+  const { keyPairs } = useCurrencyData()
 
   const StatefulButton = ({ name }: { name: string }) => {
     const handleClick = () => {

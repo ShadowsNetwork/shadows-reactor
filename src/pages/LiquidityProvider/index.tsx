@@ -21,7 +21,7 @@ import {
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
 import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
 import RedeemModal, { RedeemModalStatus } from '@/pages/LiquidityProvider/RedeemModal'
-import { usePoolData } from '@/pages/LiquidityProvider/usePoolData'
+import { usePoolData } from '@/hooks/usePoolData'
 import { PoolConfig } from '@/types/LiquidityProvider'
 import { ConfigType } from '../../../config'
 

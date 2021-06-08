@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { DependencyList, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   getSelectedWallet, getTransactionHistoryList, setAccount, setSelectedWallet,
   updateTransactionHistoryStatus
@@ -108,8 +108,7 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
           })
 
         // @ts-ignore
-        provider.provider.on('accountsChanged', async (newAccount, oldAccount) => {
-          console.log('on accounts changed: ', newAccount, oldAccount)
+        provider.provider.on('accountsChanged', async (newAccount, _) => {
           if (!newAccount.length) {
             dispatch(setAccount(null))
             dispatch(setSelectedWallet(null))
@@ -275,13 +274,5 @@ export function useListenBridgeTransactionStatus() {
 
     return () => clearInterval(intervalId)
   }, [transactionList])
-}
-
-export async function useFetch(fetchMethod: () => void, deps?: DependencyList) {
-  const fetch = useCallback(fetchMethod, [deps])
-
-  return useEffect(() => {
-    fetch()
-  }, [fetch])
 }
 

@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js'
 
 export function numberWithCommas(x: string | number | BigNumber, decimalPlace = 2): string {
-  // if (!x) {
-  //   return numberWithCommas('0')
-  // }
+  if (!x.toString().length) {
+    return numberWithCommas('0')
+  }
 
   const trimTrailingZero = (x: string) => {
     if (x.length <= decimalPlace) {

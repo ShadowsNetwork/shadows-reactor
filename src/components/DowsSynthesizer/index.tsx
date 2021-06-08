@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
-import { useSynthAssetsData } from '@/pages/Trade/TradeDataHooks'
 import AmountInputModal, { AmountInputModalStatus } from '@/pages/LiquidityProvider/AmountInputModal'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import { Button } from 'antd'
 import styled from 'styled-components'
+import { useDowsSynthesizerData } from '@/hooks/useDowsSynthesizerData'
 
 const DowsInfoContainer = styled.div`
   width: 100%;
@@ -99,7 +99,7 @@ const DowsSynthesizer: React.FC = () => {
     totalDows, availableDows, lockedDows,
     totalReward, escrowedReward, redeemableReward,
     refresh
-  } = useSynthAssetsData()
+  } = useDowsSynthesizerData()
 
   const [amountInputModalStatus, setAmountInputModalStatus] = useState<AmountInputModalStatus>({
     visible: false,

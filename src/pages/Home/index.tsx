@@ -1,11 +1,11 @@
 import { Button } from 'antd'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { usePairData } from '@/pages/Trade/TradeDataHooks'
 import { useInitializeProvider, useSetupNetwork } from '@/hooks'
-import { useHomeData } from '@/pages/Home/HomeDataHooks'
 import { numberWithCommas } from '@/utils'
 import DowsSynthesizer from '@/components/DowsSynthesizer'
+import { useCurrencyData } from '@/hooks/useTradeData'
+import { useHomeData } from '@/hooks/useHomeData'
 
 const Box = styled.div`
   background-color: #121725;
@@ -111,7 +111,7 @@ const StatInfoContainer = styled(Box)`
 const PairInfo: React.FC = () => {
   const [selectedType, setSelectedType] = useState('All')
 
-  const { keyPairs } = usePairData()
+  const { keyPairs } = useCurrencyData()
 
   const StatefulButton = ({ name }: { name: string }) => {
     const handleClick = () => {
