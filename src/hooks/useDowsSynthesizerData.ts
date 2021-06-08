@@ -14,9 +14,9 @@ type TradeData = {
   availableDows: string,
   lockedDows: string,
 
-  totalReward: string,
-  escrowedReward: string,
-  redeemableReward: string,
+  totalReward: BigNumber,
+  escrowedReward: BigNumber,
+  redeemableReward: BigNumber,
 
   refresh: () => void
 }
@@ -98,19 +98,19 @@ const useShadowsData = (refreshFlag: number): { totalDows: string, availableDows
   }
 }
 
-const useFeePoolData = (refreshFlag: number): { totalReward: string, escrowedReward: string, redeemableReward: string } => {
+const useFeePoolData = (refreshFlag: number): { totalReward: BigNumber, escrowedReward: BigNumber, redeemableReward: BigNumber } => {
   const account = useSelector(getAccount)
 
-  const [totalReward, setTotalReward] = useState('-')
-  const [escrowedReward, setEscrowedReward] = useState('-')
-  const [redeemableReward, setRedeemableReward] = useState('-')
+  const [totalReward, setTotalReward] = useState(new BigNumber(0))
+  const [escrowedReward, setEscrowedReward] = useState(new BigNumber(0))
+  const [redeemableReward, setRedeemableReward] = useState(new BigNumber(0))
 
   const fetchClaimFees = useCallback(async () => {
     const [_escrowed, _redeemable] = await dowsJSConnector.dowsJs.FeePool.feesAvailable(account)
 
-    setTotalReward(numberWithCommas(weiToString(_escrowed.add(_redeemable))))
-    setEscrowedReward(numberWithCommas(weiToString(_escrowed)))
-    setRedeemableReward(numberWithCommas(weiToString(_redeemable)))
+    setTotalReward(weiToBigNumber(_escrowed.add(_redeemable)))
+    setEscrowedReward(weiToBigNumber(_escrowed))
+    setRedeemableReward(weiToBigNumber(_redeemable))
   }, [account, refreshFlag])
 
   useEffect(() => {

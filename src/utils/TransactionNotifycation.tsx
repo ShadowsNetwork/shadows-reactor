@@ -16,6 +16,7 @@ export function notifyTransactionSuccess(transactionHistory: TransactionHistory)
 
   notification.open({
     placement: 'bottomRight',
+    // placement: 'topRight',
     message: '',
     // duration: null,
     className: 'transaction-success',

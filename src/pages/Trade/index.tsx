@@ -3,13 +3,18 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
 import { createChart, CrosshairMode, ISeriesApi } from 'lightweight-charts'
-import { useInitializeProvider, useSetupNetwork } from '@/hooks'
+import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toBigNumber, toByte32, toWei } from '@/web3/utils'
 import useTradingDataQuery from '@/queries/useTradingDataQuery'
 import BigNumber from 'bignumber.js'
 import DowsSynthesizer from '@/components/DowsSynthesizer'
 import { KeyPair, useCurrencyBalance, useCurrencyData } from '@/hooks/useTradeData'
+import { TradeSynth } from '@/types/TransactionHistory'
+import { numberWithCommas } from '@/utils'
+import { appendTransactionHistory, updateTransactionHistoryStatus } from '@/store/wallet'
+import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
+import { useDispatch } from 'react-redux'
 
 type PairInfoProps = {
   onSelectedKeyPairChanged: (_selectedKeyPair: KeyPair) => void
@@ -252,11 +257,11 @@ const CustomizedSlider = styled.div`
 `
 
 const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedKeyPair }) => {
-  const [selectedType, setSelectedType] = useState('All')
+  // const [selectedType, setSelectedType] = useState('All')
 
   const { keyPairs } = useCurrencyData()
 
-  const StatefulButton = ({ name }: { name: string }) => {
+  /*const StatefulButton = ({ name }: { name: string }) => {
     const handleClick = () => {
       setSelectedType(name)
     }
@@ -278,7 +283,7 @@ const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedK
         </Button>
       </div>
     )
-  }
+  }*/
 
   const handleSelectKeyPair = (keypair: KeyPair) => {
     onSelectedKeyPairChanged(keypair)
@@ -294,13 +299,13 @@ const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedK
 
   return (
     <PairsInfoContainer>
-      <div className="button-group">
+      {/* <div className="button-group">
         <StatefulButton name="All" />
         <StatefulButton name="Crypto" />
         <StatefulButton name="Fiat" />
         <StatefulButton name="Commodities" />
         <StatefulButton name="Equaties" />
-      </div>
+      </div>*/}
       <div className="list">
         <div className="header">
           <div className="key">Symbol</div>
@@ -337,8 +342,13 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
   balanceByCurrency,
   onComplete
 }) => {
-  const [inputValue, setInputValue] = useState('')
+  const errorMessageGetter = useErrorMessage()
 
+  const dispatch = useDispatch()
+
+  const { beginTransaction, submitTransaction, rejectTransaction } = useTransactionStatusModal()
+
+  const [inputValue, setInputValue] = useState('0')
   const [sliderValue, setSliderValue] = useState(0)
 
   const sliderMarks = {
@@ -366,19 +376,32 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
   }
 
   const handleExchange = async () => {
-    if (toBigNumber(inputValue)
-      .lte(0)) {
-      return
-    }
-
     const sourceCurrencyKey = toByte32(keyPair!.symbol[type === 'Buy' ? 1 : 0])
     const destinationCurrencyKey = toByte32(keyPair!.symbol[type === 'Buy' ? 0 : 1])
     const sourceAmount = toWei(inputValue)
 
-    const tx = await dowsJSConnector.dowsJs.Synthesizer.exchange(sourceCurrencyKey, sourceAmount, destinationCurrencyKey)
+    beginTransaction()
 
-    tx.wait()
-      .then(onComplete)
+    dowsJSConnector.dowsJs.Synthesizer.exchange(sourceCurrencyKey, sourceAmount, destinationCurrencyKey)
+      .then(tx => {
+        const transactionHistory: TradeSynth = new TradeSynth(tx.hash, numberWithCommas(inputValue, 6), type, keyPair!.symbol[0])
+        dispatch(appendTransactionHistory(transactionHistory))
+        submitTransaction()
+
+        tx.wait()
+          .then(() => {
+            transactionHistory.complete()
+            dispatch(updateTransactionHistoryStatus(transactionHistory))
+            onComplete()
+          })
+          .catch(() => {
+            transactionHistory.fail()
+            dispatch(updateTransactionHistoryStatus(transactionHistory))
+          })
+      })
+      .catch(e => {
+        rejectTransaction(errorMessageGetter(e))
+      })
   }
 
   useEffect(() => {
@@ -423,6 +446,7 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
         className="btn"
         onClick={handleExchange}
         style={{ backgroundColor: color }}
+        disabled={new BigNumber(inputValue).lte(0)}
       >
         {type}
       </Button>

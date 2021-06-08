@@ -1,5 +1,4 @@
-import { Button } from 'antd'
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { useInitializeProvider, useSetupNetwork } from '@/hooks'
 import { numberWithCommas } from '@/utils'
@@ -109,11 +108,11 @@ const StatInfoContainer = styled(Box)`
 `
 
 const PairInfo: React.FC = () => {
-  const [selectedType, setSelectedType] = useState('All')
+  // const [selectedType, setSelectedType] = useState('All')
 
   const { keyPairs } = useCurrencyData()
 
-  const StatefulButton = ({ name }: { name: string }) => {
+  /*const StatefulButton = ({ name }: { name: string }) => {
     const handleClick = () => {
       setSelectedType(name)
     }
@@ -135,17 +134,17 @@ const PairInfo: React.FC = () => {
         </Button>
       </div>
     )
-  }
+  }*/
 
   return (
     <PairsInfoContainer>
-      <div className="button-group">
+      {/*<div className="button-group">
         <StatefulButton name="All" />
         <StatefulButton name="Crypto" />
         <StatefulButton name="Fiat" />
         <StatefulButton name="Commodities" />
         <StatefulButton name="Equaties" />
-      </div>
+      </div>*/}
       <div className="list">
         <div className="header">
           <div className="key">Symbol</div>

@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { getAccount } from '@/store/wallet'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  appendTransactionHistory, getAccount, updateTransactionHistoryStatus
+} from '@/store/wallet'
 import AmountInputModal, { AmountInputModalStatus } from '@/pages/LiquidityProvider/AmountInputModal'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import { Button } from 'antd'
 import styled from 'styled-components'
 import { useDowsSynthesizerData } from '@/hooks/useDowsSynthesizerData'
+import { BurnXUSD, MintXUSD } from '@/types/TransactionHistory'
+import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
+import { useErrorMessage } from '@/hooks'
+import { numberWithCommas } from '@/utils'
 
 const DowsInfoContainer = styled.div`
   width: 100%;
@@ -92,14 +98,19 @@ const DowsInfoContainer = styled.div`
 `
 
 const DowsSynthesizer: React.FC = () => {
+  const dispatch = useDispatch()
+
   const account = useSelector(getAccount)
 
-  const {
-    myRatio, targetRatio,
-    totalDows, availableDows, lockedDows,
-    totalReward, escrowedReward, redeemableReward,
-    refresh
-  } = useDowsSynthesizerData()
+  const { beginTransaction, rejectTransaction, submitTransaction } = useTransactionStatusModal()
+
+  const errorMessageGetter = useErrorMessage()
+
+  const data = useDowsSynthesizerData()
+  const { myRatio, targetRatio } = data
+  const { totalDows, availableDows, lockedDows } = data
+  const { totalReward, escrowedReward, redeemableReward } = data
+  const { refresh } = data
 
   const [amountInputModalStatus, setAmountInputModalStatus] = useState<AmountInputModalStatus>({
     visible: false,
@@ -125,11 +136,31 @@ const DowsSynthesizer: React.FC = () => {
   }
 
   const handleMintXusd = async () => {
-    const issueSynth = async amount => {
-      const result = await dowsJSConnector.dowsJs.Synthesizer.issueSynths(toWei(amount))
+    const issueSynth = async (amount: string) => {
+      beginTransaction()
 
-      result.wait()
-        .then(refresh)
+      dowsJSConnector.dowsJs.Synthesizer.issueSynths(toWei(amount))
+        .then(tx => {
+          closeAmountInputModal()
+
+          const transactionHistory: MintXUSD = new MintXUSD(tx.hash, numberWithCommas(amount, 6))
+          dispatch(appendTransactionHistory(transactionHistory))
+          submitTransaction()
+
+          tx.wait()
+            .then(() => {
+              refresh()
+              transactionHistory.complete()
+              dispatch(updateTransactionHistoryStatus(transactionHistory))
+            })
+            .catch(() => {
+              transactionHistory.fail()
+              dispatch(updateTransactionHistoryStatus(transactionHistory))
+            })
+        })
+        .catch(e => {
+          rejectTransaction(errorMessageGetter(e))
+        })
     }
 
     const [remainingIssuableSynths] = await dowsJSConnector.dowsJs.Synthesizer.remainingIssuableSynths(account)
@@ -147,10 +178,30 @@ const DowsSynthesizer: React.FC = () => {
 
   const handleBurnXusd = async () => {
     const burnSynths = async amount => {
-      const result = await dowsJSConnector.dowsJs.Synthesizer.burnSynths(toWei(amount))
+      beginTransaction()
 
-      result.wait()
-        .then(refresh)
+      dowsJSConnector.dowsJs.Synthesizer.burnSynths(toWei(amount))
+        .then(tx => {
+          closeAmountInputModal()
+
+          const transactionHistory: BurnXUSD = new BurnXUSD(tx.hash, numberWithCommas(amount, 6))
+          dispatch(appendTransactionHistory(transactionHistory))
+          submitTransaction()
+
+          tx.wait()
+            .then(() => {
+              refresh()
+              transactionHistory.complete()
+              dispatch(updateTransactionHistoryStatus(transactionHistory))
+            })
+            .catch(() => {
+              transactionHistory.fail()
+              dispatch(updateTransactionHistoryStatus(transactionHistory))
+            })
+        })
+        .catch(e => {
+          rejectTransaction(errorMessageGetter(e))
+        })
     }
 
     const balance = weiToBigNumber(await dowsJSConnector.dowsJs.Synth.balanceOf('xUSD', account!))
@@ -203,18 +254,18 @@ const DowsSynthesizer: React.FC = () => {
       <div className="text-container">
         <p className="bold">
           <span>Total Rewards</span>
-          <span>{totalReward}</span>
+          <span>{numberWithCommas(totalReward, 6)}</span>
         </p>
         <p>
           <span>Escrowed</span>
-          <span>{escrowedReward}</span>
+          <span>{numberWithCommas(escrowedReward, 6)}</span>
         </p>
         <p>
           <span>Redeemable</span>
-          <span>{redeemableReward}</span>
+          <span>{numberWithCommas(redeemableReward, 6)}</span>
         </p>
       </div>
-      <Button className="redeem-btn" onClick={handleRedeem}>Redeem</Button>
+      <Button className="redeem-btn" onClick={handleRedeem} disabled={totalReward.lte(0)}>Redeem</Button>
 
       <AmountInputModal {...amountInputModalStatus} />
     </DowsInfoContainer>

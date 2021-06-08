@@ -40,7 +40,10 @@ export const TransactionHistoryImplementationClassType = {
   LockLP: 'LockLP',
   UnlockLP: 'UnlockLP',
   Bridge: 'Bridge',
-  Approve: 'Approve'
+  Approve: 'Approve',
+  Mint: 'Mint',
+  Burn: 'Burn',
+  Trade: 'Trade'
 }
 
 export abstract class TransactionHistory {
@@ -49,7 +52,7 @@ export abstract class TransactionHistory {
 
   protected constructor(hash: string, status?: TransactionStatus) {
     this.hash = hash
-    this._status = status !== undefined ? status : TransactionStatus.WaitForConfirmation
+    this._status = status !== undefined ? status : TransactionStatus.Submitted
   }
 
   get status(): TransactionStatus {
@@ -214,6 +217,63 @@ export class ApproveToken extends TransactionHistory {
 
 }
 
+export class MintXUSD extends TransactionHistory {
+  constructor(hash: string, public amount: string, status?: TransactionStatus) {
+    super(hash, status)
+  }
+
+  TYPE = TransactionHistoryImplementationClassType.Mint
+
+  toString(): string {
+    return `Mint ${this.amount} xUSD`
+  }
+
+  get url(): string {
+    return `${process.env.BLOCK_EXPLORER_URL}/tx/${this.hash}`
+  }
+}
+
+export class BurnXUSD extends TransactionHistory {
+  constructor(hash: string, public amount: string, status?: TransactionStatus) {
+    super(hash, status)
+  }
+
+  TYPE = TransactionHistoryImplementationClassType.Burn
+
+  toString(): string {
+    return `Burn ${this.amount} xUSD`
+  }
+
+  get url(): string {
+    return `${process.env.BLOCK_EXPLORER_URL}/tx/${this.hash}`
+  }
+}
+
+type TradeSynthType = 'Buy' | 'Sell'
+
+export class TradeSynth extends TransactionHistory {
+
+  constructor(
+    hash: string,
+    public amount: string,
+    public type: TradeSynthType,
+    public currencyKey: string,
+    status?: TransactionStatus
+  ) {
+    super(hash, status)
+  }
+
+  TYPE = TransactionHistoryImplementationClassType.Trade
+
+  toString(): string {
+    return `${this.type} for ${this.amount} ${this.currencyKey}`
+  }
+
+  get url(): string {
+    return `${process.env.BLOCK_EXPLORER_URL}/tx/${this.hash}`
+  }
+}
+
 TransactionHistory.fromJson = (json: { TYPE: string }): TransactionHistory | undefined => {
   const TYPE = json['TYPE']
   switch (TYPE) {
@@ -227,6 +287,12 @@ TransactionHistory.fromJson = (json: { TYPE: string }): TransactionHistory | und
     return new BridgeDows(json['hash'], json['amount'], json['fromChainName'], json['toChainName'], json['_status'])
   case TransactionHistoryImplementationClassType.Approve:
     return new ApproveToken(json['hash'], json['token'], json['blockExplorer'], json['_status'])
+  case TransactionHistoryImplementationClassType.Mint:
+    return new MintXUSD(json['hash'], json['amount'], json['_status'])
+  case TransactionHistoryImplementationClassType.Burn:
+    return new BurnXUSD(json['hash'], json['amount'], json['_status'])
+  case TransactionHistoryImplementationClassType.Trade:
+    return new TradeSynth(json['hash'], json['amount'], json['type'], json['currencyKey'], json['_status'])
   }
 
 }

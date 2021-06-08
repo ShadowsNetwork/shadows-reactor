@@ -14,6 +14,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import configureStore from '@/store'
 import App from '@/layouts/App'
 import { Web3Provider } from '@ethersproject/providers'
+import { TransactionStatusModalProvider } from '@/contexts/TransactionStatusModalContext'
 
 const queryClient = new QueryClient()
 
@@ -33,7 +34,9 @@ const Root: React.FC = () => (
           <Provider store={store}>
             <PersistGate loading={<LoadingOutlined />} persistor={persistor}>
               <Router>
-                <App />
+                <TransactionStatusModalProvider>
+                  <App />
+                </TransactionStatusModalProvider>
               </Router>
             </PersistGate>
           </Provider>
