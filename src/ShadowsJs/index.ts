@@ -11,6 +11,7 @@ import FeePool from '@/ShadowsJs/contracts/FeePool'
 import Oracle from './contracts/Oracle'
 import Synth from '@/ShadowsJs/contracts/Synth'
 import Exchanger from './contracts/Exchanger'
+import RewardEscrow from './contracts/RewardEscrow'
 
 export default class ShadowsJS extends ShadowsJsBase {
   static signers
@@ -25,6 +26,7 @@ export default class ShadowsJS extends ShadowsJsBase {
   Oracle: Oracle
   Synth: Synth
   Exchanger: Exchanger
+  RewardEscrow: RewardEscrow
 
   /**
    * Creates instances of Shadows contracts based on ContractSettings.
@@ -47,7 +49,7 @@ export default class ShadowsJS extends ShadowsJsBase {
     this.Oracle = new Oracle(network, signer, provider)
     this.Synth = new Synth(network, signer, provider)
     this.Exchanger = new Exchanger(network, signer, provider)
-
+    this.RewardEscrow = new RewardEscrow(network, signer, provider)
   }
 
 }

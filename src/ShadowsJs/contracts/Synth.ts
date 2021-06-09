@@ -12,7 +12,6 @@ class Synth extends AbstractContractCaller {
   }
 
   async balanceOf(currencyKey: string, account: string) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const json = getContractConfig(this.network, currencyKey)
 
     const contract = new Contract(

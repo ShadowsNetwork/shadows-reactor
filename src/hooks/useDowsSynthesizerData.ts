@@ -106,11 +106,24 @@ const useFeePoolData = (refreshFlag: number): { totalReward: BigNumber, escrowed
   const [redeemableReward, setRedeemableReward] = useState(new BigNumber(0))
 
   const fetchClaimFees = useCallback(async () => {
-    const [_escrowed, _redeemable] = await dowsJSConnector.dowsJs.FeePool.feesAvailable(account)
+    if (!account) {
+      const ZERO = new BigNumber(0)
+      setTotalReward(ZERO)
+      setEscrowedReward(ZERO)
+      setRedeemableReward(ZERO)
+      return
+    }
 
-    setTotalReward(weiToBigNumber(_escrowed.add(_redeemable)))
-    setEscrowedReward(weiToBigNumber(_escrowed))
-    setRedeemableReward(weiToBigNumber(_redeemable))
+    // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+    const [[_, _totalReward], _balanceOf, _vestBalanceOf] = await Promise.all([
+      dowsJSConnector.dowsJs.FeePool.feesAvailable(account),
+      dowsJSConnector.dowsJs.RewardEscrow.balanceOf(account),
+      dowsJSConnector.dowsJs.RewardEscrow.vestBalanceOf(account)
+    ])
+
+    setTotalReward(weiToBigNumber(_totalReward))
+    setEscrowedReward(weiToBigNumber(_balanceOf))
+    setRedeemableReward(weiToBigNumber(_vestBalanceOf))
   }, [account, refreshFlag])
 
   useEffect(() => {
