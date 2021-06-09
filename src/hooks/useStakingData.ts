@@ -6,6 +6,7 @@ import { getAccount } from '@/store/wallet'
 import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { PoolType } from '@/types/LiquidityProvider'
+import { useRefreshController } from '@/contexts/RefreshControllerContext'
 
 const ALLOWANCE_THRESHOLD_VALUE = new BigNumber('2').pow(128)
 
@@ -75,20 +76,21 @@ type PoolDataProps = {
   farmContractAddress: string,
   poolType: PoolType,
   poolNumber: number,
-  refreshFlag: number,
   lpMultiplier: number,
 }
 
-export const usePoolData = ({
+export const useStakingData = ({
   lpTokenContractAddress,
   farmContractAddress,
   poolType,
   poolNumber,
-  refreshFlag,
   lpMultiplier
 }: PoolDataProps): PoolData => {
   const account = useSelector(getAccount)
+
   const dowsPrice = new BigNumber((useDowsPriceQuery().data as string))
+
+  const { fastRefreshFlag } = useRefreshController()
 
   const [totalLockedLP, setTotalLockedLP] = useState('0')
   const [totalLockedLPInUSD, setTotalLockedLPInUSD] = useState('0')
@@ -141,7 +143,7 @@ export const usePoolData = ({
     setAllowanceEnough(isAllowanceEnough(weiToString(_lpTokenAllowance)))
 
     setAPY(_APY)
-  }, [account, dowsPrice, refreshFlag])
+  }, [account, dowsPrice, fastRefreshFlag])
 
   useEffect(() => {
     fetchData()

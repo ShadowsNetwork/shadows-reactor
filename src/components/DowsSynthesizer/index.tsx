@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  appendTransactionHistory, getAccount, updateTransactionHistoryStatus
-} from '@/store/wallet'
+import { appendTransactionHistory, getAccount } from '@/store/wallet'
 import AmountInputModal, { AmountInputModalStatus } from '@/pages/LiquidityProvider/AmountInputModal'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import { Button } from 'antd'
 import styled from 'styled-components'
 import { useDowsSynthesizerData } from '@/hooks/useDowsSynthesizerData'
-import { BurnXUSD, MintXUSD } from '@/types/TransactionHistory'
+import { BurnXUSD, MintXUSD, RedeemDows } from '@/types/TransactionHistory'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useErrorMessage } from '@/hooks'
 import { numberWithCommas } from '@/utils'
@@ -110,7 +108,6 @@ const DowsSynthesizer: React.FC = () => {
   const { myRatio, targetRatio } = data
   const { totalDows, availableDows, lockedDows } = data
   const { totalReward, escrowedReward, redeemableReward } = data
-  const { refresh } = data
 
   const [amountInputModalStatus, setAmountInputModalStatus] = useState<AmountInputModalStatus>({
     visible: false,
@@ -132,7 +129,13 @@ const DowsSynthesizer: React.FC = () => {
   }
 
   const handleRedeem = () => {
-    dowsJSConnector.dowsJs.FeePool.claimFees()
+    beginTransaction()
+    dowsJSConnector.dowsJs.RewardEscrow.vest()
+      .then(tx => {
+        const th: RedeemDows = new RedeemDows(tx.hash, numberWithCommas(escrowedReward, 6))
+        dispatch(appendTransactionHistory(th))
+        submitTransaction()
+      })
   }
 
   const handleMintXusd = async () => {
@@ -146,17 +149,6 @@ const DowsSynthesizer: React.FC = () => {
           const transactionHistory: MintXUSD = new MintXUSD(tx.hash, numberWithCommas(amount, 6))
           dispatch(appendTransactionHistory(transactionHistory))
           submitTransaction()
-
-          tx.wait()
-            .then(() => {
-              refresh()
-              transactionHistory.complete()
-              dispatch(updateTransactionHistoryStatus(transactionHistory))
-            })
-            .catch(() => {
-              transactionHistory.fail()
-              dispatch(updateTransactionHistoryStatus(transactionHistory))
-            })
         })
         .catch(e => {
           rejectTransaction(errorMessageGetter(e))
@@ -187,17 +179,6 @@ const DowsSynthesizer: React.FC = () => {
           const transactionHistory: BurnXUSD = new BurnXUSD(tx.hash, numberWithCommas(amount, 6))
           dispatch(appendTransactionHistory(transactionHistory))
           submitTransaction()
-
-          tx.wait()
-            .then(() => {
-              refresh()
-              transactionHistory.complete()
-              dispatch(updateTransactionHistoryStatus(transactionHistory))
-            })
-            .catch(() => {
-              transactionHistory.fail()
-              dispatch(updateTransactionHistoryStatus(transactionHistory))
-            })
         })
         .catch(e => {
           rejectTransaction(errorMessageGetter(e))
@@ -240,15 +221,15 @@ const DowsSynthesizer: React.FC = () => {
       <div className="text-container">
         <p className="bold">
           <span>Total DOWS</span>
-          <span>{totalDows}</span>
+          <span>{numberWithCommas(totalDows, 6)}</span>
         </p>
         <p>
           <span>Available</span>
-          <span>{availableDows}</span>
+          <span>{numberWithCommas(availableDows, 6)}</span>
         </p>
         <p>
           <span>Locked</span>
-          <span>{lockedDows}</span>
+          <span>{numberWithCommas(lockedDows, 6)}</span>
         </p>
       </div>
       <div className="text-container">
@@ -265,7 +246,7 @@ const DowsSynthesizer: React.FC = () => {
           <span>{numberWithCommas(redeemableReward, 6)}</span>
         </p>
       </div>
-      <Button className="redeem-btn" onClick={handleRedeem} disabled={totalReward.lte(0)}>Redeem</Button>
+      <Button className="redeem-btn" onClick={handleRedeem} disabled={escrowedReward.lte(0)}>Redeem</Button>
 
       <AmountInputModal {...amountInputModalStatus} />
     </DowsInfoContainer>

@@ -11,19 +11,16 @@ import { toWei } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
 import AmountInputModal, { AmountInputModalStatus } from './AmountInputModal'
 import { numberWithCommas } from '@/utils'
-import TransactionStatusModal, { TransactionStatusModalProps } from '@/components/TransactionStatusModal'
-import {
-  beginTransaction, rejectTransaction, submitTransaction
-} from '@/components/TransactionStatusModal/event'
 import {
   ApproveToken, LockLPToken, RedeemDows, TransactionHistory, TransactionStatus, UnlockLPToken
 } from '@/types/TransactionHistory'
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
 import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
 import RedeemModal, { RedeemModalStatus } from '@/pages/LiquidityProvider/RedeemModal'
-import { usePoolData } from '@/hooks/usePoolData'
+import { useStakingData } from '@/hooks/useStakingData'
 import { PoolConfig } from '@/types/LiquidityProvider'
 import { ConfigType } from '../../../config'
+import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 
 const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 
@@ -86,8 +83,6 @@ const Pool: React.FC<PoolConfig> = ({
 }) => {
   const unit = (leftCurrency ? `${leftCurrency.name}/` : '') + rightCurrency.name
 
-  const [refreshFlag, setRefreshFlag] = useState(0)
-
   const [amountInputModalStatus, setAmountInputModalStatus] = useState<AmountInputModalStatus>({
     visible: false,
     title: '',
@@ -103,17 +98,13 @@ const Pool: React.FC<PoolConfig> = ({
     onClose: undefined
   })
 
-  const [transactionStatusModalProps, setTransactionStatusModalProps] = useState<TransactionStatusModalProps>({
-    onClose: undefined,
-    status: undefined,
-    visible: false
-  })
-
   const account = useSelector(getAccount)
 
   const dispatch = useDispatch()
 
   const getErrorMessage = useErrorMessage()
+
+  const { beginTransaction, submitTransaction, rejectTransaction } = useTransactionStatusModal()
 
   const {
     totalLockedLP,
@@ -124,8 +115,8 @@ const Pool: React.FC<PoolConfig> = ({
     userLockedLpInUSD,
     dowsEarned,
     allowanceEnough
-  } = usePoolData({
-    lpTokenContractAddress, farmContractAddress, poolNumber, poolType, refreshFlag, lpMultiplier
+  } = useStakingData({
+    lpTokenContractAddress, farmContractAddress, poolNumber, poolType, lpMultiplier
   })
 
   const closeAmountInputModal = () => {
@@ -142,43 +133,16 @@ const Pool: React.FC<PoolConfig> = ({
     })
   }
 
-  const closeTransactionStatusModal = () => {
-    setTransactionStatusModalProps({
-      ...transactionStatusModalProps,
-      visible: false
-    })
-  }
-
-  const forceRefreshData = () => {
-    setRefreshFlag(new Date().getMilliseconds())
-  }
-
   const approve = async () => {
     try {
-      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      beginTransaction()
       const approveResult: TransactionResponse = await dowsJSConnector.dowsJs.LpERC20Token.approve(lpTokenContractAddress, farmContractAddress)
-      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      submitTransaction()
 
       const transactionHistory = new ApproveToken(approveResult.hash, tokenName, process.env.BLOCK_EXPLORER_URL, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
-
-      approveResult.wait()
-        .then(() => {
-          transactionHistory.complete()
-          dispatch(updateTransactionHistoryStatus(transactionHistory))
-          forceRefreshData()
-        })
-        .catch(() => {
-          rejectTransaction(transactionStatusModalProps,
-            setTransactionStatusModalProps,
-            'Approve failed! Please retry.'
-          )
-        })
     } catch (e) {
-      rejectTransaction(transactionStatusModalProps,
-        setTransactionStatusModalProps,
-        getErrorMessage(e)
-      )
+      rejectTransaction(getErrorMessage(e))
     }
   }
 
@@ -192,70 +156,42 @@ const Pool: React.FC<PoolConfig> = ({
     }
 
     try {
-      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      beginTransaction()
       const depositResult = await dowsJSConnector.dowsJs.Farm.deposit(farmContractAddress, poolNumber, amountInWei)
       closeAmountInputModal()
 
-      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      submitTransaction()
 
       const transactionHistory: TransactionHistory = new LockLPToken(depositResult.hash, amount, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
 
-      depositResult.wait()
-        .then(() => {
-          transactionHistory.complete()
-          dispatch(updateTransactionHistoryStatus(transactionHistory))
-          forceRefreshData()
-        })
-        .catch(() => {
-          transactionHistory.fail()
-          dispatch(updateTransactionHistoryStatus(transactionHistory))
-        })
     } catch (e) {
-      rejectTransaction(transactionStatusModalProps,
-        setTransactionStatusModalProps,
-        getErrorMessage(e)
-      )
+      rejectTransaction(getErrorMessage(e))
     }
   }
 
   const unlock = async (amount: string) => {
     try {
       const amountInWei = toWei(amount)
-      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      beginTransaction()
 
       const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(farmContractAddress, poolNumber, amountInWei)
       closeAmountInputModal()
-      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      submitTransaction()
 
       const transactionHistory: TransactionHistory = new UnlockLPToken(withdrawResult.hash, amount, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
-
-      withdrawResult.wait()
-        .then(() => {
-          transactionHistory.complete()
-          dispatch(updateTransactionHistoryStatus(transactionHistory))
-          forceRefreshData()
-        })
-        .catch(() => {
-          transactionHistory.fail()
-          dispatch(updateTransactionHistoryStatus(transactionHistory))
-        })
     } catch (e) {
-      rejectTransaction(
-        transactionStatusModalProps,
-        setTransactionStatusModalProps,
-        getErrorMessage(e)
-      )
+      rejectTransaction(getErrorMessage(e))
     }
   }
 
   const redeem = async () => {
     try {
-      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      beginTransaction()
 
       const withdrawResult = await dowsJSConnector.dowsJs.Farm.withdraw(farmContractAddress, poolNumber, 0)
-      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      submitTransaction()
       closeRedeemModal()
 
       const transactionHistory: TransactionHistory = new RedeemDows(withdrawResult.hash, dowsEarned, TransactionStatus.Submitted)
@@ -265,18 +201,13 @@ const Pool: React.FC<PoolConfig> = ({
         .then(() => {
           transactionHistory.complete()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
-          forceRefreshData()
         })
         .catch(() => {
           transactionHistory.fail()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
         })
     } catch (e) {
-      rejectTransaction(
-        transactionStatusModalProps,
-        setTransactionStatusModalProps,
-        getErrorMessage(e)
-      )
+      rejectTransaction(getErrorMessage(e))
     }
   }
 
@@ -368,10 +299,6 @@ const Pool: React.FC<PoolConfig> = ({
       </div>
       <AmountInputModal {...amountInputModalStatus} />
       <RedeemModal {...redeemModalStatus} />
-      <TransactionStatusModal
-        {...transactionStatusModalProps}
-        onClose={closeTransactionStatusModal}
-      />
     </div>
   )
 }

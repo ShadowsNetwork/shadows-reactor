@@ -22,7 +22,7 @@ const AmountInputModal: React.FC<AmountInputModalStatus> = ({
   confirmCallback,
   cancelCallback,
 }) => {
-  const [inputValue, setInputValue] = useState<string>('')
+  const [inputValue, setInputValue] = useState<string>('0')
 
   useEffect(() => {
     if (visible) {
@@ -71,7 +71,7 @@ const AmountInputModal: React.FC<AmountInputModalStatus> = ({
       </span>
       <div className="stakeButton">
         <Button onClick={handleCancel}>Cancel</Button>
-        <Button onClick={handleConfirm} disabled={new BigNumber(inputValue).lte(0)}>Confirm</Button>
+        <Button onClick={handleConfirm} disabled={!inputValue || new BigNumber(inputValue).lte(0)}>Confirm</Button>
       </div>
     </Modal>
   )

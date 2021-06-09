@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
 import { bytesToString, weiToBigNumber } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
+import { useRefreshController } from '@/contexts/RefreshControllerContext'
 
 export type KeyPair = {
   symbol: SymbolPair,
@@ -88,11 +89,7 @@ export const useCurrencyBalance = () => {
   const { keyList } = useCurrencyData()
   const account = useSelector(getAccount)
   const [balanceByCurrency, setBalanceByCurrency] = useState<{ [key: string]: BigNumber }>({})
-  const [refreshFlag, setRefreshFlag] = useState(0)
-
-  const refresh = () => {
-    setRefreshFlag(refreshFlag + 1)
-  }
+  const { fastRefreshFlag } = useRefreshController()
 
   const fetchBalance = useCallback(async () => {
     if (keyList.length > 0 && account) {
@@ -109,7 +106,7 @@ export const useCurrencyBalance = () => {
 
       setBalanceByCurrency(_balanceByCurrency)
     }
-  }, [keyList, refreshFlag, account])
+  }, [keyList, fastRefreshFlag, account])
 
   useEffect(() => {
     fetchBalance()
@@ -117,6 +114,5 @@ export const useCurrencyBalance = () => {
 
   return {
     balanceByCurrency,
-    refresh
   }
 }

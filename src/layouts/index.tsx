@@ -15,6 +15,7 @@ import configureStore from '@/store'
 import App from '@/layouts/App'
 import { Web3Provider } from '@ethersproject/providers'
 import { TransactionStatusModalProvider } from '@/contexts/TransactionStatusModalContext'
+import { RefreshControllerProvider } from '@/contexts/RefreshControllerContext'
 
 const queryClient = new QueryClient()
 
@@ -35,7 +36,9 @@ const Root: React.FC = () => (
             <PersistGate loading={<LoadingOutlined />} persistor={persistor}>
               <Router>
                 <TransactionStatusModalProvider>
-                  <App />
+                  <RefreshControllerProvider>
+                    <App />
+                  </RefreshControllerProvider>
                 </TransactionStatusModalProvider>
               </Router>
             </PersistGate>

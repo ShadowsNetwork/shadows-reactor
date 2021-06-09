@@ -14,14 +14,11 @@ import {
 } from '@/store/wallet'
 import { getSourcePolyChainId, setSourcePolyChainId } from '@/store/bridge'
 import DOWSIcon from '@/img/dows-info/dows.png'
-import TransactionStatusModal, { TransactionStatusModalProps } from '@/components/TransactionStatusModal'
-import {
-  beginTransaction, rejectTransaction, submitTransaction
-} from '@/components/TransactionStatusModal/event'
 import switchImg from '@/img/bridge/switch.png'
 import { ApproveToken, BridgeDows, TransactionStatus } from '@/types/TransactionHistory'
 import { PolyChain } from '@/types/PolyChain'
 import { getPolyChainById, getToPolyChainByFromPolyChain } from '@/utils/bridgeUtils'
+import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 
 type BridgeProps = {
   fromPolyChain: PolyChain
@@ -78,18 +75,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
 
   const { allowance, balance, fee } = useBridgeData({ fromPolyChain, toPolyChain, refreshFlag })
 
-  const [transactionStatusModalProps, setTransactionStatusModalProps] = useState<TransactionStatusModalProps>({
-    onClose: undefined,
-    status: undefined,
-    visible: false
-  })
-
-  const closeTransactionStatusModal = () => {
-    setTransactionStatusModalProps({
-      ...transactionStatusModalProps,
-      visible: false
-    })
-  }
+  const { beginTransaction, rejectTransaction, submitTransaction } = useTransactionStatusModal()
 
   const allowanceEnough = () => {
     return allowance && new BigNumber(amount).lt(new BigNumber(allowance))
@@ -109,9 +95,9 @@ const BridgeMain: React.FC<BridgeProps> = ({
 
   const approve = async () => {
     try {
-      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      beginTransaction()
       const approveResult = await dowsJSConnector.dowsJs.Bridge.approve(dowsTokenAddress, lockContractAddress)
-      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      submitTransaction()
 
       const transactionHistory = new ApproveToken(approveResult.hash, 'DOWS', fromPolyChain.explorerUrl, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
@@ -123,16 +109,13 @@ const BridgeMain: React.FC<BridgeProps> = ({
           forceRefreshData()
         })
     } catch (e) {
-      rejectTransaction(transactionStatusModalProps,
-        setTransactionStatusModalProps,
-        getErrorMessage(e)
-      )
+      rejectTransaction(getErrorMessage(e))
     }
   }
 
   const convert = async () => {
     try {
-      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      beginTransaction()
       const lockResult = await dowsJSConnector.dowsJs.Bridge.lock({
         lockContractAddress,
         fromAsset: dowsTokenAddress,
@@ -141,7 +124,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
         amount: toWei(amount),
         fee: toWei(fee!)
       })
-      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      submitTransaction()
 
       const transactionHistory = new BridgeDows(lockResult.hash, amount, fromPolyChain.ethereumChain.chainName, toPolyChain.ethereumChain.chainName, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
@@ -152,10 +135,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
           forceRefreshData()
         })
     } catch (e) {
-      rejectTransaction(transactionStatusModalProps,
-        setTransactionStatusModalProps,
-        getErrorMessage(e)
-      )
+      rejectTransaction(getErrorMessage(e))
     }
   }
 
@@ -205,10 +185,6 @@ const BridgeMain: React.FC<BridgeProps> = ({
           </div>
         }
       </div>
-      <TransactionStatusModal
-        {...transactionStatusModalProps}
-        onClose={closeTransactionStatusModal}
-      />
     </div>
   )
 }

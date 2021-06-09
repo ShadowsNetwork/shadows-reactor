@@ -4,7 +4,6 @@ import React from 'react'
 import '../app.less'
 import routers from '@/router'
 import { useLocation } from '@/hooks'
-import viewList from '@/img/slideBarIcon/view-list.png'
 
 const SideBar: React.FC = () => {
   const { hash } = useLocation()
@@ -16,12 +15,12 @@ const SideBar: React.FC = () => {
       theme="dark"
     >
       {
-        routers.filter(router => !router.hide)
+        routers
           .map(router => (
             <Menu.Item
               key={router.path}
             >
-              <img className="slideIcon" src={router.image} alt="" />
+              <img className="slideIcon" src={router.icon} alt="" />
               <Link to={router.path} style={{ userSelect: 'none' }}>
                 {router.title}
               </Link>
@@ -29,7 +28,7 @@ const SideBar: React.FC = () => {
           ))
       }
       <Menu.Item>
-        <img className="slideIcon" src={viewList} alt="pancake" />
+        <img className="slideIcon" src={require('@/img/menu-icons/liquidity-provider.png')} alt="pancake" />
         <a
           href={'https://exchange.pancakeswap.finance/#/add/0xfb7400707dF3D76084FBEae0109f41b178f71c02/BNB'}
           target="_blank"

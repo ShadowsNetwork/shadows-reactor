@@ -12,7 +12,7 @@ import DowsSynthesizer from '@/components/DowsSynthesizer'
 import { KeyPair, useCurrencyBalance, useCurrencyData } from '@/hooks/useTradeData'
 import { TradeSynth } from '@/types/TransactionHistory'
 import { numberWithCommas } from '@/utils'
-import { appendTransactionHistory, updateTransactionHistoryStatus } from '@/store/wallet'
+import { appendTransactionHistory } from '@/store/wallet'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useDispatch } from 'react-redux'
 
@@ -26,7 +26,6 @@ type BuySellPanelProps = {
   color: string
   keyPair?: KeyPair,
   balanceByCurrency: { [key: string]: BigNumber }
-  onComplete: () => void
 }
 
 const TradePageContainer = styled.div`
@@ -340,7 +339,6 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
   color,
   keyPair,
   balanceByCurrency,
-  onComplete
 }) => {
   const errorMessageGetter = useErrorMessage()
 
@@ -387,17 +385,6 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
         const transactionHistory: TradeSynth = new TradeSynth(tx.hash, numberWithCommas(inputValue, 6), type, keyPair!.symbol[0])
         dispatch(appendTransactionHistory(transactionHistory))
         submitTransaction()
-
-        tx.wait()
-          .then(() => {
-            transactionHistory.complete()
-            dispatch(updateTransactionHistoryStatus(transactionHistory))
-            onComplete()
-          })
-          .catch(() => {
-            transactionHistory.fail()
-            dispatch(updateTransactionHistoryStatus(transactionHistory))
-          })
       })
       .catch(e => {
         rejectTransaction(errorMessageGetter(e))
@@ -661,7 +648,7 @@ const TradePageWrapper: React.FC = () => {
     setSelectedKeyPair(keyPair)
   }
 
-  const { balanceByCurrency, refresh } = useCurrencyBalance()
+  const { balanceByCurrency } = useCurrencyBalance()
 
   return (
     <TradePageContainer>
@@ -676,7 +663,6 @@ const TradePageWrapper: React.FC = () => {
         <ContainerForBuyAndSell>
           <BuySellPanel
             balanceByCurrency={balanceByCurrency}
-            onComplete={refresh}
             color="#63cca9"
             type="Buy"
             keyPair={selectedKeyPair}
@@ -693,7 +679,6 @@ const TradePageWrapper: React.FC = () => {
         <ContainerForBuyAndSell>
           <BuySellPanel
             balanceByCurrency={balanceByCurrency}
-            onComplete={refresh}
             color="#DB5E56"
             type="Sell"
             keyPair={selectedKeyPair}

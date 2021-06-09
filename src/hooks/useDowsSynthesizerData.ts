@@ -4,21 +4,20 @@ import { useCallback, useEffect, useState } from 'react'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { numberWithCommas } from '@/utils'
 import BigNumber from 'bignumber.js'
-import { weiToBigNumber, weiToString } from '@/web3/utils'
+import { weiToBigNumber } from '@/web3/utils'
+import { useRefreshController } from '@/contexts/RefreshControllerContext'
 
 type TradeData = {
   myRatio: string,
   targetRatio: string,
 
-  totalDows: string,
-  availableDows: string,
-  lockedDows: string,
+  totalDows: BigNumber,
+  availableDows: BigNumber,
+  lockedDows: BigNumber,
 
   totalReward: BigNumber,
   escrowedReward: BigNumber,
   redeemableReward: BigNumber,
-
-  refresh: () => void
 }
 
 const useRatioData = (refreshFlag: number): { myRatio: string, targetRatio: string } => {
@@ -61,12 +60,12 @@ const useRatioData = (refreshFlag: number): { myRatio: string, targetRatio: stri
   }
 }
 
-const useShadowsData = (refreshFlag: number): { totalDows: string, availableDows: string, lockedDows: string } => {
+const useShadowsData = (refreshFlag: number): { totalDows: BigNumber, availableDows: BigNumber, lockedDows: BigNumber } => {
   const account = useSelector(getAccount)
 
-  const [totalDows, setTotalDows] = useState('-')
-  const [availableDows, setAvailableDows] = useState('-')
-  const [lockedDows, setLockedDows] = useState('-')
+  const [totalDows, setTotalDows] = useState(new BigNumber(0))
+  const [availableDows, setAvailableDows] = useState(new BigNumber(0))
+  const [lockedDows, setLockedDows] = useState(new BigNumber(0))
 
   const fetch = useCallback(async () => {
     if (!account) {
@@ -79,9 +78,9 @@ const useShadowsData = (refreshFlag: number): { totalDows: string, availableDows
       dowsJSConnector.dowsJs.Synthesizer.transferableShadows(account)
     ])
 
-    setTotalDows(weiToString(_dowsBalance, 6))
-    setAvailableDows(weiToString(_transferableDows, 6))
-    setLockedDows(weiToString(_dowsBalance.sub(_transferableDows), 6))
+    setTotalDows(weiToBigNumber(_dowsBalance))
+    setAvailableDows(weiToBigNumber(_transferableDows))
+    setLockedDows(weiToBigNumber(_dowsBalance.sub(_transferableDows)))
   }, [account, refreshFlag])
 
   useEffect(() => {
@@ -141,17 +140,13 @@ const useFeePoolData = (refreshFlag: number): { totalReward: BigNumber, escrowed
 }
 
 export const useDowsSynthesizerData = (): TradeData => {
-  const [refreshFlag, setRefreshFlag] = useState(0)
+  const { fastRefreshFlag } = useRefreshController()
 
-  const { myRatio, targetRatio } = useRatioData(refreshFlag)
+  const { myRatio, targetRatio } = useRatioData(fastRefreshFlag)
 
-  const { totalDows, availableDows, lockedDows } = useShadowsData(refreshFlag)
+  const { totalDows, availableDows, lockedDows } = useShadowsData(fastRefreshFlag)
 
-  const { totalReward, escrowedReward, redeemableReward } = useFeePoolData(refreshFlag)
-
-  const refresh = () => {
-    setRefreshFlag(refreshFlag + 1)
-  }
+  const { totalReward, escrowedReward, redeemableReward } = useFeePoolData(fastRefreshFlag)
 
   return {
     myRatio,
@@ -162,6 +157,5 @@ export const useDowsSynthesizerData = (): TradeData => {
     totalReward,
     escrowedReward,
     redeemableReward,
-    refresh
   }
 }

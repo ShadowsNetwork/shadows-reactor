@@ -4,7 +4,6 @@ import {
   getSelectedWallet, getTransactionHistoryList, setAccount, setSelectedWallet,
   updateTransactionHistoryStatus
 } from '@/store/wallet'
-import routers from '@/router'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 
 import { providers } from 'ethers'
@@ -16,10 +15,11 @@ import {
 } from '@/ShadowsJs/networkHelper'
 import { Web3Provider } from '@ethersproject/providers'
 import {
-  BridgeDows, TransactionHistoryImplementationClassType, TransactionStatus
+  BridgeDows, TransactionHistory, TransactionHistoryImplementationClassType, TransactionStatus
 } from '@/types/TransactionHistory'
 import axios from 'axios'
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
+import { useRefreshController } from '@/contexts/RefreshControllerContext'
 
 export function useLocation(): Location {
   const [location, setLocation] = useState(window.location)
@@ -39,7 +39,7 @@ export function useLocation(): Location {
   return location
 }
 
-export function useDynamicBackgroundImage(): string {
+/*export function useDynamicBackgroundImage(): string {
   const [background, setBackground] = useState('')
 
   const { hash } = useLocation()
@@ -51,7 +51,7 @@ export function useDynamicBackgroundImage(): string {
   }, [hash])
 
   return background
-}
+}*/
 
 export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean {
   const dispatch = useDispatch()
@@ -273,6 +273,40 @@ export function useListenBridgeTransactionStatus() {
     const intervalId = setInterval(() => task(bridgeTransactions), 5000)
 
     return () => clearInterval(intervalId)
+  }, [transactionList])
+}
+
+export function useListenBscTransaction() {
+  const { forceRefresh } = useRefreshController()
+
+  const dispatch = useDispatch()
+  const transactionList = useSelector(getTransactionHistoryList)
+
+
+  useEffect(() => {
+    const transactionHistories: TransactionHistory[] = transactionList.filter(t =>
+      t.TYPE !== TransactionHistoryImplementationClassType.Bridge
+      && t.status !== TransactionStatus.Completed
+    )
+
+    if (transactionHistories.length === 0) {
+      return
+    }
+
+    transactionHistories.forEach(th => {
+      dowsJSConnector.provider?.getTransaction(th.hash)
+        .then(transaction => {
+          transaction.wait().then(() => {
+            th.complete()
+            dispatch(updateTransactionHistoryStatus(th))
+            forceRefresh()
+          })
+        })
+        .catch(() => {
+          th.fail()
+          dispatch(updateTransactionHistoryStatus(th))
+        })
+    })
   }, [transactionList])
 }
 

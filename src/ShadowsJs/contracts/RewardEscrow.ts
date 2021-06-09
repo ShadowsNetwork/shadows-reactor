@@ -30,6 +30,9 @@ class RewardEscrow extends AbstractContractCaller {
   async vestBalanceOf(account: string) {
     return this.contract!.vestBalanceOf(account)
   }
+  async vest() {
+    return this.contract!.vest()
+  }
 }
 
 export default RewardEscrow
