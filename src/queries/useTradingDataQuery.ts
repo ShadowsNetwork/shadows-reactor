@@ -1,19 +1,19 @@
 import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 
-const useTradingDataQuery = (type: 'price' | 'valume' | 'countmaxmin', currencyKey?: string) => {
+const useTradingDataQuery = (mode: string, currencyKey?: string) => {
   const [data, setData] = useState<any>()
 
   const fetch = useCallback(async () => {
     const key = currencyKey?.substr(1).toLowerCase()
 
     let url = ''
-    if (type === 'price') {
+    if (mode === 'price') {
       url = `http://122.51.71.147:3001/coingecko/${key}/price`
       // url = 'http://122.51.71.147:3001/coingecko/btc/price'
-    } else if (type === 'valume') {
-      url = `http://122.51.71.147:3001/shadows/${currencyKey}/valume`
-    } else {
+    } else if (mode === 'volume') {
+      url = `http://122.51.71.147:3001/shadows/${key}/valume`
+    } else if (mode ===' countmaxmin' ) {
       url = `http://122.51.71.147:3001/shadows/${key}/countmaxmin`
     }
 
@@ -24,7 +24,7 @@ const useTradingDataQuery = (type: 'price' | 'valume' | 'countmaxmin', currencyK
     const result = (await axios.get(url)).data
 
     setData(result)
-  }, [currencyKey])
+  }, [currencyKey, mode])
 
   useEffect(() => {
     fetch()

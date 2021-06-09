@@ -2,7 +2,7 @@ import { Button, Slider } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
-import { createChart, CrosshairMode, ISeriesApi } from 'lightweight-charts'
+import { createChart, CrosshairMode, IChartApi, ISeriesApi } from 'lightweight-charts'
 import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
@@ -475,63 +475,90 @@ const Stats: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   )
 }
 
-const TradingView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
-  const [series, setSeries] = useState<ISeriesApi<'Line'> | undefined>()
+const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, mode }) => {
+  const [chart, setChart] = useState<IChartApi | undefined>()
+  const [series, setSeries] = useState<ISeriesApi<'Line'> | ISeriesApi<'Histogram'> | undefined>()
   const ref = useRef()
 
-  const { data } = useTradingDataQuery('price', keyPair?.symbol[0])
+  const { data } = useTradingDataQuery(mode, keyPair?.symbol[0])
 
+  /**
+   * create chart first
+   */
   useEffect(() => {
-    if (!series) {
-      // @ts-ignore
-      const chart = createChart(ref.current)
-      chart.applyOptions({
-        width: 500,
-        height: 280,
-        layout: {
-          backgroundColor: '#000000',
-          textColor: 'rgba(255, 255, 255, 0.9)'
+    // @ts-ignore
+    const _chart = createChart(ref.current)
+    _chart.applyOptions({
+      width: 500,
+      height: 280,
+      layout: {
+        backgroundColor: '#000000',
+        textColor: 'rgba(255, 255, 255, 0.9)'
+      },
+      grid: {
+        vertLines: {
+          color: 'rgba(197, 203, 206, 0.5)'
         },
-        grid: {
-          vertLines: {
-            color: 'rgba(197, 203, 206, 0.5)'
-          },
-          horzLines: {
-            color: 'rgba(197, 203, 206, 0.5)'
-          }
-        },
-        crosshair: {
-          mode: CrosshairMode.Normal
-        },
-        rightPriceScale: {
-          borderColor: 'rgba(197, 203, 206, 0.8)'
-        },
-        timeScale: {
-          borderColor: 'rgba(197, 203, 206, 0.8)'
+        horzLines: {
+          color: 'rgba(197, 203, 206, 0.5)'
         }
-      })
+      },
+      crosshair: {
+        mode: CrosshairMode.Normal
+      },
+      rightPriceScale: {
+        borderColor: 'rgba(197, 203, 206, 0.8)'
+      },
+      timeScale: {
+        borderColor: 'rgba(197, 203, 206, 0.8)'
+      }
+    })
+    setChart(_chart)
+  }, [])
 
-      setSeries(chart.addLineSeries())
-
+  /**
+   * after chart created, create series by different mode.
+   * When mode was switched, if there is a existed series, need to remove it first
+   */
+  useEffect(() => {
+    if (!chart) {
       return
     }
-  }, [series])
+    if (series) {
+      chart.removeSeries(series)
+    }
+
+    if (mode === 'price') {
+      setSeries(chart.addLineSeries())
+    } else if (mode === 'volume') {
+      setSeries(chart.addHistogramSeries({
+        base: 0
+      }))
+    }
+  }, [mode, chart])
 
   useEffect(() => {
     if (!series) {
       return
     }
 
-    if (data?.data) {
+    if (!data?.data) {
+      series.setData([])
+      return
+    }
+
+    if (mode === 'price') {
       series.setData(data.data.map(item => ({
         ...item,
         value: Number.parseFloat(weiToString(item.price)),
         time: parseInt(item.time)
       })))
-    } else {
-      series.setData([])
+    } else if (mode === 'volume') {
+      series.setData(data.data.map(item => ({
+        time: parseInt(item.time),
+        value: parseFloat(weiToString(item.value))
+      })))
     }
-
   }, [data, series])
 
   // @ts-ignore
@@ -546,13 +573,13 @@ const CandleStickView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   // ]
 
   const availableMode = [
-    { key: 'Price', value: 1 },
-    { key: 'Volume', value: 2 }
+    { key: 'Price', value: 'price' },
+    { key: 'Volume', value: 'volume' }
     // { key: 'Liquidity', value: 3 }
   ]
 
   // const [selectedTimeRange, setSelectedTimeRange] = useState('1m')
-  const [selectedModel, setSelectedModel] = useState('Price')
+  const [selectedMode, setSelectedMode] = useState({ key: 'Price', value: 'price' })
 
   const { data } = useTradingDataQuery('price', keyPair?.symbol[0])
 
@@ -607,7 +634,7 @@ const CandleStickView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
       </div>*/}
       <div style={{ height: '3.1rem' }} />
       <div className="trading-view-container">
-        <TradingView keyPair={keyPair} />
+        <TradingView keyPair={keyPair} mode={selectedMode.value} />
       </div>
       <div className="bottom-btn-group">
         {
@@ -615,8 +642,8 @@ const CandleStickView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
             <Button
               className="btn"
               key={mode.key}
-              onClick={() => setSelectedModel(mode.key)}
-              style={{ backgroundColor: mode.key === selectedModel ? '#63cca9' : 'transparent' }}
+              onClick={() => setSelectedMode(mode)}
+              style={{ backgroundColor: mode.key === selectedMode.key ? '#63cca9' : 'transparent' }}
             >
               {mode.key}
             </Button>
