@@ -448,20 +448,19 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
 
 const Stats: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   const { data } = useTradingDataQuery('countmaxmin', keyPair?.symbol[0])
-
   return (
     <StatsContainer>
       <div className="item">
         <div className="title">24h Change</div>
-        <div className="value">{numberWithCommas(weiToBigNumber(data?.count))}</div>
+        <div className="value">{numberWithCommas(weiToBigNumber(data?.data.count))}</div>
       </div>
       <div className="item">
         <div className="title">24h High</div>
-        <div className="value">{numberWithCommas(weiToBigNumber(data?.max))}</div>
+        <div className="value">{numberWithCommas(weiToBigNumber(data?.data.max))}</div>
       </div>
       <div className="item">
         <div className="title">24h Low</div>
-        <div className="value">{numberWithCommas(weiToBigNumber(data?.min))}</div>
+        <div className="value">{numberWithCommas(weiToBigNumber(data?.data.min))}</div>
       </div>
     </StatsContainer>
   )
