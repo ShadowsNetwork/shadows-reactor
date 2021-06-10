@@ -19,7 +19,7 @@ const useTradingDataQuery = (mode: string, currencyKey?: string) => {
     } else if (mode === 'volume') {
       url = `/shadows/${key}/valume`
     } else if (mode === 'countmaxmin') {
-      url = `/shadows/${key}/countmaxmin`
+      url = `/coingecko/${key}/countmaxmin`
     }
 
     if (!currencyKey || !url) {
