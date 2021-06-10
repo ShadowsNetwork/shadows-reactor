@@ -2,7 +2,7 @@ import { Button, Slider } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
-import { createChart, CrosshairMode, IChartApi, ISeriesApi } from 'lightweight-charts'
+import { createChart, CrosshairMode, IChartApi, ISeriesApi, UTCTimestamp } from 'lightweight-charts'
 import { useErrorMessage } from '@/hooks'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js'
 import DowsSynthesizer from '@/components/DowsSynthesizer'
 import { KeyPair, useCurrencyBalance, useCurrencyData } from '@/hooks/useTradeData'
 import { TradeSynth } from '@/types/TransactionHistory'
-import { numberWithCommas } from '@/utils'
+import { dateFormat, numberWithCommas } from '@/utils'
 import { appendTransactionHistory } from '@/store/wallet'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useDispatch } from 'react-redux'
@@ -502,6 +502,11 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
       },
       timeScale: {
         borderColor: 'rgba(197, 203, 206, 0.8)'
+      },
+      localization: {
+        timeFormatter: (time: UTCTimestamp) => {
+          return dateFormat(new Date(time), 'yyyy-MM-dd hh:mm:ss')
+        }
       }
     })
     setChart(_chart)
@@ -523,7 +528,7 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
       setSeries(chart.addAreaSeries())
     } else if (mode === 'volume') {
       setSeries(chart.addHistogramSeries({
-        base: 0
+        base: 0,
       }))
     }
   }, [mode, chart])
@@ -542,21 +547,24 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
       series.setData(data.data.map(item => ({
         ...item,
         value: Number.parseFloat(weiToString(item.price)),
-        time: parseInt(item.time) / 1000
+        time: (parseInt(item.time))
       })))
     } else if (mode === 'volume') {
       series.setData(data.data.map(item => ({
-        time: parseInt(item.time) / 1000,
+        time: parseInt(item.time),
         value: parseFloat(weiToString(item.value))
       })))
     }
+
+    chart?.timeScale().fitContent()
+
   }, [data, series])
 
   // @ts-ignore
   return <div ref={ref} id="chart" />
 }
 
-const CandleStickView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
+const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   // const availableTimeRange = [
   //   { key: '1m', value: 1 },
   //   { key: '5m', value: 5 },
@@ -657,7 +665,7 @@ const TradePage: React.FC = () => {
   return (
     <TradePageContainer>
       <Column width="53.6rem" marginRight="1.5rem">
-        <CandleStickView keyPair={selectedKeyPair} />
+        <CurrencyInfo keyPair={selectedKeyPair} />
         <Stats keyPair={selectedKeyPair} />
       </Column>
       <Column width="33.1rem" marginRight="0.8rem">

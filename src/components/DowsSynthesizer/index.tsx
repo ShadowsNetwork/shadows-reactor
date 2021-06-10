@@ -266,8 +266,22 @@ const DowsSynthesizer: React.FC = () => {
         </p>
       </div>
       <div className="button-row">
-        <Button className="button" onClick={redeemFees} disabled={redeemableFees.lte(0)}>Redeem Fees</Button>
-        <Button className="button" onClick={redeemRewards} disabled={redeemableRewards.lte(0)}>Redeem Rewards</Button>
+        <Button
+          className="button"
+          onClick={redeemFees}
+          disabled={redeemableFees.lte(0)}
+          style={{ fontSize: '1.3rem' }}
+        >
+          Redeem Fees
+        </Button>
+        <Button
+          className="button"
+          onClick={redeemRewards}
+          disabled={redeemableRewards.lte(0)}
+          style={{ fontSize: '1.3rem' }}
+        >
+          Redeem Rewards
+        </Button>
       </div>
 
       <AmountInputModal {...amountInputModalStatus} />
