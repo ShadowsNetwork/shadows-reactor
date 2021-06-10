@@ -7,7 +7,7 @@ import { toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import { Button } from 'antd'
 import styled from 'styled-components'
 import { useDowsSynthesizerData } from '@/hooks/useDowsSynthesizerData'
-import { BurnXUSD, MintXUSD, RedeemDows } from '@/types/TransactionHistory'
+import { BurnXUSD, MintXUSD, Redeem } from '@/types/TransactionHistory'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useErrorMessage } from '@/hooks'
 import { numberWithCommas } from '@/utils'
@@ -21,7 +21,6 @@ const DowsInfoContainer = styled.div`
 
   .header {
     width: 100%;
-    margin-bottom: 2.4rem;
     display: flex;
     justify-content: space-around;
 
@@ -48,7 +47,7 @@ const DowsInfoContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-around;
-    margin: 0 0.6rem 2.7rem 0.6rem;
+    margin: 0rem 0.6rem 0rem 0.6rem;
 
     .button {
       width: 45%;
@@ -68,7 +67,7 @@ const DowsInfoContainer = styled.div`
     font-size: 1.2rem;
     font-weight: bold;
     line-height: 0.6;
-    margin-bottom: 2.0rem;
+    margin-bottom: 0.5rem;
 
     .bold {
       font-size: 1.3rem;
@@ -107,7 +106,7 @@ const DowsSynthesizer: React.FC = () => {
   const data = useDowsSynthesizerData()
   const { myRatio, targetRatio } = data
   const { totalDows, availableDows, lockedDows } = data
-  const { totalReward, escrowedReward, redeemableReward } = data
+  const { totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards } = data
 
   const [amountInputModalStatus, setAmountInputModalStatus] = useState<AmountInputModalStatus>({
     visible: false,
@@ -128,11 +127,21 @@ const DowsSynthesizer: React.FC = () => {
     })
   }
 
-  const handleRedeem = () => {
+  const redeemFees = () => {
+    beginTransaction()
+    dowsJSConnector.dowsJs.FeePool.claimFees()
+      .then(tx => {
+        const th: Redeem = new Redeem(tx.hash, numberWithCommas(escrowedRewards, 6), 'xUSD')
+        dispatch(appendTransactionHistory(th))
+        submitTransaction()
+      })
+  }
+
+  const redeemRewards = () => {
     beginTransaction()
     dowsJSConnector.dowsJs.RewardEscrow.vest()
       .then(tx => {
-        const th: RedeemDows = new RedeemDows(tx.hash, numberWithCommas(escrowedReward, 6))
+        const th: Redeem = new Redeem(tx.hash, numberWithCommas(escrowedRewards, 6))
         dispatch(appendTransactionHistory(th))
         submitTransaction()
       })
@@ -200,7 +209,7 @@ const DowsSynthesizer: React.FC = () => {
 
   return (
     <DowsInfoContainer>
-      <div className="header">
+      <div className="header" style={{ marginBottom: '1.5rem' }}>
         <div className="item">
           <div className="title">Current Collateral</div>
           <div className="value">{myRatio}</div>
@@ -210,7 +219,7 @@ const DowsSynthesizer: React.FC = () => {
           <div className="value">{targetRatio}</div>
         </div>
       </div>
-      <div className="button-row">
+      <div className="button-row" style={{ marginBottom: '2.4rem' }}>
         <Button className="button" onClick={handleMintXusd}>
           Mint xUSD
         </Button>
@@ -218,7 +227,7 @@ const DowsSynthesizer: React.FC = () => {
           Burn xUSD
         </Button>
       </div>
-      <div className="text-container">
+      <div className="text-container" style={{ marginBottom: '0.8rem' }}>
         <p className="bold">
           <span>Total DOWS</span>
           <span>{numberWithCommas(totalDows, 6)}</span>
@@ -232,21 +241,34 @@ const DowsSynthesizer: React.FC = () => {
           <span>{numberWithCommas(lockedDows, 6)}</span>
         </p>
       </div>
-      <div className="text-container">
+      <div className="text-container" style={{ marginBottom: '0.8rem' }}>
         <p className="bold">
-          <span>Total Rewards</span>
-          <span>{numberWithCommas(totalReward, 6)}</span>
-        </p>
-        <p>
-          <span>Escrowed</span>
-          <span>{numberWithCommas(escrowedReward, 6)}</span>
+          <span>Total Fees</span>
+          <span>{numberWithCommas(totalFees, 6)}</span>
         </p>
         <p>
           <span>Redeemable</span>
-          <span>{numberWithCommas(redeemableReward, 6)}</span>
+          <span>{numberWithCommas(redeemableFees, 6)}</span>
         </p>
       </div>
-      <Button className="redeem-btn" onClick={handleRedeem} disabled={escrowedReward.lte(0)}>Redeem</Button>
+      <div className="text-container" style={{ marginBottom: '0.5rem' }}>
+        <p className="bold">
+          <span>Total Rewards</span>
+          <span>{numberWithCommas(totalRewards, 6)}</span>
+        </p>
+        <p>
+          <span>Escrowed</span>
+          <span>{numberWithCommas(escrowedRewards, 6)}</span>
+        </p>
+        <p>
+          <span>Redeemable</span>
+          <span>{numberWithCommas(redeemableRewards, 6)}</span>
+        </p>
+      </div>
+      <div className="button-row">
+        <Button className="button" onClick={redeemFees} disabled={redeemableFees.lte(0)}>Redeem Fees</Button>
+        <Button className="button" onClick={redeemRewards} disabled={redeemableRewards.lte(0)}>Redeem Rewards</Button>
+      </div>
 
       <AmountInputModal {...amountInputModalStatus} />
     </DowsInfoContainer>

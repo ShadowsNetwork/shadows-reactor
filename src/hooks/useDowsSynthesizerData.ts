@@ -8,17 +8,21 @@ import { addressAvailable, weiToBigNumber } from '@/web3/utils'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 
-type TradeData = {
+interface FeePoolData {
+  totalFees: BigNumber
+  redeemableFees: BigNumber
+  totalRewards: BigNumber
+  escrowedRewards: BigNumber
+  redeemableRewards: BigNumber
+}
+
+interface TradeData extends FeePoolData {
   myRatio: string,
   targetRatio: string,
 
   totalDows: BigNumber,
   availableDows: BigNumber,
   lockedDows: BigNumber,
-
-  totalReward: BigNumber,
-  escrowedReward: BigNumber,
-  redeemableReward: BigNumber,
 }
 
 const useRatioData = (refreshFlag: number): { myRatio: string, targetRatio: string } => {
@@ -101,47 +105,57 @@ const useShadowsData = (refreshFlag: number): { totalDows: BigNumber, availableD
   }
 }
 
-const useFeePoolData = (refreshFlag: number): { totalReward: BigNumber, escrowedReward: BigNumber, redeemableReward: BigNumber } => {
+const useFeePoolData = (refreshFlag: number): FeePoolData => {
   const account = useSelector(getAccount)
 
   const { networkReady } = useWeb3EnvContext()
 
-  const [totalReward, setTotalReward] = useState(new BigNumber(0))
-  const [escrowedReward, setEscrowedReward] = useState(new BigNumber(0))
-  const [redeemableReward, setRedeemableReward] = useState(new BigNumber(0))
+  const [totalFees, setTotalFees] = useState(new BigNumber(0))
+  const [redeemableFees, setRedeemableFees] = useState(new BigNumber(0))
+  const [totalRewards, setTotalRewards] = useState(new BigNumber(0))
+  const [escrowedRewards, setEscrowedRewards] = useState(new BigNumber(0))
+  const [redeemableRewards, setRedeemableRewards] = useState(new BigNumber(0))
 
-  const fetchClaimFees = useCallback(async () => {
+  const fetch = useCallback(async () => {
     if (!networkReady || !addressAvailable(account)) {
       const ZERO = new BigNumber(0)
-      setTotalReward(ZERO)
-      setEscrowedReward(ZERO)
-      setRedeemableReward(ZERO)
+      setTotalRewards(ZERO)
+      setEscrowedRewards(ZERO)
+      setRedeemableRewards(ZERO)
       return
     }
 
-    // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-    const [[_, _totalReward], _balanceOf, _vestBalanceOf] = await Promise.all([
+    const [_feesByPeriod, [_totalFees, _totalReward], _balanceOf, _vestBalanceOf] = await Promise.all([
+      dowsJSConnector.dowsJs.FeePool.feesByPeriod(account),
       dowsJSConnector.dowsJs.FeePool.feesAvailable(account),
       dowsJSConnector.dowsJs.RewardEscrow.balanceOf(account),
       dowsJSConnector.dowsJs.RewardEscrow.vestBalanceOf(account)
     ])
 
-    setTotalReward(weiToBigNumber(_totalReward))
-    setEscrowedReward(weiToBigNumber(_balanceOf))
-    setRedeemableReward(weiToBigNumber(_vestBalanceOf))
+    setTotalFees(
+      _feesByPeriod
+        .map(arr => arr.map(item => weiToBigNumber(item)))
+        .reduce((prev: BigNumber, curr: BigNumber[]) => prev.plus(curr[0]), new BigNumber(0))
+    )
+    setRedeemableFees(weiToBigNumber(_totalFees))
+    setTotalRewards(weiToBigNumber(_totalReward))
+    setEscrowedRewards(weiToBigNumber(_balanceOf))
+    setRedeemableRewards(weiToBigNumber(_vestBalanceOf))
   }, [account, refreshFlag, networkReady])
 
   useEffect(() => {
-    fetchClaimFees()
+    fetch()
       .catch(e => {
         console.error('error in useFeePoolData:', e)
       })
-  }, [fetchClaimFees])
+  }, [fetch])
 
   return {
-    totalReward,
-    escrowedReward,
-    redeemableReward
+    totalFees,
+    redeemableFees,
+    totalRewards,
+    escrowedRewards,
+    redeemableRewards
   }
 }
 
@@ -152,7 +166,9 @@ export const useDowsSynthesizerData = (): TradeData => {
 
   const { totalDows, availableDows, lockedDows } = useShadowsData(fastRefreshFlag)
 
-  const { totalReward, escrowedReward, redeemableReward } = useFeePoolData(fastRefreshFlag)
+  const {
+    totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards
+  } = useFeePoolData(fastRefreshFlag)
 
   return {
     myRatio,
@@ -160,8 +176,10 @@ export const useDowsSynthesizerData = (): TradeData => {
     totalDows,
     availableDows,
     lockedDows,
-    totalReward,
-    escrowedReward,
-    redeemableReward,
+    totalFees,
+    redeemableFees,
+    totalRewards,
+    escrowedRewards,
+    redeemableRewards
   }
 }

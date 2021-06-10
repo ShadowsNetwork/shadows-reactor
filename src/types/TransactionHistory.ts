@@ -94,15 +94,15 @@ export abstract class TransactionHistory {
   }
 }
 
-export class RedeemDows extends TransactionHistory {
-  constructor(hash: string, public amount: string, status?: TransactionStatus) {
+export class Redeem extends TransactionHistory {
+  constructor(hash: string, public amount: string, public unit = 'DOWS', status?: TransactionStatus) {
     super(hash, status)
   }
 
   TYPE = TransactionHistoryImplementationClassType.Redeem
 
   toString(): string {
-    return `Redeem ${this.amount} DOWS`
+    return `Redeem ${this.amount} ${this.unit}`
   }
 
   get url(): string {
@@ -278,7 +278,7 @@ TransactionHistory.fromJson = (json: { TYPE: string }): TransactionHistory | und
   const TYPE = json['TYPE']
   switch (TYPE) {
   case TransactionHistoryImplementationClassType.Redeem:
-    return new RedeemDows(json['hash'], json['amount'], json['_status'])
+    return new Redeem(json['hash'], json['amount'], json['_status'])
   case TransactionHistoryImplementationClassType.UnlockLP:
     return new UnlockLPToken(json['hash'], json['amount'], json['_status'])
   case TransactionHistoryImplementationClassType.LockLP:

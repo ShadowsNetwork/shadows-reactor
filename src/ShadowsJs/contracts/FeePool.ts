@@ -28,10 +28,13 @@ class FeePool extends AbstractContractCaller {
     return await this.contract!.claimFees()
   }
 
-  async feesAvailable(account): Promise<[BN, BN]>  {
+  async feesAvailable(account): Promise<[BN, BN]> {
     return await this.contract!.feesAvailable(account)
   }
 
+  async feesByPeriod(account): Promise<Array<[BN, BN]>> {
+    return await this.contract!.feesByPeriod(account)
+  }
 }
 
 export default FeePool
