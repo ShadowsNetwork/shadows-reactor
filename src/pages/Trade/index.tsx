@@ -290,8 +290,6 @@ const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedK
   }
 
   useEffect(() => {
-    console.log('selected key pair: ', selectedKeyPair)
-
     if (keyPairs?.length && !selectedKeyPair) {
       handleSelectKeyPair(keyPairs[0])
     }
@@ -471,7 +469,7 @@ const Stats: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
 
 const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, mode }) => {
   const [chart, setChart] = useState<IChartApi | undefined>()
-  const [series, setSeries] = useState<ISeriesApi<'Line'> | ISeriesApi<'Histogram'> | undefined>()
+  const [series, setSeries] = useState<ISeriesApi<'Area'> | ISeriesApi<'Histogram'> | undefined>()
   const ref = useRef()
 
   const { data } = useTradingDataQuery(mode, keyPair?.symbol[0])
@@ -523,7 +521,7 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
     }
 
     if (mode === 'price') {
-      setSeries(chart.addLineSeries())
+      setSeries(chart.addAreaSeries())
     } else if (mode === 'volume') {
       setSeries(chart.addHistogramSeries({
         base: 0
@@ -545,11 +543,11 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
       series.setData(data.data.map(item => ({
         ...item,
         value: Number.parseFloat(weiToString(item.price)),
-        time: parseInt(item.time)
+        time: parseInt(item.time) / 1000
       })))
     } else if (mode === 'volume') {
       series.setData(data.data.map(item => ({
-        time: parseInt(item.time),
+        time: parseInt(item.time) / 1000,
         value: parseFloat(weiToString(item.value))
       })))
     }
