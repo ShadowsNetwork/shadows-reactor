@@ -23,7 +23,7 @@ export const useCurrencyData = (): PairData => {
   const [keyPairs, setKeyPairs] = useState<KeyPair[] | undefined>(undefined)
   const [currencyList, setKeyList] = useState<string[]>([])
 
-  const { slowRefreshFlag } = useRefreshController()
+  const { fastRefreshFlag } = useRefreshController()
 
   const { networkReady } = useWeb3EnvContext()
 
@@ -82,7 +82,7 @@ export const useCurrencyData = (): PairData => {
 
     setKeyList(_keyList)
     setKeyPairs(_keyPairs)
-  }, [slowRefreshFlag, networkReady])
+  }, [fastRefreshFlag, networkReady])
 
   useEffect(() => {
     fetch()

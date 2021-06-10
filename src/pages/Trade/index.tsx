@@ -290,12 +290,18 @@ const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedK
   }
 
   useEffect(() => {
+    console.log('selected key pair: ', selectedKeyPair)
+
     if (keyPairs?.length && !selectedKeyPair) {
       handleSelectKeyPair(keyPairs[0])
     }
-  }, [keyPairs])
+  }, [keyPairs, selectedKeyPair])
 
-  const isKeyPairSelected = (keyPair: KeyPair) => selectedKeyPair?.symbol === keyPair.symbol
+  const isKeyPairSelected = (keyPair: KeyPair) => {
+    const s1 = selectedKeyPair?.symbol
+    const s2 = keyPair.symbol
+    return s1 && s2 && s1[0] === s2[0] && s1[1] === s2[1]
+  }
 
   return (
     <PairsInfoContainer>
