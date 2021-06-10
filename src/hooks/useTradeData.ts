@@ -5,6 +5,7 @@ import { getAccount } from '@/store/wallet'
 import { bytesToString, weiToBigNumber } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
+import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 
 export type KeyPair = {
   symbol: SymbolPair,
@@ -22,7 +23,15 @@ export const useCurrencyData = (): PairData => {
   const [keyPairs, setKeyPairs] = useState<KeyPair[] | undefined>(undefined)
   const [currencyList, setKeyList] = useState<string[]>([])
 
+  const { slowRefreshFlag } = useRefreshController()
+
+  const { networkReady } = useWeb3EnvContext()
+
   const fetch = useCallback(async () => {
+    if (!networkReady) {
+      return
+    }
+
     // ['xUSD', 'xAUD', 'xEUR', ...]
     const _keyList: Array<string> = (await dowsJSConnector.dowsJs.Synthesizer.availableCurrencyKeys()).map(k => bytesToString(k))
 
@@ -73,7 +82,7 @@ export const useCurrencyData = (): PairData => {
 
     setKeyList(_keyList)
     setKeyPairs(_keyPairs)
-  }, [])
+  }, [slowRefreshFlag, networkReady])
 
   useEffect(() => {
     fetch()
@@ -87,11 +96,20 @@ export const useCurrencyData = (): PairData => {
 
 export const useCurrencyBalance = () => {
   const { keyList } = useCurrencyData()
+
   const account = useSelector(getAccount)
-  const [balanceByCurrency, setBalanceByCurrency] = useState<{ [key: string]: BigNumber }>({})
+
   const { fastRefreshFlag } = useRefreshController()
 
+  const { networkReady } = useWeb3EnvContext()
+
+  const [balanceByCurrency, setBalanceByCurrency] = useState<{ [key: string]: BigNumber }>({})
+
   const fetchBalance = useCallback(async () => {
+    if (!networkReady) {
+      return
+    }
+
     if (keyList.length > 0 && account) {
       let balanceList = await Promise.all(
         keyList.map(key => dowsJSConnector.dowsJs.Synth.balanceOf(key, account))
@@ -106,13 +124,13 @@ export const useCurrencyBalance = () => {
 
       setBalanceByCurrency(_balanceByCurrency)
     }
-  }, [keyList, fastRefreshFlag, account])
+  }, [keyList, fastRefreshFlag, account, networkReady])
 
   useEffect(() => {
     fetchBalance()
   }, [fetchBalance])
 
   return {
-    balanceByCurrency,
+    balanceByCurrency
   }
 }

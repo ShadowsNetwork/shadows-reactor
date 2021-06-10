@@ -4,6 +4,10 @@ import BN from 'bn.js'
 
 export const web3Utils = new Web3().utils
 
+export function addressAvailable(address?: string): boolean {
+  return !!address && web3Utils.isAddress(address)
+}
+
 export function toBigNumber(value: string | number): BigNumber {
   return new BigNumber(value)
 }
@@ -17,7 +21,8 @@ export function weiToBigNumber(value?: string | number | BN, decimalPlaces = 18)
 }
 
 export function weiToString(value: string | number | BN, decimalPlaces = 18): string {
-  return weiToBigNumber(value, decimalPlaces).toFixed(decimalPlaces)
+  return weiToBigNumber(value, decimalPlaces)
+    .toFixed(decimalPlaces)
 }
 
 export function toWei(amount: number | string): string {

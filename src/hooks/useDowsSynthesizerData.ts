@@ -4,8 +4,9 @@ import { useCallback, useEffect, useState } from 'react'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { numberWithCommas } from '@/utils'
 import BigNumber from 'bignumber.js'
-import { weiToBigNumber } from '@/web3/utils'
+import { addressAvailable, weiToBigNumber } from '@/web3/utils'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
+import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 
 type TradeData = {
   myRatio: string,
@@ -23,11 +24,13 @@ type TradeData = {
 const useRatioData = (refreshFlag: number): { myRatio: string, targetRatio: string } => {
   const account = useSelector(getAccount)
 
+  const { networkReady } = useWeb3EnvContext()
+
   const [myRatio, setMyRatio] = useState('-')
   const [targetRatio, setTargetRatio] = useState('-')
 
   const fetchRatio = useCallback(async () => {
-    if (!account) {
+    if (!networkReady || !addressAvailable(account)) {
       return
     }
 
@@ -52,7 +55,7 @@ const useRatioData = (refreshFlag: number): { myRatio: string, targetRatio: stri
       .catch(e => {
         console.error('error in useRatioData:', e)
       })
-  }, [fetchRatio])
+  }, [fetchRatio, networkReady])
 
   return {
     myRatio,
@@ -63,15 +66,16 @@ const useRatioData = (refreshFlag: number): { myRatio: string, targetRatio: stri
 const useShadowsData = (refreshFlag: number): { totalDows: BigNumber, availableDows: BigNumber, lockedDows: BigNumber } => {
   const account = useSelector(getAccount)
 
+  const { networkReady } = useWeb3EnvContext()
+
   const [totalDows, setTotalDows] = useState(new BigNumber(0))
   const [availableDows, setAvailableDows] = useState(new BigNumber(0))
   const [lockedDows, setLockedDows] = useState(new BigNumber(0))
 
   const fetch = useCallback(async () => {
-    if (!account) {
+    if (!networkReady || !addressAvailable(account)) {
       return
     }
-    // console.log(await dowsJSConnector.dowsJs.Synthesizer.contract!.hasIssued(account))
 
     const [_dowsBalance, _transferableDows] = await Promise.all([
       dowsJSConnector.dowsJs.Shadows.balanceOf(account),
@@ -81,7 +85,7 @@ const useShadowsData = (refreshFlag: number): { totalDows: BigNumber, availableD
     setTotalDows(weiToBigNumber(_dowsBalance))
     setAvailableDows(weiToBigNumber(_transferableDows))
     setLockedDows(weiToBigNumber(_dowsBalance.sub(_transferableDows)))
-  }, [account, refreshFlag])
+  }, [account, refreshFlag, networkReady])
 
   useEffect(() => {
     fetch()
@@ -100,12 +104,14 @@ const useShadowsData = (refreshFlag: number): { totalDows: BigNumber, availableD
 const useFeePoolData = (refreshFlag: number): { totalReward: BigNumber, escrowedReward: BigNumber, redeemableReward: BigNumber } => {
   const account = useSelector(getAccount)
 
+  const { networkReady } = useWeb3EnvContext()
+
   const [totalReward, setTotalReward] = useState(new BigNumber(0))
   const [escrowedReward, setEscrowedReward] = useState(new BigNumber(0))
   const [redeemableReward, setRedeemableReward] = useState(new BigNumber(0))
 
   const fetchClaimFees = useCallback(async () => {
-    if (!account) {
+    if (!networkReady || !addressAvailable(account)) {
       const ZERO = new BigNumber(0)
       setTotalReward(ZERO)
       setEscrowedReward(ZERO)
@@ -123,7 +129,7 @@ const useFeePoolData = (refreshFlag: number): { totalReward: BigNumber, escrowed
     setTotalReward(weiToBigNumber(_totalReward))
     setEscrowedReward(weiToBigNumber(_balanceOf))
     setRedeemableReward(weiToBigNumber(_vestBalanceOf))
-  }, [account, refreshFlag])
+  }, [account, refreshFlag, networkReady])
 
   useEffect(() => {
     fetchClaimFees()

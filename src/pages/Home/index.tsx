@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useInitializeProvider, useSetupNetwork } from '@/hooks'
 import { numberWithCommas } from '@/utils'
 import DowsSynthesizer from '@/components/DowsSynthesizer'
 import { useCurrencyData } from '@/hooks/useTradeData'
@@ -108,11 +107,9 @@ const StatInfoContainer = styled(Box)`
 `
 
 const PairInfo: React.FC = () => {
-  // const [selectedType, setSelectedType] = useState('All')
+  /* const [selectedType, setSelectedType] = useState('All')
 
-  const { keyPairs } = useCurrencyData()
-
-  /*const StatefulButton = ({ name }: { name: string }) => {
+  const StatefulButton = ({ name }: { name: string }) => {
     const handleClick = () => {
       setSelectedType(name)
     }
@@ -135,6 +132,8 @@ const PairInfo: React.FC = () => {
       </div>
     )
   }*/
+
+  const { keyPairs } = useCurrencyData()
 
   return (
     <PairsInfoContainer>
@@ -239,28 +238,15 @@ const StatInfo: React.FC = () => {
 }
 
 const HomePage: React.FC = () => {
-  const chainId = parseInt(process.env.CHAIN_ID!, 16)
-  const RPCUrl = process.env.RPC_URL!
-
-  const providerInitialized = useInitializeProvider(chainId, RPCUrl)
-  const networkReady = useSetupNetwork(providerInitialized, {
-    blockExplorerUrls: [process.env.BLOCK_EXPLORER_URL!],
-    chainName: process.env.NETWORK_NAME!,
-    chainId: process.env.CHAIN_ID!,
-    rpcUrls: [RPCUrl]
-  })
-
-  return providerInitialized && networkReady
-    ? (
-      <HomePageContainer>
-        <StatInfo />
-        <DowsSynthesizerContainer>
-          <DowsSynthesizer />
-        </DowsSynthesizerContainer>
-        <PairInfo />
-      </HomePageContainer>
-    )
-    : (<></>)
+  return (
+    <HomePageContainer>
+      <StatInfo />
+      <DowsSynthesizerContainer>
+        <DowsSynthesizer />
+      </DowsSynthesizerContainer>
+      <PairInfo />
+    </HomePageContainer>
+  )
 }
 
 export default HomePage

@@ -55,8 +55,12 @@ export function useLocation(): Location {
 
 export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean {
   const dispatch = useDispatch()
-  const [initialized, setInitialized] = useState(false)
+
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
+
+  const { forceRefresh } = useRefreshController()
+
+  const [initialized, setInitialized] = useState(false)
 
   const initialize = useCallback(async () => {
     let provider: providers.Web3Provider | undefined
@@ -77,6 +81,7 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
           const [account] = accounts
           dispatch(setAccount(account))
           dispatch(setSelectedWallet('WalletConnect'))
+          forceRefresh()
         }
 
         const handleDisconnect = (code: number, reason: string) => {
@@ -115,6 +120,7 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
           } else {
             dispatch(setAccount(newAccount[0]))
           }
+          forceRefresh()
         })
 
         // @ts-ignore

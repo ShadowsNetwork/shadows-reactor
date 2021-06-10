@@ -3,20 +3,25 @@ import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
 import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
-import { toBigNumber, toByte32, weiToBigNumber } from '@/web3/utils'
+import { addressAvailable, toBigNumber, toByte32, weiToBigNumber } from '@/web3/utils'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { useCurrencyData } from '@/hooks/useTradeData'
+import { useRefreshController } from '@/contexts/RefreshControllerContext'
 
 const useAssetsBalance = () => {
-  const account = useSelector(getAccount)
+  const account = useSelector(getAccount
+  )
   const { keyList } = useCurrencyData()
+
   const { data: dowsPrice } = useDowsPriceQuery()
+
+  const { fastRefreshFlag } = useRefreshController()
 
   const [assetsBalanceList, setAssetsBalanceList] = useState<Array<{ key: string, quantity: BigNumber, value: BigNumber }>>([])
 
   const fetch = useCallback(async () => {
-    if (!account || !dowsPrice) {
+    if (!addressAvailable(account) || !dowsPrice) {
       return
     }
 
@@ -42,7 +47,7 @@ const useAssetsBalance = () => {
           .filter(v => v.quantity.gt(0))
       )
     }
-  }, [account, dowsPrice, keyList])
+  }, [account, dowsPrice, keyList, fastRefreshFlag])
 
   useEffect(() => {
     fetch()
@@ -59,8 +64,9 @@ const useBalance = () => {
   const [assetsBalance, setAssetsBalance] = useState('')
   const [debtPool, setDebtPool] = useState('')
 
+  const { fastRefreshFlag } = useRefreshController()
+
   const fetch = useCallback(async () => {
-    console.log('fetch')
     if (!account || !dowsPrice) {
       setYourBalance('')
       setAssetsBalance('')
@@ -83,7 +89,7 @@ const useBalance = () => {
     setYourBalance(_balanceOf)
     setAssetsBalance(_transferableShadows)
     setDebtPool(_debtBalanceOf)
-  }, [account, dowsPrice])
+  }, [account, dowsPrice, fastRefreshFlag])
 
   useEffect(() => {
     fetch()

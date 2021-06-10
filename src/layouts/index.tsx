@@ -16,6 +16,7 @@ import App from '@/layouts/App'
 import { Web3Provider } from '@ethersproject/providers'
 import { TransactionStatusModalProvider } from '@/contexts/TransactionStatusModalContext'
 import { RefreshControllerProvider } from '@/contexts/RefreshControllerContext'
+import { Web3EnvProvider } from '@/contexts/Web3EnvContext'
 
 const queryClient = new QueryClient()
 
@@ -35,11 +36,13 @@ const Root: React.FC = () => (
           <Provider store={store}>
             <PersistGate loading={<LoadingOutlined />} persistor={persistor}>
               <Router>
-                <TransactionStatusModalProvider>
-                  <RefreshControllerProvider>
-                    <App />
-                  </RefreshControllerProvider>
-                </TransactionStatusModalProvider>
+                <Web3EnvProvider>
+                  <TransactionStatusModalProvider>
+                    <RefreshControllerProvider>
+                      <App />
+                    </RefreshControllerProvider>
+                  </TransactionStatusModalProvider>
+                </Web3EnvProvider>
               </Router>
             </PersistGate>
           </Provider>

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
 import { createChart, CrosshairMode, IChartApi, ISeriesApi } from 'lightweight-charts'
-import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
+import { useErrorMessage } from '@/hooks'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import useTradingDataQuery from '@/queries/useTradingDataQuery'
@@ -256,11 +256,10 @@ const CustomizedSlider = styled.div`
 `
 
 const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedKeyPair }) => {
-  // const [selectedType, setSelectedType] = useState('All')
+  /*// const [selectedType, setSelectedType] = useState('All')
 
-  const { keyPairs } = useCurrencyData()
 
-  /*const StatefulButton = ({ name }: { name: string }) => {
+  const StatefulButton = ({ name }: { name: string }) => {
     const handleClick = () => {
       setSelectedType(name)
     }
@@ -284,12 +283,14 @@ const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedK
     )
   }*/
 
+  const { keyPairs } = useCurrencyData()
+
   const handleSelectKeyPair = (keypair: KeyPair) => {
     onSelectedKeyPairChanged(keypair)
   }
 
   useEffect(() => {
-    if (keyPairs?.length) {
+    if (keyPairs?.length && !selectedKeyPair) {
       handleSelectKeyPair(keyPairs[0])
     }
   }, [keyPairs])
@@ -338,7 +339,7 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
   type,
   color,
   keyPair,
-  balanceByCurrency,
+  balanceByCurrency
 }) => {
   const errorMessageGetter = useErrorMessage()
 
@@ -641,7 +642,7 @@ const CandleStickView: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   )
 }
 
-const TradePageWrapper: React.FC = () => {
+const TradePage: React.FC = () => {
   const [selectedKeyPair, setSelectedKeyPair] = useState<KeyPair | undefined>()
 
   const handleSelectedKeyPairChanged = (keyPair: KeyPair) => {
@@ -687,23 +688,6 @@ const TradePageWrapper: React.FC = () => {
       </Column>
     </TradePageContainer>
   )
-}
-
-const TradePage: React.FC = () => {
-  const chainId = parseInt(process.env.CHAIN_ID!, 16)
-  const RPCUrl = process.env.RPC_URL!
-
-  const providerInitialized = useInitializeProvider(chainId, RPCUrl)
-  const networkReady = useSetupNetwork(providerInitialized, {
-    blockExplorerUrls: [process.env.BLOCK_EXPLORER_URL!],
-    chainName: process.env.NETWORK_NAME!,
-    chainId: process.env.CHAIN_ID!,
-    rpcUrls: [RPCUrl]
-  })
-
-  return providerInitialized && networkReady
-    ? (<TradePageWrapper />)
-    : (<></>)
 }
 
 export default TradePage

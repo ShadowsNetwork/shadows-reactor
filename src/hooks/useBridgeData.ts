@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
 import { useCallback, useEffect, useState } from 'react'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { weiToString } from '@/web3/utils'
+import { addressAvailable, weiToString } from '@/web3/utils'
 import axios from 'axios'
 import { ConfigType } from '../../config'
 import { PolyChain } from '@/types/PolyChain'
@@ -41,7 +41,7 @@ const useBridgeData = ({
   const [fee, setFee] = useState<string>()
 
   const fetchData = useCallback(async () => {
-    if (!account) {
+    if (!addressAvailable(account)) {
       return
     }
 

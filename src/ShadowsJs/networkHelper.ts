@@ -150,27 +150,28 @@ export type EthereumChainParams = {
   blockExplorerUrls: string[]
 }
 
-export async function setupMetamaskNetwork(params: EthereumChainParams) {
+export async function setupMetamaskNetwork(params: EthereumChainParams): Promise<boolean> {
   const provider = (window as WindowChain).ethereum
   if (provider) {
-    try {
-      await provider.request({
-        method: 'wallet_addEthereumChain',
-        params: [params]
+    return await provider.request({
+      method: 'wallet_addEthereumChain',
+      params: [params]
+    })
+      .then(() => {
+        return true
       })
-      return true
-    } catch (error) {
-      if (error.message.includes('May not specify default MetaMask chain.')) {
-        message.warn(`Please manually switch to the ${params.chainName} in MetaMask`, 5)
-      }
+      .catch(error => {
+        if (error.message.includes('May not specify default MetaMask chain.')) {
+          message.warn(`Please manually switch to the ${params.chainName} in MetaMask`, 5)
+        }
 
-      if (error.message.includes('User rejected the request.')) {
-        message.warn('Please allow switching network in Metamask')
-      }
-      return false
-    }
+        if (error.message.includes('User rejected the request.')) {
+          message.warn('Please allow switching network in Metamask')
+        }
+        return false
+      })
   } else {
-    console.error('Can\'t setup the BSC network on metamask because window.ethereum is undefined')
+    console.error('Can\'t setup network on metamask because window.ethereum is undefined')
     return false
   }
 }

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { weiToBigNumber, weiToString } from '@/web3/utils'
+import { addressAvailable, weiToBigNumber, weiToString } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
 import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
@@ -102,7 +102,7 @@ export const useStakingData = ({
   const [userLpBalance, setUserLpBalance] = useState('')
 
   const fetchData = useCallback(async () => {
-    if (!account) {
+    if (!addressAvailable(account)) {
       setTotalLockedLP('0')
       setTotalLockedLPInUSD('0')
       setAPY('0')
@@ -114,12 +114,12 @@ export const useStakingData = ({
     }
 
     const [_userLpBalance, _totalLockedLP, _userLockedLp, _dowsEarned, _lpTokenAllowance, _APY] = await Promise.all([
-      dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, account),
+      dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, account!),
       dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, farmContractAddress),
       dowsJSConnector.dowsJs.Farm.deposited(farmContractAddress, poolNumber, account),
       dowsJSConnector.dowsJs.Farm.pending(farmContractAddress, poolNumber, account),
-      dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account, farmContractAddress),
-      getAPY(account, lpTokenContractAddress, farmContractAddress, poolType, poolNumber, lpMultiplier)
+      dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account!, farmContractAddress),
+      getAPY(account!, lpTokenContractAddress, farmContractAddress, poolType, poolNumber, lpMultiplier)
     ])
     setUserLpBalance(weiToString(_userLpBalance))
 
