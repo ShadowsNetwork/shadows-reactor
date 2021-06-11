@@ -550,6 +550,10 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
         value: Number.parseFloat(weiToString(item.price)),
         time: (parseInt(item.time)) / 1000
       })))
+
+      chart!.applyOptions({
+        handleScroll: true
+      })
     } else if (mode === 'volume') {
       series.setData(data.data.map(item => ({
         time: parseInt(item.time) / 1000,
