@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { appendTransactionHistory, getAccount } from '@/store/wallet'
 import AmountInputModal, { AmountInputModalStatus } from '@/pages/LiquidityProvider/AmountInputModal'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { toWei, weiToBigNumber, weiToString } from '@/web3/utils'
+import { toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import { Button } from 'antd'
 import styled from 'styled-components'
 import { useDowsSynthesizerData } from '@/hooks/useDowsSynthesizerData'
@@ -194,7 +194,7 @@ const DowsSynthesizer: React.FC = () => {
         })
     }
 
-    const balance = weiToBigNumber(await dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account!, 'xUSD'))
+    const balance = weiToBigNumber(await dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account!, toByte32('xUSD')))
 
     setAmountInputModalStatus({
       ...amountInputModalStatus,

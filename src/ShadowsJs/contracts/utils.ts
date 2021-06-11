@@ -87,8 +87,16 @@ function getContractConfig(network: string, contractName: string): ContractConfi
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const config = require(`../../../contract/publish/deployed/${network}/config.json`)
+
     const { contracts } = config
-    return contracts[contractName]
+
+    const contract = contracts[contractName]
+    const proxyContract = contracts[`${contractName}_Proxy`]
+    if (proxyContract) {
+      contract.address = proxyContract.address
+    }
+
+    return contract
   } catch (e) {
     return {
       address: '',
