@@ -504,7 +504,6 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
         borderColor: 'rgba(197, 203, 206, 0.8)'
       },
       localization: {
-        locale: 'en-US',
         timeFormatter: (time: UTCTimestamp) => {
           return dateFormat(new Date(time * 1000), 'yyyy-MM-dd hh:mm:ss')
         }
@@ -552,7 +551,11 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
       })))
 
       chart!.applyOptions({
-        handleScroll: true
+        handleScroll: true,
+        handleScale: true,
+        timeScale: {
+          tickMarkFormatter: (time: UTCTimestamp)=> dateFormat(new Date(time * 1000), 'MM-dd hh:mm')
+        }
       })
     } else if (mode === 'volume') {
       series.setData(data.data.map(item => ({
@@ -561,11 +564,16 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
       })))
 
       chart!.applyOptions({
-        handleScroll: false
+        handleScroll: false,
+        handleScale: false,
+        timeScale: {
+          tickMarkFormatter: (time: UTCTimestamp)=> dateFormat(new Date(time * 1000), 'MM-dd')
+        }
       })
+
+      chart?.timeScale().fitContent()
     }
 
-    chart?.timeScale().fitContent()
   }, [data, series])
 
   // @ts-ignore
