@@ -138,7 +138,9 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
         .reduce((prev: BigNumber, curr: BigNumber[]) => prev.plus(curr[0]), new BigNumber(0))
     )
     setRedeemableFees(weiToBigNumber(_totalFees))
-    setTotalRewards(weiToBigNumber(_totalReward))
+    setTotalRewards(_feesByPeriod
+      .map(arr => arr.map(item => weiToBigNumber(item)))
+      .reduce((prev: BigNumber, curr: BigNumber[]) => prev.plus(curr[1]), new BigNumber(0)))
     setEscrowedRewards(weiToBigNumber(_balanceOf))
     setRedeemableRewards(weiToBigNumber(_vestBalanceOf))
   }, [account, refreshFlag, networkReady])
