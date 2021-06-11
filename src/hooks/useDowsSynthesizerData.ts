@@ -125,7 +125,7 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
       return
     }
 
-    const [_feesByPeriod, [_totalFees, _totalReward], _balanceOf, _vestBalanceOf] = await Promise.all([
+    const [_feesByPeriod, [_totalFees], _balanceOf, _vestBalanceOf] = await Promise.all([
       dowsJSConnector.dowsJs.FeePool.feesByPeriod(account),
       dowsJSConnector.dowsJs.FeePool.feesAvailable(account),
       dowsJSConnector.dowsJs.RewardEscrow.balanceOf(account),
@@ -138,9 +138,12 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
         .reduce((prev: BigNumber, curr: BigNumber[]) => prev.plus(curr[0]), new BigNumber(0))
     )
     setRedeemableFees(weiToBigNumber(_totalFees))
-    setTotalRewards(_feesByPeriod
-      .map(arr => arr.map(item => weiToBigNumber(item)))
-      .reduce((prev: BigNumber, curr: BigNumber[]) => prev.plus(curr[1]), new BigNumber(0)))
+
+    setTotalRewards(
+      _feesByPeriod
+        .map(arr => arr.map(item => weiToBigNumber(item)))
+        .reduce((prev: BigNumber, curr: BigNumber[]) => prev.plus(curr[1]), new BigNumber(0))
+    )
     setEscrowedRewards(weiToBigNumber(_balanceOf))
     setRedeemableRewards(weiToBigNumber(_vestBalanceOf))
   }, [account, refreshFlag, networkReady])

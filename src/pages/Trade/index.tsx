@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js'
 import DowsSynthesizer from '@/components/DowsSynthesizer'
 import { KeyPair, useCurrencyBalance, useCurrencyData } from '@/hooks/useTradeData'
 import { TradeSynth } from '@/types/TransactionHistory'
-import { dateFormat, numberWithCommas } from '@/utils'
+import { numberWithCommas } from '@/utils'
 import { appendTransactionHistory } from '@/store/wallet'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useDispatch } from 'react-redux'
@@ -505,7 +505,10 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
       },
       localization: {
         timeFormatter: (time: UTCTimestamp) => {
-          return dateFormat(new Date(time * 1000), 'yyyy-MM-dd hh:mm:ss')
+          return new Intl.DateTimeFormat('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric',
+            hour: '2-digit', minute: '2-digit', second: '2-digit'
+          }).format(new Date(time * 1000))
         }
       }
     })
@@ -528,7 +531,7 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
       setSeries(chart.addAreaSeries())
     } else if (mode === 'volume') {
       setSeries(chart.addHistogramSeries({
-        base: 0,
+        base: 0
       }))
     }
   }, [mode, chart])
@@ -554,7 +557,11 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
         handleScroll: true,
         handleScale: true,
         timeScale: {
-          tickMarkFormatter: (time: UTCTimestamp)=> dateFormat(new Date(time * 1000), 'MM-dd hh:mm')
+          tickMarkFormatter: (time: UTCTimestamp) => {
+            return new Intl.DateTimeFormat('en-US', {
+              hour: '2-digit', minute: '2-digit'
+            }).format(new Date(time * 1000))
+          }
         }
       })
     } else if (mode === 'volume') {
@@ -567,11 +574,16 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
         handleScroll: false,
         handleScale: false,
         timeScale: {
-          tickMarkFormatter: (time: UTCTimestamp)=> dateFormat(new Date(time * 1000), 'MM-dd')
+          tickMarkFormatter: (time: UTCTimestamp) => {
+            return new Intl.DateTimeFormat('en-US', {
+              month: 'short', day: 'numeric'
+            }).format(new Date(time * 1000))
+          }
         }
       })
 
-      chart?.timeScale().fitContent()
+      chart?.timeScale()
+        .fitContent()
     }
 
   }, [data, series])

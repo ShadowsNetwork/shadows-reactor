@@ -194,7 +194,7 @@ const DowsSynthesizer: React.FC = () => {
         })
     }
 
-    const balance = weiToBigNumber(await dowsJSConnector.dowsJs.Synth.balanceOf('xUSD', account!))
+    const balance = weiToBigNumber(await dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account!, 'xUSD'))
 
     setAmountInputModalStatus({
       ...amountInputModalStatus,
