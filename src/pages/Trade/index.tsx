@@ -504,8 +504,9 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
         borderColor: 'rgba(197, 203, 206, 0.8)'
       },
       localization: {
+        locale: 'en-US',
         timeFormatter: (time: UTCTimestamp) => {
-          return dateFormat(new Date(time), 'yyyy-MM-dd hh:mm:ss')
+          return dateFormat(new Date(time * 1000), 'yyyy-MM-dd hh:mm:ss')
         }
       }
     })
@@ -547,17 +548,20 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
       series.setData(data.data.map(item => ({
         ...item,
         value: Number.parseFloat(weiToString(item.price)),
-        time: (parseInt(item.time))
+        time: (parseInt(item.time)) / 1000
       })))
     } else if (mode === 'volume') {
       series.setData(data.data.map(item => ({
-        time: parseInt(item.time),
+        time: parseInt(item.time) / 1000,
         value: parseFloat(weiToString(item.value))
       })))
+
+      chart!.applyOptions({
+        handleScroll: false
+      })
     }
 
     chart?.timeScale().fitContent()
-
   }, [data, series])
 
   // @ts-ignore
