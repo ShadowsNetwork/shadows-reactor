@@ -1,12 +1,14 @@
 import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
 import { useCallback, useEffect, useState } from 'react'
+import { utc } from 'moment'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { numberWithCommas } from '@/utils'
 import BigNumber from 'bignumber.js'
 import { addressAvailable, weiToBigNumber } from '@/web3/utils'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
+import { ContactsOutlined } from '@ant-design/icons'
 
 interface FeePoolData {
   totalFees: BigNumber
@@ -125,11 +127,12 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
       return
     }
 
-    const [_feesByPeriod, [_totalFees], _balanceOf, _vestBalanceOf] = await Promise.all([
+    const [_feesByPeriod, [_totalFees], _balanceOf, _vestTime, _vestQuantiry] = await Promise.all([
       dowsJSConnector.dowsJs.FeePool.feesByPeriod(account),
       dowsJSConnector.dowsJs.FeePool.feesAvailable(account),
       dowsJSConnector.dowsJs.RewardEscrow.balanceOf(account),
-      dowsJSConnector.dowsJs.RewardEscrow.vestBalanceOf(account)
+      dowsJSConnector.dowsJs.RewardEscrow.getNextVestingTime(account),
+      dowsJSConnector.dowsJs.RewardEscrow.getNextVestingQuantity(account),
     ])
 
     setTotalFees(
@@ -145,7 +148,13 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
         .reduce((prev: BigNumber, curr: BigNumber[]) => prev.plus(curr[1]), new BigNumber(0))
     )
     setEscrowedRewards(weiToBigNumber(_balanceOf))
-    setRedeemableRewards(weiToBigNumber(_vestBalanceOf))
+
+    if (Number(utc().format('X')) >= Number(_vestTime.toString())) {
+      setRedeemableRewards(weiToBigNumber(_vestQuantiry))
+    } else {
+      setRedeemableRewards(weiToBigNumber(0))
+    }
+
   }, [account, refreshFlag, networkReady])
 
   useEffect(() => {
@@ -158,7 +167,7 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
   return {
     totalFees,
     redeemableFees,
-    totalRewards,
+    totalRewards: totalRewards.plus(escrowedRewards),
     escrowedRewards,
     redeemableRewards
   }
