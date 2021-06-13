@@ -27,18 +27,18 @@ const routers: Router[] = [
     icon: HomeIcon
   },
   {
-    path: '/staking',
-    key: 'staking',
-    title: 'Staking',
-    component: Pool,
-    icon: StakingIcon
-  },
-  {
     path: '/trade',
     key: 'trade',
     title: 'Trade',
     component: TradePage,
     icon: TradeIcon
+  },
+  {
+    path: '/staking',
+    key: 'staking',
+    title: 'Staking',
+    component: Pool,
+    icon: StakingIcon
   },
   {
     path: '/bridge',
