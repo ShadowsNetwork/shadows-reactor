@@ -42,7 +42,7 @@ const EmptyPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency
           <div className="additional">-</div>
         </div>
         <div className="item">
-          <div className="title">APY</div>
+          <div className="title">APR</div>
           <div className="value">-</div>
         </div>
         <div className="item">
@@ -229,7 +229,7 @@ const Pool: React.FC<PoolConfig> = ({
             <div className="additional">${numberWithCommas(totalLockedLPInUSD)}</div>
           </div>
           <div className="item">
-            <div className="title">APY</div>
+            <div className="title">APR</div>
             <div className="value">{numberWithCommas(APY)}%</div>
           </div>
           <div className="item">
