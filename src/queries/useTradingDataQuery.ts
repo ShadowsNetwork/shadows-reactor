@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 
 const request = axios.create({
-  baseURL: 'http://122.51.71.147:3001',
+  baseURL: 'https://testapi.shadows.link',
   timeout: 30000
 })
 
