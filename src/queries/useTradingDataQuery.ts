@@ -15,11 +15,11 @@ const useTradingDataQuery = (mode: string, currencyKey?: string) => {
 
     let url = ''
     if (mode === 'price') {
-      url = `/coingecko/${key}/price`
+      url = `/price/${key}`
     } else if (mode === 'volume') {
       url = `/shadows/${key}/valume`
     } else if (mode === 'countmaxmin') {
-      url = `/coingecko/${key}/countmaxmin`
+      url = `/price/${key}/countmaxmin`
     }
 
     if (!currencyKey || !url) {
