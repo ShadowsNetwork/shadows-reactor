@@ -194,13 +194,20 @@ const ContainerForBuyAndSell = styled.div`
     font-weight: bold;
   }
 
+  @font-face {
+    font-family:"helveticaneue-bold";
+    src:url("/fonts/Helvetica Neu Bold.ttf") format("woff"),
+    url("/fonts/Helvetica Neu Bold.ttf") format("opentype"),
+    url("/fonts/Helvetica Neu Bold.ttf") format("truetype");
+  }
+  
   .btn {
     margin-top: 0.8rem;
     width: 100%;
     height: 3.757rem;
     border-radius: 1rem;
     color: white;
-    font-family: "Helvetica Neue";
+    font-family: "helveticaneue-bold";
     font-size: 1.5rem;
     font-weight: bold;
   }

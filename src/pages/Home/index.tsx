@@ -4,6 +4,7 @@ import { numberWithCommas } from '@/utils'
 import DowsSynthesizer from '@/components/DowsSynthesizer'
 import { useCurrencyData } from '@/hooks/useTradeData'
 import { useHomeData } from '@/hooks/useHomeData'
+import { useHistory } from 'react-router-dom'
 
 const Box = styled.div`
   background-color: #121725;
@@ -24,6 +25,7 @@ const DowsSynthesizerContainer = styled(Box)`
 const PairsInfoContainer = styled(Box)`
   width: 29.7rem;
   padding: 1.8rem 1.2rem;
+  cursor: pointer;
 
   .button-group {
     display: flex;
@@ -133,10 +135,14 @@ const PairInfo: React.FC = () => {
     )
   }*/
 
+  const history = useHistory()
+
   const { keyPairs } = useCurrencyData()
 
   return (
-    <PairsInfoContainer>
+    <PairsInfoContainer
+      onClick={() => history.push('/trade')}
+    >
       {/*<div className="button-group">
         <StatefulButton name="All" />
         <StatefulButton name="Crypto" />
