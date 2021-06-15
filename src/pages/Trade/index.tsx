@@ -356,10 +356,9 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
 
   const sliderMarks = {
     0: '',
-    20: '',
-    40: '',
-    60: '',
-    80: '',
+    25: '',
+    50: '',
+    75: '',
     100: ''
   }
 

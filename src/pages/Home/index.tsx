@@ -217,7 +217,7 @@ const StatInfo: React.FC = () => {
             assetsBalanceList.map(asset => (
               <div className="item" key={asset.key}>
                 {/*{asset.quantity.toString()}*/}
-                {numberWithCommas(asset.quantity)}
+                {numberWithCommas(asset.quantity, 6)}
               </div>
             ))
           }
