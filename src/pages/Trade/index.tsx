@@ -135,17 +135,19 @@ const StatsContainer = styled.div`
   justify-content: space-around;
 
   .item {
-    line-height: 12;
+    font-family: "DM sans";
+    font-weight: bold;
+    //line-height: 12;
 
     .title {
       color: #939393;
       margin-bottom: 0.4rem;
-      font: 1.2rem bold;
+      font-size: 1.2rem;
     }
 
     .value {
       color: white;
-      font: 2rem bold;
+      font-size: 2rem;
     }
   }
 `
@@ -198,7 +200,9 @@ const ContainerForBuyAndSell = styled.div`
     height: 3.757rem;
     border-radius: 1rem;
     color: white;
-    font: 1.5rem bold;
+    font-family: "Helvetica Neue";
+    font-size: 1.5rem;
+    font-weight: bold;
   }
 `
 
@@ -371,8 +375,10 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
 
     setInputValue(
       available
-        .multipliedBy(toBigNumber(value))
-        .dividedBy(100)
+        .multipliedBy('1e18')
+        .multipliedBy(toBigNumber(value).dividedBy(100))
+        .dp(0)
+        .dividedBy('1e18')
         .toString(10)
     )
   }
