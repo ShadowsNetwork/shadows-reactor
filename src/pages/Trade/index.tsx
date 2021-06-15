@@ -44,7 +44,7 @@ const Column = styled.div`
 `
 
 const CandlestickContainer = styled.div`
-  height: 48.5rem;
+  height: 51.5rem;
   margin-bottom: 1.5rem;
   background-color: #121725;
   padding: 2.4rem 1.5rem 2rem;
@@ -66,7 +66,7 @@ const CandlestickContainer = styled.div`
     display: flex;
     align-items: center;
     line-height: 1;
-    margin-bottom: 0.49rem;
+    margin-bottom: 0.8rem;
 
     .current {
       font-size: 2.8rem;
@@ -84,7 +84,7 @@ const CandlestickContainer = styled.div`
 
   .time-select-btn-group {
     text-align: end;
-    margin-bottom: 1.08rem;
+    //margin-bottom: 1.08rem;
 
     .btn {
       padding: 0;
@@ -106,13 +106,14 @@ const CandlestickContainer = styled.div`
   }
 
   .trading-view-container {
-    margin-bottom: 0.8rem;
+    padding-top:2rem;
+    margin-bottom: 1.2rem;
   }
 
   .bottom-btn-group {
     text-align: end;
     margin-bottom: 1rem;
-    padding-top: 1rem;
+    padding-top: 0.5rem;
     .btn {
       padding: 0;
       width: 7.2rem;
@@ -494,7 +495,7 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
     const _chart = createChart(ref.current)
     _chart.applyOptions({
       width: 500,
-      height: 280,
+      height: 320,
       layout: {
         backgroundColor: '#000000',
         textColor: 'rgba(255, 255, 255, 0.9)'
@@ -672,7 +673,6 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
           ))
         }
       </div>*/}
-      <div style={{ height: '3.1rem' }} />
       <div className="trading-view-container">
         <TradingView keyPair={keyPair} mode={selectedMode.value} />
       </div>
