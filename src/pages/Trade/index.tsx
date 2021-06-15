@@ -251,8 +251,15 @@ const PairsInfoContainer = styled.div`
 const CustomizedSlider = styled.div`
   .ant-slider-dot {
     background-color: #cccccc;
+    height:14px;
+    width:14px;
+    border:0;
+    margin-left:-7px;
+    top:-5px;
   }
-
+  .ant-slider-step{
+    background:rgba(255,255,255,.2);
+  }
   .ant-slider-dot-active {
     border-color: ${props => props.color};
     background-color: white;
@@ -263,8 +270,11 @@ const CustomizedSlider = styled.div`
   }
 
   .ant-slider-handle {
+    height:20px;
+    width:20px;
     background-color: white;
-    border-width: 3.3px;
+    border-width: 5px;
+    margin-top:-9px;
   }
 `
 
