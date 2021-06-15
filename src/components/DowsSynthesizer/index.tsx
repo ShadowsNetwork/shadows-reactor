@@ -62,12 +62,13 @@ const DowsInfoContainer = styled.div`
   }
 
   .text-container {
-    width: 85%;
+    width:100%;
+    padding: 0 1.2rem;
     color: white;
     font-size: 1.2rem;
     font-weight: bold;
     line-height: 0.6;
-    margin-bottom: 0.5rem;
+    margin-bottom: 2rem;
 
     .bold {
       font-size: 1.3rem;
@@ -219,7 +220,7 @@ const DowsSynthesizer: React.FC = () => {
           <div className="value">{targetRatio}</div>
         </div>
       </div>
-      <div className="button-row" style={{ marginBottom: '2.4rem' }}>
+      <div className="button-row" style={{ marginBottom: '2.8rem' }}>
         <Button className="button" onClick={handleMintXusd}>
           Mint xUSD
         </Button>
@@ -227,7 +228,7 @@ const DowsSynthesizer: React.FC = () => {
           Burn xUSD
         </Button>
       </div>
-      <div className="text-container" style={{ marginBottom: '0.8rem' }}>
+      <div className="text-container" style={{ marginBottom: '2rem' }}>
         <p className="bold">
           <span>Total DOWS</span>
           <span>{numberWithCommas(totalDows, 6)}</span>
@@ -241,7 +242,7 @@ const DowsSynthesizer: React.FC = () => {
           <span>{numberWithCommas(lockedDows, 6)}</span>
         </p>
       </div>
-      <div className="text-container" style={{ marginBottom: '0.8rem' }}>
+      <div className="text-container" style={{ marginBottom: '2rem' }}>
         <p className="bold">
           <span>Total Fees</span>
           <span>{numberWithCommas(totalFees, 6)}</span>
@@ -251,7 +252,7 @@ const DowsSynthesizer: React.FC = () => {
           <span>{numberWithCommas(redeemableFees, 6)}</span>
         </p>
       </div>
-      <div className="text-container" style={{ marginBottom: '0.5rem' }}>
+      <div className="text-container" style={{ marginBottom: '1.5rem' }}>
         <p className="bold">
           <span>Total Rewards</span>
           <span>{numberWithCommas(totalRewards, 6)}</span>

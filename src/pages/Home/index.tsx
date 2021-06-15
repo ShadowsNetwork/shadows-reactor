@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom'
 const Box = styled.div`
   background-color: #121725;
   padding: ${props => props.padding};
-  height: 36.8rem;
+  height: 41rem;
   margin-right: 2.5rem;
   border-radius: 1rem;
 `

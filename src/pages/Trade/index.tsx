@@ -44,10 +44,10 @@ const Column = styled.div`
 `
 
 const CandlestickContainer = styled.div`
-  height: 46.5rem;
+  height: 48.5rem;
   margin-bottom: 1.5rem;
   background-color: #121725;
-  padding: 1.5rem 1.5rem;
+  padding: 2.4rem 1.5rem 2rem;
 
   .title {
     font-size: 2.8rem;
@@ -78,6 +78,7 @@ const CandlestickContainer = styled.div`
     .change {
       font-size: 2.2rem;
       font-weight: 500;
+      margin-left: 1rem;
     }
   }
 
@@ -110,14 +111,14 @@ const CandlestickContainer = styled.div`
 
   .bottom-btn-group {
     text-align: end;
-    margin-bottom: 1.08rem;
-
+    margin-bottom: 1rem;
+    padding-top: 1rem;
     .btn {
       padding: 0;
       width: 7.2rem;
       height: 2.457rem;
-      margin-right: 0.345rem;
-
+      margin-left: 1rem;
+      margin-right: 0.5rem;
       font-size: 0.9rem;
       color: white;
       border-width: 1px;
@@ -141,7 +142,7 @@ const StatsContainer = styled.div`
 
     .title {
       color: #939393;
-      margin-bottom: 0.4rem;
+      // margin-bottom: 0.4rem;
       font-size: 1.2rem;
     }
 
@@ -153,7 +154,7 @@ const StatsContainer = styled.div`
 `
 
 const ContainerForDowsAndPair = styled.div`
-  height: 36.8rem;
+  height: 41rem;
   margin-bottom: 0.9rem;
   background-color: #121725;
 `
