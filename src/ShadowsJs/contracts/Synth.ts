@@ -1,6 +1,7 @@
 import { AbstractContractCaller } from '@/ShadowsJs/AbstractContractCaller'
 import { Contract } from 'ethers'
 import { getContractConfig } from '@/ShadowsJs/contracts/utils'
+import BN from 'bn.js'
 
 class Synth extends AbstractContractCaller {
 
@@ -13,6 +14,10 @@ class Synth extends AbstractContractCaller {
 
   async balanceOf(currencyKey: string, account: string) {
     const json = getContractConfig(this.network, currencyKey)
+
+    if (!json) {
+      return new BN(0)
+    }
 
     const contract = new Contract(
       json.address,

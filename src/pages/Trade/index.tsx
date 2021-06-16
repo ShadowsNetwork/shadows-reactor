@@ -107,7 +107,7 @@ const CandlestickContainer = styled.div`
   }
 
   .trading-view-container {
-    padding-top:2rem;
+    padding-top: 2rem;
     margin-bottom: 1.2rem;
   }
 
@@ -115,6 +115,7 @@ const CandlestickContainer = styled.div`
     text-align: end;
     margin-bottom: 1rem;
     padding-top: 0.5rem;
+
     .btn {
       padding: 0;
       width: 7.2rem;
@@ -126,7 +127,8 @@ const CandlestickContainer = styled.div`
       border-width: 1px;
       border-color: #63CCA9;
       border-radius: 5px;
-      &:hover{
+
+      &:hover {
         border-color: #ffffff;
       }
     }
@@ -201,12 +203,12 @@ const ContainerForBuyAndSell = styled.div`
   }
 
   @font-face {
-    font-family:"helveticaneue-bold";
-    src:url("/fonts/Helvetica Neu Bold.ttf") format("woff"),
+    font-family: "helveticaneue-bold";
+    src: url("/fonts/Helvetica Neu Bold.ttf") format("woff"),
     url("/fonts/Helvetica Neu Bold.ttf") format("opentype"),
     url("/fonts/Helvetica Neu Bold.ttf") format("truetype");
   }
-  
+
   .btn {
     margin-top: 0.8rem;
     width: 100%;
@@ -217,12 +219,14 @@ const ContainerForBuyAndSell = styled.div`
     font-size: 1.5rem;
     font-weight: bold;
     transition: all 0.2s linear;
-    &:hover{
-      transform:translate(0, 4px);
+
+    &:hover {
+      transform: translate(0, 4px);
     }
-    &[disabled]{
-      &:hover{
-        transform:translate(0, 0);
+
+    &[disabled] {
+      &:hover {
+        transform: translate(0, 0);
       }
     }
   }
@@ -264,15 +268,17 @@ const PairsInfoContainer = styled.div`
 const CustomizedSlider = styled.div`
   .ant-slider-dot {
     background-color: #cccccc;
-    height:14px;
-    width:14px;
-    border:0;
-    margin-left:-7px;
-    top:-5px;
+    height: 14px;
+    width: 14px;
+    border: 0;
+    margin-left: -7px;
+    top: -5px;
   }
-  .ant-slider-step{
-    background:rgba(255,255,255,.2);
+
+  .ant-slider-step {
+    background: rgba(255, 255, 255, .2);
   }
+
   .ant-slider-dot-active {
     border-color: ${props => props.color};
     background-color: white;
@@ -283,11 +289,11 @@ const CustomizedSlider = styled.div`
   }
 
   .ant-slider-handle {
-    height:20px;
-    width:20px;
+    height: 20px;
+    width: 20px;
     background-color: white;
     border-width: 5px;
-    margin-top:-9px;
+    margin-top: -9px;
   }
 `
 
@@ -408,7 +414,8 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
     setInputValue(
       available
         .multipliedBy('1e18')
-        .multipliedBy(toBigNumber(value).dividedBy(100))
+        .multipliedBy(toBigNumber(value)
+          .dividedBy(100))
         .dp(0)
         .dividedBy('1e18')
         .toString(10)
@@ -650,11 +657,24 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   const currentPrice = (() => {
     if (data?.data) {
       const len = data.data.length
-      return numberWithCommas(weiToBigNumber(data.data[len - 1].price))
-    } else {
-      return '---'
+      if (len) {
+        return numberWithCommas(weiToBigNumber(data.data[len - 1].price))
+      }
     }
+    return '---'
   })()
+
+  const currencyIcon = (key: string) => {
+    const map = {
+      'xUSD': 'https://raw.githubusercontent.com/Synthetixio/synthetix-assets/v2.0.10/synths/sUSD.svg',
+      'xETH': 'https://raw.githubusercontent.com/Synthetixio/synthetix-assets/v2.0.10/synths/sETH.svg',
+      'xCOINBASE': 'https://raw.githubusercontent.com/Synthetixio/synthetix-assets/v2.0.10/synths/sCOIN.svg',
+      'xSILVER': 'https://raw.githubusercontent.com/Synthetixio/synthetix-assets/v2.0.10/synths/sXAG.svg',
+      'xGOLD': 'https://raw.githubusercontent.com/Synthetixio/synthetix-assets/v2.0.10/synths/sXAU.svg',
+    }
+
+    return map[key] ?? map['xUSD']
+  }
 
   return (
     <CandlestickContainer>
@@ -662,7 +682,7 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
         {
           keyPair?.symbol[0] && (
             <img
-              src={require(`@/img/tokens/${keyPair?.symbol[0]}.svg`)}
+              src={currencyIcon(keyPair.symbol[0])}
               alt=""
             />
           )
