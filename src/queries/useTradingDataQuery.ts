@@ -9,20 +9,23 @@ const request = axios.create({
   timeout: 30000
 })
 
+const filterKey = ['eth', 'btc'];
+
 const useTradingDataQuery = (mode: string, currencyKey?: string) => {
   const [data, setData] = useState<any>()
 
   const fetch = useCallback(async () => {
     const key = currencyKey?.substr(1)
       .toLowerCase()
+    const isBool = key && filterKey.includes(key)
 
     let url = ''
     if (mode === 'price') {
-      url = `/price/${key}`
+      url = isBool ? `/price/${key}` : `/coingecko/${key}/price`
     } else if (mode === 'volume') {
       url = `/shadows/${key}/valume`
     } else if (mode === 'countmaxmin') {
-      url = `/price/${key}/countmaxmin`
+      url = isBool ? `/price/${key}/countmaxmin` : `/coingecko/${key}/countmaxmin`
     }
 
     if (!currencyKey || !url) {

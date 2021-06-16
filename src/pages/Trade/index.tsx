@@ -663,7 +663,7 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   //   }
   //   return '---'
   // })()
-  console.log(keyPair?.symbol[0])
+  
   const { currentPrice } = useCurrencyPrice(keyPair?.symbol[0])
 
   const currencyIcon = (key: string) => {
