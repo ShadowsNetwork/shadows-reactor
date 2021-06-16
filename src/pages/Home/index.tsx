@@ -46,7 +46,14 @@ const PairsInfoContainer = styled(Box)`
       font-size: 1.4rem;
       user-select: none;
       cursor: pointer;
+      transition: all 0.2s linear;
+      &:hover{
+        transform:translate(0, 2px);
+        color: #979797;
+        // text-decoration: underline;
+      }
     }
+
 
     .header {
       color: #979797 !important;

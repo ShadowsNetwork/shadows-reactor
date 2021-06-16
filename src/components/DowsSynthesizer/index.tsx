@@ -58,6 +58,16 @@ const DowsInfoContainer = styled.div`
       font-weight: bold;
       border-width: 0.2rem;
       border-color: #979797;
+      transition: all 0.2s linear;
+      &:hover{
+        border-color: #ffffff;
+        transform:translate(0, 4px);
+      }
+      &[disabled]{
+        &:hover{
+          transform:translate(0, 0);
+        }
+      }
     }
   }
 

@@ -74,25 +74,46 @@ const useBalance = () => {
       return
     }
 
-    const [_balanceOf, _transferableShadows, _debtBalanceOf, _collateralisationRatio, _dowsRate] = (
+    const [_balanceOf, _transferableShadows, _debtBalanceOf, _collateralisationRatio, _issuanceRatio] = (
       await Promise.all([
         dowsJSConnector.dowsJs.Shadows.balanceOf(account),
         dowsJSConnector.dowsJs.Synthesizer.transferableShadows(account),
         dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('DOWS')),
         dowsJSConnector.dowsJs.Synthesizer.collateralisationRatio(account),
-        dowsJSConnector.dowsJs.Oracle.rateForCurrency('DOWS')
+        dowsJSConnector.dowsJs.Synthesizer.issuanceRatio()
       ]))
 
+    const rate = weiToBigNumber(_collateralisationRatio) > weiToBigNumber(_issuanceRatio) ? weiToBigNumber(_collateralisationRatio) : weiToBigNumber(_issuanceRatio)
     const [_newBalanceOf, _newTransferableShadows] = [_balanceOf, _transferableShadows]
       .map((value: BN) => weiToBigNumber(value))
       .map((value: BigNumber) =>
         value.multipliedBy(toBigNumber(dowsPrice))
           .toString()
       )
-    const _newDebtBalanceOf = weiToBigNumber(_debtBalanceOf).dividedBy(weiToBigNumber(_collateralisationRatio)).multipliedBy(toBigNumber(dowsPrice)).toString()
+
+    const _newDebtBalanceOf = weiToBigNumber(_debtBalanceOf)
+      .dividedBy(rate)
+      .multipliedBy(toBigNumber(dowsPrice)).toString()
+
     setYourBalance(_newBalanceOf)
     setAssetsBalance(_newTransferableShadows)
     setDebtPool(_newDebtBalanceOf)
+
+    // const [_balanceOf, _transferableShadows, _debtBalanceOf] = (
+    //   await Promise.all([
+    //     dowsJSConnector.dowsJs.Shadows.balanceOf(account),
+    //     dowsJSConnector.dowsJs.Synthesizer.transferableShadows(account),
+    //     dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('DOWS'))
+    //   ]))
+    //   .map((value: BN) => weiToBigNumber(value))
+    //   .map((value: BigNumber) =>
+    //     value.multipliedBy(toBigNumber(dowsPrice))
+    //       .toString()
+    //   )
+
+    // setYourBalance(_balanceOf)
+    // setAssetsBalance(_transferableShadows)
+    // setDebtPool(_debtBalanceOf)
   }, [account, dowsPrice, fastRefreshFlag])
 
   useEffect(() => {

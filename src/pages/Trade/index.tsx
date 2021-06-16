@@ -126,6 +126,9 @@ const CandlestickContainer = styled.div`
       border-width: 1px;
       border-color: #63CCA9;
       border-radius: 5px;
+      &:hover{
+        border-color: #ffffff;
+      }
     }
   }
 `
@@ -213,6 +216,15 @@ const ContainerForBuyAndSell = styled.div`
     font-family: "helveticaneue-bold";
     font-size: 1.5rem;
     font-weight: bold;
+    transition: all 0.2s linear;
+    &:hover{
+      transform:translate(0, 4px);
+    }
+    &[disabled]{
+      &:hover{
+        transform:translate(0, 0);
+      }
+    }
   }
 `
 
