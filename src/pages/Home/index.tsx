@@ -25,7 +25,6 @@ const DowsSynthesizerContainer = styled(Box)`
 const PairsInfoContainer = styled(Box)`
   width: 29.7rem;
   padding: 1.8rem 1.2rem;
-  cursor: pointer;
 
   .button-group {
     display: flex;
@@ -46,6 +45,7 @@ const PairsInfoContainer = styled(Box)`
       color: white;
       font-size: 1.4rem;
       user-select: none;
+      cursor: pointer;
     }
 
     .header {
@@ -140,9 +140,7 @@ const PairInfo: React.FC = () => {
   const { keyPairs } = useCurrencyData()
 
   return (
-    <PairsInfoContainer
-      onClick={() => history.push('/trade')}
-    >
+    <PairsInfoContainer>
       {/*<div className="button-group">
         <StatefulButton name="All" />
         <StatefulButton name="Crypto" />
@@ -162,6 +160,12 @@ const PairInfo: React.FC = () => {
               <div
                 className="item"
                 key={index}
+                onClick={() => history.push({
+                  pathname: '/trade',
+                  state: {
+                    keyPair
+                  }
+                })}
               >
                 <div className="key">
                   {`${symbol[0]} / ${symbol[1]}`}

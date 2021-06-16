@@ -15,6 +15,7 @@ import { numberWithCommas } from '@/utils'
 import { appendTransactionHistory } from '@/store/wallet'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useDispatch } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
 type PairInfoProps = {
   onSelectedKeyPairChanged: (_selectedKeyPair: KeyPair) => void
@@ -705,13 +706,15 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
 }
 
 const TradePage: React.FC = () => {
-  const [selectedKeyPair, setSelectedKeyPair] = useState<KeyPair | undefined>()
+  const { state } = useLocation()
+
+  const { balanceByCurrency } = useCurrencyBalance()
+
+  const [selectedKeyPair, setSelectedKeyPair] = useState<KeyPair | undefined>((state as any)?.keyPair)
 
   const handleSelectedKeyPairChanged = (keyPair: KeyPair) => {
     setSelectedKeyPair(keyPair)
   }
-
-  const { balanceByCurrency } = useCurrencyBalance()
 
   return (
     <TradePageContainer>
