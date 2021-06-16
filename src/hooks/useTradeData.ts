@@ -134,3 +134,22 @@ export const useCurrencyBalance = () => {
     balanceByCurrency
   }
 }
+
+export const useCurrencyPrice = (name?: string) => {
+  const [currentPrice, setCurrentPrice] = useState<string>('---')
+
+  const getPrice = useCallback(async () => {
+    if (name) {
+      const rage = await dowsJSConnector.dowsJs.Oracle.rateForCurrency(name)
+      setCurrentPrice(weiToBigNumber(rage).toString());
+    }
+  }, [name])
+
+  useEffect(() => {
+    getPrice()
+  }, [getPrice])
+
+  return {
+    currentPrice
+  }
+}

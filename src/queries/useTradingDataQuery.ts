@@ -1,8 +1,11 @@
 import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 
+import { ConfigType } from '../../config'
+const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
+
 const request = axios.create({
-  baseURL: 'https://testapi.shadows.link',
+  baseURL: config.baseUrl,
   timeout: 30000
 })
 

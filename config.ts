@@ -5,7 +5,8 @@ export type ConfigType = {
   liquidityProvider: {
     supportedPools: PoolConfig[]
   },
-  bridge: BridgeConfig
+  bridge: BridgeConfig,
+  baseUrl: string
 }
 
 export type BridgeConfig = {

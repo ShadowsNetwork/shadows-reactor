@@ -9,7 +9,7 @@ import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web
 import useTradingDataQuery from '@/queries/useTradingDataQuery'
 import BigNumber from 'bignumber.js'
 import DowsSynthesizer from '@/components/DowsSynthesizer'
-import { KeyPair, useCurrencyBalance, useCurrencyData } from '@/hooks/useTradeData'
+import { KeyPair, useCurrencyBalance, useCurrencyData, useCurrencyPrice } from '@/hooks/useTradeData'
 import { TradeSynth } from '@/types/TransactionHistory'
 import { numberWithCommas } from '@/utils'
 import { appendTransactionHistory } from '@/store/wallet'
@@ -654,15 +654,17 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
 
   const { data } = useTradingDataQuery('price', keyPair?.symbol[0])
 
-  const currentPrice = (() => {
-    if (data?.data) {
-      const len = data.data.length
-      if (len) {
-        return numberWithCommas(weiToBigNumber(data.data[len - 1].price))
-      }
-    }
-    return '---'
-  })()
+  // const currentPrice = (() => {
+  //   if (data?.data) {
+  //     const len = data.data.length
+  //     if (len) {
+  //       return numberWithCommas(weiToBigNumber(data.data[len - 1].price))
+  //     }
+  //   }
+  //   return '---'
+  // })()
+  console.log(keyPair?.symbol[0])
+  const { currentPrice } = useCurrencyPrice(keyPair?.symbol[0])
 
   const currencyIcon = (key: string) => {
     const map = {
@@ -694,7 +696,7 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
       <div className="price-info">
         <div className="current">
           $
-          {currentPrice}
+          {numberWithCommas(currentPrice)}
         </div>
         <div className="change" style={{ color: '#63cca9' }}>
           {data?.usd_24h_change > 0 ? '+' : ''}
