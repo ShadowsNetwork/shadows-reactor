@@ -74,21 +74,25 @@ const useBalance = () => {
       return
     }
 
-    const [_balanceOf, _transferableShadows, _debtBalanceOf] = (
+    const [_balanceOf, _transferableShadows, _debtBalanceOf, _collateralisationRatio, _dowsRate] = (
       await Promise.all([
         dowsJSConnector.dowsJs.Shadows.balanceOf(account),
         dowsJSConnector.dowsJs.Synthesizer.transferableShadows(account),
-        dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('DOWS'))
+        dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('DOWS')),
+        dowsJSConnector.dowsJs.Synthesizer.collateralisationRatio(account),
+        dowsJSConnector.dowsJs.Oracle.rateForCurrency('DOWS')
       ]))
+
+    const [_newBalanceOf, _newTransferableShadows] = [_balanceOf, _transferableShadows]
       .map((value: BN) => weiToBigNumber(value))
       .map((value: BigNumber) =>
         value.multipliedBy(toBigNumber(dowsPrice))
           .toString()
       )
-
-    setYourBalance(_balanceOf)
-    setAssetsBalance(_transferableShadows)
-    setDebtPool(_debtBalanceOf)
+    const _newDebtBalanceOf = weiToBigNumber(_debtBalanceOf).dividedBy(weiToBigNumber(_collateralisationRatio)).multipliedBy(toBigNumber(dowsPrice)).toString()
+    setYourBalance(_newBalanceOf)
+    setAssetsBalance(_newTransferableShadows)
+    setDebtPool(_newDebtBalanceOf)
   }, [account, dowsPrice, fastRefreshFlag])
 
   useEffect(() => {
