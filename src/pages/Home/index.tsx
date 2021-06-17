@@ -5,17 +5,22 @@ import DowsSynthesizer from '@/components/DowsSynthesizer'
 import { useCurrencyData } from '@/hooks/useTradeData'
 import { useHomeData } from '@/hooks/useHomeData'
 import { useHistory } from 'react-router-dom'
+import { toBigNumber } from '@/web3/utils'
 
 const Box = styled.div`
   background-color: #121725;
   padding: ${props => props.padding};
-  height: 45rem;
+  min-height: 42rem;
+  height:auto;
   margin-right: 2.5rem;
   border-radius: 1rem;
 `
 
-const HomePageContainer = styled.div`
-  display: flex;
+const DivContainer = styled.div`
+`
+
+const ContentContainer = styled.div`
+  display:flex;
 `
 
 const DowsSynthesizerContainer = styled(Box)`
@@ -189,8 +194,9 @@ const PairInfo: React.FC = () => {
 }
 
 const StatInfo: React.FC = () => {
-  const { yourBalance, assetsBalance, debtPool, assetsBalanceList } = useHomeData()
+  const { yourBalance, assetsBalance, debtPool, assetsBalanceList, netTradingBalance } = useHomeData()
 
+  const newNetTradingBalance = netTradingBalance >= toBigNumber(0) ? `$${numberWithCommas(netTradingBalance)}` : numberWithCommas(netTradingBalance).replace('-', '-$');
   return (
     <StatInfoContainer>
       <div className="summary-row">
@@ -204,7 +210,7 @@ const StatInfo: React.FC = () => {
         </div>
         <div className="summary-item">
           <div className="label">Net Trading Balance</div>
-          <div className="value">(${numberWithCommas(debtPool)})</div>
+          <div className="value">{newNetTradingBalance}</div>
         </div>
       </div>
       <div className="asset-list">
@@ -227,7 +233,7 @@ const StatInfo: React.FC = () => {
               </div>
             ))
           }
-          {/* <div className="item" style={{marginLeft:'3.5rem'}}>My Debt</div> */}
+          <div className="item" style={{ marginLeft: '3.5rem' }}>My Debt</div>
         </div>
         <div className="column">
           <div className="header">Qty</div>
@@ -239,7 +245,7 @@ const StatInfo: React.FC = () => {
               </div>
             ))
           }
-          {/* <div className="item">-</div> */}
+          <div className="item">-</div>
         </div>
         <div className="column">
           <div className="header">Value</div>
@@ -250,7 +256,7 @@ const StatInfo: React.FC = () => {
               </div>
             ))
           }
-          {/* <div className="item">($52,342.5)</div> */}
+          <div className="item">({numberWithCommas(debtPool)})</div>
         </div>
       </div>
     </StatInfoContainer>
@@ -259,13 +265,21 @@ const StatInfo: React.FC = () => {
 
 const HomePage: React.FC = () => {
   return (
-    <HomePageContainer>
-      <StatInfo />
-      <DowsSynthesizerContainer>
-        <DowsSynthesizer />
-      </DowsSynthesizerContainer>
-      <PairInfo />
-    </HomePageContainer>
+    <DivContainer>
+      <ContentContainer>
+        <DivContainer>
+          <StatInfo />
+        </DivContainer>
+        <DivContainer>
+          <DowsSynthesizerContainer>
+            <DowsSynthesizer />
+          </DowsSynthesizerContainer>
+        </DivContainer>
+        <DivContainer>
+          <PairInfo />
+        </DivContainer>
+      </ContentContainer>
+    </DivContainer>
   )
 }
 

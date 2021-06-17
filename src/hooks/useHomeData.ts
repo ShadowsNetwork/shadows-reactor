@@ -63,6 +63,7 @@ const useBalance = () => {
   const [yourBalance, setYourBalance] = useState('')
   const [assetsBalance, setAssetsBalance] = useState('')
   const [debtPool, setDebtPool] = useState('')
+  const [ratio, setRatio] = useState(toBigNumber(0.2))
 
   const { fastRefreshFlag } = useRefreshController()
 
@@ -98,6 +99,7 @@ const useBalance = () => {
     setYourBalance(_newBalanceOf)
     setAssetsBalance(_newTransferableShadows)
     setDebtPool(_newDebtBalanceOf)
+    setRatio(rate)
 
   }, [account, dowsPrice, fastRefreshFlag])
 
@@ -106,19 +108,20 @@ const useBalance = () => {
   }, [fetch])
 
   return {
-    yourBalance, assetsBalance, debtPool
+    yourBalance, assetsBalance, debtPool, ratio
   }
 }
 
 export const useHomeData = () => {
   const { assetsBalanceList } = useAssetsBalance()
 
-  const { yourBalance, assetsBalance, debtPool } = useBalance()
-
+  const { assetsBalance, debtPool, ratio } = useBalance()
+  const totalCurrentKeysBalance = assetsBalanceList.reduce((sum: BigNumber, item: any) => sum.plus(item.value), toBigNumber(0)).dividedBy(ratio)
   return {
-    yourBalance,
+    yourBalance: totalCurrentKeysBalance.plus(toBigNumber(assetsBalance)),
     assetsBalance,
     debtPool,
-    assetsBalanceList
+    assetsBalanceList,
+    netTradingBalance: totalCurrentKeysBalance.minus(debtPool)
   }
 }
