@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom'
 const Box = styled.div`
   background-color: #121725;
   padding: ${props => props.padding};
-  height: 41rem;
+  height: 45rem;
   margin-right: 2.5rem;
   border-radius: 1rem;
 `
@@ -199,11 +199,11 @@ const StatInfo: React.FC = () => {
           <div className="value">${numberWithCommas(yourBalance)}</div>
         </div>
         <div className="summary-item">
-          <div className="label">Assets Balance</div>
+          <div className="label">DOWS Balance</div>
           <div className="value">${numberWithCommas(assetsBalance)}</div>
         </div>
         <div className="summary-item">
-          <div className="label">Debt Pool</div>
+          <div className="label">Net Trading Balance</div>
           <div className="value">(${numberWithCommas(debtPool)})</div>
         </div>
       </div>
@@ -227,6 +227,7 @@ const StatInfo: React.FC = () => {
               </div>
             ))
           }
+          {/* <div className="item" style={{marginLeft:'3.5rem'}}>My Debt</div> */}
         </div>
         <div className="column">
           <div className="header">Qty</div>
@@ -238,6 +239,7 @@ const StatInfo: React.FC = () => {
               </div>
             ))
           }
+          {/* <div className="item">-</div> */}
         </div>
         <div className="column">
           <div className="header">Value</div>
@@ -248,6 +250,7 @@ const StatInfo: React.FC = () => {
               </div>
             ))
           }
+          {/* <div className="item">($52,342.5)</div> */}
         </div>
       </div>
     </StatInfoContainer>

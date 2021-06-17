@@ -99,21 +99,6 @@ const useBalance = () => {
     setAssetsBalance(_newTransferableShadows)
     setDebtPool(_newDebtBalanceOf)
 
-    // const [_balanceOf, _transferableShadows, _debtBalanceOf] = (
-    //   await Promise.all([
-    //     dowsJSConnector.dowsJs.Shadows.balanceOf(account),
-    //     dowsJSConnector.dowsJs.Synthesizer.transferableShadows(account),
-    //     dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('DOWS'))
-    //   ]))
-    //   .map((value: BN) => weiToBigNumber(value))
-    //   .map((value: BigNumber) =>
-    //     value.multipliedBy(toBigNumber(dowsPrice))
-    //       .toString()
-    //   )
-
-    // setYourBalance(_balanceOf)
-    // setAssetsBalance(_transferableShadows)
-    // setDebtPool(_debtBalanceOf)
   }, [account, dowsPrice, fastRefreshFlag])
 
   useEffect(() => {
