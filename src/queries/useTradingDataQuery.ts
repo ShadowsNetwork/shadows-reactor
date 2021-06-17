@@ -9,7 +9,7 @@ const request = axios.create({
   timeout: 30000
 })
 
-const filterKey = ['eth', 'btc'];
+const filterKey = ['coinbase', 'silver', 'gold']
 
 const useTradingDataQuery = (mode: string, currencyKey?: string) => {
   const [data, setData] = useState<any>()
@@ -17,7 +17,7 @@ const useTradingDataQuery = (mode: string, currencyKey?: string) => {
   const fetch = useCallback(async () => {
     const key = currencyKey?.substr(1)
       .toLowerCase()
-    const isBool = key && filterKey.includes(key)
+    const isBool = key && !filterKey.includes(key)
 
     let url = ''
     if (mode === 'price') {
