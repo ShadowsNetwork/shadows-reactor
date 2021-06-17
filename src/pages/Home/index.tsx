@@ -256,7 +256,7 @@ const StatInfo: React.FC = () => {
               </div>
             ))
           }
-          <div className="item">({numberWithCommas(debtPool)})</div>
+          <div className="item">(${numberWithCommas(debtPool)})</div>
         </div>
       </div>
     </StatInfoContainer>

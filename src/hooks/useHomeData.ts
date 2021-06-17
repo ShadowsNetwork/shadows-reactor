@@ -79,7 +79,7 @@ const useBalance = () => {
       await Promise.all([
         dowsJSConnector.dowsJs.Shadows.balanceOf(account),
         dowsJSConnector.dowsJs.Synthesizer.transferableShadows(account),
-        dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('DOWS')),
+        dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('xUSD')),
         dowsJSConnector.dowsJs.Synthesizer.collateralisationRatio(account),
         dowsJSConnector.dowsJs.Synthesizer.issuanceRatio()
       ]))
@@ -92,9 +92,13 @@ const useBalance = () => {
           .toString()
       )
 
-    const _newDebtBalanceOf = weiToBigNumber(_debtBalanceOf)
-      .dividedBy(rate)
-      .multipliedBy(toBigNumber(dowsPrice)).toString()
+    // const _newDebtBalanceOf = weiToBigNumber(_debtBalanceOf)
+    // .dividedBy(rate)
+    // .multipliedBy(toBigNumber(dowsPrice)).toString()
+
+    const _newDebtBalanceOf = weiToBigNumber(_debtBalanceOf).toString()
+    // .dividedBy(rate)
+    // .multipliedBy(toBigNumber(dowsPrice)).toString()
 
     setYourBalance(_newBalanceOf)
     setAssetsBalance(_newTransferableShadows)
@@ -108,15 +112,15 @@ const useBalance = () => {
   }, [fetch])
 
   return {
-    yourBalance, assetsBalance, debtPool, ratio
+    yourBalance, assetsBalance, debtPool
   }
 }
 
 export const useHomeData = () => {
   const { assetsBalanceList } = useAssetsBalance()
 
-  const { assetsBalance, debtPool, ratio } = useBalance()
-  const totalCurrentKeysBalance = assetsBalanceList.reduce((sum: BigNumber, item: any) => sum.plus(item.value), toBigNumber(0)).dividedBy(ratio)
+  const { assetsBalance, debtPool } = useBalance()
+  const totalCurrentKeysBalance = assetsBalanceList.reduce((sum: BigNumber, item: any) => sum.plus(item.value), toBigNumber(0))
   return {
     yourBalance: totalCurrentKeysBalance.plus(toBigNumber(assetsBalance)),
     assetsBalance,

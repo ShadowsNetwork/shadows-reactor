@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { appendTransactionHistory, getAccount } from '@/store/wallet'
 import AmountInputModal, { AmountInputModalStatus } from '@/pages/LiquidityProvider/AmountInputModal'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
+import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import { Button, Popover } from 'antd'
 import styled from 'styled-components'
 import { useDowsSynthesizerData } from '@/hooks/useDowsSynthesizerData'
@@ -69,6 +69,7 @@ const DowsInfoContainer = styled.div`
       }
       &[disabled]{
         &:hover{
+          border-color: #979797;
           transform:translate(0, 0);
         }
       }
@@ -222,13 +223,17 @@ const DowsSynthesizer: React.FC = () => {
         })
     }
 
-    const balance = weiToBigNumber(await dowsJSConnector.dowsJs.Synth.balanceOf('xUSD', account!))
+    let debtBalance = weiToBigNumber(await dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account!, toByte32('xUSD')))
+
+    if (Number(myRatio.replace('%', '')) < Number(targetRatio.replace('%', ''))) {
+      debtBalance = weiToBigNumber(0)
+    }
 
     setAmountInputModalStatus({
       ...amountInputModalStatus,
       visible: true,
       title: 'Burn xUSD',
-      maxAvailable: balance,
+      maxAvailable: debtBalance,
       cancelCallback: closeAmountInputModal,
       confirmCallback: burnSynths,
       unit: 'xUSD'
