@@ -204,9 +204,7 @@ const PairInfo: React.FC = () => {
 const StatInfo: React.FC = () => {
   const { yourBalance, assetsBalance, debtPool, assetsBalanceList, netTradingBalance } = useHomeData()
 
-  const newNetTradingBalance = netTradingBalance >= toBigNumber(0) ? `$${numberWithCommas(netTradingBalance)}` : numberWithCommas(netTradingBalance).replace('-', '-$');
-
-  console.log(assetsBalanceList)
+  const newNetTradingBalance = netTradingBalance >= toBigNumber(0) ? `$${numberWithCommas(netTradingBalance)}` : numberWithCommas(netTradingBalance).replace('-', '-$')
 
   const currencyIcon = (key: string) => {
     const map = shadowsSynthsConfig.find((item: ShadowsSynth) => item.symbol === key)
