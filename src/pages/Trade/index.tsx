@@ -648,7 +648,6 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   //   { key: '1h', value: 60 }
   // ]
 
-  console.log(keyPair)
   const availableMode = [
     { key: 'Price', value: 'price' },
     { key: 'Volume', value: 'volume' }
