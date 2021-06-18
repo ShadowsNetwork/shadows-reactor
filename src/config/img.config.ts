@@ -40,7 +40,7 @@ export const shadowsSynthsConfig: Array<ShadowsSynth> = [
   },
   {
     type: 'Equaties',
-    coingecko: 'coin-artist',
+    coingecko: 'coinbase-stock',
     name: 'coinbase',
     symbol: 'xCOINBASE',
     isCoingeckoSql: true,

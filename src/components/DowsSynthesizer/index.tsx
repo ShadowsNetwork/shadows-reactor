@@ -257,9 +257,9 @@ const DowsSynthesizer: React.FC = () => {
     return (
       <TipDiv>
         <div className="tip">
-          <p>DOWS Rewards are distributed based on user’s share <br />of the debt pool. </p>
+          <p>DOWS Rewards are distributed based on user’s share<br />of the debt pool.</p>
           <br />
-          <p>--DOWS Rewards are calculated weekly</p>
+          <p>-DOWS Rewards are calculated weekly</p>
           <p>-An escrow period of (enter here time) is required<br /> before redeem option is available.</p>
         </div>
       </TipDiv>
@@ -302,7 +302,7 @@ const DowsSynthesizer: React.FC = () => {
       </div>
       <div className="text-container" style={{ marginBottom: '2rem' }}>
         <p className="bold">
-          <span>Total xUSD Fees&nbsp;
+          <span>Total xUSD Rewards&nbsp;
             <Popover trigger="hover" content={feeTip}>
               <InfoCircleFilled style={{ color: '#63CCA9' }} />
             </Popover>
@@ -339,7 +339,7 @@ const DowsSynthesizer: React.FC = () => {
           disabled={redeemableFees.lte(0)}
           style={{ fontSize: '1.3rem' }}
         >
-          Redeem Fees
+          Redeem reward xUSD 
         </Button>
         <Button
           className="button"
@@ -347,7 +347,7 @@ const DowsSynthesizer: React.FC = () => {
           disabled={redeemableRewards.lte(0)}
           style={{ fontSize: '1.3rem' }}
         >
-          Redeem Rewards
+          Redeem reward DOWS 
         </Button>
       </div>
 
