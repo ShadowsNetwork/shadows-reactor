@@ -41,7 +41,7 @@ export const shadowsSynthsConfig: Array<ShadowsSynth> = [
   {
     type: 'Equaties',
     coingecko: 'coin-artist',
-    name: 'coin',
+    name: 'coinbase',
     symbol: 'xCOINBASE',
     isCoingeckoSql: true,
     isContractUpdate: true
