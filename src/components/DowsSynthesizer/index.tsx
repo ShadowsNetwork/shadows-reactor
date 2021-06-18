@@ -304,7 +304,7 @@ const DowsSynthesizer: React.FC = () => {
         <p className="bold">
           <span>Total xUSD Fees&nbsp;
             <Popover trigger="hover" content={feeTip}>
-              <InfoCircleFilled />
+              <InfoCircleFilled style={{ color: '#63CCA9' }} />
             </Popover>
           </span>
           <span>{numberWithCommas(totalFees, 6)}</span>
@@ -318,7 +318,7 @@ const DowsSynthesizer: React.FC = () => {
         <p className="bold">
           <span>Total DOWS Rewards&nbsp;
             <Popover trigger="hover" content={rewardTip}>
-              <InfoCircleFilled />
+              <InfoCircleFilled style={{ color: '#63CCA9' }} />
             </Popover>
           </span>
           <span>{numberWithCommas(totalRewards, 6)}</span>

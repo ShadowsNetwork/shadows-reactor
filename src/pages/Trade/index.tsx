@@ -16,6 +16,8 @@ import { appendTransactionHistory } from '@/store/wallet'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
+import { shadowsSynthsConfig, ShadowsSynth } from '@/config/img.config'
+
 
 type PairInfoProps = {
   onSelectedKeyPairChanged: (_selectedKeyPair: KeyPair) => void
@@ -298,9 +300,7 @@ const CustomizedSlider = styled.div`
 `
 
 const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedKeyPair }) => {
-  /*// const [selectedType, setSelectedType] = useState('All')
-
-
+  const [selectedType, setSelectedType] = useState('All')
   const StatefulButton = ({ name }: { name: string }) => {
     const handleClick = () => {
       setSelectedType(name)
@@ -323,9 +323,14 @@ const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedK
         </Button>
       </div>
     )
-  }*/
+  }
 
-  const { keyPairs } = useCurrencyData()
+  let { keyPairs } = useCurrencyData()
+  if (selectedType !== 'All') {
+    keyPairs = keyPairs?.filter(keyPair =>
+      shadowsSynthsConfig.find(val => val.symbol === keyPair?.symbol[0])?.type === selectedType
+    )
+  }
 
   const handleSelectKeyPair = (keypair: KeyPair) => {
     onSelectedKeyPairChanged(keypair)
@@ -345,13 +350,13 @@ const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedK
 
   return (
     <PairsInfoContainer>
-      {/* <div className="button-group">
+      <div className="button-group">
         <StatefulButton name="All" />
         <StatefulButton name="Crypto" />
-        <StatefulButton name="Fiat" />
+        {/* <StatefulButton name="Fiat" /> */}
         <StatefulButton name="Commodities" />
         <StatefulButton name="Equaties" />
-      </div>*/}
+      </div>
       <div className="list">
         <div className="header">
           <div className="key">Symbol</div>
@@ -643,6 +648,7 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   //   { key: '1h', value: 60 }
   // ]
 
+  console.log(keyPair)
   const availableMode = [
     { key: 'Price', value: 'price' },
     { key: 'Volume', value: 'volume' }
@@ -663,19 +669,12 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   //   }
   //   return '---'
   // })()
-  
+
   const { currentPrice } = useCurrencyPrice(keyPair?.symbol[0])
 
   const currencyIcon = (key: string) => {
-    const map = {
-      'xUSD': 'https://raw.githubusercontent.com/Synthetixio/synthetix-assets/v2.0.10/synths/sUSD.svg',
-      'xETH': 'https://raw.githubusercontent.com/Synthetixio/synthetix-assets/v2.0.10/synths/sETH.svg',
-      'xCOINBASE': 'https://raw.githubusercontent.com/Synthetixio/synthetix-assets/v2.0.10/synths/sCOIN.svg',
-      'xSILVER': 'https://raw.githubusercontent.com/Synthetixio/synthetix-assets/v2.0.10/synths/sXAG.svg',
-      'xGOLD': 'https://raw.githubusercontent.com/Synthetixio/synthetix-assets/v2.0.10/synths/sXAU.svg',
-    }
-
-    return map[key] ?? map['xUSD']
+    const map = shadowsSynthsConfig.find((item: ShadowsSynth) => item.symbol === key)
+    return require(`../../img/tokens/${map?.symbol || 'xUSD'}.svg`)
   }
 
   return (

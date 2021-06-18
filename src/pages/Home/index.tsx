@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import { Button } from 'antd'
 import { numberWithCommas } from '@/utils'
 import DowsSynthesizer from '@/components/DowsSynthesizer'
 import { useCurrencyData } from '@/hooks/useTradeData'
 import { useHomeData } from '@/hooks/useHomeData'
 import { useHistory } from 'react-router-dom'
 import { toBigNumber } from '@/web3/utils'
+import { shadowsSynthsConfig, ShadowsSynth } from '@/config/img.config'
 
 const Box = styled.div`
   background-color: #121725;
@@ -121,7 +123,7 @@ const StatInfoContainer = styled(Box)`
 `
 
 const PairInfo: React.FC = () => {
-  /* const [selectedType, setSelectedType] = useState('All')
+  const [selectedType, setSelectedType] = useState('All')
 
   const StatefulButton = ({ name }: { name: string }) => {
     const handleClick = () => {
@@ -145,21 +147,27 @@ const PairInfo: React.FC = () => {
         </Button>
       </div>
     )
-  }*/
+  }
 
   const history = useHistory()
 
-  const { keyPairs } = useCurrencyData()
+  let { keyPairs } = useCurrencyData()
+
+  if (selectedType !== 'All') {
+    keyPairs = keyPairs?.filter(keyPair =>
+      shadowsSynthsConfig.find(val => val.symbol === keyPair?.symbol[0])?.type === selectedType
+    )
+  }
 
   return (
     <PairsInfoContainer>
-      {/*<div className="button-group">
+      <div className="button-group">
         <StatefulButton name="All" />
         <StatefulButton name="Crypto" />
-        <StatefulButton name="Fiat" />
+        {/* <StatefulButton name="Fiat" /> */}
         <StatefulButton name="Commodities" />
         <StatefulButton name="Equaties" />
-      </div>*/}
+      </div>
       <div className="list">
         <div className="header">
           <div className="key">Symbol</div>
@@ -197,6 +205,14 @@ const StatInfo: React.FC = () => {
   const { yourBalance, assetsBalance, debtPool, assetsBalanceList, netTradingBalance } = useHomeData()
 
   const newNetTradingBalance = netTradingBalance >= toBigNumber(0) ? `$${numberWithCommas(netTradingBalance)}` : numberWithCommas(netTradingBalance).replace('-', '-$');
+
+  console.log(assetsBalanceList)
+
+  const currencyIcon = (key: string) => {
+    const map = shadowsSynthsConfig.find((item: ShadowsSynth) => item.symbol === key)
+    return require(`../../img/tokens/${map?.symbol || 'xUSD'}.svg`)
+  }
+
   return (
     <StatInfoContainer>
       <div className="summary-row">
@@ -225,7 +241,7 @@ const StatInfo: React.FC = () => {
 
                   <img
                     className="icon"
-                    src={require(`../../img/tokens/${asset.key}.svg`)}
+                    src={currencyIcon(asset.key)}
                     alt={asset.key}
                   />
                 }
