@@ -15,7 +15,8 @@ interface FeePoolData {
   redeemableFees: BigNumber
   totalRewards: BigNumber
   escrowedRewards: BigNumber
-  redeemableRewards: BigNumber
+  redeemableRewards: BigNumber,
+  nextVestTime: string
 }
 
 interface TradeData extends FeePoolData {
@@ -117,6 +118,7 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
   const [totalRewards, setTotalRewards] = useState(new BigNumber(0))
   const [escrowedRewards, setEscrowedRewards] = useState(new BigNumber(0))
   const [redeemableRewards, setRedeemableRewards] = useState(new BigNumber(0))
+  const [nextVestTime, setNextVestTime] = useState('')
 
   const fetch = useCallback(async () => {
     if (!networkReady || !addressAvailable(account)) {
@@ -155,6 +157,8 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
       setRedeemableRewards(weiToBigNumber(0))
     }
 
+    setNextVestTime(utc(_vestTime).format('MMM DD,YYYY hh:mm:ss A') + '(UTC)')
+
   }, [account, refreshFlag, networkReady])
 
   useEffect(() => {
@@ -169,7 +173,8 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
     redeemableFees,
     totalRewards: totalRewards.plus(escrowedRewards),
     escrowedRewards,
-    redeemableRewards
+    redeemableRewards,
+    nextVestTime
   }
 }
 
@@ -181,7 +186,7 @@ export const useDowsSynthesizerData = (): TradeData => {
   const { totalDows, availableDows, lockedDows } = useShadowsData(fastRefreshFlag)
 
   const {
-    totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards
+    totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards, nextVestTime
   } = useFeePoolData(fastRefreshFlag)
 
   return {
@@ -194,6 +199,7 @@ export const useDowsSynthesizerData = (): TradeData => {
     redeemableFees,
     totalRewards,
     escrowedRewards,
-    redeemableRewards
+    redeemableRewards,
+    nextVestTime
   }
 }

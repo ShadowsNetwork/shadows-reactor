@@ -39,7 +39,7 @@ export const shadowsSynthsConfig: Array<ShadowsSynth> = [
     isContractUpdate: true
   },
   {
-    type: 'Equaties',
+    type: 'Equities',
     coingecko: 'coinbase-stock',
     name: 'coinbase',
     symbol: 'xCOINBASE',

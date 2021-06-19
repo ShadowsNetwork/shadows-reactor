@@ -135,7 +135,7 @@ const DowsSynthesizer: React.FC = () => {
   const data = useDowsSynthesizerData()
   const { myRatio, targetRatio } = data
   const { totalDows, availableDows, lockedDows } = data
-  const { totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards } = data
+  const { totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards, nextVestTime } = data
 
   const [amountInputModalStatus, setAmountInputModalStatus] = useState<AmountInputModalStatus>({
     visible: false,
@@ -223,7 +223,7 @@ const DowsSynthesizer: React.FC = () => {
         })
     }
 
-    let debtBalance = weiToBigNumber(await dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account!, toByte32('xUSD')))
+    let debtBalance = weiToBigNumber(await dowsJSConnector.dowsJs.Synth.balanceOf('xUSD', account!))
 
     if (Number(myRatio.replace('%', '')) < Number(targetRatio.replace('%', ''))) {
       debtBalance = weiToBigNumber(0)
@@ -260,7 +260,7 @@ const DowsSynthesizer: React.FC = () => {
           <p>DOWS Rewards are distributed based on user’s share<br />of the debt pool.</p>
           <br />
           <p>-DOWS Rewards are calculated weekly</p>
-          <p>-An escrow period of (enter here time) is required<br /> before redeem option is available.</p>
+          <p>-An escrow period of ({nextVestTime}) is required<br /> before redeem option is available.</p>
         </div>
       </TipDiv>
     )
@@ -307,11 +307,11 @@ const DowsSynthesizer: React.FC = () => {
               <InfoCircleFilled style={{ color: '#63CCA9' }} />
             </Popover>
           </span>
-          <span>{numberWithCommas(totalFees, 6)}</span>
+          <span>${numberWithCommas(totalFees, 6)}</span>
         </p>
         <p>
           <span>Redeemable </span>
-          <span>{numberWithCommas(redeemableFees, 6)}</span>
+          <span>${numberWithCommas(redeemableFees, 6)}</span>
         </p>
       </div>
       <div className="text-container" style={{ marginBottom: '1.5rem' }}>
@@ -339,7 +339,7 @@ const DowsSynthesizer: React.FC = () => {
           disabled={redeemableFees.lte(0)}
           style={{ fontSize: '1.3rem' }}
         >
-          Redeem reward xUSD 
+          Redeem {/* reward */} xUSD
         </Button>
         <Button
           className="button"
@@ -347,7 +347,7 @@ const DowsSynthesizer: React.FC = () => {
           disabled={redeemableRewards.lte(0)}
           style={{ fontSize: '1.3rem' }}
         >
-          Redeem reward DOWS 
+          Redeem {/* reward */} DOWS
         </Button>
       </div>
 

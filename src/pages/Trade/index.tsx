@@ -355,7 +355,7 @@ const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedK
         <StatefulButton name="Crypto" />
         {/* <StatefulButton name="Fiat" /> */}
         <StatefulButton name="Commodities" />
-        <StatefulButton name="Equaties" />
+        <StatefulButton name="Equities" />
       </div>
       <div className="list">
         <div className="header">
@@ -694,9 +694,9 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
       <div className="price-info">
         <div className="current">
           $
-          {numberWithCommas(currentPrice)}
+          {numberWithCommas(currentPrice || 0)}
         </div>
-        <div className="change" style={{ color: '#63cca9' }}>
+        <div className="change" style={{ color: data?.usd_24h_change > 0 ? '#63cca9' : '#DB5E56' }}>
           {data?.usd_24h_change > 0 ? '+' : ''}
           {data?.usd_24h_change?.toFixed(2)}
           {data?.usd_24h_change && '%'}

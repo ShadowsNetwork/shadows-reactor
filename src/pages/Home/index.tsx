@@ -166,7 +166,7 @@ const PairInfo: React.FC = () => {
         <StatefulButton name="Crypto" />
         {/* <StatefulButton name="Fiat" /> */}
         <StatefulButton name="Commodities" />
-        <StatefulButton name="Equaties" />
+        <StatefulButton name="Equities" />
       </div>
       <div className="list">
         <div className="header">
