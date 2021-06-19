@@ -223,17 +223,15 @@ const DowsSynthesizer: React.FC = () => {
         })
     }
 
-    let debtBalance = weiToBigNumber(await dowsJSConnector.dowsJs.Synth.balanceOf('xUSD', account!))
-
-    if (Number(myRatio.replace('%', '')) < Number(targetRatio.replace('%', ''))) {
-      debtBalance = weiToBigNumber(0)
-    }
-
+    const [_debtBalance, _balanceOf] = await Promise.all([
+      dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account!, toByte32('xUSD')),
+      dowsJSConnector.dowsJs.Synth.balanceOf('xUSD', account!)
+    ])
     setAmountInputModalStatus({
       ...amountInputModalStatus,
       visible: true,
       title: 'Burn xUSD',
-      maxAvailable: debtBalance,
+      maxAvailable: weiToBigNumber(_debtBalance).minus(weiToBigNumber(_balanceOf)) > weiToBigNumber(0) ? weiToBigNumber(_balanceOf) : weiToBigNumber(_debtBalance),
       cancelCallback: closeAmountInputModal,
       confirmCallback: burnSynths,
       unit: 'xUSD'
