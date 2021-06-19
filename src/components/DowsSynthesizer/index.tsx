@@ -263,7 +263,6 @@ const DowsSynthesizer: React.FC = () => {
       </TipDiv>
     )
   }
-
   return (
     <DowsInfoContainer>
       <div className="header" style={{ marginBottom: '1.5rem' }}>
@@ -277,10 +276,10 @@ const DowsSynthesizer: React.FC = () => {
         </div>
       </div>
       <div className="button-row" style={{ marginBottom: '2.8rem' }}>
-        <Button className="button" onClick={handleMintXusd}>
+        <Button className="button" onClick={handleMintXusd} disabled={myRatio === '-' ? true : false}>
           Mint xUSD
         </Button>
-        <Button className="button" onClick={handleBurnXusd}>
+        <Button className="button" onClick={handleBurnXusd} disabled={myRatio === '-' ? true : false}>
           Burn xUSD
         </Button>
       </div>
@@ -350,7 +349,7 @@ const DowsSynthesizer: React.FC = () => {
       </div>
 
       <AmountInputModal {...amountInputModalStatus} />
-    </DowsInfoContainer>
+    </DowsInfoContainer >
   )
 }
 

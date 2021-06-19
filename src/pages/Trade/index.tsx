@@ -145,7 +145,7 @@ const StatsContainer = styled.div`
   justify-content: space-around;
 
   .item {
-    font-family: "DM sans";
+    // font-family: "DM sans";
     font-weight: bold;
     //line-height: 12;
 
