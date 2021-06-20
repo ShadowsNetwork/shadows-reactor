@@ -202,7 +202,7 @@ const PairInfo: React.FC = () => {
 }
 
 const StatInfo: React.FC = () => {
-  const { yourBalance, assetsBalance, debtPool, assetsBalanceList, netTradingBalance } = useHomeData()
+  const { yourBalance, dowsBalance, assetsBalance, debtPool, assetsBalanceList, netTradingBalance } = useHomeData()
 
   const newNetTradingBalance = netTradingBalance >= toBigNumber(0) ? `$${numberWithCommas(netTradingBalance)}` : numberWithCommas(netTradingBalance).replace('-', '-$')
 
@@ -220,7 +220,7 @@ const StatInfo: React.FC = () => {
         </div>
         <div className="summary-item">
           <div className="label">DOWS Balance</div>
-          <div className="value">${numberWithCommas(assetsBalance)}</div>
+          <div className="value">${numberWithCommas(dowsBalance)}</div>
         </div>
         <div className="summary-item">
           <div className="label">Net Trading Balance</div>

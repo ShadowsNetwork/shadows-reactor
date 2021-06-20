@@ -8,7 +8,6 @@ import BigNumber from 'bignumber.js'
 import { addressAvailable, weiToBigNumber } from '@/web3/utils'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
-import { ContactsOutlined } from '@ant-design/icons'
 
 interface FeePoolData {
   totalFees: BigNumber
@@ -120,7 +119,7 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
   const [escrowedRewards, setEscrowedRewards] = useState(new BigNumber(0))
   const [redeemableRewards, setRedeemableRewards] = useState(new BigNumber(0))
   const [nextVestTime, setNextVestTime] = useState('')
-  const [vestingScheduleTime, setVestingScheduleTime] = useState('')
+  const [vestingScheduleTime, setVestingScheduleTime] = useState(new BigNumber(0))
 
   const fetch = useCallback(async () => {
     if (!networkReady || !addressAvailable(account)) {

@@ -118,10 +118,11 @@ const useBalance = () => {
 
 export const useHomeData = () => {
   const { assetsBalanceList } = useAssetsBalance()
-  const { assetsBalance, debtPool } = useBalance()
+  const { yourBalance, assetsBalance, debtPool } = useBalance()
   const totalCurrentKeysBalance = assetsBalanceList.reduce((sum: BigNumber, item: any) => sum.plus(item.value), toBigNumber(0))
   return {
     yourBalance: totalCurrentKeysBalance.plus(toBigNumber(assetsBalance || 0)),
+    dowsBalance: yourBalance,
     assetsBalance,
     debtPool,
     assetsBalanceList,

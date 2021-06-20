@@ -252,13 +252,30 @@ const DowsSynthesizer: React.FC = () => {
   }
 
   const rewardTip = () => {
+    const week = vestingScheduleTime.mod(1 * 60 * 60 * 24 * 7)
+    const day = vestingScheduleTime.mod(1 * 60 * 60 * 24)
+    const hour = vestingScheduleTime.mod(1 * 60 * 60)
+    const min = vestingScheduleTime.mod(1 * 60)
+    let _vestingScheduleTime
+    if (week.toString() === '0') {
+      _vestingScheduleTime = (vestingScheduleTime.div(1 * 60 * 60 * 24 * 7)).toString() + ' weeks'
+    } else if (day.toString() === '0') {
+      _vestingScheduleTime = (vestingScheduleTime.div(1 * 60 * 60 * 24)).toString() + ' days'
+    } else if (hour.toString() === '0') {
+      _vestingScheduleTime = (vestingScheduleTime.div(1 * 60 * 60)).toString() + ' hours'
+    } else if (min.toString() === '0') {
+      _vestingScheduleTime = (vestingScheduleTime.div(1 * 60)).toString() + ' minutes'
+    } else {
+      _vestingScheduleTime = vestingScheduleTime.toString() + ' seconds s'
+    }
+
     return (
       <TipDiv>
         <div className="tip">
           <p>DOWS Rewards are distributed based on user’s share<br />of the debt pool.</p>
           <br />
           <p>-DOWS Rewards are calculated weekly</p>
-          <p>-An escrow period of ({vestingScheduleTime.toString()}) is required<br /> before redeem option is available.</p>
+          <p>-An escrow period of ({_vestingScheduleTime}) is required<br /> before redeem option is available.</p>
         </div>
       </TipDiv>
     )
