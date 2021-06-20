@@ -135,7 +135,7 @@ const DowsSynthesizer: React.FC = () => {
   const data = useDowsSynthesizerData()
   const { myRatio, targetRatio } = data
   const { totalDows, availableDows, lockedDows } = data
-  const { totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards, nextVestTime } = data
+  const { totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards, nextVestTime, vestingScheduleTime } = data
 
   const [amountInputModalStatus, setAmountInputModalStatus] = useState<AmountInputModalStatus>({
     visible: false,
@@ -258,7 +258,7 @@ const DowsSynthesizer: React.FC = () => {
           <p>DOWS Rewards are distributed based on user’s share<br />of the debt pool.</p>
           <br />
           <p>-DOWS Rewards are calculated weekly</p>
-          <p>-An escrow period of ({nextVestTime}) is required<br /> before redeem option is available.</p>
+          <p>-An escrow period of ({vestingScheduleTime.toString()}) is required<br /> before redeem option is available.</p>
         </div>
       </TipDiv>
     )
@@ -276,10 +276,10 @@ const DowsSynthesizer: React.FC = () => {
         </div>
       </div>
       <div className="button-row" style={{ marginBottom: '2.8rem' }}>
-        <Button className="button" onClick={handleMintXusd} disabled={myRatio === '-' ? true : false}>
+        <Button className="button" onClick={handleMintXusd} disabled={!account ? true : false}>
           Mint xUSD
         </Button>
-        <Button className="button" onClick={handleBurnXusd} disabled={myRatio === '-' ? true : false}>
+        <Button className="button" onClick={handleBurnXusd} disabled={!account ? true : false}>
           Burn xUSD
         </Button>
       </div>

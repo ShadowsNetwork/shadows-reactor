@@ -16,7 +16,8 @@ interface FeePoolData {
   totalRewards: BigNumber
   escrowedRewards: BigNumber
   redeemableRewards: BigNumber,
-  nextVestTime: string
+  nextVestTime: string,
+  vestingScheduleTime: BigNumber
 }
 
 interface TradeData extends FeePoolData {
@@ -119,6 +120,7 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
   const [escrowedRewards, setEscrowedRewards] = useState(new BigNumber(0))
   const [redeemableRewards, setRedeemableRewards] = useState(new BigNumber(0))
   const [nextVestTime, setNextVestTime] = useState('')
+  const [vestingScheduleTime, setVestingScheduleTime] = useState('')
 
   const fetch = useCallback(async () => {
     if (!networkReady || !addressAvailable(account)) {
@@ -129,12 +131,13 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
       return
     }
 
-    const [_feesByPeriod, [_totalFees], _balanceOf, _vestTime, _vestQuantiry] = await Promise.all([
+    const [_feesByPeriod, [_totalFees], _balanceOf, _vestTime, _vestQuantiry, _vestingScheduleTime] = await Promise.all([
       dowsJSConnector.dowsJs.FeePool.feesByPeriod(account),
       dowsJSConnector.dowsJs.FeePool.feesAvailable(account),
       dowsJSConnector.dowsJs.RewardEscrow.balanceOf(account),
       dowsJSConnector.dowsJs.RewardEscrow.getNextVestingTime(account),
       dowsJSConnector.dowsJs.RewardEscrow.getNextVestingQuantity(account),
+      dowsJSConnector.dowsJs.RewardEscrow.vestingScheduleTime(),
     ])
 
     setTotalFees(
@@ -158,6 +161,7 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
     }
 
     setNextVestTime(utc(_vestTime).format('MMM DD,YYYY hh:mm:ss A') + '(UTC)')
+    setVestingScheduleTime(_vestingScheduleTime)
 
   }, [account, refreshFlag, networkReady])
 
@@ -168,13 +172,15 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
       })
   }, [fetch])
 
+
   return {
     totalFees,
     redeemableFees,
     totalRewards: totalRewards.plus(escrowedRewards),
     escrowedRewards,
     redeemableRewards,
-    nextVestTime
+    nextVestTime,
+    vestingScheduleTime
   }
 }
 
@@ -186,7 +192,7 @@ export const useDowsSynthesizerData = (): TradeData => {
   const { totalDows, availableDows, lockedDows } = useShadowsData(fastRefreshFlag)
 
   const {
-    totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards, nextVestTime
+    totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards, nextVestTime, vestingScheduleTime
   } = useFeePoolData(fastRefreshFlag)
 
   return {
@@ -200,6 +206,7 @@ export const useDowsSynthesizerData = (): TradeData => {
     totalRewards,
     escrowedRewards,
     redeemableRewards,
-    nextVestTime
+    nextVestTime,
+    vestingScheduleTime
   }
 }
