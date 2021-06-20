@@ -33,6 +33,7 @@ const routers: Router[] = [
     component: TradePage,
     icon: TradeIcon
   },
+  /*
   {
     path: '/staking',
     key: 'staking',
@@ -47,6 +48,7 @@ const routers: Router[] = [
     component: Bridge,
     icon: BridgeIcon
   }
+  */
 ]
 
 export default routers

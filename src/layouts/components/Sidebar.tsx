@@ -27,16 +27,6 @@ const SideBar: React.FC = () => {
             </Menu.Item>
           ))
       }
-      <Menu.Item>
-        <img className="slideIcon" src={require('@/img/menu-icons/liquidity-provider.png')} alt="pancake" />
-        <a
-          href={'https://exchange.pancakeswap.finance/#/add/0xfb7400707dF3D76084FBEae0109f41b178f71c02/BNB'}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Provide Liquidity
-        </a>
-      </Menu.Item>
     </Menu>
   )
 }

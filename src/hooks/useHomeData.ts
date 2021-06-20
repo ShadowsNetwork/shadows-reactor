@@ -121,7 +121,7 @@ export const useHomeData = () => {
   const { yourBalance, assetsBalance, debtPool } = useBalance()
   const totalCurrentKeysBalance = assetsBalanceList.reduce((sum: BigNumber, item: any) => sum.plus(item.value), toBigNumber(0))
   return {
-    yourBalance: totalCurrentKeysBalance.plus(toBigNumber(assetsBalance || 0)),
+    yourBalance: totalCurrentKeysBalance.plus(toBigNumber(yourBalance || 0)),
     dowsBalance: yourBalance,
     assetsBalance,
     debtPool,

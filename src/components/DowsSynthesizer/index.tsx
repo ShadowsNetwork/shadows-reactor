@@ -274,7 +274,7 @@ const DowsSynthesizer: React.FC = () => {
         <div className="tip">
           <p>DOWS Rewards are distributed based on user’s share<br />of the debt pool.</p>
           <br />
-          <p>-DOWS Rewards are calculated weekly</p>
+          <p>-xUSD rewards must be redeemed first before DOWS Rewards show up</p>
           <p>-An escrow period of ({_vestingScheduleTime}) is required<br /> before redeem option is available.</p>
         </div>
       </TipDiv>
