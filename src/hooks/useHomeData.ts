@@ -63,7 +63,6 @@ const useBalance = () => {
   const [yourBalance, setYourBalance] = useState('')
   const [assetsBalance, setAssetsBalance] = useState('')
   const [debtPool, setDebtPool] = useState('')
-  const [ratio, setRatio] = useState(toBigNumber(0.2))
 
   const { fastRefreshFlag } = useRefreshController()
 
@@ -75,35 +74,24 @@ const useBalance = () => {
       return
     }
 
-    const [_balanceOf, _transferableShadows, _debtBalanceOf, _collateralisationRatio, _issuanceRatio] = (
+    const [_balanceOf, _transferableShadows, _debtBalanceOf] = (
       await Promise.all([
         dowsJSConnector.dowsJs.Shadows.balanceOf(account),
         dowsJSConnector.dowsJs.Synthesizer.transferableShadows(account),
         dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('xUSD')),
-        dowsJSConnector.dowsJs.Synthesizer.collateralisationRatio(account),
-        dowsJSConnector.dowsJs.Synthesizer.issuanceRatio()
       ]))
 
-    const rate = weiToBigNumber(_collateralisationRatio) > weiToBigNumber(_issuanceRatio) ? weiToBigNumber(_collateralisationRatio) : weiToBigNumber(_issuanceRatio)
     const [_newBalanceOf, _newTransferableShadows] = [_balanceOf, _transferableShadows]
       .map((value: BN) => weiToBigNumber(value))
       .map((value: BigNumber) =>
         value.multipliedBy(toBigNumber(dowsPrice))
           .toString()
       )
-
-    // const _newDebtBalanceOf = weiToBigNumber(_debtBalanceOf)
-    // .dividedBy(rate)
-    // .multipliedBy(toBigNumber(dowsPrice)).toString()
-
     const _newDebtBalanceOf = weiToBigNumber(_debtBalanceOf).toString()
-    // .dividedBy(rate)
-    // .multipliedBy(toBigNumber(dowsPrice)).toString()
 
     setYourBalance(_newBalanceOf)
     setAssetsBalance(_newTransferableShadows)
     setDebtPool(_newDebtBalanceOf)
-    setRatio(rate)
 
   }, [account, dowsPrice, fastRefreshFlag])
 
@@ -121,7 +109,7 @@ export const useHomeData = () => {
   const { yourBalance, assetsBalance, debtPool } = useBalance()
   const totalCurrentKeysBalance = assetsBalanceList.reduce((sum: BigNumber, item: any) => sum.plus(item.value), toBigNumber(0))
   return {
-    yourBalance: totalCurrentKeysBalance.plus(toBigNumber(yourBalance || 0)),
+    yourBalance: toBigNumber(yourBalance || 0).plus(totalCurrentKeysBalance.minus(toBigNumber(debtPool || 0))),
     dowsBalance: yourBalance,
     assetsBalance,
     debtPool,

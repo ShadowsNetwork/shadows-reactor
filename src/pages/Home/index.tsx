@@ -111,9 +111,18 @@ const StatInfoContainer = styled(Box)`
         padding: 0;
 
         .icon {
-          width: 3rem;
-          height: 3rem;
+          width: 2.6rem;
+          height: 2.6rem;
+        }
+        span{
+          border:2px solid #31D8A4;
+          border-radius:50%;
           margin-right: 0.5rem;
+        }
+        img{
+          border:2px solid #fff;
+          border-radius:50%;
+          background:#FFF;
         }
       }
     }
@@ -202,7 +211,7 @@ const PairInfo: React.FC = () => {
 }
 
 const StatInfo: React.FC = () => {
-  const { yourBalance, dowsBalance, assetsBalance, debtPool, assetsBalanceList, netTradingBalance } = useHomeData()
+  const { yourBalance, dowsBalance, debtPool, assetsBalanceList, netTradingBalance } = useHomeData()
 
   const newNetTradingBalance = netTradingBalance >= toBigNumber(0) ? `$${numberWithCommas(netTradingBalance)}` : numberWithCommas(netTradingBalance).replace('-', '-$')
 
@@ -233,16 +242,15 @@ const StatInfo: React.FC = () => {
           {
             assetsBalanceList.map(asset => (
               <div className="item" key={asset.key}>
-                {
-                  // safeRequire(`../../img/tokens/${asset.key}.png`) &&
-                  // src={safeRequire('../../img/tokens/xBTC.png')}
-
-                  <img
-                    className="icon"
-                    src={currencyIcon(asset.key)}
-                    alt={asset.key}
-                  />
-                }
+                <span>
+                  {
+                    <img
+                      className="icon"
+                      src={currencyIcon(asset.key)}
+                      alt={asset.key}
+                    />
+                  }
+                </span>
                 {asset.key}
               </div>
             ))

@@ -57,11 +57,23 @@ const CandlestickContainer = styled.div`
     font-weight: bold;
     color: white;
     margin-bottom: 0.8rem;
-
-    img {
-      width: 3.6rem;
-      height: 3.6rem;
+    span{
+      border:2px solid #31D8A4;
+      border-radius:50%;
       margin-right: 0.6rem;
+      display:inline-block;
+      height:3.6rem;
+      width:3.6rem;
+      vertical-align:middle;
+      line-height:0;
+    }
+    img {
+      width: 3.2rem;
+      height: 3.2rem;
+      border:2px solid #fff;
+      border-radius:50%;
+      font-size:0;
+      background:#FFF;
     }
   }
 
@@ -679,12 +691,15 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   return (
     <CandlestickContainer>
       <div className="title">
+
         {
           keyPair?.symbol[0] && (
-            <img
-              src={currencyIcon(keyPair.symbol[0])}
-              alt=""
-            />
+            <span>
+              <img
+                src={currencyIcon(keyPair.symbol[0])}
+                alt=""
+              />
+            </span>
           )
         }
         {

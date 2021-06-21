@@ -5,7 +5,10 @@ import './index.less'
 
 const TopBar: React.FC = () => (
   <>
-    <img className="top-bar-logo" src={logo} alt="" />
+    <div className="top-bar">
+      <span className="top-bar-logo" ><img src={logo} alt="" /></span>
+      <span className="beta-version">BETA V1</span>
+    </div>
     <Wallet />
     {/*<LanguageSelector />*/}
   </>

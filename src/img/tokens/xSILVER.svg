@@ -6,8 +6,8 @@
 <circle cx="240" cy="240" r="240" fill="#31D8A4"/>
 <circle cx="240" cy="240" r="208" fill="white"/>
 </g>
-<circle cx="240" cy="240" r="184" fill="#0E052F"/>
-<circle cx="240" cy="240" r="184" fill="#0E052F"/>
+<circle cx="240" cy="240" r="240" fill="#0E052F"/>
+<circle cx="240" cy="240" r="240" fill="#0E052F"/>
 <circle cx="196.565" cy="180.469" r="53.2647" transform="rotate(28.842 196.565 180.469)" fill="#DFDFDF"/>
 <line x1="223.385" y1="134.432" x2="171.995" y2="227.746" stroke="#C4C4C4" stroke-width="5"/>
 <line x1="235.05" y1="143.666" x2="161.26" y2="220.501" stroke="#C4C4C4" stroke-width="5"/>
