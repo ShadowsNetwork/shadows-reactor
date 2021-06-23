@@ -1,6 +1,5 @@
 import { Button, Slider } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
 import { createChart, CrosshairMode, IChartApi, ISeriesApi, UTCTimestamp } from 'lightweight-charts'
 import { useErrorMessage } from '@/hooks'
@@ -17,7 +16,16 @@ import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalCont
 import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import { shadowsSynthsConfig, ShadowsSynth } from '@/config/img.config'
-
+import {
+  TradePageContainer,
+  Column,
+  CandlestickContainer,
+  StatsContainer,
+  ContainerForDowsAndPair,
+  ContainerForBuyAndSell,
+  PairsInfoContainer,
+  CustomizedSlider
+} from './index.css'
 
 type PairInfoProps = {
   onSelectedKeyPairChanged: (_selectedKeyPair: KeyPair) => void
@@ -30,286 +38,6 @@ type BuySellPanelProps = {
   keyPair?: KeyPair,
   balanceByCurrency: { [key: string]: BigNumber }
 }
-
-const TradePageContainer = styled.div`
-  display: flex;
-`
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: ${props => props.width};
-  margin-right: ${props => props.marginRight};
-
-  div {
-    border-radius: 10px;
-  }
-`
-
-const CandlestickContainer = styled.div`
-  height: 51.5rem;
-  margin-bottom: 1.5rem;
-  background-color: #121725;
-  padding: 2.4rem 1.5rem 2rem;
-
-  .title {
-    font-size: 2.8rem;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 0.8rem;
-    span{
-      border:2px solid #31D8A4;
-      border-radius:50%;
-      margin-right: 0.6rem;
-      display:inline-block;
-      height:3.6rem;
-      width:3.6rem;
-      vertical-align:middle;
-      line-height:0;
-    }
-    img {
-      width: 3.2rem;
-      height: 3.2rem;
-      border:2px solid #fff;
-      border-radius:50%;
-      font-size:0;
-      background:#FFF;
-    }
-  }
-
-  .price-info {
-    display: flex;
-    align-items: center;
-    line-height: 1;
-    margin-bottom: 0.8rem;
-
-    .current {
-      font-size: 2.8rem;
-      color: white;
-      margin-right: 0.5rem;
-      font-weight: bold;
-    }
-
-    .change {
-      font-size: 2.2rem;
-      font-weight: 500;
-      margin-left: 1rem;
-    }
-  }
-
-  .time-select-btn-group {
-    text-align: end;
-    //margin-bottom: 1.08rem;
-
-    .btn {
-      padding: 0;
-      width: 2.555rem;
-      height: 2.457rem;
-      margin-right: 0.345rem;
-
-      font-size: 0.9rem;
-      font-weight: 400;
-      color: white;
-      border-width: 1px;
-      border-color: #63CCA9;
-      border-radius: 5px;
-    }
-  }
-
-  .title, .price-info, .time-select-btn-group {
-    padding: 0 1.3rem;
-  }
-
-  .trading-view-container {
-    padding-top: 2rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .bottom-btn-group {
-    text-align: end;
-    margin-bottom: 1rem;
-    padding-top: 0.5rem;
-
-    .btn {
-      padding: 0;
-      width: 7.2rem;
-      height: 2.457rem;
-      margin-left: 1rem;
-      margin-right: 0.5rem;
-      font-size: 0.9rem;
-      color: white;
-      border-width: 1px;
-      border-color: #63CCA9;
-      border-radius: 5px;
-
-      &:hover {
-        border-color: #ffffff;
-      }
-    }
-  }
-`
-
-const StatsContainer = styled.div`
-  height: 8.8rem;
-  display: flex;
-  align-items: center;
-  background-color: #1C1C1C;
-  justify-content: space-around;
-
-  .item {
-    // font-family: "DM sans";
-    font-weight: bold;
-    //line-height: 12;
-
-    .title {
-      color: #939393;
-      // margin-bottom: 0.4rem;
-      font-size: 1.2rem;
-    }
-
-    .value {
-      color: white;
-      font-size: 2rem;
-    }
-  }
-`
-
-const ContainerForDowsAndPair = styled.div`
-  height: 41rem;
-  margin-bottom: 0.9rem;
-  background-color: #121725;
-`
-
-const ContainerForBuyAndSell = styled.div`
-  height: 19.8rem;
-  background-color: #121725;
-  padding: 1.6rem 1.6rem;
-
-  .panel {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-  }
-
-  .input {
-    height: 3.757rem;
-    border-radius: 2rem;
-    background-color: #363636;
-  }
-
-  .row {
-    display: flex;
-    align-items: center;
-  }
-
-  .unit {
-    color: #63CCA9;
-    font-weight: bold;
-    font-size: 1.4rem;
-    margin-left: 1.6rem;
-  }
-
-  .info-row {
-    justify-content: space-between;
-    color: white;
-    font-size: 1.4rem;
-    font-weight: bold;
-  }
-
-  @font-face {
-    font-family: "helveticaneue-bold";
-    src: url("/fonts/Helvetica Neu Bold.ttf") format("woff"),
-    url("/fonts/Helvetica Neu Bold.ttf") format("opentype"),
-    url("/fonts/Helvetica Neu Bold.ttf") format("truetype");
-  }
-
-  .btn {
-    margin-top: 0.8rem;
-    width: 100%;
-    height: 3.757rem;
-    border-radius: 1rem;
-    color: white;
-    font-family: "helveticaneue-bold";
-    font-size: 1.5rem;
-    font-weight: bold;
-    transition: all 0.2s linear;
-
-    &:hover {
-      transform: translate(0, 4px);
-    }
-
-    &[disabled] {
-      &:hover {
-        transform: translate(0, 0);
-      }
-    }
-  }
-`
-
-const PairsInfoContainer = styled.div`
-  padding: 1.8rem 1.2rem;
-
-  .button-group {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1.2rem;
-  }
-
-  .list {
-    margin: 0 1.2rem;
-    font-weight: bold;
-
-    .item, .header {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .item {
-      color: white;
-      font-size: 1.4rem;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .header {
-      color: #979797 !important;
-      font-size: 1.2rem;
-      user-select: none;
-    }
-  }
-`
-
-const CustomizedSlider = styled.div`
-  .ant-slider-dot {
-    background-color: #cccccc;
-    height: 14px;
-    width: 14px;
-    border: 0;
-    margin-left: -7px;
-    top: -5px;
-  }
-
-  .ant-slider-step {
-    background: rgba(255, 255, 255, .2);
-  }
-
-  .ant-slider-dot-active {
-    border-color: ${props => props.color};
-    background-color: white;
-  }
-
-  .ant-slider-with-marks {
-    margin: 1.6rem 0;
-  }
-
-  .ant-slider-handle {
-    height: 20px;
-    width: 20px;
-    background-color: white;
-    border-width: 5px;
-    margin-top: -9px;
-  }
-`
 
 const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedKeyPair }) => {
   const [selectedType, setSelectedType] = useState('All')
@@ -364,7 +92,7 @@ const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedK
     <PairsInfoContainer>
       <div className="button-group">
         <StatefulButton name="All" />
-        <StatefulButton name="Crypto" />
+        <StatefulButton name="Cryptos" />
         {/* <StatefulButton name="Fiat" /> */}
         <StatefulButton name="Commodities" />
         <StatefulButton name="Equities" />
@@ -427,7 +155,6 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
 
   const onSliderChange = value => {
     setSliderValue(value)
-
     setInputValue(
       available
         .multipliedBy('1e18')
@@ -435,7 +162,8 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
           .dividedBy(100))
         .dp(0)
         .dividedBy('1e18')
-        .toString(10)
+        .toFixed(6)
+        .toString()
     )
   }
 
@@ -473,7 +201,7 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
           inputValue={inputValue}
           setInputValue={setInputValue}
           className="input"
-          maximum={available}
+          maximum={available.toFixed(6)}
         />
         <span className="unit" style={{ color }}>{unit}</span>
       </div>
@@ -703,7 +431,7 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
           )
         }
         {
-          keyPair ? `${keyPair.symbol[0] || ''} / ${keyPair.symbol[1] || ''}` : ' '
+          keyPair ? `${keyPair.symbol[0] || ''} / ${keyPair.symbol[1] || ''}` : '- / xUSD'
         }
       </div>
       <div className="price-info">
@@ -712,9 +440,7 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
           {numberWithCommas(currentPrice || 0)}
         </div>
         <div className="change" style={{ color: data?.usd_24h_change > 0 ? '#63cca9' : '#DB5E56' }}>
-          {data?.usd_24h_change > 0 ? '+' : ''}
-          {data?.usd_24h_change?.toFixed(2)}
-          {data?.usd_24h_change && '%'}
+          {data?.usd_24h_change > 0 ? `+${data.usd_24h_change.toFixed(2)}%` : `${data?.usd_24h_change?.toFixed(2) || 0}%`}
         </div>
       </div>
       {/*<div className="time-select-btn-group">

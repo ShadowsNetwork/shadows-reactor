@@ -56,18 +56,18 @@ const AmountInputModal: React.FC<AmountInputModalStatus> = ({
       onCancel={cancelCallback}
       footer={null}
     >
-      <span className="available">{`${numberWithCommas(maxAvailable, 18)} ${unit} Available`}</span>
+      <span className="available">{`${numberWithCommas(maxAvailable, 6)} ${unit} Available`}</span>
       <span className="input-dows">
         <LimitableNumberInput
           minimum="0"
-          maximum={maxAvailable}
-          decimalPlaces={18}
+          maximum={numberWithCommas(maxAvailable, 6)}
+          decimalPlaces={6}
           inputValue={inputValue}
           setInputValue={setInputValue}
           allowClear={true}
         />
         <span className="dows">{unit}</span>
-        <Button onClick={() => setInputValue(maxAvailable.toString())}>MAX</Button>
+        <Button onClick={() => setInputValue(numberWithCommas(maxAvailable, 6))}>MAX</Button>
       </span>
       <div className="stakeButton">
         <Button onClick={handleCancel}>Cancel</Button>

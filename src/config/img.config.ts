@@ -10,21 +10,21 @@ export type ShadowsSynth = {
 
 export const shadowsSynthsConfig: Array<ShadowsSynth> = [
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     name: 'dows',
     coingecko: 'shadows',
     symbol: 'DOWS',
     isContractUpdate: true
   },
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     coingecko: 'ethereum',
     name: 'eth',
     symbol: 'xETH',
     address: '0x143db3CEEfbdfe5631aDD3E50f7614B6ba708BA7'
   },
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     coingecko: 'bitcoin',
     name: 'btc',
     symbol: 'xBTC',
@@ -55,42 +55,42 @@ export const shadowsSynthsConfig: Array<ShadowsSynth> = [
     isContractUpdate: true
   },
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     coingecko: 'cardano',
     name: 'ada',
     symbol: 'xADA',
     address: '0x5e66a1775BbC249b5D51C13d29245522582E671C'
   },
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     coingecko: 'binancecoin',
     name: 'bnb',
     symbol: 'xBNB',
     address: '0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526'
   },
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     coingecko: 'dogecoin',
     name: 'doge',
     symbol: 'xDOGE',
     address: '0x963D5e7f285Cc84ed566C486c3c1bC911291be38'
   },
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     coingecko: 'polkadot',
     name: 'dot',
     symbol: 'xDOT',
     address: '0xEA8731FD0685DB8AeAde9EcAE90C4fdf1d8164ed'
   },
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     coingecko: 'chainlink',
     name: 'link',
     symbol: 'xLINK',
     address: '0x1B329402Cb1825C6F30A0d92aB9E2862BE47333f'
   },
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     coingecko: 'litecoin',
     name: 'ltc',
     symbol: 'xLTC',
@@ -103,28 +103,28 @@ export const shadowsSynthsConfig: Array<ShadowsSynth> = [
     address: '0x4046332373C24Aed1dC8bAd489A04E187833B28d'
   },
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     coingecko: 'floatprotocol',
     name: 'bank',
     symbol: 'xBANK',
     address: '0xbe75E0725922D78769e3abF0bcb560d1E2675d5d'
   },
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     coingecko: 'pancakeswap',
     name: 'cake',
     symbol: 'xCAKE',
     address: '0x81faeDDfeBc2F8Ac524327d70Cf913001732224C'
   },
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     coingecko: 'swipe',
     name: 'sxp',
     symbol: 'xSXP',
     address: '0x678AC35ACbcE272651874E782DB5343F9B8a7D66'
   },
   {
-    type: 'Crypto',
+    type: 'Cryptos',
     coingecko: 'venus',
     name: 'xvs',
     symbol: 'xXVS',
