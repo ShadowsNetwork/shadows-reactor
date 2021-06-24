@@ -72,7 +72,7 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
 
   const initialize = useCallback(async () => {
     // console.log((await contract.availableCurrencyKeys()).map(item => bytesToString(item)))
-    
+
     if (selectedWallet) {
       provider = await getWeb3ProviderByWallet({ chainId, RPCUrl }, selectedWallet)
     }
@@ -136,7 +136,7 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
     }
     dowsJSConnector.setContractSettings(new ContractSettings(
       provider,
-      provider,
+      !selectedWallet ? provider : (provider.getSigner ? provider.getSigner() : null),
       chainId
     ))
 
