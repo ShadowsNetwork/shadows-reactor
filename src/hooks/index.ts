@@ -5,8 +5,8 @@ import {
   updateTransactionHistoryStatus
 } from '@/store/wallet'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-
-import { providers } from 'ethers'
+import web3 from 'web3'
+import { providers, Contract } from 'ethers'
 import { getWeb3ProviderByWallet, WalletNames } from '@/web3/wallets'
 import ContractSettings from '@/ShadowsJs/ContractSettings'
 import WalletConnectProvider from '@walletconnect/web3-provider'
@@ -20,6 +20,8 @@ import {
 import axios from 'axios'
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
+import { getContractConfig } from '@/ShadowsJs/contracts/utils'
+
 
 export function useLocation(): Location {
   const [location, setLocation] = useState(window.location)
@@ -61,85 +63,83 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
   const { forceRefresh } = useRefreshController()
 
   const [initialized, setInitialized] = useState(false)
+  let provider: providers.Web3Provider
+
+  const currentProvider: any = new web3.providers.HttpProvider('https://data-seed-prebsc-2-s1.binance.org:8545')
+  provider = new providers.Web3Provider(currentProvider)
+  // const { abi, address } = getContractConfig('bsctestnet', 'Synthesizer')
+  // const contract = new Contract(address, abi, provider)
 
   const initialize = useCallback(async () => {
-    let provider: providers.Web3Provider | undefined
-    try {
+    // console.log((await contract.availableCurrencyKeys()).map(item => bytesToString(item)))
+    
+    if (selectedWallet) {
       provider = await getWeb3ProviderByWallet({ chainId, RPCUrl }, selectedWallet)
-
-      if (!selectedWallet || !provider) {
-        setInitialized(false)
-        return
-      }
-
-      if (selectedWallet === 'WalletConnect') {
-        const walletConnectProvider = provider.provider as WalletConnectProvider
-
-        await walletConnectProvider.enable()
-
-        const handleAccountChange = (accounts: string[]) => {
-          const [account] = accounts
-          dispatch(setAccount(account))
-          dispatch(setSelectedWallet('WalletConnect'))
-          forceRefresh()
-        }
-
-        const handleDisconnect = (code: number, reason: string) => {
-          console.log(code, reason)
-          dispatch(setAccount(null))
-          dispatch(setSelectedWallet(null))
-
-          walletConnectProvider.stop()
-          walletConnectProvider.removeListener('accountsChanged', handleAccountChange)
-        }
-
-        const handleChainChanged = (_, __) => {
-          console.log(_, __)
-        }
-
-        walletConnectProvider.removeListener('disconnect', handleDisconnect)
-        walletConnectProvider.removeListener('accountsChanged', handleAccountChange)
-        walletConnectProvider.removeListener('chainChanged', handleChainChanged)
-
-        walletConnectProvider.on('disconnect', handleDisconnect)
-        walletConnectProvider.on('accountsChanged', handleAccountChange)
-        walletConnectProvider.on('chainChanged', handleChainChanged)
-      } else if (selectedWallet === 'Metamask' || selectedWallet === 'BSC') {
-        // @ts-ignore
-        provider.provider.request({ method: 'eth_requestAccounts' })
-          .then(accounts => {
-            const [account] = accounts
-            dispatch(setAccount(account))
-          })
-
-        // @ts-ignore
-        provider.provider.on('accountsChanged', async (newAccount, _) => {
-          if (!newAccount.length) {
-            dispatch(setAccount(null))
-            dispatch(setSelectedWallet(null))
-          } else {
-            dispatch(setAccount(newAccount[0]))
-          }
-          forceRefresh()
-        })
-
-        // @ts-ignore
-        provider.provider.on('chainChanged', async (newChain, oldChain) => {
-          console.log(newChain, oldChain)
-          window.location.reload()
-        })
-      }
-    } catch (e) {
-      dispatch(setAccount(null))
-      dispatch(setSelectedWallet(null))
-      return
     }
 
+    if (selectedWallet === 'WalletConnect') {
+      const walletConnectProvider = provider.provider as WalletConnectProvider
+
+      await walletConnectProvider.enable()
+
+      const handleAccountChange = (accounts: string[]) => {
+        const [account] = accounts
+        dispatch(setAccount(account))
+        dispatch(setSelectedWallet('WalletConnect'))
+        forceRefresh()
+      }
+
+      const handleDisconnect = (code: number, reason: string) => {
+        console.log(code, reason)
+        dispatch(setAccount(null))
+        dispatch(setSelectedWallet(null))
+
+        walletConnectProvider.stop()
+        walletConnectProvider.removeListener('accountsChanged', handleAccountChange)
+      }
+
+      const handleChainChanged = (_, __) => {
+        console.log(_, __)
+      }
+
+      walletConnectProvider.removeListener('disconnect', handleDisconnect)
+      walletConnectProvider.removeListener('accountsChanged', handleAccountChange)
+      walletConnectProvider.removeListener('chainChanged', handleChainChanged)
+
+      walletConnectProvider.on('disconnect', handleDisconnect)
+      walletConnectProvider.on('accountsChanged', handleAccountChange)
+      walletConnectProvider.on('chainChanged', handleChainChanged)
+    } else if (selectedWallet === 'Metamask' || selectedWallet === 'BSC') {
+      // @ts-ignore
+      provider.provider.request({ method: 'eth_requestAccounts' })
+        .then(accounts => {
+          const [account] = accounts
+          dispatch(setAccount(account))
+        })
+
+      // @ts-ignore
+      provider.provider.on('accountsChanged', async (newAccount, _) => {
+        if (!newAccount.length) {
+          dispatch(setAccount(null))
+          dispatch(setSelectedWallet(null))
+        } else {
+          dispatch(setAccount(newAccount[0]))
+        }
+        forceRefresh()
+      })
+
+      // @ts-ignore
+      provider.provider.on('chainChanged', async (newChain, oldChain) => {
+        console.log(newChain, oldChain)
+        window.location.reload()
+      })
+    }
     dowsJSConnector.setContractSettings(new ContractSettings(
       provider,
-      provider.getSigner ? provider.getSigner() : null,
+      provider,
       chainId
     ))
+
     setInitialized(true)
   }, [selectedWallet, chainId, RPCUrl])
 
@@ -159,28 +159,33 @@ export function useSetupNetwork(providerInitialized: boolean, params: EthereumCh
   const [ready, setReady] = useState(false)
 
   const setup = useCallback(async () => {
-    if (!selectedWallet || !providerInitialized) {
-      setReady(false)
-      return
+    // if (!selectedWallet) {
+    //   return setReady(false)
+    // }
+
+    let provider: providers.Web3Provider
+    const currentProvider: any = new web3.providers.HttpProvider('https://data-seed-prebsc-2-s1.binance.org:8545')
+    provider = new providers.Web3Provider(currentProvider)
+
+    if (selectedWallet) {
+      provider = await getWeb3ProviderByWallet({
+        chainId, RPCUrl
+      }, selectedWallet) as Web3Provider
     }
 
-    const web3Provider = await getWeb3ProviderByWallet({
-      chainId, RPCUrl
-    }, selectedWallet) as unknown as Web3Provider
-
     if (selectedWallet === 'WalletConnect') {
-      if (await setupWalletConnectNetwork(params, web3Provider)) {
+      if (await setupWalletConnectNetwork(params, provider)) {
         setReady(true)
       } else {
         setReady(false)
-        dispatch(setAccount(''))
-        dispatch(setSelectedWallet(''))
+        dispatch(setAccount(null))
+        dispatch(setSelectedWallet(null))
       }
       return
     }
 
     // WalletConnect couldn't use this method because not enable() before
-    web3Provider?.ready?.then(async network => {
+    provider?.ready?.then(async network => {
       if (network.chainId === parseInt(params.chainId, 16)) {
         setReady(true)
         return
@@ -199,6 +204,7 @@ export function useSetupNetwork(providerInitialized: boolean, params: EthereumCh
           setReady(await setupBinanceWalletNetwork(params))
         }
       })
+
   }, [selectedWallet, providerInitialized, params])
 
   useEffect(() => {

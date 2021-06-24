@@ -10,14 +10,11 @@ class Synthesizer extends AbstractContractCaller {
     this.signer = signer
     this.provider = provider
     this.network = network
-
     if (!network) {
       return
     }
-
     // const { abi, address } = getContractConfig(this.network, 'Synthesizer_Proxy')
     const { abi, address } = getContractConfig(this.network, 'Synthesizer')
-
     this.contract = new Contract(
       address,
       abi,

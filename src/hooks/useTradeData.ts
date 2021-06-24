@@ -34,8 +34,8 @@ export const useCurrencyData = (): PairData => {
 
     // ['xUSD', 'xAUD', 'xEUR', ...]
     const _keyList: Array<string> = (await dowsJSConnector.dowsJs.Synthesizer.availableCurrencyKeys()).map(k => bytesToString(k))
-
     // ['1.000000', '0.500000', '0.75000000', ...]
+
     const ratesList = (
       await Promise.all(
         _keyList.map(key => dowsJSConnector.dowsJs.Oracle.rateForCurrency(key))
@@ -106,7 +106,8 @@ export const useCurrencyBalance = () => {
   const [balanceByCurrency, setBalanceByCurrency] = useState<{ [key: string]: BigNumber }>({})
 
   const fetchBalance = useCallback(async () => {
-    if (!networkReady) {
+    if (!networkReady || !account) {
+      setBalanceByCurrency({})
       return
     }
 

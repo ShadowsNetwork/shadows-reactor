@@ -22,6 +22,7 @@ const useAssetsBalance = () => {
 
   const fetch = useCallback(async () => {
     if (!addressAvailable(account) || !dowsPrice) {
+      setAssetsBalanceList([])
       return
     }
 
@@ -65,7 +66,6 @@ const useBalance = () => {
   const [debtPool, setDebtPool] = useState('')
 
   const { fastRefreshFlag } = useRefreshController()
-
   const fetch = useCallback(async () => {
     if (!account || !dowsPrice) {
       setYourBalance('')

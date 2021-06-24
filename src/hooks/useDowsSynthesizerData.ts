@@ -38,6 +38,8 @@ const useRatioData = (refreshFlag: number): { myRatio: string, targetRatio: stri
 
   const fetchRatio = useCallback(async () => {
     if (!networkReady || !addressAvailable(account)) {
+      setMyRatio('-')
+      setTargetRatio('-')
       return
     }
 
@@ -81,6 +83,9 @@ const useShadowsData = (refreshFlag: number): { totalDows: BigNumber, availableD
 
   const fetch = useCallback(async () => {
     if (!networkReady || !addressAvailable(account)) {
+      setTotalDows(new BigNumber(0))
+      setAvailableDows(new BigNumber(0))
+      setLockedDows(new BigNumber(0))
       return
     }
 
@@ -127,6 +132,10 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
       setTotalRewards(ZERO)
       setEscrowedRewards(ZERO)
       setRedeemableRewards(ZERO)
+      setTotalFees(ZERO)
+      setRedeemableFees(ZERO)
+      setNextVestTime('')
+      setVestingScheduleTime(ZERO)
       return
     }
 

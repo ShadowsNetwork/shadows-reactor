@@ -33,22 +33,22 @@ const routers: Router[] = [
     component: TradePage,
     icon: TradeIcon
   },
-  /*
-  {
-    path: '/staking',
-    key: 'staking',
-    title: 'Staking',
-    component: Pool,
-    icon: StakingIcon
-  },
-  {
-    path: '/bridge',
-    key: 'bridge',
-    title: 'Bridge',
-    component: Bridge,
-    icon: BridgeIcon
-  }
-  */
+  
+  // {
+  //   path: '/staking',
+  //   key: 'staking',
+  //   title: 'Staking',
+  //   component: Pool,
+  //   icon: StakingIcon
+  // },
+  // {
+  //   path: '/bridge',
+  //   key: 'bridge',
+  //   title: 'Bridge',
+  //   component: Bridge,
+  //   icon: BridgeIcon
+  // }
+  
 ]
 
 export default routers
