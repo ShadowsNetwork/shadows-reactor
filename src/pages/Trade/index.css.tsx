@@ -239,6 +239,10 @@ export const PairsInfoContainer = styled.div`
       font-size: 1.4rem;
       cursor: pointer;
       user-select: none;
+      transition: all 0.2s linear;
+      &:hover{
+        transform:translate(0, 2px);
+      }
     }
 
     .header {
@@ -292,7 +296,10 @@ export const SellBuyTabs = styled.div`
     background-color: #121725;
     line-height:3.6rem;
     border-radius:10px 10px 0 0;
-    font-size:1.6rem
+    font-size:1.6rem;
+    &:hover{
+      transform: translate(0, 1px);
+    }
   }
   .buy{
     color:#63CCA9;
