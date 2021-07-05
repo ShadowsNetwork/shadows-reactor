@@ -514,7 +514,7 @@ const TradePage: React.FC = () => {
           />
         </ContainerForBuyAndSell>
       </Column> */}
-      <Column width="30.7rem">
+      <Column width="37rem">
         <ContainerForDowsAndPair>
           <PairInfo
             onSelectedKeyPairChanged={handleSelectedKeyPairChanged}
