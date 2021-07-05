@@ -16,7 +16,7 @@ export const Column = styled.div`
 `
 
 export const CandlestickContainer = styled.div`
-  height: 51.5rem;
+  height: 55.2rem;
   margin-bottom: 1.5rem;
   background-color: #121725;
   padding: 2.4rem 1.5rem 2rem;
@@ -153,6 +153,7 @@ export const ContainerForBuyAndSell = styled.div`
   height: 19.8rem;
   background-color: #121725;
   padding: 1.6rem 1.6rem;
+  border-radius:0 0 10px 10px !important;
 
   .panel {
     display: flex;
@@ -277,5 +278,28 @@ export const CustomizedSlider = styled.div`
     background-color: white;
     border-width: 5px;
     margin-top: -9px;
+  }
+`
+
+export const SellBuyTabs = styled.div`
+  display:flex;
+
+  div{
+    cursor: pointer;
+    height:3.6rem;
+    width:50%;
+    text-align:center;
+    background-color: #121725;
+    line-height:3.6rem;
+    border-radius:10px 10px 0 0;
+    font-size:1.6rem
+  }
+  .buy{
+    color:#63CCA9;
+    margin-right:0.5rem;
+  }
+  .sell{
+    color:#DB5E56;
+    margin-left:0.5rem
   }
 `

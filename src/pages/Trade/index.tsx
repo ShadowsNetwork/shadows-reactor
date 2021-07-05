@@ -24,7 +24,8 @@ import {
   ContainerForDowsAndPair,
   ContainerForBuyAndSell,
   PairsInfoContainer,
-  CustomizedSlider
+  CustomizedSlider,
+  SellBuyTabs
 } from './index.css'
 
 type PairInfoProps = {
@@ -150,7 +151,6 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
   }
 
   const unit = keyPair?.symbol[type === 'Buy' ? 1 : 0]
-
   const available: BigNumber = (unit && balanceByCurrency[unit]) || new BigNumber('0')
 
   const onSliderChange = value => {
@@ -207,7 +207,7 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
       </div>
       <CustomizedSlider color={color}>
         <Slider
-          disabled={available.eq(0)}
+          disabled={available.toFixed(6).toString() === '0.000000'}
           marks={sliderMarks}
           value={sliderValue}
           onChange={onSliderChange}
@@ -269,8 +269,8 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
     // @ts-ignore
     const _chart = createChart(ref.current)
     _chart.applyOptions({
-      width: 500,
-      height: 320,
+      width: 740,
+      height: 360,
       layout: {
         backgroundColor: '#000000',
         textColor: 'rgba(255, 255, 255, 0.9)'
@@ -485,17 +485,23 @@ const TradePage: React.FC = () => {
 
   const [selectedKeyPair, setSelectedKeyPair] = useState<KeyPair | undefined>((state as any)?.keyPair)
 
+  const [tradeActive, setTradeActive] = useState<BuySellPanelProps['type']>('Buy')
+
   const handleSelectedKeyPairChanged = (keyPair: KeyPair) => {
     setSelectedKeyPair(keyPair)
   }
 
+  const handleSetTradeActive = (value: BuySellPanelProps['type']) => {
+    setTradeActive(value)
+  }
+
   return (
     <TradePageContainer>
-      <Column width="53.6rem" marginRight="1.5rem">
+      <Column width="77rem" marginRight="1.5rem">
         <CurrencyInfo keyPair={selectedKeyPair} />
         <Stats keyPair={selectedKeyPair} />
       </Column>
-      <Column width="33.1rem" marginRight="0.8rem">
+      {/* <Column width="33.1rem" marginRight="0.8rem">
         <ContainerForDowsAndPair>
           <DowsSynthesizer />
         </ContainerForDowsAndPair>
@@ -507,7 +513,7 @@ const TradePage: React.FC = () => {
             keyPair={selectedKeyPair}
           />
         </ContainerForBuyAndSell>
-      </Column>
+      </Column> */}
       <Column width="30.7rem">
         <ContainerForDowsAndPair>
           <PairInfo
@@ -515,16 +521,32 @@ const TradePage: React.FC = () => {
             selectedKeyPair={selectedKeyPair}
           />
         </ContainerForDowsAndPair>
+        <SellBuyTabs>
+          <div className="buy" onClick={() => handleSetTradeActive('Buy')}>Buy</div>
+          <div className="sell" onClick={() => handleSetTradeActive('Sell')}>Sell</div>
+        </SellBuyTabs>
         <ContainerForBuyAndSell>
-          <BuySellPanel
-            balanceByCurrency={balanceByCurrency}
-            color="#DB5E56"
-            type="Sell"
-            keyPair={selectedKeyPair}
-          />
+          {
+            tradeActive == 'Buy' && <BuySellPanel
+              balanceByCurrency={balanceByCurrency}
+              color="#63cca9"
+              type="Buy"
+              keyPair={selectedKeyPair}
+            />
+          }
+
+          {
+            tradeActive == 'Sell' && <BuySellPanel
+              balanceByCurrency={balanceByCurrency}
+              color="#DB5E56"
+              type="Sell"
+              keyPair={selectedKeyPair}
+            />
+          }
+
         </ContainerForBuyAndSell>
       </Column>
-    </TradePageContainer>
+    </TradePageContainer >
   )
 }
 
