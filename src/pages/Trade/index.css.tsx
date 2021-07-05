@@ -297,6 +297,7 @@ export const SellBuyTabs = styled.div`
     line-height:3.6rem;
     border-radius:10px 10px 0 0;
     font-size:1.6rem;
+    font-weight: bold;
     &:hover{
       transform: translate(0, 1px);
     }
