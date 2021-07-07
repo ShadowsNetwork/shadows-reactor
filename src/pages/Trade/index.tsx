@@ -170,13 +170,19 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
   const handleExchange = async () => {
     const sourceCurrencyKey = toByte32(keyPair!.symbol[type === 'Buy' ? 1 : 0])
     const destinationCurrencyKey = toByte32(keyPair!.symbol[type === 'Buy' ? 0 : 1])
-    const sourceAmount = toWei(inputValue)
+    const sourceAmount = Math.round(sliderValue) >= 100 ? toWei(available.toString()) : toWei(inputValue)
 
     beginTransaction()
 
     dowsJSConnector.dowsJs.Synthesizer.exchange(sourceCurrencyKey, sourceAmount, destinationCurrencyKey)
       .then(tx => {
-        const transactionHistory: TradeSynth = new TradeSynth(tx.hash, numberWithCommas(inputValue, 6), type, keyPair!.symbol[0])
+        const transactionHistory: TradeSynth = new TradeSynth(
+          tx.hash,
+          numberWithCommas(inputValue, 6),
+          type,
+          type === 'Sell' ? keyPair!.symbol[0] : 'xUSD',
+          type === 'Sell' ? 'xUSD' : keyPair!.symbol[0]
+        )
         dispatch(appendTransactionHistory(transactionHistory))
         submitTransaction()
       })

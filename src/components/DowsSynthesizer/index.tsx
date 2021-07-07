@@ -7,7 +7,7 @@ import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web
 import { Button, Popover } from 'antd'
 import styled from 'styled-components'
 import { useDowsSynthesizerData } from '@/hooks/useDowsSynthesizerData'
-import { BurnXUSD, MintXUSD, Redeem } from '@/types/TransactionHistory'
+import { BurnXUSD, MintXUSD, RedeemXUSD, RedeemDOWS } from '@/types/TransactionHistory'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useErrorMessage } from '@/hooks'
 import { numberWithCommas } from '@/utils'
@@ -156,21 +156,21 @@ const DowsSynthesizer: React.FC = () => {
     })
   }
 
-  const redeemFees = () => {
+  const redeemXusd = () => {
     beginTransaction()
     dowsJSConnector.dowsJs.FeePool.claimFees()
       .then(tx => {
-        const th: Redeem = new Redeem(tx.hash, numberWithCommas(escrowedRewards, 6), 'xUSD')
+        const th: RedeemXUSD = new RedeemXUSD(tx.hash, numberWithCommas(redeemableFees, 6), 'xUSD')
         dispatch(appendTransactionHistory(th))
         submitTransaction()
       })
   }
 
-  const redeemRewards = () => {
+  const redeemDows = () => {
     beginTransaction()
     dowsJSConnector.dowsJs.RewardEscrow.vest()
       .then(tx => {
-        const th: Redeem = new Redeem(tx.hash, numberWithCommas(escrowedRewards, 6))
+        const th: RedeemDOWS = new RedeemDOWS(tx.hash, numberWithCommas(redeemableRewards, 6))
         dispatch(appendTransactionHistory(th))
         submitTransaction()
       })
@@ -350,19 +350,19 @@ const DowsSynthesizer: React.FC = () => {
       <div className="button-row">
         <Button
           className="button"
-          onClick={redeemFees}
+          onClick={redeemXusd}
           disabled={redeemableFees.lte(0)}
           style={{ fontSize: '1.3rem' }}
         >
-          Redeem {/* reward */} xUSD
+          Redeem xUSD
         </Button>
         <Button
           className="button"
-          onClick={redeemRewards}
+          onClick={redeemDows}
           disabled={redeemableRewards.lte(0)}
           style={{ fontSize: '1.3rem' }}
         >
-          Redeem {/* reward */} DOWS
+          Redeem DOWS
         </Button>
       </div>
 

@@ -30,17 +30,24 @@ const AmountInputModal: React.FC<AmountInputModalStatus> = ({
     }
   }, [visible])
 
+  const newMax = Number(maxAvailable.toString()).toFixed(6)
   const handleConfirm = () => {
-    if (new BigNumber(inputValue).lte(new BigNumber('0'))) {
-      message.error('Value should greater than 0!')
-      return
-    }
+    let isMax = false
+    if (inputValue === newMax) {
+      isMax = true
+    } else {
+      if (new BigNumber(inputValue).lte(new BigNumber('0'))) {
+        message.error('Value should greater than 0!')
+        return
+      }
 
-    if (new BigNumber(inputValue).gt(new BigNumber(maxAvailable))) {
-      message.error('Insufficient balance!')
-      return
+      if (new BigNumber(inputValue).gt(new BigNumber(maxAvailable))) {
+        message.error('Insufficient balance!')
+        return
+      }
     }
-    confirmCallback?.(inputValue)
+    console.log(isMax ? maxAvailable.toString() : inputValue)
+    confirmCallback?.(isMax ? maxAvailable.toString() : inputValue)
   }
 
   const handleCancel = () => {
@@ -60,14 +67,14 @@ const AmountInputModal: React.FC<AmountInputModalStatus> = ({
       <span className="input-dows">
         <LimitableNumberInput
           minimum="0"
-          maximum={Number(maxAvailable.toString()).toFixed(6)}
+          maximum={newMax}
           decimalPlaces={6}
           inputValue={inputValue}
           setInputValue={setInputValue}
           allowClear={true}
         />
         <span className="dows">{unit}</span>
-        <Button onClick={() => setInputValue(Number(maxAvailable.toString()).toFixed(6))}>MAX</Button>
+        <Button onClick={() => setInputValue(newMax)}>MAX</Button>
       </span>
       <div className="stakeButton">
         <Button onClick={handleCancel}>Cancel</Button>

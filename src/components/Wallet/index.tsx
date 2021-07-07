@@ -156,7 +156,6 @@ const CurrentAccount: React.FC<CurrentAccountProps> = ({ account }) => {
   const closeModal = () => {
     setIsModalVisible(false)
   }
-
   return (
     <div className="current-account">
       <MetamaskIcon />
