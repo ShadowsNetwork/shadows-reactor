@@ -294,11 +294,10 @@ export function useListenBscTransaction() {
   const dispatch = useDispatch()
   const transactionList = useSelector(getTransactionHistoryList)
 
-
   useEffect(() => {
     const transactionHistories: TransactionHistory[] = transactionList.filter(t =>
       t.TYPE !== TransactionHistoryImplementationClassType.Bridge
-      && t.status !== TransactionStatus.Completed
+      && t.status !== TransactionStatus.Completed && t.status !== TransactionStatus.Failed
     )
 
     if (transactionHistories.length === 0) {
@@ -312,11 +311,10 @@ export function useListenBscTransaction() {
             th.complete()
             dispatch(updateTransactionHistoryStatus(th))
             forceRefresh()
+          }).catch(() => {
+            th.fail()
+            dispatch(updateTransactionHistoryStatus(th))
           })
-        })
-        .catch(() => {
-          th.fail()
-          dispatch(updateTransactionHistoryStatus(th))
         })
     })
   }, [transactionList])

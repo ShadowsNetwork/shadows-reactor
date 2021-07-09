@@ -46,7 +46,6 @@ const AmountInputModal: React.FC<AmountInputModalStatus> = ({
         return
       }
     }
-    console.log(isMax ? maxAvailable.toString() : inputValue)
     confirmCallback?.(isMax ? maxAvailable.toString() : inputValue)
   }
 

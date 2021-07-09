@@ -100,7 +100,7 @@ export class RedeemDOWS extends TransactionHistory {
     super(hash, status)
   }
 
-  TYPE = TransactionHistoryImplementationClassType.Redeem
+  TYPE = TransactionHistoryImplementationClassType.RedeemDOWS
 
   toString(): string {
     return `Redeem ${this.amount} DOWS`
@@ -117,7 +117,7 @@ export class RedeemXUSD extends TransactionHistory {
     super(hash, status)
   }
 
-  TYPE = TransactionHistoryImplementationClassType.Redeem
+  TYPE = TransactionHistoryImplementationClassType.RedeemXUSD
 
   toString(): string {
     return `Redeem ${this.amount} xUSD`

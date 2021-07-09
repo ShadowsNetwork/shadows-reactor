@@ -163,6 +163,8 @@ const DowsSynthesizer: React.FC = () => {
         const th: RedeemXUSD = new RedeemXUSD(tx.hash, numberWithCommas(redeemableFees, 6), 'xUSD')
         dispatch(appendTransactionHistory(th))
         submitTransaction()
+      }).catch(e => {
+        rejectTransaction(errorMessageGetter(e))
       })
   }
 
@@ -173,6 +175,8 @@ const DowsSynthesizer: React.FC = () => {
         const th: RedeemDOWS = new RedeemDOWS(tx.hash, numberWithCommas(redeemableRewards, 6))
         dispatch(appendTransactionHistory(th))
         submitTransaction()
+      }).catch(e => {
+        rejectTransaction(errorMessageGetter(e))
       })
   }
 
