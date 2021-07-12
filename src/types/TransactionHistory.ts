@@ -96,7 +96,7 @@ export abstract class TransactionHistory {
 }
 
 export class RedeemDOWS extends TransactionHistory {
-  constructor(hash: string, public amount: string, public unit = 'DOWS', status?: TransactionStatus) {
+  constructor(hash: string, public amount: string, status?: TransactionStatus) {
     super(hash, status)
   }
 
@@ -113,7 +113,7 @@ export class RedeemDOWS extends TransactionHistory {
 }
 
 export class RedeemXUSD extends TransactionHistory {
-  constructor(hash: string, public amount: string, public unit = 'DOWS', status?: TransactionStatus) {
+  constructor(hash: string, public amount: string, status?: TransactionStatus) {
     super(hash, status)
   }
 
