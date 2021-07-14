@@ -1,7 +1,7 @@
 import { Button, Slider } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
-import { createChart, CrosshairMode, IChartApi, ISeriesApi, UTCTimestamp } from 'lightweight-charts'
+import { createChart, CrosshairMode, IChartApi, ISeriesApi, PriceScaleMode, UTCTimestamp } from 'lightweight-charts'
 import { useErrorMessage } from '@/hooks'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
@@ -283,14 +283,19 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
       },
       grid: {
         vertLines: {
-          color: 'rgba(197, 203, 206, 0.5)'
+          color: 'rgba(197, 203, 206, 0.5)',
+          visible: false
         },
         horzLines: {
-          color: 'rgba(197, 203, 206, 0.5)'
+          color: 'rgba(197, 203, 206, 0.5)',
+          visible: false
         }
       },
+      overlayPriceScales: {
+        entireTextOnly: true
+      },
       crosshair: {
-        mode: CrosshairMode.Normal
+        mode: CrosshairMode.Magnet
       },
       rightPriceScale: {
         borderColor: 'rgba(197, 203, 206, 0.8)'
@@ -318,12 +323,14 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
     if (!chart) {
       return
     }
+
     if (series) {
       chart.removeSeries(series)
     }
 
     if (mode === 'price') {
-      setSeries(chart.addAreaSeries())
+      setSeries(chart.addAreaSeries({
+      }))
     } else if (mode === 'volume') {
       setSeries(chart.addHistogramSeries({
         base: 0
@@ -376,10 +383,12 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
           }
         }
       })
-
-      chart?.timeScale()
-        .fitContent()
     }
+    
+    chart?.timeScale().setVisibleRange({
+      from: parseInt(data.data[0].time) / 1000,
+      to: parseInt(data.data[data.data.length - 1].time) / 1000,
+    })
 
   }, [data, series])
 
@@ -388,11 +397,12 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
 }
 
 const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
-  // const availableTimeRange = [
-  //   { key: '1m', value: 1 },
-  //   { key: '5m', value: 5 },
-  //   { key: '1h', value: 60 }
-  // ]
+  const availableTimeRange = [
+    { key: '1D', value: 1 },
+    { key: '3D', value: 5 },
+    { key: '7D', value: 60 },
+    { key: '1M', value: 60 }
+  ]
 
   const availableMode = [
     { key: 'Price', value: 'price' },
@@ -400,7 +410,7 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
     // { key: 'Liquidity', value: 3 }
   ]
 
-  // const [selectedTimeRange, setSelectedTimeRange] = useState('1m')
+  const [selectedTimeRange, setSelectedTimeRange] = useState('1D')
   const [selectedMode, setSelectedMode] = useState({ key: 'Price', value: 'price' })
 
   const { data } = useTradingDataQuery('price', keyPair?.symbol[0])
@@ -449,7 +459,7 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
           {data?.usd_24h_change > 0 ? `+${data.usd_24h_change.toFixed(2)}%` : `${data?.usd_24h_change?.toFixed(2) || 0}%`}
         </div>
       </div>
-      {/*<div className="time-select-btn-group">
+      {/* <div className="time-select-btn-group">
         {
           availableTimeRange.map(time => (
             <Button
@@ -462,7 +472,7 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
             </Button>
           ))
         }
-      </div>*/}
+      </div> */}
       <div className="trading-view-container">
         <TradingView keyPair={keyPair} mode={selectedMode.value} />
       </div>

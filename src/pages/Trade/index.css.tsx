@@ -86,7 +86,7 @@ export const CandlestickContainer = styled.div`
   }
 
   .title, .price-info, .time-select-btn-group {
-    padding: 0 1.3rem;
+    padding: 0;
   }
 
   .trading-view-container {
