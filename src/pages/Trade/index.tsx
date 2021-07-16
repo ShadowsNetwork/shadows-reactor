@@ -189,6 +189,8 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
       .catch(e => {
         rejectTransaction(errorMessageGetter(e))
       })
+
+    gtag('event', type.toLocaleLowerCase())
   }
 
   useEffect(() => {

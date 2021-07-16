@@ -8,6 +8,10 @@ import { useLocation } from '@/hooks'
 const SideBar: React.FC = () => {
   const { hash } = useLocation()
 
+  const handleGtag = (key: string) => {
+    gtag('event', key)
+  }
+
   return (
     <Menu
       selectedKeys={[hash.slice(1)]}
@@ -19,6 +23,7 @@ const SideBar: React.FC = () => {
           .map(router => (
             <Menu.Item
               key={router.path}
+              onClick={() => { handleGtag(router.key) }}
             >
               <img className="slideIcon" src={router.icon} alt="" />
               <Link to={router.path} style={{ userSelect: 'none' }}>

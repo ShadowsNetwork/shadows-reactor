@@ -208,6 +208,7 @@ const DowsSynthesizer: React.FC = () => {
       confirmCallback: issueSynth,
       unit: 'xUSD'
     })
+    gtag('event', 'handle_mint_xusd')
   }
 
   const handleBurnXusd = async () => {
@@ -240,6 +241,8 @@ const DowsSynthesizer: React.FC = () => {
       confirmCallback: burnSynths,
       unit: 'xUSD'
     })
+
+    gtag('event', 'handle_burn_xusd')
   }
 
   const feeTip = () => {
@@ -298,10 +301,10 @@ const DowsSynthesizer: React.FC = () => {
         </div>
       </div>
       <div className="button-row" style={{ marginBottom: '2.8rem' }}>
-        <Button className="button" onClick={handleMintXusd} disabled={!account ? true : false}>
+        <Button className="button handle_mint_xusd" onClick={handleMintXusd} id="handle_mint_xusd" disabled={!account ? true : false}>
           Mint xUSD
         </Button>
-        <Button className="button" onClick={handleBurnXusd} disabled={!account ? true : false}>
+        <Button className="button handle_burn_xusd" onClick={handleBurnXusd} id="handle_burn_xusd" disabled={!account ? true : false}>
           Burn xUSD
         </Button>
       </div>
