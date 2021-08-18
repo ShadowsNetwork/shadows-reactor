@@ -285,7 +285,7 @@ export class TradeSynth extends TransactionHistory {
   TYPE = TransactionHistoryImplementationClassType.Trade
 
   toString(): string {
-    return `${this.type} ${this.amount} ${this.toKey} for ${this.currencyKey}`
+    return `${this.type} ${this.amount} ${this.currencyKey} for ${this.toKey}`
   }
 
   get url(): string {
