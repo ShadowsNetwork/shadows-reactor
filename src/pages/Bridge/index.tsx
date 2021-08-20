@@ -108,63 +108,63 @@ const BridgeMain: React.FC<BridgeProps> = ({
   }
 
   const approve = async () => {
-    // try {
-    //   beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
-    //   const approveResult = await dowsJSConnector.dowsJs.Bridge.approve(dowsTokenAddress, lockContractAddress)
-    //   submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+    try {
+      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      const approveResult = await dowsJSConnector.dowsJs.Bridge.approve(dowsTokenAddress, lockContractAddress)
+      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
-    //   const transactionHistory = new ApproveToken(approveResult.hash, 'DOWS', fromPolyChain.explorerUrl, TransactionStatus.Submitted)
-    //   dispatch(appendTransactionHistory(transactionHistory))
+      const transactionHistory = new ApproveToken(approveResult.hash, 'DOWS', fromPolyChain.explorerUrl, TransactionStatus.Submitted)
+      dispatch(appendTransactionHistory(transactionHistory))
 
-    //   approveResult.wait()
-    //     .then(() => {
-    //       transactionHistory.complete()
-    //       dispatch(updateTransactionHistoryStatus(transactionHistory))
-    //       forceRefreshData()
-    //     })
-    // } catch (e) {
-    //   rejectTransaction(transactionStatusModalProps,
-    //     setTransactionStatusModalProps,
-    //     getErrorMessage(e)
-    //   )
-    // }
-    rejectTransaction(transactionStatusModalProps,
-      setTransactionStatusModalProps,
-      'under maintenance.....'
-    )
+      approveResult.wait()
+        .then(() => {
+          transactionHistory.complete()
+          dispatch(updateTransactionHistoryStatus(transactionHistory))
+          forceRefreshData()
+        })
+    } catch (e) {
+      rejectTransaction(transactionStatusModalProps,
+        setTransactionStatusModalProps,
+        getErrorMessage(e)
+      )
+    }
+    // rejectTransaction(transactionStatusModalProps,
+    //   setTransactionStatusModalProps,
+    //   'under maintenance.....'
+    // )
   }
 
   const convert = async () => {
-    // try {
-    //   beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
-    //   const lockResult = await dowsJSConnector.dowsJs.Bridge.lock({
-    //     lockContractAddress,
-    //     fromAsset: dowsTokenAddress,
-    //     toChainId: toPolyChain.polyChainId,
-    //     toAddress: account,
-    //     amount: toWei(amount),
-    //     fee: toWei(fee!)
-    //   })
-    // submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+    try {
+      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      const lockResult = await dowsJSConnector.dowsJs.Bridge.lock({
+        lockContractAddress,
+        fromAsset: dowsTokenAddress,
+        toChainId: toPolyChain.polyChainId,
+        toAddress: account,
+        amount: toWei(amount),
+        fee: toWei(fee!)
+      })
+      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
 
-    //   const transactionHistory = new BridgeDows(lockResult.hash, amount, fromPolyChain.ethereumChain.chainName, toPolyChain.ethereumChain.chainName, TransactionStatus.Submitted)
-    //   dispatch(appendTransactionHistory(transactionHistory))
+      const transactionHistory = new BridgeDows(lockResult.hash, amount, fromPolyChain.ethereumChain.chainName, toPolyChain.ethereumChain.chainName, TransactionStatus.Submitted)
+      dispatch(appendTransactionHistory(transactionHistory))
 
-    //   lockResult.wait()
-    //     .then(() => {
-    //       setAmount('')
-    //       forceRefreshData()
-    //     })
-    // } catch (e) {
-    //   rejectTransaction(transactionStatusModalProps,
-    //     setTransactionStatusModalProps,
-    //     getErrorMessage(e)
-    //   )
-    // }
-    rejectTransaction(transactionStatusModalProps,
-      setTransactionStatusModalProps,
-      'under maintenance.....'
-    )
+      lockResult.wait()
+        .then(() => {
+          setAmount('')
+          forceRefreshData()
+        })
+    } catch (e) {
+      rejectTransaction(transactionStatusModalProps,
+        setTransactionStatusModalProps,
+        getErrorMessage(e)
+      )
+    }
+    // rejectTransaction(transactionStatusModalProps,
+    //   setTransactionStatusModalProps,
+    //   'under maintenance.....'
+    // )
   }
 
   return (
