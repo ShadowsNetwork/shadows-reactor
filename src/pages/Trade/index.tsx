@@ -180,8 +180,8 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
           tx.hash,
           numberWithCommas(inputValue, 6),
           type,
-          type === 'Sell' ? keyPair!.symbol[0] : 'xUSD',
-          type === 'Sell' ? 'xUSD' : keyPair!.symbol[0]
+          type === 'Sell' ? keyPair!.symbol[0] : 'ShaUSD',
+          type === 'Sell' ? 'ShaUSD' : keyPair!.symbol[0]
         )
         dispatch(appendTransactionHistory(transactionHistory))
         submitTransaction()
@@ -386,11 +386,14 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
         }
       })
     }
-    
-    chart?.timeScale().setVisibleRange({
-      from: parseInt(data.data[0].time) / 1000,
-      to: parseInt(data.data[data.data.length - 1].time) / 1000,
-    })
+
+    if (data.data.length > 0) {
+      chart?.timeScale().setVisibleRange({
+        from: parseInt(data.data[0].time) / 1000,
+        to: parseInt(data.data[data.data.length - 1].time) / 1000,
+      })
+    }
+
 
   }, [data, series])
 
@@ -449,7 +452,7 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
           )
         }
         {
-          keyPair ? `${keyPair.symbol[0] || ''} / ${keyPair.symbol[1] || ''}` : '- / xUSD'
+          keyPair ? `${keyPair.symbol[0] || ''} / ${keyPair.symbol[1] || ''}` : '- / ShaUSD'
         }
       </div>
       <div className="price-info">

@@ -120,7 +120,7 @@ export class RedeemXUSD extends TransactionHistory {
   TYPE = TransactionHistoryImplementationClassType.RedeemXUSD
 
   toString(): string {
-    return `Redeem ${this.amount} xUSD`
+    return `Redeem ${this.amount} ShaUSD`
   }
 
   get url(): string {
@@ -243,7 +243,7 @@ export class MintXUSD extends TransactionHistory {
   TYPE = TransactionHistoryImplementationClassType.Mint
 
   toString(): string {
-    return `Mint ${this.amount} xUSD`
+    return `Mint ${this.amount} ShaUSD`
   }
 
   get url(): string {
@@ -259,7 +259,7 @@ export class BurnXUSD extends TransactionHistory {
   TYPE = TransactionHistoryImplementationClassType.Burn
 
   toString(): string {
-    return `Burn ${this.amount} xUSD`
+    return `Burn ${this.amount} ShaUSD`
   }
 
   get url(): string {

@@ -78,7 +78,7 @@ const useBalance = () => {
       await Promise.all([
         dowsJSConnector.dowsJs.Shadows.balanceOf(account),
         dowsJSConnector.dowsJs.Synthesizer.transferableShadows(account),
-        dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('xUSD')),
+        dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account, toByte32('ShaUSD')),
       ]))
 
     const [_newBalanceOf, _newTransferableShadows] = [_balanceOf, _transferableShadows]

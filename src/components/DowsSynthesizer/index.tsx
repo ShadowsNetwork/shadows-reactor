@@ -160,7 +160,7 @@ const DowsSynthesizer: React.FC = () => {
     beginTransaction()
     dowsJSConnector.dowsJs.FeePool.claimFees()
       .then(tx => {
-        const th: RedeemXUSD = new RedeemXUSD(tx.hash, numberWithCommas(redeemableFees, 6), 'xUSD')
+        const th: RedeemXUSD = new RedeemXUSD(tx.hash, numberWithCommas(redeemableFees, 6), 'ShaUSD')
         dispatch(appendTransactionHistory(th))
         submitTransaction()
       }).catch(e => {
@@ -202,11 +202,11 @@ const DowsSynthesizer: React.FC = () => {
     setAmountInputModalStatus({
       ...amountInputModalStatus,
       visible: true,
-      title: 'Mint xUSD',
+      title: 'Mint ShaUSD',
       maxAvailable: weiToString(remainingIssuableSynths),
       cancelCallback: closeAmountInputModal,
       confirmCallback: issueSynth,
-      unit: 'xUSD'
+      unit: 'ShaUSD'
     })
     gtag('event', 'handle_mint_xusd')
   }
@@ -229,17 +229,17 @@ const DowsSynthesizer: React.FC = () => {
     }
 
     const [_debtBalance, _balanceOf] = await Promise.all([
-      dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account!, toByte32('xUSD')),
-      dowsJSConnector.dowsJs.Synth.balanceOf('xUSD', account!)
+      dowsJSConnector.dowsJs.Synthesizer.debtBalanceOf(account!, toByte32('ShaUSD')),
+      dowsJSConnector.dowsJs.Synth.balanceOf('ShaUSD', account!)
     ])
     setAmountInputModalStatus({
       ...amountInputModalStatus,
       visible: true,
-      title: 'Burn xUSD',
+      title: 'Burn ShaUSD',
       maxAvailable: weiToBigNumber(_debtBalance).minus(weiToBigNumber(_balanceOf)) > weiToBigNumber(0) ? weiToBigNumber(_balanceOf) : weiToBigNumber(_debtBalance),
       cancelCallback: closeAmountInputModal,
       confirmCallback: burnSynths,
-      unit: 'xUSD'
+      unit: 'ShaUSD'
     })
 
     gtag('event', 'handle_burn_xusd')
@@ -251,7 +251,7 @@ const DowsSynthesizer: React.FC = () => {
         <div className="tip">
           <p>100% transaction fees generated on the platform are rewarded <br />back to the users who contribute to the debt pool. <br />xUSD rewards are distributed based on the share of the debt pool. </p>
           <br />
-          <p>-‘Total xUSD Rewards’ is updated in real time.</p>
+          <p>-‘Total ShaUSD Rewards’ is updated in real time.</p>
           <p>-‘Redeemable’ is updated every 10 mins.</p>
         </div>
       </TipDiv>
@@ -279,10 +279,10 @@ const DowsSynthesizer: React.FC = () => {
     return (
       <TipDiv>
         <div className="tip">
-          <p>In addition to the xUSD rewards, users also gain extra DOWS. </p>
+          <p>In addition to the ShaUSD rewards, users also gain extra DOWS. </p>
           <br />
           <p>- ‘Total DOWS Rewards’ is updated in real time.</p>
-          <p>- When the xUSD rewards are redeemed, an equivalent value of <br />DOWS will show up under ‘Escrowed’.</p>
+          <p>- When the ShaUSD rewards are redeemed, an equivalent value of <br />DOWS will show up under ‘Escrowed’.</p>
           <p>- After an escrow (i.e. vesting) period of {_vestingScheduleTime}, the DOWS <br />rewards will become redeemable.</p>
         </div>
       </TipDiv>
@@ -302,10 +302,10 @@ const DowsSynthesizer: React.FC = () => {
       </div>
       <div className="button-row" style={{ marginBottom: '2.8rem' }}>
         <Button className="button handle_mint_xusd" onClick={handleMintXusd} id="handle_mint_xusd" disabled={!account ? true : false}>
-          Mint xUSD
+          Mint ShaUSD
         </Button>
         <Button className="button handle_burn_xusd" onClick={handleBurnXusd} id="handle_burn_xusd" disabled={!account ? true : false}>
-          Burn xUSD
+          Burn ShaUSD
         </Button>
       </div>
       <div className="text-container" style={{ marginBottom: '2rem' }}>
@@ -324,7 +324,7 @@ const DowsSynthesizer: React.FC = () => {
       </div>
       <div className="text-container" style={{ marginBottom: '2rem' }}>
         <p className="bold">
-          <span>Total xUSD Rewards&nbsp;
+          <span>Total ShaUSD Rewards&nbsp;
             <Popover trigger="hover" content={feeTip}>
               <InfoCircleFilled style={{ color: '#63CCA9' }} />
             </Popover>
@@ -361,7 +361,7 @@ const DowsSynthesizer: React.FC = () => {
           disabled={redeemableFees.lte(0)}
           style={{ fontSize: '1.3rem' }}
         >
-          Redeem xUSD
+          Redeem ShaUSD
         </Button>
         <Button
           className="button"

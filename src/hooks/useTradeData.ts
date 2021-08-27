@@ -53,7 +53,7 @@ export const useCurrencyData = (): PairData => {
     const keysByRate = new Map(_keyList.map((key, index) => [key, ratesList[index]]))
 
     const keysSet = new Set<string>(_keyList)
-    keysSet.delete('xUSD')
+    keysSet.delete('ShaUSD')
 
     /**
      * Get key pair price by source key and target key.
@@ -75,8 +75,8 @@ export const useCurrencyData = (): PairData => {
     const _keyPairs = Array.from(keysSet)
       .map<KeyPair>(
         key => ({
-          symbol: [key, 'xUSD'],
-          lastPrice: pairPrice(key, 'xUSD')
+          symbol: [key, 'ShaUSD'],
+          lastPrice: pairPrice(key, 'ShaUSD')
         })
       )
 
