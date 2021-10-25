@@ -45,13 +45,11 @@ const PairInfo: React.FC = () => {
   const history = useHistory()
 
   let { keyPairs } = useCurrencyData()
-
   if (selectedType !== 'All') {
     keyPairs = keyPairs?.filter(keyPair =>
       shadowsSynthsConfig.find(val => val.symbol === keyPair?.symbol[0])?.type === selectedType
     )
   }
-
   return (
     <PairsInfoContainer>
       <div className="button-group">

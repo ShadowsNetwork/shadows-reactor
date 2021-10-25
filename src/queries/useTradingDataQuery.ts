@@ -15,7 +15,7 @@ const useTradingDataQuery = (mode: string, currencyKey?: string) => {
   const [data, setData] = useState<any>()
 
   const fetch = useCallback(async () => {
-    const key = currencyKey?.substr(1)
+    const key = currencyKey?.replace(/^(sha)|x/i, '')
       .toLowerCase()
     const isBool = key && !filterKey.includes(key)
 
