@@ -5,7 +5,7 @@ import { ConfigType } from '../../config'
 const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 
 const request = axios.create({
-  baseURL: config.baseUrl,
+  baseURL: 'http://43.132.155.78:8020',
   timeout: 30000
 })
 
