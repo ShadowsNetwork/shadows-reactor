@@ -252,7 +252,7 @@ const DowsSynthesizer: React.FC = () => {
           <p>100% transaction fees generated on the platform are rewarded <br />back to the users who contribute to the debt pool. <br />xUSD rewards are distributed based on the share of the debt pool. </p>
           <br />
           <p>-‘Total ShaUSD Rewards’ is updated in real time.</p>
-          <p>-‘Redeemable’ is updated every 10 mins.</p>
+          <p>-‘Redeemable’ is updated every 1 weeks.</p>
         </div>
       </TipDiv>
     )

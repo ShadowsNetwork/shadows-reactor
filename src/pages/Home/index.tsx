@@ -99,7 +99,7 @@ const StatInfo: React.FC = () => {
 
   const currencyIcon = (key: string) => {
     const map = shadowsSynthsConfig.find((item: ShadowsSynth) => item.symbol === key)
-    return require(`../../img/tokens/${map?.symbol || 'xUSD'}.svg`)
+    return require(`../../img/tokens/${map?.symbol || 'ShaUSD'}.svg`)
   }
 
   return (
