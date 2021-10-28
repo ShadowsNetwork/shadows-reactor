@@ -55,9 +55,9 @@ const PairInfo: React.FC = () => {
       <div className="button-group">
         <StatefulButton name="All" />
         <StatefulButton name="Cryptos" />
-        {/* <StatefulButton name="Fiat" /> */}
+        <StatefulButton name="Fiat" />
         <StatefulButton name="Commodities" />
-        <StatefulButton name="Equities" />
+        {/* <StatefulButton name="Equities" /> */}
       </div>
       <div className="list">
         <div className="header">
