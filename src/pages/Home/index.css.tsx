@@ -31,7 +31,6 @@ export const PairsInfoContainer = styled(Box)`
   }
 
   .list {
-    margin: 0 1.2rem;
     font-weight: bold;
 
     .item, .header {
@@ -54,9 +53,15 @@ export const PairsInfoContainer = styled(Box)`
 
 
     .header {
+      padding: 0 1.2rem;
       color: #979797 !important;
       font-size: 1.2rem;
       user-select: none;
+    }
+    .content{
+      padding: 0 1.2rem;
+      height:23em;
+      overflow:auto
     }
   }
 `

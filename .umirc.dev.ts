@@ -4,9 +4,10 @@ import config from './config.dev'
 
 export default defineConfig({
   define: {
+    'process.env.NETWORK': 'bsctestnet',
     'process.env.CHAIN_ID': '0x61',
     'process.env.NETWORK_NAME': 'Binance Smart Chain Testnet',
-    'process.env.RPC_URL': 'https://data-seed-prebsc-2-s1.binance.org:8545//',
+    'process.env.RPC_URL': 'https://data-seed-prebsc-2-s3.binance.org:8545/',
     'process.env.BLOCK_EXPLORER_URL': 'https://testnet.bscscan.com',
     'process.env.CONTRACT_CONFIG': config
   }

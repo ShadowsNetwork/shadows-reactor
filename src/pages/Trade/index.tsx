@@ -103,24 +103,26 @@ const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedK
           <div className="key">Symbol</div>
           <div className="value">Last Price</div>
         </div>
-        {
-          keyPairs?.map((keyPair, index) => {
-            const { symbol, lastPrice } = keyPair
-            return (
-              <div
-                className="item"
-                key={index}
-                onClick={() => handleSelectKeyPair(keyPair)}
-                style={{ color: isKeyPairSelected(keyPair) ? '#63cca9' : '' }}
-              >
-                <div className="key">
-                  {`${symbol[0]} / ${symbol[1]}`}
+        <div className="content">
+          {
+            keyPairs?.map((keyPair, index) => {
+              const { symbol, lastPrice } = keyPair
+              return (
+                <div
+                  className="item"
+                  key={index}
+                  onClick={() => handleSelectKeyPair(keyPair)}
+                  style={{ color: isKeyPairSelected(keyPair) ? '#63cca9' : '' }}
+                >
+                  <div className="key">
+                    {`${symbol[0]} / ${symbol[1]}`}
+                  </div>
+                  <div className="value">{lastPrice}</div>
                 </div>
-                <div className="value">{lastPrice}</div>
-              </div>
-            )
-          })
-        }
+              )
+            })
+          }
+        </div>
       </div>
     </PairsInfoContainer>
   )

@@ -59,13 +59,13 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
   const dispatch = useDispatch()
 
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
-
+  
   const { forceRefresh } = useRefreshController()
 
   const [initialized, setInitialized] = useState(false)
   let provider: providers.Web3Provider
 
-  const currentProvider: any = new web3.providers.HttpProvider('https://data-seed-prebsc-2-s1.binance.org:8545')
+  const currentProvider: any = new web3.providers.HttpProvider(process.env.RPC_URL as string)
   provider = new providers.Web3Provider(currentProvider)
   // const { abi, address } = getContractConfig('bsctestnet', 'Synthesizer')
   // const contract = new Contract(address, abi, provider)
@@ -164,7 +164,7 @@ export function useSetupNetwork(providerInitialized: boolean, params: EthereumCh
     // }
 
     let provider: providers.Web3Provider
-    const currentProvider: any = new web3.providers.HttpProvider('https://data-seed-prebsc-2-s1.binance.org:8545')
+    const currentProvider: any = new web3.providers.HttpProvider(process.env.RPC_URL as string)
     provider = new providers.Web3Provider(currentProvider)
 
     if (selectedWallet) {

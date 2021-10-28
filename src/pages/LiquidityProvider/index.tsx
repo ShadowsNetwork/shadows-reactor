@@ -12,7 +12,7 @@ import BigNumber from 'bignumber.js'
 import AmountInputModal, { AmountInputModalStatus } from './AmountInputModal'
 import { numberWithCommas } from '@/utils'
 import {
-  ApproveToken, LockLPToken, Redeem, TransactionHistory, TransactionStatus, UnlockLPToken
+  ApproveToken, LockLPToken, RedeemDOWS, TransactionHistory, TransactionStatus, UnlockLPToken
 } from '@/types/TransactionHistory'
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
 import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
@@ -194,7 +194,7 @@ const Pool: React.FC<PoolConfig> = ({
       submitTransaction()
       closeRedeemModal()
 
-      const transactionHistory: TransactionHistory = new Redeem(withdrawResult.hash, dowsEarned, TransactionStatus.Submitted)
+      const transactionHistory: TransactionHistory = new RedeemDOWS(withdrawResult.hash, dowsEarned, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
 
       withdrawResult.wait()

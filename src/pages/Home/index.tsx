@@ -64,28 +64,30 @@ const PairInfo: React.FC = () => {
           <div className="key">Symbol</div>
           <div className="value">Last Price</div>
         </div>
-        {
-          keyPairs?.map((keyPair, index) => {
-            const { symbol, lastPrice } = keyPair
-            return (
-              <div
-                className="item"
-                key={index}
-                onClick={() => history.push({
-                  pathname: '/trade',
-                  state: {
-                    keyPair
-                  }
-                })}
-              >
-                <div className="key">
-                  {`${symbol[0]} / ${symbol[1]}`}
+        <div className="content">
+          {
+            keyPairs?.map((keyPair, index) => {
+              const { symbol, lastPrice } = keyPair
+              return (
+                <div
+                  className="item"
+                  key={index}
+                  onClick={() => history.push({
+                    pathname: '/trade',
+                    state: {
+                      keyPair
+                    }
+                  })}
+                >
+                  <div className="key">
+                    {`${symbol[0]} / ${symbol[1]}`}
+                  </div>
+                  <div className="value">{lastPrice}</div>
                 </div>
-                <div className="value">{lastPrice}</div>
-              </div>
-            )
-          })
-        }
+              )
+            })
+          }
+        </div>
       </div>
     </PairsInfoContainer>
   )

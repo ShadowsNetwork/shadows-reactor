@@ -48,7 +48,6 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
 }) => {
   const dispatch = useDispatch()
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
-
   const disconnect = async () => {
     dispatch(setSelectedWallet(null))
     dispatch(setAccount(null))

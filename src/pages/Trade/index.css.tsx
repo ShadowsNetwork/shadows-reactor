@@ -226,9 +226,7 @@ export const PairsInfoContainer = styled.div`
   }
 
   .list {
-    margin: 0 1.2rem;
     font-weight: bold;
-
     .item, .header {
       display: flex;
       justify-content: space-between;
@@ -246,9 +244,15 @@ export const PairsInfoContainer = styled.div`
     }
 
     .header {
+      padding: 0 1.2rem;
       color: #979797 !important;
       font-size: 1.2rem;
       user-select: none;
+    }
+    .content{
+      padding: 0 1.2rem;
+      height: 23em;
+      overflow: auto;
     }
   }
 `
