@@ -3,6 +3,7 @@ import { defineConfig } from 'umi'
 // ref: https://umijs.org/config/
 export default defineConfig({
   title: 'Shadows',
+  hash: true,
   routes: [
     {
       path: '/',

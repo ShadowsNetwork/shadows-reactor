@@ -30,7 +30,7 @@ const shadowsSynthsConfig: Array<ShadowsSynth> = [
     address: '',
   },
   {
-    type: 'Equaties',
+    type: 'Equities',
     coingecko: 'coinbase-stock',
     name: 'coinbase',
     symbol: 'ShaCOINBASE',
