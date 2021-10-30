@@ -3,7 +3,7 @@ import { ConfigType } from './config'
 import bridgeConfig from './config/bridge.config.prod'
 
 const config: ConfigType = {
-  baseUrl : 'https://testapi.shadows.link',
+  baseUrl : 'https://api.shadows.link',
   bridge: bridgeConfig,
   liquidityProvider: {
     supportedPools: [
