@@ -436,7 +436,7 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
 
   const currencyIcon = (key: string) => {
     const map = shadowsSynthsConfig.find((item: ShadowsSynth) => item.symbol === key)
-    return require(`../../img/tokens/${map?.symbol || 'ShaUSD'}.svg`)
+    return require(`../../img/coin/${map?.symbol || 'ShaUSD'}.png`)
   }
 
   return (
