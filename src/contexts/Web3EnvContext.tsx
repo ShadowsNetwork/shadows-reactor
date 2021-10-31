@@ -4,7 +4,6 @@ import { setChainId, setRpcUrl } from '../store/wallet'
 import { useInitializeProvider, useSetupNetwork } from '../hooks'
 import { EthereumChain, getEthereumChainById } from '@/ShadowsJs/networkHelper'
 import useStoredWallet from '@/store/wallet/useStoredWallet'
-import { parseInt } from 'lodash'
 import { useLocation } from 'react-router-dom'
 
 type Web3EnvContextType = {
@@ -53,10 +52,9 @@ const Web3EnvProvider: React.FC = ({ children }) => {
     }
   }, [RPCUrl, chainId])
 
+  const providerInitialized = useInitializeProvider(chainId, RPCUrl)
 
-  const providerInitialized = useInitializeProvider(parseInt(chainId!, 16), RPCUrl)
-
-  const networkReady = useSetupNetwork(providerInitialized, getEthereumChainById(chainId!))
+  const networkReady = useSetupNetwork(providerInitialized, getEthereumChainById(chainId))
 
   return <Web3EnvContext.Provider value={{ providerInitialized, networkReady, setup }}>{children}</Web3EnvContext.Provider>
 }

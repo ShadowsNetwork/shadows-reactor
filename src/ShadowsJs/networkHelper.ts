@@ -75,13 +75,8 @@ export const SUPPORTED_ETHEREUM_CHAINS: EthereumChain[] = [
   }
 ]
 
-export function getEthereumChainById(id: SUPPORT_ETHEREUM_CHAIN_ID) {
-  const chain = SUPPORTED_ETHEREUM_CHAINS.find(o => o.chainId === id)
-  if (!chain) {
-    throw new Error('Chain id not found: ' + id)
-  }
-
-  return chain
+export function getEthereumChainById(id?: SUPPORT_ETHEREUM_CHAIN_ID): EthereumChain | undefined {
+  return SUPPORTED_ETHEREUM_CHAINS.find(o => o.chainId === id)
 }
 
 export async function setupMetamaskNetwork(params: EthereumChain): Promise<boolean> {

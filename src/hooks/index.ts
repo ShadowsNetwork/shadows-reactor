@@ -39,7 +39,7 @@ export function useLocation(): Location {
   return location
 }
 
-export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean {
+export function useInitializeProvider(chainIdHexString?: string, RPCUrl?: string): boolean {
   const dispatch = useDispatch()
 
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
@@ -53,8 +53,14 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
   provider = new providers.Web3Provider(currentProvider)
 
   const initialize = useCallback(async () => {
+    if (!chainIdHexString || !RPCUrl) {
+      return
+    }
+
+    const chainId = parseInt(chainIdHexString, 16)
+
     if (selectedWallet) {
-      provider = await getWeb3ProviderByWallet({ chainId, RPCUrl }, selectedWallet)
+      provider = await getWeb3ProviderByWallet({ chainId , RPCUrl }, selectedWallet)
     }
 
     if (selectedWallet === 'WalletConnect') {
@@ -122,7 +128,7 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
     ))
 
     setInitialized(true)
-  }, [selectedWallet, chainId, RPCUrl])
+  }, [selectedWallet, chainIdHexString, RPCUrl])
 
   useEffect(() => {
     initialize()
@@ -131,18 +137,18 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
   return initialized
 }
 
-export function useSetupNetwork(providerInitialized: boolean, params: EthereumChain): boolean {
-  const chainId = parseInt(params.chainId, 16)
-  const [RPCUrl] = params.rpcUrls
-
+export function useSetupNetwork(providerInitialized: boolean, chain?: EthereumChain): boolean {
   const dispatch = useDispatch()
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
   const [ready, setReady] = useState(false)
 
   const setup = useCallback(async () => {
-    // if (!selectedWallet) {
-    //   return setReady(false)
-    // }
+    if (!chain) {
+      return
+    }
+
+    const chainId = parseInt(chain.chainId, 16)
+    const [RPCUrl] = chain.rpcUrls
 
     let provider: providers.Web3Provider
     const currentProvider: any = new web3.providers.HttpProvider(process.env.RPC_URL as string)
@@ -155,7 +161,7 @@ export function useSetupNetwork(providerInitialized: boolean, params: EthereumCh
     }
 
     if (selectedWallet === 'WalletConnect') {
-      if (await setupWalletConnectNetwork(params, provider)) {
+      if (await setupWalletConnectNetwork(chain, provider)) {
         setReady(true)
       } else {
         setReady(false)
@@ -167,26 +173,26 @@ export function useSetupNetwork(providerInitialized: boolean, params: EthereumCh
 
     // WalletConnect couldn't use this method because not enable() before
     provider?.ready?.then(async network => {
-      if (network.chainId === parseInt(params.chainId, 16)) {
+      if (network.chainId === parseInt(chain.chainId, 16)) {
         setReady(true)
         return
       }
 
       if (selectedWallet === 'Metamask') {
-        setReady(await setupMetamaskNetwork(params))
+        setReady(await setupMetamaskNetwork(chain))
       } else if (selectedWallet === 'BSC') {
-        setReady(await setupBinanceWalletNetwork(params))
+        setReady(await setupBinanceWalletNetwork(chain))
       }
     })
       .catch(async () => {
         if (selectedWallet === 'Metamask') {
-          setReady(await setupMetamaskNetwork(params))
+          setReady(await setupMetamaskNetwork(chain))
         } else if (selectedWallet === 'BSC') {
-          setReady(await setupBinanceWalletNetwork(params))
+          setReady(await setupBinanceWalletNetwork(chain))
         }
       })
 
-  }, [selectedWallet, providerInitialized, params])
+  }, [selectedWallet, providerInitialized, chain])
 
   useEffect(() => {
     setup()
