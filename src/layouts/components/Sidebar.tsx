@@ -9,6 +9,7 @@ const SideBar: React.FC = () => {
   const { hash } = useLocation()
 
   const handleGtag = (key: string) => {
+    // @ts-ignore
     gtag('event', key)
   }
 
@@ -23,7 +24,7 @@ const SideBar: React.FC = () => {
           .map(router => (
             <Menu.Item
               key={router.path}
-              onClick={() => { handleGtag(router.key) }}
+              onClick={() => handleGtag(router.key)}
             >
               <img className="slideIcon" src={router.icon} alt="" />
               <Link to={router.path} style={{ userSelect: 'none' }}>

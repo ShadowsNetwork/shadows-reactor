@@ -1,5 +1,5 @@
 import LimitableNumberInput from '@/components/LimitableNumberInput'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import './index.less'
 import { useErrorMessage } from '@/hooks'
@@ -214,17 +214,13 @@ const EmptyBridgeMain: React.FC = () => (
 )
 
 const Bridge: React.FC = () => {
-  const { providerInitialized, networkReady, setup } = useWeb3EnvContext()
+  const { providerInitialized, networkReady } = useWeb3EnvContext()
 
   const dispatch = useDispatch()
   const fromPolyChainId = useSelector(getSourcePolyChainId)
 
   const fromPolyChain = getPolyChainById(fromPolyChainId)!
   const toPolyChain = getToPolyChainByFromPolyChain(fromPolyChain)
-
-  useEffect(() => {
-    setup(fromPolyChain.ethereumChain)
-  }, [fromPolyChain])
 
   const handleSwitch = () => {
     dispatch(setSourcePolyChainId(toPolyChain.polyChainId))

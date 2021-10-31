@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TransactionHistory } from '@/types/TransactionHistory'
 import { State, WalletState } from '@/store/type'
-import { SUPPORT_ETHEREUM_CHAIN_ID } from '@/ShadowsJs/networkHelper'
 
 const initialState: WalletState = {
   selectedWallet: undefined,
@@ -15,13 +14,6 @@ export const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers: {
-    setChainId: (state, action) => {
-      if (!action.payload.toString().includes('0x')) {
-        throw new Error(`Error chain id: ${action.payload}. Chain id must start with '0x'`)
-      }
-
-      state.chainId = action.payload
-    },
     setRpcUrl: (state, action) => {
       state.rpcUrl = action.payload
     },
@@ -75,14 +67,6 @@ export function getTransactionHistoryList(state: State): Array<TransactionHistor
   return state.wallet.transactionHistoryList ?? []
 }
 
-export function getChainId(state: State): SUPPORT_ETHEREUM_CHAIN_ID | undefined {
-  return state.wallet.chainId
-}
-
-export function getRpcUrl(state: State): string | undefined {
-  return state.wallet.rpcUrl
-}
-
 export function getAccount(state: State): string | undefined {
   return state.wallet.account
 }
@@ -92,8 +76,6 @@ export function getSelectedWallet(state: State): string | undefined {
 }
 
 export const {
-  setRpcUrl,
-  setChainId,
   setAccount,
   setSelectedWallet,
   appendTransactionHistory,

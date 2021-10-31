@@ -8,6 +8,7 @@ import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { useCurrencyData } from '@/hooks/useTradeData'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
+import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 
 const useAssetsBalance = () => {
   const account = useSelector(getAccount
@@ -20,8 +21,10 @@ const useAssetsBalance = () => {
 
   const [assetsBalanceList, setAssetsBalanceList] = useState<Array<{ key: string, quantity: BigNumber, value: BigNumber }>>([])
 
+  const { providerInitialized, networkReady } = useWeb3EnvContext()
+
   const fetch = useCallback(async () => {
-    if (!addressAvailable(account) || !dowsPrice) {
+    if (!addressAvailable(account) || !dowsPrice || !providerInitialized || !networkReady) {
       setAssetsBalanceList([])
       return
     }
@@ -48,7 +51,7 @@ const useAssetsBalance = () => {
           .filter(v => v.quantity.gt(0))
       )
     }
-  }, [account, dowsPrice, keyList, fastRefreshFlag])
+  }, [account, dowsPrice, keyList, fastRefreshFlag, providerInitialized, networkReady])
 
   useEffect(() => {
     fetch()
@@ -66,8 +69,10 @@ const useBalance = () => {
   const [debtPool, setDebtPool] = useState('')
 
   const { fastRefreshFlag } = useRefreshController()
+  const { providerInitialized, networkReady } = useWeb3EnvContext()
+
   const fetch = useCallback(async () => {
-    if (!account || !dowsPrice) {
+    if (!account || !dowsPrice || !providerInitialized || !networkReady) {
       setYourBalance('')
       setAssetsBalance('')
       setDebtPool('')
@@ -93,7 +98,7 @@ const useBalance = () => {
     setAssetsBalance(_newTransferableShadows)
     setDebtPool(_newDebtBalanceOf)
 
-  }, [account, dowsPrice, fastRefreshFlag])
+  }, [account, dowsPrice, fastRefreshFlag, providerInitialized, networkReady])
 
   useEffect(() => {
     fetch()
@@ -107,7 +112,9 @@ const useBalance = () => {
 export const useHomeData = () => {
   const { assetsBalanceList } = useAssetsBalance()
   const { yourBalance, assetsBalance, debtPool } = useBalance()
+
   const totalCurrentKeysBalance = assetsBalanceList.reduce((sum: BigNumber, item: any) => sum.plus(item.value), toBigNumber(0))
+
   return {
     yourBalance: toBigNumber(yourBalance || 0).plus(totalCurrentKeysBalance.minus(toBigNumber(debtPool || 0))),
     dowsBalance: yourBalance,

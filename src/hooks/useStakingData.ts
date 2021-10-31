@@ -7,6 +7,7 @@ import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { PoolType } from '@/types/LiquidityProvider'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
+import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 
 const ALLOWANCE_THRESHOLD_VALUE = new BigNumber('2').pow(128)
 
@@ -103,7 +104,13 @@ export const useStakingData = ({
   const [allowanceEnough, setAllowanceEnough] = useState(false)
   const [userLpBalance, setUserLpBalance] = useState('')
 
+  const { providerInitialized, networkReady } = useWeb3EnvContext()
+
   const fetchData = useCallback(async () => {
+    if (!providerInitialized || !networkReady) {
+      return
+    }
+
     if (!addressAvailable(account)) {
       setTotalLockedLP('0')
       setTotalLockedLPInUSD('0')

@@ -25,10 +25,10 @@ export const useCurrencyData = (): PairData => {
 
   const { fastRefreshFlag } = useRefreshController()
 
-  const { networkReady } = useWeb3EnvContext()
+  const { networkReady, providerInitialized } = useWeb3EnvContext()
 
   const fetch = useCallback(async () => {
-    if (!networkReady || !dowsJSConnector.dowsJs?.network) {
+    if (!providerInitialized || !networkReady || !dowsJSConnector.dowsJs?.network) {
       return
     }
 
@@ -81,7 +81,7 @@ export const useCurrencyData = (): PairData => {
 
     setKeyList(_keyList)
     setKeyPairs(_keyPairs)
-  }, [fastRefreshFlag, networkReady])
+  }, [fastRefreshFlag, networkReady, providerInitialized])
 
   useEffect(() => {
     fetch()

@@ -3,6 +3,7 @@
 import { Web3Provider } from '@ethersproject/providers'
 import { message } from 'antd'
 import WalletConnectProvider from '@walletconnect/web3-provider'
+import { providers } from 'ethers'
 
 export const SUPPORTED_NETWORKS = {
   1: 'mainnet',
@@ -14,10 +15,10 @@ export const SUPPORTED_NETWORKS = {
   56: 'bsc'
 }
 
-export type SUPPORT_ETHEREUM_CHAIN_ID = '0x1' | '0x38' | '0x3' | '0x61'
+export type SupportedEthereumChainId = '0x1' | '0x38' | '0x3' | '0x61'
 
 export type EthereumChain = {
-  chainId: SUPPORT_ETHEREUM_CHAIN_ID,  // hex string
+  chainId: SupportedEthereumChainId,  // hex string
   chainName: string,
   nativeCurrency?: {
     name: string,
@@ -75,11 +76,11 @@ export const SUPPORTED_ETHEREUM_CHAINS: EthereumChain[] = [
   }
 ]
 
-export function getEthereumChainById(id?: SUPPORT_ETHEREUM_CHAIN_ID): EthereumChain | undefined {
+export function getEthereumChainById(id?: SupportedEthereumChainId): EthereumChain | undefined {
   return SUPPORTED_ETHEREUM_CHAINS.find(o => o.chainId === id)
 }
 
-export async function setupMetamaskNetwork(params: EthereumChain): Promise<boolean> {
+export async function setupMetamaskNetwork(chain: EthereumChain): Promise<boolean> {
   const provider = (window as WindowChain).ethereum
 
   if (!provider) {
@@ -89,15 +90,17 @@ export async function setupMetamaskNetwork(params: EthereumChain): Promise<boole
 
   return await provider.request({
     method: 'wallet_addEthereumChain',
-    params: [params]
+    params: [chain]
   })
-    .then(() => {
-      return true
+    .then(async () => {
+      const { chainId } = await new providers.Web3Provider(provider).ready
+
+      return chainId === parseInt(chain.chainId, 16)
     })
     .catch(error => {
       // message: May not specify default MetaMask chain.
       if (error.code === -32602) {
-        message.warn(`Please manually switch to the ${params.chainName} in MetaMask`, 5)
+        message.warn(`Please manually switch to the ${chain.chainName} in MetaMask`, 5)
         return false
       }
 
