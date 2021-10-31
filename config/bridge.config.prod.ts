@@ -1,5 +1,5 @@
 import { BridgeConfig } from '../config'
-import { getEthereumChainById } from '@/ShadowsJs/networkHelper'
+import { getEthereumChainById } from '../src/ShadowsJs/networkHelper'
 
 const PolyChainId = {
   Eth: 2,
