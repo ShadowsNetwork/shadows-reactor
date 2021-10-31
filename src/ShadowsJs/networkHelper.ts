@@ -112,7 +112,7 @@ export async function setupMetamaskNetwork(chain: EthereumChain): Promise<boolea
 
       // message: Request of type 'wallet_switchEthereumChain' already pending for origin ******. Please wait.
       if (error.code === -32002) {
-        message.warn('Network switching request has been sent to your MetaMask, please check it!')
+        message.warn('Network switching request has been sent to your MetaMask, please check it!', 5)
         return false
       }
 

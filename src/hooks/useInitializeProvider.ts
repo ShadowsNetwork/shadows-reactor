@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { getSelectedWallet, setAccount, setSelectedWallet } from '@/store/wallet'
+import { getAccount, getSelectedWallet, setAccount, setSelectedWallet } from '@/store/wallet'
 import { getWeb3ProviderByWallet, WalletNames } from '@/web3/wallets'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useCallback, useEffect, useState } from 'react'
@@ -13,6 +13,7 @@ export function useInitializeProvider(requiredChain?: EthereumChain): boolean {
   const dispatch = useDispatch()
 
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
+  const account = useSelector(getAccount)
 
   const { forceRefresh } = useRefreshController()
 
@@ -25,12 +26,8 @@ export function useInitializeProvider(requiredChain?: EthereumChain): boolean {
   provider = new providers.Web3Provider(currentProvider)
 
   const initialize = useCallback(async () => {
-    if (!requiredChain) {
+    if (!requiredChain || !selectedWallet) {
       setInitialized(false)
-      return
-    }
-
-    if (!selectedWallet) {
       return
     }
 
@@ -85,9 +82,11 @@ export function useInitializeProvider(requiredChain?: EthereumChain): boolean {
 
       // @ts-ignore
       provider.provider.on('accountsChanged', async (newAccount, _) => {
+        console.log(newAccount)
         if (!newAccount.length) {
           dispatch(setAccount(null))
           dispatch(setSelectedWallet(null))
+          setInitialized(false)
         } else {
           dispatch(setAccount(newAccount[0]))
         }
@@ -108,7 +107,7 @@ export function useInitializeProvider(requiredChain?: EthereumChain): boolean {
     // ))
 
     setInitialized(true)
-  }, [selectedWallet, requiredChain, networkReady])
+  }, [selectedWallet, requiredChain, networkReady, account])
 
   useEffect(() => {
     initialize()

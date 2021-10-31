@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { useInitializeProvider } from '@/hooks/useInitializeProvider'
 import { useNetworkReady } from '@/hooks/useNetworkReady'
 import useRequiredChain from '@/hooks/useRequiredChain'
+import useFixupNetwork from '@/hooks/useFixupNetwork'
 
 type Web3EnvContextType = {
   providerInitialized: boolean,
@@ -20,7 +21,7 @@ const Web3EnvProvider: React.FC = ({ children }) => {
 
   const networkReady = useNetworkReady(requiredChain)
 
-  console.log(requiredChain?.chainName, providerInitialized, networkReady)
+  useFixupNetwork()
 
   return (
     <Web3EnvContext.Provider value={{ providerInitialized, networkReady }}>

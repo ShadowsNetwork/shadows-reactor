@@ -11,8 +11,8 @@ import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 
 const useAssetsBalance = () => {
-  const account = useSelector(getAccount
-  )
+  const account = useSelector(getAccount)
+
   const { keyList } = useCurrencyData()
 
   const { data: dowsPrice } = useDowsPriceQuery()
