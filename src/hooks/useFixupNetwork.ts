@@ -4,18 +4,16 @@ import { getSelectedWallet } from '@/store/wallet'
 import { WalletNames } from '@/web3/wallets'
 import useRequiredChain from '@/hooks/useRequiredChain'
 import { useEffect } from 'react'
-import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { useLocation } from 'react-router-dom'
 
-const useFixupNetwork = () => {
+const useFixupNetwork = (networkReady?: boolean) => {
   const location = useLocation()
-  const { networkReady } = useWeb3EnvContext()
 
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
   const requiredChain = useRequiredChain()!
 
   useEffect(() => {
-    if (!requiredChain || networkReady) {
+    if (!requiredChain || networkReady || networkReady === undefined) {
       return
     }
 

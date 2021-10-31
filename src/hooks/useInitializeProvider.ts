@@ -6,10 +6,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { providers } from 'ethers'
 import web3 from 'web3'
 import WalletConnectProvider from '@walletconnect/web3-provider'
-import { EthereumChain } from '@/ShadowsJs/networkHelper'
 import { useNetworkReady } from '@/hooks/useNetworkReady'
+import useRequiredChain from '@/hooks/useRequiredChain'
 
-export function useInitializeProvider(requiredChain?: EthereumChain): boolean {
+export function useInitializeProvider(): boolean {
+  const requiredChain = useRequiredChain()
+
   const dispatch = useDispatch()
 
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
@@ -17,7 +19,7 @@ export function useInitializeProvider(requiredChain?: EthereumChain): boolean {
 
   const { forceRefresh } = useRefreshController()
 
-  const networkReady = useNetworkReady(requiredChain)
+  const networkReady = useNetworkReady()
 
   const [initialized, setInitialized] = useState(false)
   let provider: providers.Web3Provider
@@ -96,7 +98,7 @@ export function useInitializeProvider(requiredChain?: EthereumChain): boolean {
       // @ts-ignore
       provider.provider.on('chainChanged', async (newChain, oldChain) => {
         console.log(newChain, oldChain)
-        window.location.reload()
+        forceRefresh()
       })
     }
 
