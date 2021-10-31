@@ -1,4 +1,4 @@
-import Pool from '@/pages/LiquidityProvider'
+import Pool from '@/pages/Staking'
 import Bridge from '@/pages/Bridge'
 import TradePage from '@/pages/Trade'
 import HomePage from '@/pages/Home'
@@ -33,7 +33,7 @@ const routers: Router[] = [
     component: TradePage,
     icon: TradeIcon
   },
-  
+
   {
     path: '/staking',
     key: 'staking',
@@ -48,7 +48,7 @@ const routers: Router[] = [
     component: Bridge,
     icon: BridgeIcon
   }
-  
+
 ]
 
 export default routers

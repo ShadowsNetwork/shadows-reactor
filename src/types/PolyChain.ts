@@ -1,8 +1,8 @@
-import { EthereumChainParams } from '@/ShadowsJs/networkHelper'
+import { EthereumChain } from '@/ShadowsJs/networkHelper'
 
 export type PolyChain = {
   polyChainId: number
-  ethereumChain: EthereumChainParams
+  ethereumChain: EthereumChain
   explorerUrl: string
   lockContractAddress: string
   dowsTokenAddress: string

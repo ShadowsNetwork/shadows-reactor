@@ -16,6 +16,10 @@ class RewardEscrow extends AbstractContractCaller {
 
     const { abi, address } = getContractConfig(this.network, 'RewardEscrow')
 
+    if (!abi || !address) {
+      return
+    }
+
     this.contract = new Contract(
       address,
       abi,

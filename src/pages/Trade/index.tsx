@@ -1,31 +1,27 @@
 import { Button, Slider } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import LimitableNumberInput from '@/components/LimitableNumberInput'
-import { createChart, CrosshairMode, IChartApi, ISeriesApi, PriceScaleMode, UTCTimestamp } from 'lightweight-charts'
+import {
+  createChart, CrosshairMode, IChartApi, ISeriesApi, Time, UTCTimestamp
+} from 'lightweight-charts'
 import { useErrorMessage } from '@/hooks'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import useTradingDataQuery from '@/queries/useTradingDataQuery'
 import BigNumber from 'bignumber.js'
-import DowsSynthesizer from '@/components/DowsSynthesizer'
-import { KeyPair, useCurrencyBalance, useCurrencyData, useCurrencyPrice } from '@/hooks/useTradeData'
+import {
+  KeyPair, useCurrencyBalance, useCurrencyData, useCurrencyPrice
+} from '@/hooks/useTradeData'
 import { TradeSynth } from '@/types/TransactionHistory'
 import { numberWithCommas } from '@/utils'
 import { appendTransactionHistory } from '@/store/wallet'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { shadowsSynthsConfig, ShadowsSynth } from '@/config/img.config'
+import { ShadowsSynth, shadowsSynthsConfig } from '@/config/img.config'
 import {
-  TradePageContainer,
-  Column,
-  CandlestickContainer,
-  StatsContainer,
-  ContainerForDowsAndPair,
-  ContainerForBuyAndSell,
-  PairsInfoContainer,
-  CustomizedSlider,
-  SellBuyTabs
+  CandlestickContainer, Column, ContainerForBuyAndSell, ContainerForDowsAndPair, CustomizedSlider,
+  PairsInfoContainer, SellBuyTabs, StatsContainer, TradePageContainer
 } from './index.css'
 
 type PairInfoProps = {
@@ -192,6 +188,7 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
         rejectTransaction(errorMessageGetter(e))
       })
 
+    // @ts-ignore
     gtag('event', type.toLocaleLowerCase())
   }
 
@@ -391,11 +388,10 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
 
     if (data.data.length > 0) {
       chart?.timeScale().setVisibleRange({
-        from: parseInt(data.data[0].time) / 1000,
-        to: parseInt(data.data[data.data.length - 1].time) / 1000,
+        from: (parseInt(data.data[0].time) / 1000) as Time,
+        to: (parseInt(data.data[data.data.length - 1].time) / 1000) as Time,
       })
     }
-
 
   }, [data, series])
 
@@ -404,33 +400,15 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
 }
 
 const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
-  const availableTimeRange = [
-    { key: '1D', value: 1 },
-    { key: '3D', value: 5 },
-    { key: '7D', value: 60 },
-    { key: '1M', value: 60 }
-  ]
-
   const availableMode = [
     { key: 'Price', value: 'price' },
     { key: 'Volume', value: 'volume' }
     // { key: 'Liquidity', value: 3 }
   ]
 
-  const [selectedTimeRange, setSelectedTimeRange] = useState('1D')
   const [selectedMode, setSelectedMode] = useState({ key: 'Price', value: 'price' })
 
   const { data } = useTradingDataQuery('price', keyPair?.symbol[0])
-
-  // const currentPrice = (() => {
-  //   if (data?.data) {
-  //     const len = data.data.length
-  //     if (len) {
-  //       return numberWithCommas(weiToBigNumber(data.data[len - 1].price))
-  //     }
-  //   }
-  //   return '---'
-  // })()
 
   const { currentPrice } = useCurrencyPrice(keyPair?.symbol[0])
 
@@ -550,21 +528,25 @@ const TradePage: React.FC = () => {
         </SellBuyTabs>
         <ContainerForBuyAndSell>
           {
-            tradeActive == 'Buy' && <BuySellPanel
-              balanceByCurrency={balanceByCurrency}
-              color="#63cca9"
-              type="Buy"
-              keyPair={selectedKeyPair}
-            />
+            tradeActive == 'Buy' && (
+              <BuySellPanel
+                balanceByCurrency={balanceByCurrency}
+                color="#63cca9"
+                type="Buy"
+                keyPair={selectedKeyPair}
+              />
+            )
           }
 
           {
-            tradeActive == 'Sell' && <BuySellPanel
-              balanceByCurrency={balanceByCurrency}
-              color="#DB5E56"
-              type="Sell"
-              keyPair={selectedKeyPair}
-            />
+            tradeActive == 'Sell' && (
+              <BuySellPanel
+                balanceByCurrency={balanceByCurrency}
+                color="#DB5E56"
+                type="Sell"
+                keyPair={selectedKeyPair}
+              />
+            )
           }
 
         </ContainerForBuyAndSell>

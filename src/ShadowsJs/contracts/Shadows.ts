@@ -16,6 +16,10 @@ class Shadows extends AbstractContractCaller {
 
     const { abi, address } = getContractConfig(this.network, 'Shadows')
 
+    if (!abi || !address) {
+      return
+    }
+
     this.contract = new Contract(
       address,
       abi,

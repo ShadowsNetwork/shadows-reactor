@@ -15,60 +15,64 @@ import {
   ApproveToken, LockLPToken, RedeemDOWS, TransactionHistory, TransactionStatus, UnlockLPToken
 } from '@/types/TransactionHistory'
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
-import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
-import RedeemModal, { RedeemModalStatus } from '@/pages/LiquidityProvider/RedeemModal'
+import { useErrorMessage } from '@/hooks'
+import RedeemModal, { RedeemModalStatus } from '@/pages/Staking/RedeemModal'
 import { useStakingData } from '@/hooks/useStakingData'
 import { PoolConfig } from '@/types/LiquidityProvider'
 import { ConfigType } from '../../../config'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
+import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 
 const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 
-const EmptyPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency, poolType }) => (
-  <div className="pool">
-    <div className="pool-name">
-      <span>{poolName}</span>
-    </div>
-    <div className="pool-main">
-      <div className="info-container-title">
-        {leftCurrency && `${leftCurrency.name}/`}{rightCurrency.name}
+const EmptyPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency, poolType }) => {
+  return (
+    <div className="pool">
+      <div className="pool-name">
+        <span>{poolName}</span>
       </div>
-      <img src={rightCurrency.icon} alt="" />
-      <img className="infoContent-dows" src={leftCurrency?.icon} alt="" />
-      <div className="info-container">
-        <div className="item">
-          <div className="title">{poolType == 'pair' ? 'Total LP Locked' : 'Total Locked'}</div>
-          <div className="value">-</div>
-          <div className="additional">-</div>
+      <div className="pool-main">
+        <div className="info-container-title">
+          {leftCurrency && `${leftCurrency.name}/`}{rightCurrency.name}
         </div>
-        <div className="item">
-          <div className="title">APR</div>
-          <div className="value">-</div>
+        <img src={rightCurrency.icon} alt="" />
+        <img className="infoContent-dows" src={leftCurrency?.icon} alt="" />
+        <div className="info-container">
+          <div className="item">
+            <div className="title">{poolType == 'pair' ? 'Total LP Locked' : 'Total Locked'}</div>
+            <div className="value">-</div>
+            <div className="additional">-</div>
+          </div>
+          <div className="item">
+            <div className="title">APR</div>
+            <div className="value">-</div>
+          </div>
+          <div className="item">
+            <div className="title">{poolType == 'pair' ? 'Your LP Locked' : 'Your Locked'}</div>
+            <div className="value">-</div>
+            <div className="additional">-</div>
+          </div>
+          <div className="item">
+            <div className="title">DOWS Earned</div>
+            <div className="value">-</div>
+          </div>
         </div>
-        <div className="item">
-          <div className="title">{poolType == 'pair' ? 'Your LP Locked' : 'Your Locked'}</div>
-          <div className="value">-</div>
-          <div className="additional">-</div>
-        </div>
-        <div className="item">
-          <div className="title">DOWS Earned</div>
-          <div className="value">-</div>
-        </div>
-      </div>
-      <div className="button-container">
+        <div className="button-container">
 
-        <Button className="lock">
-          <PlusOutlined style={{ fontSize: '1.1rem', color: '#FFFEFE' }} />
-        </Button>
-        <Button className="unlock">
-          Unlock
-        </Button>
-        <Button className="redeem">
-          Redeem
-        </Button>
+          <Button className="lock">
+            <PlusOutlined style={{ fontSize: '1.1rem', color: '#FFFEFE' }} />
+          </Button>
+          <Button className="unlock">
+            Unlock
+          </Button>
+          <Button className="redeem">
+            Redeem
+          </Button>
+        </div>
       </div>
     </div>
-  </div>)
+  )
+}
 
 const Pool: React.FC<PoolConfig> = ({
   poolNumber,
@@ -303,17 +307,8 @@ const Pool: React.FC<PoolConfig> = ({
   )
 }
 
-const LiquidityProvider: React.FC = () => {
-  const chainId = parseInt(process.env.CHAIN_ID!, 16)
-  const RPCUrl = process.env.RPC_URL!
-
-  const providerInitialized = useInitializeProvider(chainId, RPCUrl)
-  const networkReady = useSetupNetwork(providerInitialized, {
-    blockExplorerUrls: [process.env.BLOCK_EXPLORER_URL!],
-    chainName: process.env.NETWORK_NAME!,
-    chainId: process.env.CHAIN_ID!,
-    rpcUrls: [RPCUrl]
-  })
+const Staking: React.FC = () => {
+  const { providerInitialized, networkReady } = useWeb3EnvContext()
 
   return (
     <div className="liquidity-provider">
@@ -328,4 +323,4 @@ const LiquidityProvider: React.FC = () => {
   )
 }
 
-export default LiquidityProvider
+export default Staking

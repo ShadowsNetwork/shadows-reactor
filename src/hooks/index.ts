@@ -6,12 +6,12 @@ import {
 } from '@/store/wallet'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import web3 from 'web3'
-import { providers, Contract } from 'ethers'
+import { providers } from 'ethers'
 import { getWeb3ProviderByWallet, WalletNames } from '@/web3/wallets'
 import ContractSettings from '@/ShadowsJs/ContractSettings'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import {
-  EthereumChainParams, setupBinanceWalletNetwork, setupMetamaskNetwork, setupWalletConnectNetwork
+  EthereumChain, setupBinanceWalletNetwork, setupMetamaskNetwork, setupWalletConnectNetwork
 } from '@/ShadowsJs/networkHelper'
 import { Web3Provider } from '@ethersproject/providers'
 import {
@@ -20,8 +20,6 @@ import {
 import axios from 'axios'
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
-import { getContractConfig } from '@/ShadowsJs/contracts/utils'
-
 
 export function useLocation(): Location {
   const [location, setLocation] = useState(window.location)
@@ -41,25 +39,11 @@ export function useLocation(): Location {
   return location
 }
 
-/*export function useDynamicBackgroundImage(): string {
-  const [background, setBackground] = useState('')
-
-  const { hash } = useLocation()
-  const path = hash.replace(new RegExp('(#/)?'), '/')
-
-  useEffect(() => {
-    const currentRouter = routers.filter(router => router.path === path)[0]
-    setBackground(currentRouter?.backgroundImage)
-  }, [hash])
-
-  return background
-}*/
-
 export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean {
   const dispatch = useDispatch()
 
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
-  
+
   const { forceRefresh } = useRefreshController()
 
   const [initialized, setInitialized] = useState(false)
@@ -67,12 +51,8 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
 
   const currentProvider: any = new web3.providers.HttpProvider(process.env.RPC_URL as string)
   provider = new providers.Web3Provider(currentProvider)
-  // const { abi, address } = getContractConfig('bsctestnet', 'Synthesizer')
-  // const contract = new Contract(address, abi, provider)
 
   const initialize = useCallback(async () => {
-    // console.log((await contract.availableCurrencyKeys()).map(item => bytesToString(item)))
-
     if (selectedWallet) {
       provider = await getWeb3ProviderByWallet({ chainId, RPCUrl }, selectedWallet)
     }
@@ -151,7 +131,7 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
   return initialized
 }
 
-export function useSetupNetwork(providerInitialized: boolean, params: EthereumChainParams): boolean {
+export function useSetupNetwork(providerInitialized: boolean, params: EthereumChain): boolean {
   const chainId = parseInt(params.chainId, 16)
   const [RPCUrl] = params.rpcUrls
 

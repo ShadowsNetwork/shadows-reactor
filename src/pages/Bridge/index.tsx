@@ -1,8 +1,8 @@
 import LimitableNumberInput from '@/components/LimitableNumberInput'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './index.less'
-import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
+import { useErrorMessage } from '@/hooks'
 import { Button, Input } from 'antd'
 import BigNumber from 'bignumber.js'
 import useBridgeData from '@/hooks/useBridgeData'
@@ -10,7 +10,7 @@ import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toWei } from '@/web3/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  appendTransactionHistory, getAccount, setChainId, setRpcUrl, updateTransactionHistoryStatus
+  appendTransactionHistory, getAccount, updateTransactionHistoryStatus
 } from '@/store/wallet'
 import { getSourcePolyChainId, setSourcePolyChainId } from '@/store/bridge'
 import DOWSIcon from '@/img/dows-info/dows.png'
@@ -19,6 +19,7 @@ import { ApproveToken, BridgeDows, TransactionStatus } from '@/types/Transaction
 import { PolyChain } from '@/types/PolyChain'
 import { getPolyChainById, getToPolyChainByFromPolyChain } from '@/utils/bridgeUtils'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
+import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 
 type BridgeProps = {
   fromPolyChain: PolyChain
@@ -213,23 +214,19 @@ const EmptyBridgeMain: React.FC = () => (
 )
 
 const Bridge: React.FC = () => {
+  const { providerInitialized, networkReady, setup } = useWeb3EnvContext()
+
   const dispatch = useDispatch()
   const fromPolyChainId = useSelector(getSourcePolyChainId)
 
   const fromPolyChain = getPolyChainById(fromPolyChainId)!
   const toPolyChain = getToPolyChainByFromPolyChain(fromPolyChain)
 
-  dispatch(setChainId(parseInt(fromPolyChain.ethereumChain.chainId, 16)))
-  dispatch(setRpcUrl(fromPolyChain.ethereumChain.rpcUrls[0]))
+  useEffect(() => {
+    setup(fromPolyChain.ethereumChain)
+  }, [fromPolyChain])
 
-  const providerInitialized = useInitializeProvider(
-    parseInt(fromPolyChain.ethereumChain.chainId, 16),
-    fromPolyChain.ethereumChain.rpcUrls[0]
-  )
-
-  const networkReady = useSetupNetwork(providerInitialized, fromPolyChain.ethereumChain)
-
-  const onSwitch = () => {
+  const handleSwitch = () => {
     dispatch(setSourcePolyChainId(toPolyChain.polyChainId))
   }
 
@@ -243,10 +240,10 @@ const Bridge: React.FC = () => {
         <ChainBridge
           fromPolyChain={fromPolyChain}
           toPolyChain={toPolyChain}
-          onSwitch={onSwitch}
+          onSwitch={handleSwitch}
         />
         {
-          providerInitialized && networkReady ?
+          (providerInitialized && networkReady) ?
             <BridgeMain
               fromPolyChain={fromPolyChain}
               toPolyChain={toPolyChain}

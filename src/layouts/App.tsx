@@ -5,18 +5,11 @@ import { Route } from 'react-router-dom'
 import TopBar from '@/layouts/components/TopBar'
 import DowsInfo from '@/layouts/components/DowsInfo'
 import { useListenBridgeTransactionStatus, useListenBscTransaction } from '@/hooks'
-import { useDispatch } from 'react-redux'
-import { setChainId, setRpcUrl } from '@/store/wallet'
 import { Layout } from 'antd'
 import { Content, Header } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
 
 const App: React.FC = () => {
-  // const background = useDynamicBackgroundImage()
-  const dispatch = useDispatch()
-  dispatch(setChainId(parseInt(process.env.CHAIN_ID!, 16)))
-  dispatch(setRpcUrl(process.env.RPC_URL!))
-
   useListenBridgeTransactionStatus()
   useListenBscTransaction()
 

@@ -1,20 +1,18 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { appendTransactionHistory, getAccount } from '@/store/wallet'
-import AmountInputModal, { AmountInputModalStatus } from '@/pages/LiquidityProvider/AmountInputModal'
+import AmountInputModal, { AmountInputModalStatus } from '@/pages/Staking/AmountInputModal'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
+import { toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import { Button, Popover } from 'antd'
 import styled from 'styled-components'
 import { useDowsSynthesizerData } from '@/hooks/useDowsSynthesizerData'
-import { BurnXUSD, MintXUSD, RedeemXUSD, RedeemDOWS } from '@/types/TransactionHistory'
+import { BurnXUSD, MintXUSD, RedeemDOWS, RedeemXUSD } from '@/types/TransactionHistory'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useErrorMessage } from '@/hooks'
 import { numberWithCommas } from '@/utils'
 
-import {
-  InfoCircleFilled,
-} from '@ant-design/icons'
+import { InfoCircleFilled } from '@ant-design/icons'
 
 const DowsInfoContainer = styled.div`
   width: 100%;
@@ -135,7 +133,7 @@ const DowsSynthesizer: React.FC = () => {
   const data = useDowsSynthesizerData()
   const { myRatio, targetRatio } = data
   const { totalDows, availableDows, lockedDows } = data
-  const { totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards, nextVestTime, vestingScheduleTime } = data
+  const { totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards, vestingScheduleTime } = data
 
   const [amountInputModalStatus, setAmountInputModalStatus] = useState<AmountInputModalStatus>({
     visible: false,
@@ -160,7 +158,7 @@ const DowsSynthesizer: React.FC = () => {
     beginTransaction()
     dowsJSConnector.dowsJs.FeePool.claimFees()
       .then(tx => {
-        const th: RedeemXUSD = new RedeemXUSD(tx.hash, numberWithCommas(redeemableFees, 6), 'ShaUSD')
+        const th: RedeemXUSD = new RedeemXUSD(tx.hash, numberWithCommas(redeemableFees, 6))
         dispatch(appendTransactionHistory(th))
         submitTransaction()
       }).catch(e => {
@@ -208,6 +206,8 @@ const DowsSynthesizer: React.FC = () => {
       confirmCallback: issueSynth,
       unit: 'ShaUSD'
     })
+
+    // @ts-ignore
     gtag('event', 'handle_mint_xusd')
   }
 
@@ -242,6 +242,7 @@ const DowsSynthesizer: React.FC = () => {
       unit: 'ShaUSD'
     })
 
+    // @ts-ignore
     gtag('event', 'handle_burn_xusd')
   }
 
@@ -259,19 +260,19 @@ const DowsSynthesizer: React.FC = () => {
   }
 
   const rewardTip = () => {
-    const week = vestingScheduleTime.mod(1 * 60 * 60 * 24 * 7)
-    const day = vestingScheduleTime.mod(1 * 60 * 60 * 24)
-    const hour = vestingScheduleTime.mod(1 * 60 * 60)
-    const min = vestingScheduleTime.mod(1 * 60)
+    const week = vestingScheduleTime.mod(60 * 60 * 24 * 7)
+    const day = vestingScheduleTime.mod(60 * 60 * 24)
+    const hour = vestingScheduleTime.mod(60 * 60)
+    const min = vestingScheduleTime.mod(60)
     let _vestingScheduleTime
     if (week.toString() === '0') {
-      _vestingScheduleTime = (vestingScheduleTime.div(1 * 60 * 60 * 24 * 7)).toString() + ' weeks'
+      _vestingScheduleTime = (vestingScheduleTime.div(60 * 60 * 24 * 7)).toString() + ' weeks'
     } else if (day.toString() === '0') {
-      _vestingScheduleTime = (vestingScheduleTime.div(1 * 60 * 60 * 24)).toString() + ' days'
+      _vestingScheduleTime = (vestingScheduleTime.div(60 * 60 * 24)).toString() + ' days'
     } else if (hour.toString() === '0') {
-      _vestingScheduleTime = (vestingScheduleTime.div(1 * 60 * 60)).toString() + ' hours'
+      _vestingScheduleTime = (vestingScheduleTime.div(60 * 60)).toString() + ' hours'
     } else if (min.toString() === '0') {
-      _vestingScheduleTime = (vestingScheduleTime.div(1 * 60)).toString() + ' minutes'
+      _vestingScheduleTime = (vestingScheduleTime.div(60)).toString() + ' minutes'
     } else {
       _vestingScheduleTime = vestingScheduleTime.toString() + ' seconds'
     }
@@ -301,10 +302,10 @@ const DowsSynthesizer: React.FC = () => {
         </div>
       </div>
       <div className="button-row" style={{ marginBottom: '2.8rem' }}>
-        <Button className="button handle_mint_xusd" onClick={handleMintXusd} id="handle_mint_xusd" disabled={!account ? true : false}>
+        <Button className="button handle_mint_xusd" onClick={handleMintXusd} id="handle_mint_xusd" disabled={!account}>
           Mint ShaUSD
         </Button>
-        <Button className="button handle_burn_xusd" onClick={handleBurnXusd} id="handle_burn_xusd" disabled={!account ? true : false}>
+        <Button className="button handle_burn_xusd" onClick={handleBurnXusd} id="handle_burn_xusd" disabled={!account}>
           Burn ShaUSD
         </Button>
       </div>

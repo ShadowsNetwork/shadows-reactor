@@ -6,13 +6,9 @@ import { useCurrencyData } from '@/hooks/useTradeData'
 import { useHomeData } from '@/hooks/useHomeData'
 import { useHistory } from 'react-router-dom'
 import { toBigNumber } from '@/web3/utils'
-import { shadowsSynthsConfig, ShadowsSynth } from '@/config/img.config'
+import { ShadowsSynth, shadowsSynthsConfig } from '@/config/img.config'
 import {
-  DivContainer,
-  ContentContainer,
-  DowsSynthesizerContainer,
-  PairsInfoContainer,
-  StatInfoContainer
+  ContentContainer, DivContainer, DowsSynthesizerContainer, PairsInfoContainer, StatInfoContainer
 } from './index.css'
 
 const PairInfo: React.FC = () => {
@@ -45,11 +41,13 @@ const PairInfo: React.FC = () => {
   const history = useHistory()
 
   let { keyPairs } = useCurrencyData()
+
   if (selectedType !== 'All') {
     keyPairs = keyPairs?.filter(keyPair =>
       shadowsSynthsConfig.find(val => val.symbol === keyPair?.symbol[0])?.type === selectedType
     )
   }
+
   return (
     <PairsInfoContainer>
       <div className="button-group">

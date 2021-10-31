@@ -17,6 +17,10 @@ class Oracle extends AbstractContractCaller {
 
     const { abi, address } = getContractConfig(this.network, 'Oracle')
 
+    if (!abi || !address) {
+      return
+    }
+
     this.contract = new Contract(
       address,
       abi,

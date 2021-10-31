@@ -25,7 +25,7 @@ const WalletCard: React.FC<WalletCardProps> = ({ wallet }) => {
     <div className="wallet-card">
       <div
         className="walletItem"
-        onClick={() => chainId && RPCUrl && handleConnect(dispatch, chainId, RPCUrl)}
+        onClick={() => chainId && RPCUrl && handleConnect(dispatch, parseInt(chainId, 16), RPCUrl)}
       >
         <span className="wallet-name">
           {name}

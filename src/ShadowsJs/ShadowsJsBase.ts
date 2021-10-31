@@ -1,5 +1,4 @@
 import * as ethers from 'ethers'
-import contracts from './contracts'
 import Util from './utils/index'
 import * as BinaryOptionsUtils from './utils/binaryOptions'
 import ContractSettings from './ContractSettings'
@@ -21,15 +20,6 @@ class ShadowsJsBase {
     this.contractSettings = contractSettings
     const { network } = contractSettings
     this.network = network
-
-    const contractForEnv = contracts[network]
-    if (contractForEnv) {
-      Object.keys(contractForEnv)
-        .forEach(name => {
-          const Contract = contractForEnv[name]
-          this[name] = new Contract(contractSettings)
-        })
-    }
 
     this.util = new Util(contractSettings)
     this.utils = this.util

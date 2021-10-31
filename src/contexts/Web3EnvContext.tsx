@@ -1,30 +1,64 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { setChainId, setRpcUrl } from '../store/wallet'
 import { useInitializeProvider, useSetupNetwork } from '../hooks'
+import { EthereumChain, getEthereumChainById } from '@/ShadowsJs/networkHelper'
+import useStoredWallet from '@/store/wallet/useStoredWallet'
+import { parseInt } from 'lodash'
+import { useLocation } from 'react-router-dom'
 
-const Web3EnvContext = React.createContext({ providerInitialized: false, networkReady: false })
+type Web3EnvContextType = {
+  providerInitialized: boolean,
+  networkReady: boolean,
+  setup: (_params: EthereumChain) => void
+}
+
+const Web3EnvContext = React.createContext<Web3EnvContextType>({
+  networkReady: false,
+  providerInitialized: false,
+  setup(_params: EthereumChain): void { return }
+})
 
 const Web3EnvProvider: React.FC = ({ children }) => {
+  const location = useLocation()
+
   const dispatch = useDispatch()
 
-  const hexChainId = process.env.CHAIN_ID!
-  const decChainId = parseInt(hexChainId, 16)
-  const RPCUrl = process.env.RPC_URL!
-  const blockExplorerUrl = process.env.BLOCK_EXPLORER_URL!
-  const chainName = process.env.NETWORK_NAME!
+  const { RPCUrl, chainId } = useStoredWallet()
 
-  dispatch(setChainId(decChainId))
-  dispatch(setRpcUrl(RPCUrl))
-  const providerInitialized = useInitializeProvider(decChainId, RPCUrl)
-  const networkReady = useSetupNetwork(providerInitialized, {
-    blockExplorerUrls: [blockExplorerUrl],
-    chainName,
-    chainId: hexChainId,
-    rpcUrls: [RPCUrl]
-  })
+  const setup: Web3EnvContextType['setup'] = (params: EthereumChain) => {
+    dispatch(setChainId(params.chainId))
+    dispatch(setRpcUrl(params.rpcUrls[0]))
+  }
 
-  return <Web3EnvContext.Provider value={{ providerInitialized, networkReady }}>{children}</Web3EnvContext.Provider>
+  useEffect(() => {
+    if (location.pathname.startsWith('/bridge')) {
+      return
+    }
+
+    const _rpcUrl = process.env.RPC_URL!
+    const _chainId = process.env.CHAIN_ID!
+
+    dispatch(setRpcUrl(_rpcUrl))
+    dispatch(setChainId(_chainId))
+  }, [location])
+
+  useEffect(() => {
+    if (!RPCUrl) {
+      dispatch(setRpcUrl(process.env.RPC_URL!))
+    }
+
+    if (!chainId) {
+      dispatch(setChainId(process.env.CHAIN_ID!))
+    }
+  }, [RPCUrl, chainId])
+
+
+  const providerInitialized = useInitializeProvider(parseInt(chainId!, 16), RPCUrl)
+
+  const networkReady = useSetupNetwork(providerInitialized, getEthereumChainById(chainId!))
+
+  return <Web3EnvContext.Provider value={{ providerInitialized, networkReady, setup }}>{children}</Web3EnvContext.Provider>
 }
 
 const useWeb3EnvContext = () => {
