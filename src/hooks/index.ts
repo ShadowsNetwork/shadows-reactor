@@ -134,6 +134,7 @@ export function useInitializeProvider(chainId: number, RPCUrl?: string): boolean
         window.location.reload()
       })
     }
+
     dowsJSConnector.setContractSettings(new ContractSettings(
       provider,
       !selectedWallet ? provider : (provider.getSigner ? provider.getSigner() : null),

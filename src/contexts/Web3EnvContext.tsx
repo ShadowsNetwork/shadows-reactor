@@ -16,7 +16,6 @@ const Web3EnvProvider: React.FC = ({ children }) => {
 
   dispatch(setChainId(decChainId))
   dispatch(setRpcUrl(RPCUrl))
-
   const providerInitialized = useInitializeProvider(decChainId, RPCUrl)
   const networkReady = useSetupNetwork(providerInitialized, {
     blockExplorerUrls: [blockExplorerUrl],

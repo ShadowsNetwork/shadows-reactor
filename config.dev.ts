@@ -3,7 +3,7 @@ import { ConfigType } from './config'
 import bridgeConfig from './config/bridge.config.dev'
 
 const config: ConfigType = {
-  baseUrl : 'http://127.0.0.1:3000',
+  baseUrl : 'http://43.132.155.78:8020',
   bridge: bridgeConfig,
   liquidityProvider: {
     supportedPools: [

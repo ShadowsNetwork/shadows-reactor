@@ -28,14 +28,13 @@ export const useCurrencyData = (): PairData => {
   const { networkReady } = useWeb3EnvContext()
 
   const fetch = useCallback(async () => {
-    if (!networkReady) {
+    if (!networkReady || !dowsJSConnector.dowsJs?.network) {
       return
     }
 
     // ['xUSD', 'xAUD', 'xEUR', ...]
     const _keyList: Array<string> = (await dowsJSConnector.dowsJs.Synthesizer.availableCurrencyKeys()).map(k => bytesToString(k))
     // ['1.000000', '0.500000', '0.75000000', ...]
-
     const ratesList = (
       await Promise.all(
         _keyList.map(key => dowsJSConnector.dowsJs.Oracle.rateForCurrency(key))

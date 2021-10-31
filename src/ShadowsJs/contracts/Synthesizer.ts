@@ -20,6 +20,7 @@ class Synthesizer extends AbstractContractCaller {
       abi,
       signer || provider
     )
+  
   }
 
   async issuanceRatio() {
