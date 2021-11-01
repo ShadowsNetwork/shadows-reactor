@@ -76,7 +76,7 @@ const useStakingPoolPublicData = ({
   const dowsPrice = useDowsPrice()
   const { providerReady } = useWeb3EnvContext()
 
-  return useQuery([`STAKING_POOL_PUBLIC_DATA_${poolNumber}_${lpMultiplier}_${farmContractAddress}_${lpMultiplier}`, dowsPrice, providerReady], async () => {
+  return useQuery(['STAKING_POOL_PUBLIC_DATA', dowsPrice, providerReady, lpMultiplier, lpTokenContractAddress, farmContractAddress, poolNumber], async () => {
     if (!providerReady || !dowsPrice) {
       return
     }
@@ -107,7 +107,7 @@ const useStakingPoolPrivateData = ({
   const { providerReady } = useWeb3EnvContext()
   const account = useSelector(getAccount)
 
-  return useQuery([`STAKING_POOL_PRIVATE_DATA_${poolNumber}_${lpMultiplier}_${farmContractAddress}_${lpMultiplier}`, dowsPrice, providerReady], async () => {
+  return useQuery(['STAKING_POOL_PRIVATE_DATA', dowsPrice, providerReady, lpTokenContractAddress, lpMultiplier, poolNumber, farmContractAddress], async () => {
     if (!providerReady || !dowsPrice) {
       return
     }
