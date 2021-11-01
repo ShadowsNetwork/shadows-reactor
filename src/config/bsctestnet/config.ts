@@ -10,17 +10,17 @@ const shadowsSynthsConfig: Array<ShadowsSynth> = [
   },
   {
     type: 'Cryptos',
-    coingecko: 'ethereum',
-    name: 'eth',
-    symbol: 'ShaETH',
-    address: '0x143db3CEEfbdfe5631aDD3E50f7614B6ba708BA7'
-  },
-  {
-    type: 'Cryptos',
     coingecko: 'bitcoin',
     name: 'btc',
     symbol: 'ShaBTC',
     address: '0x5741306c21795FdCBb9b265Ea0255F499DFe515C'
+  },
+  {
+    type: 'Cryptos',
+    coingecko: 'ethereum',
+    name: 'eth',
+    symbol: 'ShaETH',
+    address: '0x143db3CEEfbdfe5631aDD3E50f7614B6ba708BA7'
   },
   {
     type: 'Commodities',
