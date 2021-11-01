@@ -23,7 +23,7 @@ export function useProviderReady(): boolean {
 
   const { forceRefresh } = useRefreshController()
 
-  const networkReady = useNetworkReady()
+  const [networkReady] = useNetworkReady()
 
   const [ready, setReady] = useState(false)
 
@@ -34,7 +34,7 @@ export function useProviderReady(): boolean {
       const { chainId, rpcUrls } = requiredChain
       const [RPCUrl] = rpcUrls
 
-      getWeb3ProviderByWallet({ chainId , RPCUrl }, selectedWallet)
+      getWeb3ProviderByWallet({ chainId, RPCUrl }, selectedWallet)
         .then(provider => {
           setProvider(provider)
         })

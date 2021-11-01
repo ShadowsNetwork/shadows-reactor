@@ -8,7 +8,7 @@ import ContractSettings from '@/ShadowsJs/ContractSettings'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import useRequiredChain from '@/hooks/useRequiredChain'
 
-export function useNetworkReady(): boolean | undefined {
+export function useNetworkReady(): [boolean | undefined, number | undefined] {
   const requiredChain = useRequiredChain()
 
   const [currentNetwork, setCurrentNetwork] = useState<providers.Network>()
@@ -38,7 +38,7 @@ export function useNetworkReady(): boolean | undefined {
       })
   }, [requiredChain, selectedWallet, slowRefreshFlag])
 
-  return useMemo(
+  const networkReady = useMemo(
     () => {
       if (!currentNetwork || !requiredChain) {
         return undefined
@@ -60,4 +60,5 @@ export function useNetworkReady(): boolean | undefined {
     },
     [currentNetwork, requiredChain, account, selectedWallet]
   )
+  return [networkReady, currentNetwork?.chainId]
 }
