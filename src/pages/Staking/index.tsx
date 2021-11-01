@@ -23,6 +23,7 @@ import { ConfigType } from '../../../config'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
+import { useDowsSynthesizerData } from '@/hooks/data/useDowsSynthesizerData'
 
 const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 
@@ -108,6 +109,7 @@ const StakingPool: React.FC<PoolConfig> = ({
   const getErrorMessage = useErrorMessage()
   const { beginTransaction, submitTransaction, rejectTransaction } = useTransactionStatusModal()
   const { forceRefresh } = useRefreshController()
+  const { availableDows } = useDowsSynthesizerData()
 
   const {
     totalLockedLP,
@@ -259,7 +261,7 @@ const StakingPool: React.FC<PoolConfig> = ({
                   onClick={() => {
                     setAmountInputModalStatus({
                       ...amountInputModalStatus,
-                      maxAvailable: userLpBalance!,
+                      maxAvailable: tokenName === 'DOWS' ? availableDows! : userLpBalance!,
                       visible: true,
                       title: 'Stake Liquidity',
                       cancelCallback: closeAmountInputModal,
