@@ -6,6 +6,7 @@ import useDowsPrice from '@/queries/useDowsPrice'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { useQuery } from 'react-query'
+import { useRefreshController } from '@/contexts/RefreshControllerContext'
 
 type PoolDataProps = {
   lpTokenContractAddress: string,
@@ -75,26 +76,30 @@ const useStakingPoolPublicData = ({
 }: PoolDataProps) => {
   const dowsPrice = useDowsPrice()
   const { providerReady } = useWeb3EnvContext()
+  const { quietRefreshFlag } = useRefreshController()
 
-  return useQuery(['STAKING_POOL_PUBLIC_DATA', dowsPrice, providerReady, lpMultiplier, lpTokenContractAddress, farmContractAddress, poolNumber], async () => {
-    if (!providerReady || !dowsPrice) {
-      return
+  return useQuery(
+    ['STAKING_POOL_PUBLIC_DATA', dowsPrice, providerReady, lpMultiplier, lpTokenContractAddress, farmContractAddress, poolNumber, quietRefreshFlag],
+    async () => {
+      if (!providerReady || !dowsPrice) {
+        return
+      }
+
+      const [_totalLockedLP, _apy] = await Promise.all([
+        dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, farmContractAddress),
+        getAPY(lpTokenContractAddress, farmContractAddress, poolNumber, lpMultiplier)
+      ])
+
+      return {
+        totalLockedLP: weiToString(_totalLockedLP),
+        totalLockedLPInUSD: weiToBigNumber(_totalLockedLP)
+          .multipliedBy(dowsPrice)
+          .multipliedBy(lpMultiplier)
+          .toFixed(2),
+        apy: _apy
+      }
     }
-
-    const [_totalLockedLP, _apy] = await Promise.all([
-      dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, farmContractAddress),
-      getAPY(lpTokenContractAddress, farmContractAddress, poolNumber, lpMultiplier)
-    ])
-
-    return {
-      totalLockedLP: weiToString(_totalLockedLP),
-      totalLockedLPInUSD: weiToBigNumber(_totalLockedLP)
-        .multipliedBy(dowsPrice)
-        .multipliedBy(lpMultiplier)
-        .toFixed(2),
-      apy: _apy
-    }
-  })
+  )
 }
 
 const useStakingPoolPrivateData = ({
@@ -104,33 +109,37 @@ const useStakingPoolPrivateData = ({
   lpMultiplier
 }: PoolDataProps) => {
   const dowsPrice = useDowsPrice()
-  const { providerReady } = useWeb3EnvContext()
   const account = useSelector(getAccount)
+  const { providerReady } = useWeb3EnvContext()
+  const { quietRefreshFlag } = useRefreshController()
 
-  return useQuery(['STAKING_POOL_PRIVATE_DATA', dowsPrice, providerReady, lpTokenContractAddress, lpMultiplier, poolNumber, farmContractAddress], async () => {
-    if (!providerReady || !dowsPrice) {
-      return
-    }
+  return useQuery(
+    ['STAKING_POOL_PRIVATE_DATA', dowsPrice, providerReady, lpTokenContractAddress, lpMultiplier, poolNumber, farmContractAddress, quietRefreshFlag],
+    async () => {
+      if (!providerReady || !dowsPrice) {
+        return
+      }
 
-    const [_userLpBalance, _userLockedLp, _dowsEarned, _lpTokenAllowance] = await Promise.all([
-      dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, account!),
-      dowsJSConnector.dowsJs.Farm.deposited(farmContractAddress, poolNumber, account),
-      dowsJSConnector.dowsJs.Farm.pending(farmContractAddress, poolNumber, account),
-      dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account!, farmContractAddress),
-    ])
+      const [_userLpBalance, _userLockedLp, _dowsEarned, _lpTokenAllowance] = await Promise.all([
+        dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, account!),
+        dowsJSConnector.dowsJs.Farm.deposited(farmContractAddress, poolNumber, account),
+        dowsJSConnector.dowsJs.Farm.pending(farmContractAddress, poolNumber, account),
+        dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account!, farmContractAddress),
+      ])
 
-    return {
-      userLpBalance: weiToString(_userLpBalance),
-      userLockedLp: weiToString(_userLockedLp),
-      userLockedLpInUSD: weiToBigNumber(_userLockedLp)
-        .multipliedBy(dowsPrice)
-        .multipliedBy(lpMultiplier)
-        .toFixed(2),
-      dowsEarned: weiToBigNumber(_dowsEarned)
-        .toFixed(2),
-      allowanceEnough: isAllowanceEnough(weiToString(_lpTokenAllowance))
-    }
-  })
+      return {
+        userLpBalance: weiToString(_userLpBalance),
+        userLockedLp: weiToString(_userLockedLp),
+        userLockedLpInUSD: weiToBigNumber(_userLockedLp)
+          .multipliedBy(dowsPrice)
+          .multipliedBy(lpMultiplier)
+          .toFixed(2),
+        dowsEarned: weiToBigNumber(_dowsEarned)
+          .toFixed(2),
+        allowanceEnough: isAllowanceEnough(weiToString(_lpTokenAllowance))
+      }
+    },
+  )
 }
 
 export const useStakingData = ({

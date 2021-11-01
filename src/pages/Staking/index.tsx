@@ -22,6 +22,7 @@ import { PoolConfig } from '@/types/LiquidityProvider'
 import { ConfigType } from '../../../config'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
+import { useRefreshController } from '@/contexts/RefreshControllerContext'
 
 const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 
@@ -103,12 +104,10 @@ const StakingPool: React.FC<PoolConfig> = ({
   })
 
   const account = useSelector(getAccount)
-
   const dispatch = useDispatch()
-
   const getErrorMessage = useErrorMessage()
-
   const { beginTransaction, submitTransaction, rejectTransaction } = useTransactionStatusModal()
+  const { forceRefresh } = useRefreshController()
 
   const {
     totalLockedLP,
@@ -145,6 +144,8 @@ const StakingPool: React.FC<PoolConfig> = ({
 
       const transactionHistory = new ApproveToken(approveResult.hash, tokenName, process.env.BLOCK_EXPLORER_URL, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
+
+      approveResult.wait().then(forceRefresh)
     } catch (e) {
       rejectTransaction(getErrorMessage(e))
     }
@@ -169,6 +170,7 @@ const StakingPool: React.FC<PoolConfig> = ({
       const transactionHistory: TransactionHistory = new LockLPToken(depositResult.hash, amount, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
 
+      depositResult.wait().then(forceRefresh)
     } catch (e) {
       rejectTransaction(getErrorMessage(e))
     }
@@ -185,6 +187,8 @@ const StakingPool: React.FC<PoolConfig> = ({
 
       const transactionHistory: TransactionHistory = new UnlockLPToken(withdrawResult.hash, amount, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
+
+      withdrawResult.wait().then(forceRefresh)
     } catch (e) {
       rejectTransaction(getErrorMessage(e))
     }

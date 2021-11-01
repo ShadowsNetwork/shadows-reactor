@@ -12,11 +12,18 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import App from '@/layouts/App'
 import { TransactionStatusModalProvider } from '@/contexts/TransactionStatusModalContext'
-import { RefreshControllerProvider } from '@/contexts/RefreshControllerContext'
+import { RefreshControllerProvider, SLOW_INTERVAL } from '@/contexts/RefreshControllerContext'
 import { Web3EnvProvider } from '@/contexts/Web3EnvContext'
 import { persistor, store } from '@/store'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchInterval: SLOW_INTERVAL,
+      keepPreviousData: true
+    }
+  }
+})
 
 const Root: React.FC = () => (
   <Suspense fallback={<div />}>

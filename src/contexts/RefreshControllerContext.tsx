@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 
-const FAST_INTERVAL = 3000
-const SLOW_INTERVAL = 30000
+export const FAST_INTERVAL = 3000
+export const SLOW_INTERVAL = 30000
 
 const RefreshControllerContext = React.createContext({
   fast: 0,
   slow: 0,
+  quiet: 0,
   refresh: () => {
     return
   }
@@ -14,10 +15,12 @@ const RefreshControllerContext = React.createContext({
 const RefreshControllerProvider: React.FC = ({ children }) => {
   const [slow, setSlow] = useState(0)
   const [fast, setFast] = useState(0)
+  const [quiet, setQuiet] = useState(0)
 
   const refresh = () => {
     setFast(prev => prev + 1)
     setSlow(prev => prev + 1)
+    setQuiet(prev => prev + 1)
   }
 
   useEffect(() => {
@@ -37,7 +40,7 @@ const RefreshControllerProvider: React.FC = ({ children }) => {
 
   return (
     <RefreshControllerContext.Provider
-      value={{ slow, fast, refresh }}
+      value={{ slow, fast, quiet, refresh }}
     >
       {children}
     </RefreshControllerContext.Provider>
@@ -45,10 +48,11 @@ const RefreshControllerProvider: React.FC = ({ children }) => {
 }
 
 const useRefreshController = () => {
-  const { slow, fast, refresh } = useContext(RefreshControllerContext)
+  const { slow, fast, quiet, refresh } = useContext(RefreshControllerContext)
   return {
     slowRefreshFlag: slow,
     fastRefreshFlag: fast,
+    quietRefreshFlag: quiet,
     forceRefresh: refresh
   }
 }
