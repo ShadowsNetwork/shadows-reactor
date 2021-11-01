@@ -83,7 +83,7 @@ export function useListenBridgeTransactionStatus() {
         })
         .catch(async _ => {
           const receipt = await dowsJSConnector.provider!.waitForTransaction(hash, 0)
-          if (!receipt || !receipt.status) {
+          if (receipt && !receipt.status) {
             t.fail()
             dispatch(updateTransactionHistoryStatus(t))
           }

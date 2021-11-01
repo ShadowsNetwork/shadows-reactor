@@ -118,6 +118,7 @@ const useStakingPoolPrivateData = ({
       dowsJSConnector.dowsJs.Farm.pending(farmContractAddress, poolNumber, account),
       dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account!, farmContractAddress),
     ])
+
     return {
       userLpBalance: weiToString(_userLpBalance),
       userLockedLp: weiToString(_userLockedLp),

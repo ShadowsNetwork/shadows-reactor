@@ -18,8 +18,6 @@ const Web3EnvProvider: React.FC = ({ children }) => {
 
   const networkReady = useNetworkReady()
 
-  console.log(providerReady, networkReady)
-
   useFixupNetwork(networkReady)
 
   return (
