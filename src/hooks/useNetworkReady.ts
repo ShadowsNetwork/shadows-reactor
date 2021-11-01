@@ -14,7 +14,7 @@ export function useNetworkReady(): [boolean | undefined, number | undefined] {
   const [currentNetwork, setCurrentNetwork] = useState<providers.Network>()
   const [provider, setProvider] = useState<providers.Web3Provider>()
 
-  const { slowRefreshFlag } = useRefreshController()
+  const { quietRefreshFlag } = useRefreshController()
 
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
   const account = useSelector(getAccount)
@@ -36,7 +36,7 @@ export function useNetworkReady(): [boolean | undefined, number | undefined] {
       ?.then(async network => {
         setCurrentNetwork(network)
       })
-  }, [requiredChain, selectedWallet, slowRefreshFlag])
+  }, [requiredChain, selectedWallet, quietRefreshFlag])
 
   const networkReady = useMemo(
     () => {
