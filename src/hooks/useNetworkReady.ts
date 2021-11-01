@@ -37,24 +37,22 @@ export function useNetworkReady(): boolean | undefined {
       })
   }, [requiredChain, selectedWallet, slowRefreshFlag])
 
-  const ready = useMemo(
+  return useMemo(
     () => {
       if (!currentNetwork || !requiredChain) {
         return undefined
       }
 
-      return currentNetwork.chainId === parseInt(requiredChain.chainId, 16)
+      const r = currentNetwork.chainId === parseInt(requiredChain.chainId, 16)
+
+      r && dowsJSConnector.setContractSettings(new ContractSettings(
+        provider,
+        selectedWallet ? (provider?.getSigner ? provider.getSigner() : null) : provider,
+        requiredChain.chainId
+      ))
+
+      return r
     },
     [currentNetwork, requiredChain]
   )
-
-  if (ready && provider && requiredChain) {
-    dowsJSConnector.setContractSettings(new ContractSettings(
-      provider,
-      !selectedWallet ? provider : (provider.getSigner ? provider.getSigner() : null),
-      requiredChain.chainId
-    ))
-  }
-
-  return ready
 }

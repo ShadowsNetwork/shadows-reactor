@@ -28,7 +28,9 @@ interface TradeData extends FeePoolData {
   lockedDows: BigNumber,
 }
 
-const useRatioData = (refreshFlag: number): { myRatio: string, targetRatio: string } => {
+const useRatioData = (): { myRatio: string, targetRatio: string } => {
+  const { fastRefreshFlag } = useRefreshController()
+
   const account = useSelector(getAccount)
 
   const { networkReady } = useWeb3EnvContext()
@@ -57,7 +59,7 @@ const useRatioData = (refreshFlag: number): { myRatio: string, targetRatio: stri
       _issuanceRatio.isZero()
         ? '-'
         : `${numberWithCommas(new BigNumber('100').dividedBy(weiToBigNumber(_issuanceRatio)))}%`)
-  }, [account, refreshFlag])
+  }, [account, fastRefreshFlag])
 
   useEffect(() => {
     fetchRatio()
@@ -72,7 +74,9 @@ const useRatioData = (refreshFlag: number): { myRatio: string, targetRatio: stri
   }
 }
 
-const useShadowsData = (refreshFlag: number): { totalDows: BigNumber, availableDows: BigNumber, lockedDows: BigNumber } => {
+const useShadowsData = (): { totalDows: BigNumber, availableDows: BigNumber, lockedDows: BigNumber } => {
+  const { fastRefreshFlag } = useRefreshController()
+
   const account = useSelector(getAccount)
 
   const { networkReady } = useWeb3EnvContext()
@@ -97,7 +101,7 @@ const useShadowsData = (refreshFlag: number): { totalDows: BigNumber, availableD
     setTotalDows(weiToBigNumber(_dowsBalance))
     setAvailableDows(weiToBigNumber(_transferableDows))
     setLockedDows(weiToBigNumber(_dowsBalance.sub(_transferableDows)))
-  }, [account, refreshFlag, networkReady])
+  }, [account, fastRefreshFlag, networkReady])
 
   useEffect(() => {
     fetch()
@@ -113,7 +117,9 @@ const useShadowsData = (refreshFlag: number): { totalDows: BigNumber, availableD
   }
 }
 
-const useFeePoolData = (refreshFlag: number): FeePoolData => {
+const useFeePoolData = (): FeePoolData => {
+  const { fastRefreshFlag } = useRefreshController()
+
   const account = useSelector(getAccount)
 
   const { networkReady } = useWeb3EnvContext()
@@ -171,7 +177,7 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
     setNextVestTime(utc(_vestTime).format('MMM DD,YYYY hh:mm:ss A') + '(UTC)')
     setVestingScheduleTime(_vestingScheduleTime)
 
-  }, [account, refreshFlag, networkReady])
+  }, [account, fastRefreshFlag, networkReady])
 
   useEffect(() => {
     fetch()
@@ -193,15 +199,13 @@ const useFeePoolData = (refreshFlag: number): FeePoolData => {
 }
 
 export const useDowsSynthesizerData = (): TradeData => {
-  const { fastRefreshFlag } = useRefreshController()
+  const { myRatio, targetRatio } = useRatioData()
 
-  const { myRatio, targetRatio } = useRatioData(fastRefreshFlag)
-
-  const { totalDows, availableDows, lockedDows } = useShadowsData(fastRefreshFlag)
+  const { totalDows, availableDows, lockedDows } = useShadowsData()
 
   const {
     totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards, nextVestTime, vestingScheduleTime
-  } = useFeePoolData(fastRefreshFlag)
+  } = useFeePoolData()
 
   return {
     myRatio,

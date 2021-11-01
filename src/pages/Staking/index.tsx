@@ -17,7 +17,7 @@ import {
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
 import { useErrorMessage } from '@/hooks'
 import RedeemModal, { RedeemModalStatus } from '@/pages/Staking/RedeemModal'
-import { useStakingData } from '@/hooks/useStakingData'
+import { useStakingData } from '@/hooks/data/useStakingData'
 import { PoolConfig } from '@/types/LiquidityProvider'
 import { ConfigType } from '../../../config'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
@@ -25,7 +25,7 @@ import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 
 const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 
-const EmptyPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency, poolType }) => {
+const EmptyStakingPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency, poolType }) => {
   return (
     <div className="pool">
       <div className="pool-name">
@@ -74,7 +74,7 @@ const EmptyPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency
   )
 }
 
-const Pool: React.FC<PoolConfig> = ({
+const StakingPool: React.FC<PoolConfig> = ({
   poolNumber,
   poolName,
   poolType,
@@ -113,14 +113,14 @@ const Pool: React.FC<PoolConfig> = ({
   const {
     totalLockedLP,
     totalLockedLPInUSD,
-    APY,
+    apy,
     userLpBalance,
     userLockedLp,
     userLockedLpInUSD,
     dowsEarned,
     allowanceEnough
   } = useStakingData({
-    lpTokenContractAddress, farmContractAddress, poolNumber, poolType, lpMultiplier
+    lpTokenContractAddress, farmContractAddress, poolNumber, lpMultiplier
   })
 
   const closeAmountInputModal = () => {
@@ -198,7 +198,7 @@ const Pool: React.FC<PoolConfig> = ({
       submitTransaction()
       closeRedeemModal()
 
-      const transactionHistory: TransactionHistory = new RedeemDOWS(withdrawResult.hash, dowsEarned, TransactionStatus.Submitted)
+      const transactionHistory: TransactionHistory = new RedeemDOWS(withdrawResult.hash, dowsEarned!, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
 
       withdrawResult.wait()
@@ -234,7 +234,7 @@ const Pool: React.FC<PoolConfig> = ({
           </div>
           <div className="item">
             <div className="title">APR</div>
-            <div className="value">{numberWithCommas(APY)}%</div>
+            <div className="value">{numberWithCommas(apy)}%</div>
           </div>
           <div className="item">
             <div className="title">{poolType == 'pair' ? 'Your LP Locked' : 'Your Locked'}</div>
@@ -255,7 +255,7 @@ const Pool: React.FC<PoolConfig> = ({
                   onClick={() => {
                     setAmountInputModalStatus({
                       ...amountInputModalStatus,
-                      maxAvailable: userLpBalance,
+                      maxAvailable: userLpBalance!,
                       visible: true,
                       title: 'Stake Liquidity',
                       cancelCallback: closeAmountInputModal,
@@ -270,7 +270,7 @@ const Pool: React.FC<PoolConfig> = ({
                   onClick={() => {
                     setAmountInputModalStatus({
                       ...amountInputModalStatus,
-                      maxAvailable: userLockedLp,
+                      maxAvailable: userLockedLp!,
                       visible: true,
                       title: 'Unstake Liquidity',
                       cancelCallback: closeAmountInputModal,
@@ -290,7 +290,7 @@ const Pool: React.FC<PoolConfig> = ({
             onClick={() => {
               setRedeemModalStatus({
                 ...redeemModalStatus,
-                amount: dowsEarned,
+                amount: dowsEarned!,
                 visible: true,
                 onConfirm: redeem,
                 onClose: closeRedeemModal
@@ -308,15 +308,15 @@ const Pool: React.FC<PoolConfig> = ({
 }
 
 const Staking: React.FC = () => {
-  const { providerInitialized, networkReady } = useWeb3EnvContext()
+  const { providerReady } = useWeb3EnvContext()
 
   return (
     <div className="liquidity-provider">
       {
         config.liquidityProvider.supportedPools.map((pool, index) =>
-          providerInitialized && networkReady
-            ? <Pool {...pool} key={index} />
-            : <EmptyPool {...pool} key={index} />
+          providerReady
+            ? <StakingPool {...pool} key={index} />
+            : <EmptyStakingPool {...pool} key={index} />
         )
       }
     </div>

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { addressAvailable, weiToString } from '@/web3/utils'
 import axios from 'axios'
-import { ConfigType } from '../../config'
+import { ConfigType } from '../../../config'
 import { PolyChain } from '@/types/PolyChain'
 
 const config = process.env.CONTRACT_CONFIG as unknown as ConfigType

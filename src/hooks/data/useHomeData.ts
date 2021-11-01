@@ -2,32 +2,32 @@ import { useCallback, useEffect, useState } from 'react'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
-import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
+import useDowsPrice from '@/queries/useDowsPrice'
 import { addressAvailable, toBigNumber, toByte32, weiToBigNumber } from '@/web3/utils'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
-import { useCurrencyData } from '@/hooks/useTradeData'
+import { useCurrencyData } from '@/hooks/data/useTradeData'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 
 const useAssetsBalance = () => {
   const account = useSelector(getAccount)
 
-  const { keyList } = useCurrencyData()
+  const { data: currencyData } = useCurrencyData()
 
-  const { data: dowsPrice } = useDowsPriceQuery()
-
-  const { fastRefreshFlag } = useRefreshController()
+  const { slowRefreshFlag } = useRefreshController()
 
   const [assetsBalanceList, setAssetsBalanceList] = useState<Array<{ key: string, quantity: BigNumber, value: BigNumber }>>([])
 
-  const { providerInitialized, networkReady } = useWeb3EnvContext()
+  const { providerReady, networkReady } = useWeb3EnvContext()
 
   const fetch = useCallback(async () => {
-    if (!addressAvailable(account) || !dowsPrice || !providerInitialized || !networkReady) {
+    if (!addressAvailable(account) || !providerReady || !networkReady || !currencyData) {
       setAssetsBalanceList([])
       return
     }
+
+    const { keyList } = currencyData
 
     if (keyList.length > 0 && account) {
       const balanceList: BN[] = await Promise.all(keyList.map(key => dowsJSConnector.dowsJs.Synth.balanceOf(key, account)))
@@ -51,7 +51,7 @@ const useAssetsBalance = () => {
           .filter(v => v.quantity.gt(0))
       )
     }
-  }, [account, dowsPrice, keyList, fastRefreshFlag, providerInitialized, networkReady])
+  }, [account, currencyData, slowRefreshFlag, providerReady, networkReady])
 
   useEffect(() => {
     fetch()
@@ -62,17 +62,17 @@ const useAssetsBalance = () => {
 
 const useBalance = () => {
   const account = useSelector(getAccount)
-  const { data: dowsPrice } = useDowsPriceQuery()
+  const dowsPrice = useDowsPrice()
 
   const [yourBalance, setYourBalance] = useState('')
   const [assetsBalance, setAssetsBalance] = useState('')
   const [debtPool, setDebtPool] = useState('')
 
   const { fastRefreshFlag } = useRefreshController()
-  const { providerInitialized, networkReady } = useWeb3EnvContext()
+  const { providerReady, networkReady } = useWeb3EnvContext()
 
   const fetch = useCallback(async () => {
-    if (!account || !dowsPrice || !providerInitialized || !networkReady) {
+    if (!account || !dowsPrice || !providerReady || !networkReady) {
       setYourBalance('')
       setAssetsBalance('')
       setDebtPool('')
@@ -89,8 +89,7 @@ const useBalance = () => {
     const [_newBalanceOf, _newTransferableShadows] = [_balanceOf, _transferableShadows]
       .map((value: BN) => weiToBigNumber(value))
       .map((value: BigNumber) =>
-        value.multipliedBy(toBigNumber(dowsPrice))
-          .toString()
+        value.multipliedBy(dowsPrice).toString()
       )
     const _newDebtBalanceOf = weiToBigNumber(_debtBalanceOf).toString()
 
@@ -98,7 +97,7 @@ const useBalance = () => {
     setAssetsBalance(_newTransferableShadows)
     setDebtPool(_newDebtBalanceOf)
 
-  }, [account, dowsPrice, fastRefreshFlag, providerInitialized, networkReady])
+  }, [account, dowsPrice, fastRefreshFlag, providerReady, networkReady])
 
   useEffect(() => {
     fetch()

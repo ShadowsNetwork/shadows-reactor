@@ -21,10 +21,6 @@ export interface Wallet {
 export async function getWeb3ProviderByWallet(
   { chainId, RPCUrl }, walletName: WalletNames
 ): Promise<providers.Web3Provider> {
-  // if (!walletName) {
-  //   return undefined
-  // }
-
   return await (new Map<WalletNames, any>([
     ['Metamask', MetamaskWeb3Provider],
     ['BSC', BscWeb3Provider],

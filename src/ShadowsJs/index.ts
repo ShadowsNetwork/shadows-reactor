@@ -10,7 +10,6 @@ import Synthesizer from '@/ShadowsJs/contracts/Synthesizer'
 import FeePool from '@/ShadowsJs/contracts/FeePool'
 import Oracle from './contracts/Oracle'
 import Synth from '@/ShadowsJs/contracts/Synth'
-import Exchanger from './contracts/Exchanger'
 import RewardEscrow from './contracts/RewardEscrow'
 
 export default class ShadowsJS extends ShadowsJsBase {
@@ -25,7 +24,6 @@ export default class ShadowsJS extends ShadowsJsBase {
   FeePool: FeePool
   Oracle: Oracle
   Synth: Synth
-  Exchanger: Exchanger
   RewardEscrow: RewardEscrow
 
   /**
@@ -48,7 +46,6 @@ export default class ShadowsJS extends ShadowsJsBase {
     this.FeePool = new FeePool(network, signer, provider)
     this.Oracle = new Oracle(network, signer, provider)
     this.Synth = new Synth(network, signer, provider)
-    this.Exchanger = new Exchanger(network, signer, provider)
     this.RewardEscrow = new RewardEscrow(network, signer, provider)
   }
 

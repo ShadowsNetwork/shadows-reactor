@@ -216,47 +216,6 @@ export const ContainerForBuyAndSell = styled.div`
   }
 `
 
-export const PairsInfoContainer = styled.div`
-  padding: 1.8rem 1.2rem;
-
-  .button-group {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1.2rem;
-  }
-
-  .list {
-    font-weight: bold;
-    .item, .header {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .item {
-      color: white;
-      font-size: 1.4rem;
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.2s linear;
-      &:hover{
-        transform:translate(0, 2px);
-      }
-    }
-
-    .header {
-      padding: 0 1.2rem;
-      color: #979797 !important;
-      font-size: 1.2rem;
-      user-select: none;
-    }
-    .content{
-      padding: 0 1.2rem;
-      height: 23em;
-      overflow: auto;
-    }
-  }
-`
-
 export const CustomizedSlider = styled.div`
   .ant-slider-dot {
     background-color: #cccccc;

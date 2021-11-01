@@ -9,9 +9,7 @@ import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import useTradingDataQuery from '@/queries/useTradingDataQuery'
 import BigNumber from 'bignumber.js'
-import {
-  KeyPair, useCurrencyBalance, useCurrencyData, useCurrencyPrice
-} from '@/hooks/useTradeData'
+import { KeyPair, useCurrencyBalance, useCurrencyPrice } from '@/hooks/data/useTradeData'
 import { TradeSynth } from '@/types/TransactionHistory'
 import { numberWithCommas } from '@/utils'
 import { appendTransactionHistory } from '@/store/wallet'
@@ -21,108 +19,15 @@ import { useLocation } from 'react-router-dom'
 import { ShadowsSynth, shadowsSynthsConfig } from '@/config/img.config'
 import {
   CandlestickContainer, Column, ContainerForBuyAndSell, ContainerForDowsAndPair, CustomizedSlider,
-  PairsInfoContainer, SellBuyTabs, StatsContainer, TradePageContainer
+  SellBuyTabs, StatsContainer, TradePageContainer
 } from './index.css'
-
-type PairInfoProps = {
-  onSelectedKeyPairChanged: (_selectedKeyPair: KeyPair) => void
-  selectedKeyPair?: KeyPair
-}
+import PairPanel from './PairPanel'
 
 type BuySellPanelProps = {
   type: 'Buy' | 'Sell'
   color: string
   keyPair?: KeyPair,
   balanceByCurrency: { [key: string]: BigNumber }
-}
-
-const PairInfo: React.FC<PairInfoProps> = ({ onSelectedKeyPairChanged, selectedKeyPair }) => {
-  const [selectedType, setSelectedType] = useState('All')
-  const StatefulButton = ({ name }: { name: string }) => {
-    const handleClick = () => {
-      setSelectedType(name)
-    }
-
-    const isActive = selectedType === name
-
-    return (
-      <div>
-        <Button
-          type="text"
-          onClick={handleClick}
-          style={{
-            color: isActive ? '#63cca9' : '#979797',
-            fontWeight: 'bold',
-            padding: '0'
-          }}
-        >
-          {name}
-        </Button>
-      </div>
-    )
-  }
-
-  let { keyPairs } = useCurrencyData()
-  if (selectedType !== 'All') {
-    keyPairs = keyPairs?.filter(keyPair =>
-      shadowsSynthsConfig.find(val => val.symbol === keyPair?.symbol[0])?.type === selectedType
-    )
-  }
-
-  const handleSelectKeyPair = (keypair: KeyPair) => {
-    onSelectedKeyPairChanged(keypair)
-  }
-
-  useEffect(() => {
-    if (keyPairs?.length && !selectedKeyPair) {
-      handleSelectKeyPair(keyPairs[0])
-    }
-  }, [keyPairs, selectedKeyPair])
-
-  const isKeyPairSelected = (keyPair: KeyPair) => {
-    const s1 = selectedKeyPair?.symbol
-    const s2 = keyPair.symbol
-    return s1 && s2 && s1[0] === s2[0] && s1[1] === s2[1]
-  }
-
-  return (
-    <PairsInfoContainer>
-      <div className="button-group">
-        <StatefulButton name="All" />
-        <StatefulButton name="Cryptos" />
-        <StatefulButton name="Fiat" />
-        <StatefulButton name="Commodities" />
-        {/* <StatefulButton name="Equities" /> */}
-      </div>
-      <div className="list">
-        <div className="header">
-          <div className="key">Symbol</div>
-          <div className="value">Last Price</div>
-        </div>
-        <div className="content">
-          {
-            keyPairs?.map((keyPair, index) => {
-              const { symbol, lastPrice } = keyPair
-              return (
-                <div
-                  className="item"
-                  key={index}
-                  onClick={() => handleSelectKeyPair(keyPair)}
-                  style={{ color: isKeyPairSelected(keyPair) ? '#63cca9' : '' }}
-                >
-                  <div className="key">
-                    {`${symbol[0]} / ${symbol[1]}`}
-                  </div>
-                  <div className="value">{lastPrice}</div>
-                </div>
-              )
-            })
-          }
-        </div>
-      </div>
-    </PairsInfoContainer>
-  )
-
 }
 
 const BuySellPanel: React.FC<BuySellPanelProps> = ({
@@ -502,22 +407,9 @@ const TradePage: React.FC = () => {
         <CurrencyInfo keyPair={selectedKeyPair} />
         <Stats keyPair={selectedKeyPair} />
       </Column>
-      {/* <Column width="33.1rem" marginRight="0.8rem">
-        <ContainerForDowsAndPair>
-          <DowsSynthesizer />
-        </ContainerForDowsAndPair>
-        <ContainerForBuyAndSell>
-          <BuySellPanel
-            balanceByCurrency={balanceByCurrency}
-            color="#63cca9"
-            type="Buy"
-            keyPair={selectedKeyPair}
-          />
-        </ContainerForBuyAndSell>
-      </Column> */}
       <Column width="37rem">
         <ContainerForDowsAndPair>
-          <PairInfo
+          <PairPanel
             onSelectedKeyPairChanged={handleSelectedKeyPairChanged}
             selectedKeyPair={selectedKeyPair}
           />

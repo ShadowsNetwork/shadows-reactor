@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 const FAST_INTERVAL = 3000
-const SLOW_INTERVAL = 10000
+const SLOW_INTERVAL = 30000
 
 const RefreshControllerContext = React.createContext({
   fast: 0,

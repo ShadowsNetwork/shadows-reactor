@@ -4,10 +4,11 @@ import locationIcon from '@/img/dows-info/location.png'
 import twitterIcon from '@/img/dows-info/twitter.png'
 
 import './index.less'
-import useDowsPriceQuery from '@/queries/useDowsPriceQuery'
+import useDowsPrice from '@/queries/useDowsPrice'
+import { numberWithCommas } from '@/utils'
 
 const DowsInfo: React.FC = () => {
-  const { data: dowsPrice } = useDowsPriceQuery()
+  const dowsPrice = useDowsPrice()
 
   return (
     <div className="dows-info">
@@ -18,7 +19,7 @@ const DowsInfo: React.FC = () => {
         </div>
         <div className="label dollar">$</div>
         <div className="value">
-          {dowsPrice}
+          {numberWithCommas(dowsPrice, 6)}
         </div>
       </div>
       <div>
