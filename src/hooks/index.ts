@@ -11,7 +11,8 @@ import {
 import axios from 'axios'
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
-
+import { ConfigType } from '../../config'
+const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 export function useLocation(): Location {
   const [location, setLocation] = useState(window.location)
 
@@ -57,7 +58,7 @@ export function useListenBridgeTransactionStatus() {
     bridgeTransactions.forEach(async (t: BridgeDows) => {
       const { hash } = t
 
-      await axios.post('https://bridge.poly.network/v1/transactionofhash', {
+      await axios.post(`${config.bridge.apiBaseUrl}/transactionofhash`, {
         hash: hash.substring(2)
       })
         .then(r => {
