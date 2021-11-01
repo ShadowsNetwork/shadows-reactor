@@ -12,6 +12,9 @@ import axios from 'axios'
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { ConfigType } from '../../config'
+import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
+import { TransactionResponse } from '@ethersproject/providers'
+
 const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 export function useLocation(): Location {
   const [location, setLocation] = useState(window.location)
@@ -80,7 +83,7 @@ export function useListenBridgeTransactionStatus() {
         })
         .catch(async _ => {
           const receipt = await dowsJSConnector.provider!.waitForTransaction(hash, 0)
-          if (!receipt.status) {
+          if (!receipt || !receipt.status) {
             t.fail()
             dispatch(updateTransactionHistoryStatus(t))
           }
@@ -111,7 +114,13 @@ export function useListenBscTransaction() {
   const dispatch = useDispatch()
   const transactionList = useSelector(getTransactionHistoryList)
 
+  const { providerReady } = useWeb3EnvContext()
+
   useEffect(() => {
+    if (!providerReady) {
+      return
+    }
+
     const transactionHistories: TransactionHistory[] = transactionList.filter(t =>
       t.TYPE !== TransactionHistoryImplementationClassType.Bridge
       && t.status !== TransactionStatus.Completed && t.status !== TransactionStatus.Failed
@@ -123,8 +132,8 @@ export function useListenBscTransaction() {
 
     transactionHistories.forEach(th => {
       dowsJSConnector.provider?.getTransaction(th.hash)
-        .then(transaction => {
-          transaction.wait().then(() => {
+        .then((transaction: TransactionResponse | undefined) => {
+          transaction?.wait().then(() => {
             th.complete()
             dispatch(updateTransactionHistoryStatus(th))
             forceRefresh()
@@ -134,6 +143,6 @@ export function useListenBscTransaction() {
           })
         })
     })
-  }, [transactionList])
+  }, [transactionList, providerReady])
 }
 
