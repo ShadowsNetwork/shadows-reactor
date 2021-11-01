@@ -1,27 +1,29 @@
 import React, { useContext } from 'react'
-import { useInitializeProvider } from '@/hooks/useInitializeProvider'
+import { useProviderReady } from '@/hooks/useProviderReady'
 import { useNetworkReady } from '@/hooks/useNetworkReady'
 import useFixupNetwork from '@/hooks/useFixupNetwork'
 
 type Web3EnvContextType = {
-  providerInitialized: boolean,
+  providerReady: boolean,
   networkReady: boolean | undefined,
 }
 
 const Web3EnvContext = React.createContext<Web3EnvContextType>({
   networkReady: false,
-  providerInitialized: false,
+  providerReady: false,
 })
 
 const Web3EnvProvider: React.FC = ({ children }) => {
-  const providerInitialized = useInitializeProvider()
+  const providerReady = useProviderReady()
 
   const networkReady = useNetworkReady()
+
+  console.log(providerReady, networkReady)
 
   useFixupNetwork(networkReady)
 
   return (
-    <Web3EnvContext.Provider value={{ providerInitialized, networkReady }}>
+    <Web3EnvContext.Provider value={{ providerReady, networkReady }}>
       {children}
     </Web3EnvContext.Provider>
   )

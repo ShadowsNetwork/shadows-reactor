@@ -1,11 +1,11 @@
 import BigNumber from 'bignumber.js'
 
-export function numberWithCommas(x?: string | number | BigNumber, decimalPlace = 2): string {
-  if (!x?.toString().length) {
-    return numberWithCommas('0')
+export function numberWithCommas(x?: string | number | BigNumber, decimalPlace = 2, showSign?: boolean): string {
+  if (x === undefined || !x.toString().length) {
+    return numberWithCommas('0', decimalPlace, showSign)
   }
 
-  const trimTrailingZero = (x: string) => {
+  const trimTrailingZero = (x: string): string => {
     if (x.length <= decimalPlace) {
       return x.padEnd(decimalPlace, '0')
     }
@@ -23,7 +23,13 @@ export function numberWithCommas(x?: string | number | BigNumber, decimalPlace =
     parts[1] = trimTrailingZero(parts[1])
   }
 
-  return parts.join('.')
+  if (!decimalPlace) {
+    return parts[0]
+  }
+  return [
+    showSign && new BigNumber(x).gte(0) ? '+' : '',
+    parts.join('.')
+  ].join('')
 }
 
 export function dateFormat(date: Date, format: string): string {

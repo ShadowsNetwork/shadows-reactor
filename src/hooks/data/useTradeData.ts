@@ -7,6 +7,7 @@ import BigNumber from 'bignumber.js'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { shadowsSynthsConfig } from '@/config/img.config'
+import { useQuery } from 'react-query'
 
 export type KeyPair = {
   symbol: SymbolPair,
@@ -20,25 +21,21 @@ export type PairData = {
 
 export type SymbolPair = [string, string]
 
-export const useCurrencyData = (): PairData => {
-  const [keyPairs, setKeyPairs] = useState<KeyPair[] | undefined>(undefined)
-  const [currencyList, setKeyList] = useState<string[]>([])
+export const useCurrencyData = () => {
+  const { networkReady, providerReady } = useWeb3EnvContext()
 
-  const { fastRefreshFlag } = useRefreshController()
-
-  const { networkReady, providerInitialized } = useWeb3EnvContext()
-
-  const fetch = useCallback(async () => {
-    if (!providerInitialized || !networkReady || !dowsJSConnector.dowsJs?.network) {
+  return useQuery(['CURRENCY_DATA', networkReady, providerReady], async () => {
+    if (!providerReady) {
       return
     }
 
     // ['xUSD', 'xAUD', 'xEUR', ...]
-    const _keyList: Array<string> = (await dowsJSConnector.dowsJs.Synthesizer.availableCurrencyKeys()).map(k => bytesToString(k))
+    const keyList: Array<string> = (await dowsJSConnector.dowsJs.Synthesizer.availableCurrencyKeys()).map(k => bytesToString(k))
+
     // ['1.000000', '0.500000', '0.75000000', ...]
     const ratesList = (
       await Promise.all(
-        _keyList.map(key => dowsJSConnector.dowsJs.Oracle.rateForCurrency(key))
+        keyList.map(key => dowsJSConnector.dowsJs.Oracle.rateForCurrency(key))
       )
     ).map(rate => weiToBigNumber(rate))
 
@@ -50,9 +47,9 @@ export const useCurrencyData = (): PairData => {
      *   ...
      * }
      */
-    const keysByRate = new Map(_keyList.map((key, index) => [key, ratesList[index]]))
+    const keysByRate = new Map(keyList.map((key, index) => [key, ratesList[index]]))
 
-    const keysSet = new Set<string>(_keyList)
+    const keysSet = new Set<string>(keyList)
     keysSet.delete('ShaUSD')
 
     /**
@@ -80,24 +77,16 @@ export const useCurrencyData = (): PairData => {
         lastPrice: pairPrice(key, 'ShaUSD')
       }
     })
-    const _keyPairs = _pairs.filter(item => !!item)
-
-    setKeyList(_keyList)
-    setKeyPairs(_keyPairs)
-  }, [fastRefreshFlag, networkReady, providerInitialized])
-
-  useEffect(() => {
-    fetch()
-  }, [fetch])
-
-  return {
-    keyPairs,
-    keyList: currencyList
-  }
+    const keyPairs = _pairs.filter(item => !!item)
+    return {
+      keyPairs,
+      keyList
+    }
+  })
 }
 
 export const useCurrencyBalance = () => {
-  const { keyList } = useCurrencyData()
+  const { data: currencyData } = useCurrencyData()
 
   const account = useSelector(getAccount)
 
@@ -108,10 +97,12 @@ export const useCurrencyBalance = () => {
   const [balanceByCurrency, setBalanceByCurrency] = useState<{ [key: string]: BigNumber }>({})
 
   const fetchBalance = useCallback(async () => {
-    if (!networkReady || !account) {
+    if (!networkReady || !account || !currencyData) {
       setBalanceByCurrency({})
       return
     }
+
+    const { keyList } = currencyData
 
     if (keyList.length > 0 && account) {
       let balanceList = await Promise.all(
@@ -127,7 +118,7 @@ export const useCurrencyBalance = () => {
 
       setBalanceByCurrency(_balanceByCurrency)
     }
-  }, [keyList, fastRefreshFlag, account, networkReady])
+  }, [currencyData, fastRefreshFlag, account, networkReady])
 
   useEffect(() => {
     fetchBalance()

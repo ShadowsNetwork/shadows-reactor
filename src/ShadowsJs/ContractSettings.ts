@@ -16,11 +16,10 @@ class ContractSettings {
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(provider, signer, networkId) {
-    // contractSettings = contractSettings || {}
     this.networkId = networkId
     this.network = SUPPORTED_NETWORKS[Number(this.networkId)]
     this.provider = provider || getDefaultProvider()
-    if (!provider && networkId) {
+    if (!this.provider && networkId) {
       this.provider = getDefaultProvider(this.network)
     }
     this.signer = signer

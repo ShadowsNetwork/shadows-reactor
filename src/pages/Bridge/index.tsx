@@ -1,11 +1,11 @@
 import LimitableNumberInput from '@/components/LimitableNumberInput'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import './index.less'
 import { useErrorMessage } from '@/hooks'
 import { Button, Input } from 'antd'
 import BigNumber from 'bignumber.js'
-import useBridgeData from '@/hooks/useBridgeData'
+import useBridgeData from '@/hooks/data/useBridgeData'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toWei } from '@/web3/utils'
 import { useDispatch, useSelector } from 'react-redux'
@@ -214,7 +214,7 @@ const EmptyBridgeMain: React.FC = () => (
 )
 
 const Bridge: React.FC = () => {
-  const { providerInitialized, networkReady } = useWeb3EnvContext()
+  const { providerReady, networkReady } = useWeb3EnvContext()
 
   const dispatch = useDispatch()
   const fromPolyChainId = useSelector(getSourcePolyChainId)
@@ -225,6 +225,18 @@ const Bridge: React.FC = () => {
   const handleSwitch = () => {
     dispatch(setSourcePolyChainId(toPolyChain.polyChainId))
   }
+
+  const errorMessage = useMemo(() => {
+    if (networkReady === undefined) {
+      return 'Please connect to a wallet first'
+    }
+
+    if (!networkReady) {
+      return 'Please make sure your network is setup to correct!'
+    }
+
+    return undefined
+  }, [networkReady, providerReady])
 
   return (
     <div className="bridge-container">
@@ -239,7 +251,7 @@ const Bridge: React.FC = () => {
           onSwitch={handleSwitch}
         />
         {
-          (providerInitialized && networkReady) ?
+          (providerReady && networkReady) ?
             <BridgeMain
               fromPolyChain={fromPolyChain}
               toPolyChain={toPolyChain}
@@ -247,9 +259,8 @@ const Bridge: React.FC = () => {
             <EmptyBridgeMain />
         }
         {
-          !networkReady &&
           <div className="error-hint">
-            Please make sure your network is setup to correct!
+            {errorMessage}
           </div>
         }
         <p className="copyright">
