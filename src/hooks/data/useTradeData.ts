@@ -6,6 +6,7 @@ import { bytesToString, weiToBigNumber } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
+import { shadowsSynthsConfig } from '@/config/img.config'
 import { useQuery } from 'react-query'
 
 export type KeyPair = {
@@ -68,14 +69,15 @@ export const useCurrencyData = () => {
      *  ...
      * ]
      */
-    const keyPairs = Array.from(keysSet)
-      .map<KeyPair>(
-        key => ({
-          symbol: [key, 'ShaUSD'],
-          lastPrice: pairPrice(key, 'ShaUSD')
-        })
-      )
-
+    const _pairs: KeyPair[] = []
+    Array.from(keysSet).forEach((key: string) => {
+      const _index = shadowsSynthsConfig.findIndex(item => item.symbol === key)
+      _pairs[_index] = {
+        symbol: [key, 'ShaUSD'],
+        lastPrice: pairPrice(key, 'ShaUSD')
+      }
+    })
+    const keyPairs = _pairs.filter(item => !!item)
     return {
       keyPairs,
       keyList
