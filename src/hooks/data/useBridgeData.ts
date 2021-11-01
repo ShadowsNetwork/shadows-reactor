@@ -7,13 +7,14 @@ import axios from 'axios'
 import { ConfigType } from '../../../config'
 import { PolyChain } from '@/types/PolyChain'
 import { useQuery } from 'react-query'
+import { useRefreshController } from '@/contexts/RefreshControllerContext'
+import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 
 const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 
 type BridgeDataProps = {
   fromPolyChain: PolyChain
   toPolyChain: PolyChain
-  refreshFlag: number
 }
 
 const useQueryBridgeFee = (SrcChainId, Hash, DstChainId) => {
@@ -35,8 +36,11 @@ const useQueryBridgeFee = (SrcChainId, Hash, DstChainId) => {
 const useBridgeData = ({
   fromPolyChain,
   toPolyChain,
-  refreshFlag
 }: BridgeDataProps) => {
+  const { slowRefreshFlag } = useRefreshController()
+
+  const { providerReady, networkReady } = useWeb3EnvContext()
+
   const account = useSelector(getAccount)
 
   const [allowance, setAllowance] = useState<string>()
@@ -45,7 +49,9 @@ const useBridgeData = ({
   const { data: fee } = useQueryBridgeFee(fromPolyChain.polyChainId, fromPolyChain.dowsTokenAddress, toPolyChain.polyChainId)
 
   const fetchData = useCallback(async () => {
-    if (!addressAvailable(account)) {
+    if (!addressAvailable(account) || !providerReady || !networkReady) {
+      setAllowance(undefined)
+      setBalance(undefined)
       return
     }
 
@@ -56,7 +62,7 @@ const useBridgeData = ({
 
     setAllowance(weiToString(_allowance))
     setBalance(weiToString(_balance))
-  }, [account, refreshFlag, fromPolyChain, toPolyChain])
+  }, [account, slowRefreshFlag, fromPolyChain, toPolyChain, providerReady, networkReady])
 
   useEffect(() => {
     fetchData()

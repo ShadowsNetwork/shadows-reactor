@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { providers } from 'ethers'
 import { getWeb3ProviderByWallet, WalletNames } from '@/web3/wallets'
 import { useSelector } from 'react-redux'
-import { getSelectedWallet } from '@/store/wallet'
+import { getAccount, getSelectedWallet } from '@/store/wallet'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import ContractSettings from '@/ShadowsJs/ContractSettings'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
@@ -17,6 +17,7 @@ export function useNetworkReady(): boolean | undefined {
   const { slowRefreshFlag } = useRefreshController()
 
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
+  const account = useSelector(getAccount)
 
   useEffect(() => {
     if (!requiredChain || !selectedWallet) {
@@ -43,6 +44,10 @@ export function useNetworkReady(): boolean | undefined {
         return undefined
       }
 
+      if (!selectedWallet && !account) {
+        return false
+      }
+
       const r = currentNetwork.chainId === parseInt(requiredChain.chainId, 16)
 
       r && dowsJSConnector.setContractSettings(new ContractSettings(
@@ -53,6 +58,6 @@ export function useNetworkReady(): boolean | undefined {
 
       return r
     },
-    [currentNetwork, requiredChain]
+    [currentNetwork, requiredChain, account, selectedWallet]
   )
 }

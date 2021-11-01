@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react'
 
 import './index.less'
 import { useErrorMessage } from '@/hooks'
-import { Button, Input } from 'antd'
+import { Button } from 'antd'
 import BigNumber from 'bignumber.js'
 import useBridgeData from '@/hooks/data/useBridgeData'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
@@ -20,6 +20,7 @@ import { PolyChain } from '@/types/PolyChain'
 import { getPolyChainById, getToPolyChainByFromPolyChain } from '@/utils/bridgeUtils'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
+import { useRefreshController } from '@/contexts/RefreshControllerContext'
 
 type BridgeProps = {
   fromPolyChain: PolyChain
@@ -72,9 +73,10 @@ const BridgeMain: React.FC<BridgeProps> = ({
   const getErrorMessage = useErrorMessage()
   const account = useSelector(getAccount)
   const [amount, setAmount] = useState<string>('')
-  const [refreshFlag, setRefreshFlag] = useState(0)
 
-  const { allowance, balance, fee } = useBridgeData({ fromPolyChain, toPolyChain, refreshFlag })
+  const { allowance, balance, fee } = useBridgeData({ fromPolyChain, toPolyChain })
+
+  const { forceRefresh } = useRefreshController()
 
   const { beginTransaction, rejectTransaction, submitTransaction } = useTransactionStatusModal()
 
@@ -90,10 +92,6 @@ const BridgeMain: React.FC<BridgeProps> = ({
     setAmount(balance!)
   }
 
-  const forceRefreshData = () => {
-    setRefreshFlag(new Date().getMilliseconds())
-  }
-
   const approve = async () => {
     try {
       beginTransaction()
@@ -107,7 +105,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
         .then(() => {
           transactionHistory.complete()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
-          forceRefreshData()
+          forceRefresh()
         })
     } catch (e) {
       rejectTransaction(getErrorMessage(e))
@@ -133,7 +131,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
       lockResult.wait()
         .then(() => {
           setAmount('')
-          forceRefreshData()
+          forceRefresh()
         })
     } catch (e) {
       rejectTransaction(getErrorMessage(e))
@@ -190,29 +188,6 @@ const BridgeMain: React.FC<BridgeProps> = ({
   )
 }
 
-const EmptyBridgeMain: React.FC = () => (
-  <div className="bridge-main">
-    <div className="balance-row">
-      <div className="available">
-        - DOWS Available
-      </div>
-    </div>
-    <div className="input-row">
-      <Input />
-      <div className="DOWS">DOWS</div>
-      <Button disabled={true}>MAX</Button>
-    </div>
-    <div className="fee">
-      Fee: -
-    </div>
-    <div className="convert-button">
-      <Button disabled={true}>
-        Convert
-      </Button>
-    </div>
-  </div>
-)
-
 const Bridge: React.FC = () => {
   const { providerReady, networkReady } = useWeb3EnvContext()
 
@@ -250,14 +225,10 @@ const Bridge: React.FC = () => {
           toPolyChain={toPolyChain}
           onSwitch={handleSwitch}
         />
-        {
-          (providerReady && networkReady) ?
-            <BridgeMain
-              fromPolyChain={fromPolyChain}
-              toPolyChain={toPolyChain}
-            /> :
-            <EmptyBridgeMain />
-        }
+        <BridgeMain
+          fromPolyChain={fromPolyChain}
+          toPolyChain={toPolyChain}
+        />
         {
           <div className="error-hint">
             {errorMessage}
