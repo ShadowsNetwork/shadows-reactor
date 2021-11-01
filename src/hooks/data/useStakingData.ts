@@ -107,7 +107,7 @@ const useStakingPoolPrivateData = ({
   const { providerReady } = useWeb3EnvContext()
   const account = useSelector(getAccount)
 
-  return useQuery(['STAKING_POOL_PRIVATE_DATA', dowsPrice, providerReady], async () => {
+  return useQuery([`STAKING_POOL_PRIVATE_DATA_${poolNumber}_${lpMultiplier}_${farmContractAddress}_${lpMultiplier}`, dowsPrice, providerReady], async () => {
     if (!providerReady || !dowsPrice) {
       return
     }
