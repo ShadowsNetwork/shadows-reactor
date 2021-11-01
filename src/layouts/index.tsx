@@ -10,16 +10,13 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import '@/i18n'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-import configureStore from '@/store'
 import App from '@/layouts/App'
 import { TransactionStatusModalProvider } from '@/contexts/TransactionStatusModalContext'
 import { RefreshControllerProvider } from '@/contexts/RefreshControllerContext'
 import { Web3EnvProvider } from '@/contexts/Web3EnvContext'
+import { persistor, store } from '@/store'
 
 const queryClient = new QueryClient()
-
-const { store, persistor } = configureStore()
-
 
 const Root: React.FC = () => (
   <Suspense fallback={<div />}>
