@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
-import { useCallback, useEffect, useState } from 'react'
 import { utc } from 'moment'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { numberWithCommas } from '@/utils'
@@ -8,41 +7,51 @@ import BigNumber from 'bignumber.js'
 import { addressAvailable, weiToBigNumber } from '@/web3/utils'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
+import { useQuery } from 'react-query'
+import { UseQueryResult } from 'react-query/types/react/types'
 
-interface FeePoolData {
-  totalFees: BigNumber
-  redeemableFees: BigNumber
-  totalRewards: BigNumber
-  escrowedRewards: BigNumber
-  redeemableRewards: BigNumber,
-  nextVestTime: string,
-  vestingScheduleTime: BigNumber
+type FeePoolData = {
+  totalFees?: BigNumber
+  redeemableFees?: BigNumber
+  totalRewards?: BigNumber
+  escrowedRewards?: BigNumber
+  redeemableRewards?: BigNumber,
+  nextVestTime?: string,
+  vestingScheduleTime?: BigNumber
 }
 
-interface TradeData extends FeePoolData {
-  myRatio: string,
-  targetRatio: string,
-
-  totalDows: BigNumber,
-  availableDows: BigNumber,
-  lockedDows: BigNumber,
+type RatioData = {
+  myRatio?: string,
+  targetRatio?: string,
 }
 
-const useRatioData = (): { myRatio: string, targetRatio: string } => {
-  const { fastRefreshFlag } = useRefreshController()
+type ShadowsData = {
+  totalDows?: BigNumber,
+  availableDows?: BigNumber,
+  lockedDows?: BigNumber,
+}
 
+type TradeData = FeePoolData & RatioData & ShadowsData
+
+const useRatioData = (): UseQueryResult<RatioData | undefined> => {
+  const { slowRefreshFlag } = useRefreshController()
   const account = useSelector(getAccount)
+  const { networkReady, providerReady } = useWeb3EnvContext()
 
-  const { networkReady } = useWeb3EnvContext()
-
-  const [myRatio, setMyRatio] = useState('-')
-  const [targetRatio, setTargetRatio] = useState('-')
-
-  const fetchRatio = useCallback(async () => {
-    if (!networkReady || !addressAvailable(account)) {
-      setMyRatio('-')
-      setTargetRatio('-')
+  return useQuery<RatioData | undefined>(['RATIO_DATA', account, slowRefreshFlag, networkReady, providerReady], async () => {
+    if (!providerReady) {
       return
+    }
+
+    if (!networkReady || !addressAvailable(account)) {
+      const _issuanceRatio = await dowsJSConnector.dowsJs.Synthesizer.issuanceRatio()
+
+      return {
+        targetRatio: (
+          _issuanceRatio.isZero()
+            ? '-'
+            : `${numberWithCommas(new BigNumber('100').dividedBy(weiToBigNumber(_issuanceRatio)))}%`)
+      }
     }
 
     const [_collateralisationRatio, _issuanceRatio] = await Promise.all([
@@ -50,46 +59,27 @@ const useRatioData = (): { myRatio: string, targetRatio: string } => {
       dowsJSConnector.dowsJs.Synthesizer.issuanceRatio()
     ])
 
-    setMyRatio(
-      _collateralisationRatio.isZero()
-        ? '-'
-        : `${numberWithCommas(new BigNumber('100').dividedBy(weiToBigNumber(_collateralisationRatio)))}%`
-    )
-    setTargetRatio(
-      _issuanceRatio.isZero()
-        ? '-'
-        : `${numberWithCommas(new BigNumber('100').dividedBy(weiToBigNumber(_issuanceRatio)))}%`)
-  }, [account, fastRefreshFlag])
-
-  useEffect(() => {
-    fetchRatio()
-      .catch(e => {
-        console.error('error in useRatioData:', e)
-      })
-  }, [fetchRatio, networkReady])
-
-  return {
-    myRatio,
-    targetRatio
-  }
+    return {
+      myRatio: (
+        _collateralisationRatio.isZero()
+          ? '-'
+          : `${numberWithCommas(new BigNumber('100').dividedBy(weiToBigNumber(_collateralisationRatio)))}%`
+      ),
+      targetRatio: (
+        _issuanceRatio.isZero()
+          ? '-'
+          : `${numberWithCommas(new BigNumber('100').dividedBy(weiToBigNumber(_issuanceRatio)))}%`)
+    }
+  })
 }
 
-const useShadowsData = (): { totalDows: BigNumber, availableDows: BigNumber, lockedDows: BigNumber } => {
-  const { fastRefreshFlag } = useRefreshController()
-
+const useShadowsData = (): UseQueryResult<ShadowsData | undefined> => {
+  const { slowRefreshFlag } = useRefreshController()
   const account = useSelector(getAccount)
+  const { networkReady, providerReady } = useWeb3EnvContext()
 
-  const { networkReady } = useWeb3EnvContext()
-
-  const [totalDows, setTotalDows] = useState(new BigNumber(0))
-  const [availableDows, setAvailableDows] = useState(new BigNumber(0))
-  const [lockedDows, setLockedDows] = useState(new BigNumber(0))
-
-  const fetch = useCallback(async () => {
-    if (!networkReady || !addressAvailable(account)) {
-      setTotalDows(new BigNumber(0))
-      setAvailableDows(new BigNumber(0))
-      setLockedDows(new BigNumber(0))
+  return useQuery<ShadowsData | undefined>(['SHADOWS_DATA', account, slowRefreshFlag, networkReady, providerReady], async () => {
+    if (!providerReady) {
       return
     }
 
@@ -98,127 +88,63 @@ const useShadowsData = (): { totalDows: BigNumber, availableDows: BigNumber, loc
       dowsJSConnector.dowsJs.Synthesizer.transferableShadows(account)
     ])
 
-    setTotalDows(weiToBigNumber(_dowsBalance))
-    setAvailableDows(weiToBigNumber(_transferableDows))
-    setLockedDows(weiToBigNumber(_dowsBalance.sub(_transferableDows)))
-  }, [account, fastRefreshFlag, networkReady])
-
-  useEffect(() => {
-    fetch()
-      .catch(e => {
-        console.error('error in useShadowsData:', e)
-      })
-  }, [fetch])
-
-  return {
-    totalDows,
-    availableDows,
-    lockedDows
-  }
+    return {
+      totalDows: weiToBigNumber(_dowsBalance),
+      availableDows: weiToBigNumber(_transferableDows),
+      lockedDows: weiToBigNumber(_dowsBalance.sub(_transferableDows))
+    }
+  })
 }
 
-const useFeePoolData = (): FeePoolData => {
-  const { fastRefreshFlag } = useRefreshController()
+const useFeePoolData = (): UseQueryResult<FeePoolData | undefined> => {
+  const { slowRefreshFlag } = useRefreshController()
 
   const account = useSelector(getAccount)
 
-  const { networkReady } = useWeb3EnvContext()
+  const { networkReady, providerReady } = useWeb3EnvContext()
 
-  const [totalFees, setTotalFees] = useState(new BigNumber(0))
-  const [redeemableFees, setRedeemableFees] = useState(new BigNumber(0))
-  const [totalRewards, setTotalRewards] = useState(new BigNumber(0))
-  const [escrowedRewards, setEscrowedRewards] = useState(new BigNumber(0))
-  const [redeemableRewards, setRedeemableRewards] = useState(new BigNumber(0))
-  const [nextVestTime, setNextVestTime] = useState('')
-  const [vestingScheduleTime, setVestingScheduleTime] = useState(new BigNumber(0))
-
-  const fetch = useCallback(async () => {
-    if (!networkReady || !addressAvailable(account)) {
-      const ZERO = new BigNumber(0)
-      setTotalRewards(ZERO)
-      setEscrowedRewards(ZERO)
-      setRedeemableRewards(ZERO)
-      setTotalFees(ZERO)
-      setRedeemableFees(ZERO)
-      setNextVestTime('')
-      setVestingScheduleTime(ZERO)
+  return useQuery<FeePoolData | undefined>(['FEE_POOL_DATA', account, slowRefreshFlag, networkReady], async () => {
+    if (!providerReady) {
       return
     }
 
-    const [_feesByPeriod, [_totalFees], _balanceOf, _vestTime, _vestQuantiry, _vestingScheduleTime] = await Promise.all([
+    if (!networkReady || !addressAvailable(account)) {
+      return {
+        vestingScheduleTime: await dowsJSConnector.dowsJs.RewardEscrow.vestingScheduleTime()
+      }
+    }
+
+    const [_feesByPeriod, [_totalFees], _balanceOf, _vestTime, _vestQuantity, _vestingScheduleTime] = await Promise.all([
       dowsJSConnector.dowsJs.FeePool.feesByPeriod(account),
       dowsJSConnector.dowsJs.FeePool.feesAvailable(account),
       dowsJSConnector.dowsJs.RewardEscrow.balanceOf(account),
       dowsJSConnector.dowsJs.RewardEscrow.getNextVestingTime(account),
       dowsJSConnector.dowsJs.RewardEscrow.getNextVestingQuantity(account),
-      dowsJSConnector.dowsJs.RewardEscrow.vestingScheduleTime(),
+      dowsJSConnector.dowsJs.RewardEscrow.vestingScheduleTime()
     ])
 
-    setTotalFees(
-      _feesByPeriod
+    return {
+      totalFees: _feesByPeriod
         .map(arr => arr.map(item => weiToBigNumber(item)))
-        .reduce((prev: BigNumber, curr: BigNumber[]) => prev.plus(curr[0]), new BigNumber(0))
-    )
-    setRedeemableFees(weiToBigNumber(_totalFees))
-
-    setTotalRewards(
-      _feesByPeriod
+        .reduce((prev: BigNumber, curr: BigNumber[]) => prev.plus(curr[0]), new BigNumber(0)),
+      redeemableFees: weiToBigNumber(_totalFees),
+      totalRewards: _feesByPeriod
         .map(arr => arr.map(item => weiToBigNumber(item)))
-        .reduce((prev: BigNumber, curr: BigNumber[]) => prev.plus(curr[1]), new BigNumber(0))
-    )
-    setEscrowedRewards(weiToBigNumber(_balanceOf))
-
-    if (Number(utc().format('X')) >= Number(_vestTime.toString())) {
-      setRedeemableRewards(weiToBigNumber(_vestQuantiry))
-    } else {
-      setRedeemableRewards(weiToBigNumber(0))
+        .reduce((prev: BigNumber, curr: BigNumber[]) => prev.plus(curr[1]), new BigNumber(0)),
+      escrowedRewards: weiToBigNumber(_balanceOf),
+      redeemableRewards: weiToBigNumber(Number(utc()
+        .format('X')) >= Number(_vestTime.toString()) ? _vestQuantity : 0),
+      nextVestTime: utc(_vestTime)
+        .format('MMM DD,YYYY hh:mm:ss A') + '(UTC)',
+      vestingScheduleTime: _vestingScheduleTime
     }
-
-    setNextVestTime(utc(_vestTime).format('MMM DD,YYYY hh:mm:ss A') + '(UTC)')
-    setVestingScheduleTime(_vestingScheduleTime)
-
-  }, [account, fastRefreshFlag, networkReady])
-
-  useEffect(() => {
-    fetch()
-      .catch(e => {
-        console.error('error in useFeePoolData:', e)
-      })
-  }, [fetch])
-
-
-  return {
-    totalFees,
-    redeemableFees,
-    totalRewards: totalRewards.plus(escrowedRewards),
-    escrowedRewards,
-    redeemableRewards,
-    nextVestTime,
-    vestingScheduleTime
-  }
+  })
 }
 
 export const useDowsSynthesizerData = (): TradeData => {
-  const { myRatio, targetRatio } = useRatioData()
-
-  const { totalDows, availableDows, lockedDows } = useShadowsData()
-
-  const {
-    totalFees, redeemableFees, totalRewards, escrowedRewards, redeemableRewards, nextVestTime, vestingScheduleTime
-  } = useFeePoolData()
-
   return {
-    myRatio,
-    targetRatio,
-    totalDows,
-    availableDows,
-    lockedDows,
-    totalFees,
-    redeemableFees,
-    totalRewards,
-    escrowedRewards,
-    redeemableRewards,
-    nextVestTime,
-    vestingScheduleTime
+    ...useRatioData().data,
+    ...useShadowsData().data,
+    ...useFeePoolData().data
   }
 }

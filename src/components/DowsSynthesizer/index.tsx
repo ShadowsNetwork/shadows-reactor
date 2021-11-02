@@ -246,7 +246,7 @@ const DowsSynthesizer: React.FC = () => {
     gtag('event', 'handle_burn_xusd')
   }
 
-  const feeTip = () => {
+  const FeeTip = () => {
     return (
       <TipDiv>
         <div className="tip">
@@ -259,22 +259,30 @@ const DowsSynthesizer: React.FC = () => {
     )
   }
 
-  const rewardTip = () => {
-    const week = vestingScheduleTime.mod(60 * 60 * 24 * 7)
-    const day = vestingScheduleTime.mod(60 * 60 * 24)
-    const hour = vestingScheduleTime.mod(60 * 60)
-    const min = vestingScheduleTime.mod(60)
-    let _vestingScheduleTime
+  const RewardTip = () => {
+    if (!vestingScheduleTime) {
+      return <>Loading...</>
+    }
+
+    const _vestingScheduleTime = vestingScheduleTime
+
+    const week = _vestingScheduleTime.mod(60 * 60 * 24 * 7)
+    const day = _vestingScheduleTime.mod(60 * 60 * 24)
+    const hour = _vestingScheduleTime.mod(60 * 60)
+    const min = _vestingScheduleTime.mod(60)
+
+    let timeString
+
     if (week.toString() === '0') {
-      _vestingScheduleTime = (vestingScheduleTime.div(60 * 60 * 24 * 7)).toString() + ' weeks'
+      timeString = (_vestingScheduleTime.div(60 * 60 * 24 * 7)).toString() + ' weeks'
     } else if (day.toString() === '0') {
-      _vestingScheduleTime = (vestingScheduleTime.div(60 * 60 * 24)).toString() + ' days'
+      timeString = (_vestingScheduleTime.div(60 * 60 * 24)).toString() + ' days'
     } else if (hour.toString() === '0') {
-      _vestingScheduleTime = (vestingScheduleTime.div(60 * 60)).toString() + ' hours'
+      timeString = (_vestingScheduleTime.div(60 * 60)).toString() + ' hours'
     } else if (min.toString() === '0') {
-      _vestingScheduleTime = (vestingScheduleTime.div(60)).toString() + ' minutes'
+      timeString = (_vestingScheduleTime.div(60)).toString() + ' minutes'
     } else {
-      _vestingScheduleTime = vestingScheduleTime.toString() + ' seconds'
+      timeString = _vestingScheduleTime.toString() + ' seconds'
     }
 
     return (
@@ -284,21 +292,22 @@ const DowsSynthesizer: React.FC = () => {
           <br />
           <p>- ‘Total DOWS Rewards’ is updated in real time.</p>
           <p>- When the ShaUSD rewards are redeemed, an equivalent value of <br />DOWS will show up under ‘Escrowed’.</p>
-          <p>- After an escrow (i.e. vesting) period of {_vestingScheduleTime}, the DOWS <br />rewards will become redeemable.</p>
+          <p>- After an escrow (i.e. vesting) period of {timeString}, the DOWS <br />rewards will become redeemable.</p>
         </div>
       </TipDiv>
     )
   }
+
   return (
     <DowsInfoContainer>
       <div className="header" style={{ marginBottom: '1.5rem' }}>
         <div className="item">
           <div className="title">Current Collateral</div>
-          <div className="value">{myRatio}</div>
+          <div className="value">{myRatio ?? '-'}</div>
         </div>
         <div className="item">
           <div className="title">Target Collateral</div>
-          <div className="value">{targetRatio}</div>
+          <div className="value">{targetRatio ?? '-'}</div>
         </div>
       </div>
       <div className="button-row" style={{ marginBottom: '2.8rem' }}>
@@ -326,7 +335,7 @@ const DowsSynthesizer: React.FC = () => {
       <div className="text-container" style={{ marginBottom: '2rem' }}>
         <p className="bold">
           <span>Total ShaUSD Rewards&nbsp;
-            <Popover trigger="hover" content={feeTip}>
+            <Popover trigger="hover" content={FeeTip}>
               <InfoCircleFilled style={{ color: '#63CCA9' }} />
             </Popover>
           </span>
@@ -340,7 +349,7 @@ const DowsSynthesizer: React.FC = () => {
       <div className="text-container" style={{ marginBottom: '1.5rem' }}>
         <p className="bold">
           <span>Total DOWS Rewards&nbsp;
-            <Popover trigger="hover" content={rewardTip}>
+            <Popover trigger="hover" content={RewardTip}>
               <InfoCircleFilled style={{ color: '#63CCA9' }} />
             </Popover>
           </span>
@@ -359,7 +368,7 @@ const DowsSynthesizer: React.FC = () => {
         <Button
           className="button"
           onClick={redeemXusd}
-          disabled={redeemableFees.lte(0)}
+          disabled={redeemableFees?.lte(0)}
           style={{ fontSize: '1.3rem' }}
         >
           Redeem ShaUSD
@@ -367,7 +376,7 @@ const DowsSynthesizer: React.FC = () => {
         <Button
           className="button"
           onClick={redeemDows}
-          disabled={redeemableRewards.lte(0)}
+          disabled={redeemableRewards?.lte(0)}
           style={{ fontSize: '1.3rem' }}
         >
           Redeem DOWS
