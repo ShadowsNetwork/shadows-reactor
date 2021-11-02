@@ -85,6 +85,11 @@ const useStakingPoolPublicData = ({
         return
       }
 
+      let priceBase = dowsPrice
+      if (poolNumber===2) {
+        priceBase = new BigNumber(1)
+      }
+
       const [_totalLockedLP, _apy] = await Promise.all([
         dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, farmContractAddress),
         getAPY(lpTokenContractAddress, farmContractAddress, poolNumber, lpMultiplier)
@@ -93,7 +98,7 @@ const useStakingPoolPublicData = ({
       return {
         totalLockedLP: weiToString(_totalLockedLP),
         totalLockedLPInUSD: weiToBigNumber(_totalLockedLP)
-          .multipliedBy(dowsPrice)
+          .multipliedBy(priceBase)
           .multipliedBy(lpMultiplier)
           .toFixed(2),
         apy: _apy
@@ -126,12 +131,17 @@ const useStakingPoolPrivateData = ({
         dowsJSConnector.dowsJs.Farm.pending(farmContractAddress, poolNumber, account),
         dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account!, farmContractAddress),
       ])
+      
+      let priceBase = dowsPrice
+      if (poolNumber===2) {
+        priceBase = new BigNumber(1)
+      }
 
       return {
         userLpBalance: weiToString(_userLpBalance),
         userLockedLp: weiToString(_userLockedLp),
         userLockedLpInUSD: weiToBigNumber(_userLockedLp)
-          .multipliedBy(dowsPrice)
+          .multipliedBy(priceBase)
           .multipliedBy(lpMultiplier)
           .toFixed(2),
         dowsEarned: weiToBigNumber(_dowsEarned)
