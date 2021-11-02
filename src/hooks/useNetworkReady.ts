@@ -33,7 +33,7 @@ export function useNetworkReady(): [boolean | undefined, number | undefined] {
 
         return provider.ready
       })
-      ?.then(async network => {
+      ?.then(async (network: providers.Network) => {
         setCurrentNetwork(network)
       })
   }, [requiredChain, selectedWallet, quietRefreshFlag])
@@ -60,5 +60,6 @@ export function useNetworkReady(): [boolean | undefined, number | undefined] {
     },
     [currentNetwork, requiredChain, account, selectedWallet]
   )
+
   return [networkReady, currentNetwork?.chainId]
 }

@@ -1,14 +1,17 @@
 import { providers } from 'ethers'
-import WalletConnectProvider from '@walletconnect/web3-provider'
+import WalletConnectProvider from '@walletconnect/ethereum-provider'
 
-export const WalletConnectWeb3Provider: any = ({ chainId, RPCUrl }) => {
+export const WalletConnectWeb3Provider: any = ({
+  chainId: chainIdArg, RPCUrl
+}) => {
   let provider
-  if (!provider) {
 
+  const chainId = chainIdArg.toString().startsWith('0x') ? parseInt(chainIdArg, 16) : chainIdArg
+
+  if (!provider) {
     provider = new WalletConnectProvider({
-      bridge: 'https://bridge.walletconnect.org',
-      pollingInterval: 12000,
       qrcode: true,
+      chainId,
       rpc: {
         [chainId]: RPCUrl
       }

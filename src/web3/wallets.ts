@@ -6,9 +6,8 @@ import { providers } from 'ethers'
 import { Dispatch } from 'redux'
 import { MetamaskWeb3Provider } from './providers/Metamask'
 import { WalletConnectWeb3Provider } from './providers/WalletConnect'
-import WalletConnectProvider from '@walletconnect/web3-provider'
+import WalletConnectProvider from '@walletconnect/ethereum-provider'
 import { BscWeb3Provider } from '@/web3/providers/BSC'
-import { message } from 'antd'
 
 export type WalletNames = 'Metamask' | 'BSC' | 'WalletConnect'
 
@@ -49,26 +48,31 @@ const connectToBSC = async (dispatch: Dispatch<any>, chainId: number, RPCUrl?: s
 }
 
 const connectToWalletConnect = async (dispatch: Dispatch<any>, chainId: number, RPCUrl?: string): Promise<void> => {
-  const web3Provider = await getWeb3ProviderByWallet({
-    chainId, RPCUrl
-  }, 'WalletConnect') as providers.Web3Provider
+  const web3Provider = await getWeb3ProviderByWallet({ chainId, RPCUrl }, 'WalletConnect')
 
   const walletConnectProvider = web3Provider.provider as WalletConnectProvider
 
-  console.log(`wc connected: ${walletConnectProvider.wc.connected}`)
-  if (!walletConnectProvider.wc.connected) {
-    walletConnectProvider.wc.connect({ chainId })
-      .then(r => {
-        console.log(r)
-        const [account] = r.accounts
-        dispatch(setAccount(account))
-        dispatch(setSelectedWallet('WalletConnect'))
-        const connectedChainId = r.chainId
-        if (connectedChainId !== chainId) {
-          message.warn('Not in correct network!')
-        }
-      })
-  }
+  console.log(walletConnectProvider)
+  walletConnectProvider.enable()
+    .then(accounts => {
+      const [account] = accounts
+      dispatch(setAccount(account))
+      dispatch(setSelectedWallet('WalletConnect'))
+    })
+  // console.log(`wc connected: ${walletConnectProvider.wc.connected}`)
+  // if (!walletConnectProvider.wc.connected) {
+  //   walletConnectProvider.wc.connect({ chainId })
+  //     .then(r => {
+  //       console.log(r)
+  //       const [account] = r.accounts
+  //       dispatch(setAccount(account))
+  //       dispatch(setSelectedWallet('WalletConnect'))
+  //       const connectedChainId = r.chainId
+  //       if (connectedChainId !== chainId) {
+  //         message.warn('Not in correct network!')
+  //       }
+  //     })
+  // }
 
   // walletConnectProvider.enable()
   //   .then(accounts => {

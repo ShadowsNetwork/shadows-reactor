@@ -20,6 +20,7 @@
     "@ethersproject/units": "^5.0.1",
     "@reduxjs/toolkit": "^1.5.0",
     "@umijs/preset-react": "^1.8.8",
+    "@walletconnect/ethereum-provider": "^1.6.6",
     "@walletconnect/web3-provider": "^1.4.1",
     "antd": "^4.12.3",
     "axios": "^0.21.1",

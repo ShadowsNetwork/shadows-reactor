@@ -48,6 +48,7 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
 }) => {
   const dispatch = useDispatch()
   const selectedWallet = useSelector(getSelectedWallet) as WalletNames
+
   const disconnect = async () => {
     dispatch(setSelectedWallet(null))
     dispatch(setAccount(null))
@@ -100,14 +101,18 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
                     tx.TYPE === TransactionHistoryImplementationClassType.Bridge
                     && (tx as BridgeDows).state !== PolyTransactionStatus.FINISHED
                     && tx.status !== TransactionStatus.Failed
-                      ? <Tooltip title={(tx as BridgeDows).hint}>
+                      ? (
+                        <Tooltip title={(tx as BridgeDows).hint}>
+                          <span className="transaction-history-status">
+                            {icon}
+                          </span>
+                        </Tooltip>
+                      )
+                      : (
                         <span className="transaction-history-status">
                           {icon}
                         </span>
-                      </Tooltip>
-                      : <span className="transaction-history-status">
-                        {icon}
-                      </span>
+                      )
                   }
                   <LinkIcon
                     fill={color}

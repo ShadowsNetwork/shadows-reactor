@@ -44,38 +44,17 @@ export function useProviderReady(): boolean {
   useEffect(() => {
     if (provider?.provider !== undefined) {
       if (selectedWallet === 'WalletConnect') {
-        const walletConnectProvider = provider.provider as WalletConnectProvider
+        const handleDisconnect = () => {
+          dispatch(setAccount(null))
+          dispatch(setSelectedWallet(null))
+        }
 
-        walletConnectProvider.enable()
-          .then(() => {
-            const handleAccountChange = (accounts: string[]) => {
-              const [account] = accounts
-              dispatch(setAccount(account))
-              dispatch(setSelectedWallet('WalletConnect'))
-              forceRefresh()
-            }
+        const wcProvider: WalletConnectProvider = provider.provider as WalletConnectProvider
 
-            const handleDisconnect = (code: number, reason: string) => {
-              console.log(code, reason)
-              dispatch(setAccount(null))
-              dispatch(setSelectedWallet(null))
-
-              walletConnectProvider.stop()
-              walletConnectProvider.removeListener('accountsChanged', handleAccountChange)
-            }
-
-            const handleChainChanged = (_, __) => {
-              console.log(_, __)
-            }
-
-            walletConnectProvider.removeListener('disconnect', handleDisconnect)
-            walletConnectProvider.removeListener('accountsChanged', handleAccountChange)
-            walletConnectProvider.removeListener('chainChanged', handleChainChanged)
-
-            walletConnectProvider.on('disconnect', handleDisconnect)
-            walletConnectProvider.on('accountsChanged', handleAccountChange)
-            walletConnectProvider.on('chainChanged', handleChainChanged)
-          })
+        if (wcProvider.connector) {
+          const { connector } = wcProvider
+          connector.on('disconnect', handleDisconnect)
+        }
       }
 
       // @ts-ignore
@@ -107,7 +86,7 @@ export function useProviderReady(): boolean {
         })
       }
     }
-  }, [provider])
+  }, [provider, provider?.provider])
 
   const initialize = useCallback(async () => {
     setReady(false)
@@ -131,7 +110,7 @@ export function useProviderReady(): boolean {
     }
 
     setReady(true)
-  }, [selectedWallet, requiredChain, networkReady, account])
+  }, [selectedWallet, requiredChain, networkReady, account, provider])
 
   useEffect(() => {
     initialize()
