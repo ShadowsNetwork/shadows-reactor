@@ -74,7 +74,8 @@ const BridgeMain: React.FC<BridgeProps> = ({
   const account = useSelector(getAccount)
   const [amount, setAmount] = useState<string>('')
 
-  const { allowance, balance, fee, availableDows, isBsc } = useBridgeData({ fromPolyChain, toPolyChain })
+  const { data } = useBridgeData({ fromPolyChain, toPolyChain })
+  const { allowance, balance, fee, availableDows, isBsc } = data ?? {}
 
   const { forceRefresh } = useRefreshController()
 
@@ -142,7 +143,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
     <div className="bridge-main">
       <div className="balance-row">
         <div className="available">
-          {isBsc ? availableDows.toString() ?? '-' : balance ?? '-'} DOWS Available
+          {isBsc ? availableDows?.toString() ?? '-' : balance ?? '-'} DOWS Available
         </div>
       </div>
       <div className="input-row">
@@ -150,7 +151,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
           decimalPlaces={18}
           inputValue={amount}
           setInputValue={setAmount}
-          maximum={isBsc ? availableDows.toString() : balance}
+          maximum={isBsc ? availableDows?.toString() : balance}
         />
         <div className="DOWS">DOWS</div>
         <Button onClick={setAmountToMax}>MAX</Button>

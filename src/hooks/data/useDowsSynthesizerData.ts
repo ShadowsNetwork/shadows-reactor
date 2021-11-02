@@ -33,14 +33,14 @@ type ShadowsData = {
 
 type TradeData = FeePoolData & RatioData & ShadowsData
 
-const useRatioData = (): UseQueryResult<RatioData | undefined> => {
+const useRatioData = (): UseQueryResult<RatioData> => {
   const { slowRefreshFlag } = useRefreshController()
   const account = useSelector(getAccount)
   const { networkReady, providerReady } = useWeb3EnvContext()
 
-  return useQuery<RatioData | undefined>(['RATIO_DATA', account, slowRefreshFlag, networkReady, providerReady], async () => {
+  return useQuery<RatioData>(['RATIO_DATA', account, slowRefreshFlag, networkReady, providerReady], async () => {
     if (!providerReady) {
-      return
+      return {}
     }
 
     if (!networkReady || !addressAvailable(account)) {
@@ -73,14 +73,14 @@ const useRatioData = (): UseQueryResult<RatioData | undefined> => {
   })
 }
 
-const useShadowsData = (): UseQueryResult<ShadowsData | undefined> => {
+const useShadowsData = (): UseQueryResult<ShadowsData> => {
   const { slowRefreshFlag } = useRefreshController()
   const account = useSelector(getAccount)
   const { networkReady, providerReady } = useWeb3EnvContext()
 
-  return useQuery<ShadowsData | undefined>(['SHADOWS_DATA', account, slowRefreshFlag, networkReady, providerReady], async () => {
-    if (!providerReady) {
-      return
+  return useQuery<ShadowsData>(['SHADOWS_DATA', account, slowRefreshFlag, networkReady, providerReady], async () => {
+    if (!providerReady || !addressAvailable(account)) {
+      return {}
     }
 
     const [_dowsBalance, _transferableDows] = await Promise.all([
@@ -96,16 +96,14 @@ const useShadowsData = (): UseQueryResult<ShadowsData | undefined> => {
   })
 }
 
-const useFeePoolData = (): UseQueryResult<FeePoolData | undefined> => {
+const useFeePoolData = (): UseQueryResult<FeePoolData> => {
   const { slowRefreshFlag } = useRefreshController()
-
   const account = useSelector(getAccount)
-
   const { networkReady, providerReady } = useWeb3EnvContext()
 
-  return useQuery<FeePoolData | undefined>(['FEE_POOL_DATA', account, slowRefreshFlag, networkReady], async () => {
+  return useQuery<FeePoolData>(['FEE_POOL_DATA', account, slowRefreshFlag, networkReady], async () => {
     if (!providerReady) {
-      return
+      return {}
     }
 
     if (!networkReady || !addressAvailable(account)) {

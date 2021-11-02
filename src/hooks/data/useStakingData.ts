@@ -1,4 +1,4 @@
-import { weiToBigNumber, weiToString } from '@/web3/utils'
+import { addressAvailable, weiToBigNumber, weiToString } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
 import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
@@ -7,6 +7,7 @@ import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { useQuery } from 'react-query'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
+import { UseQueryResult } from 'react-query/types/react/types'
 
 type PoolDataProps = {
   lpTokenContractAddress: string,
@@ -54,13 +55,18 @@ async function getAPY(
     .dividedBy(totalAllocPoint)
     .multipliedBy('10368000')
 
-  return rewardPerYear.dividedBy(staked).multipliedBy(100).toString(10)
+  return rewardPerYear.dividedBy(staked)
+    .multipliedBy(100)
+    .toString(10)
 }
 
-export type PoolData = {
+type StakingPoolPublicData = {
   totalLockedLP?: string
   totalLockedLPInUSD?: string
   apy?: string
+}
+
+type StakingPoolPrivateData = {
   userLpBalance?: string
   userLockedLp?: string
   userLockedLpInUSD?: string
@@ -68,21 +74,25 @@ export type PoolData = {
   allowanceEnough?: boolean
 }
 
-const useStakingPoolPublicData = ({
-  lpTokenContractAddress,
-  farmContractAddress,
-  poolNumber,
-  lpMultiplier
-}: PoolDataProps) => {
+export type PoolData = StakingPoolPrivateData & StakingPoolPublicData
+
+const useStakingPoolPublicData = (props: PoolDataProps): UseQueryResult<StakingPoolPublicData> => {
+  const {
+    lpTokenContractAddress,
+    farmContractAddress,
+    poolNumber,
+    lpMultiplier
+  } = props
+
   const dowsPrice = useDowsPrice()
   const { providerReady } = useWeb3EnvContext()
   const { quietRefreshFlag } = useRefreshController()
 
-  return useQuery(
+  return useQuery<StakingPoolPublicData>(
     ['STAKING_POOL_PUBLIC_DATA', dowsPrice, providerReady, lpMultiplier, lpTokenContractAddress, farmContractAddress, poolNumber, quietRefreshFlag],
     async () => {
       if (!providerReady || !dowsPrice) {
-        return
+        return {}
       }
 
       const [_totalLockedLP, _apy] = await Promise.all([
@@ -102,29 +112,31 @@ const useStakingPoolPublicData = ({
   )
 }
 
-const useStakingPoolPrivateData = ({
-  lpTokenContractAddress,
-  farmContractAddress,
-  poolNumber,
-  lpMultiplier
-}: PoolDataProps) => {
+const useStakingPoolPrivateData = (props: PoolDataProps): UseQueryResult<StakingPoolPrivateData> => {
+  const {
+    lpTokenContractAddress,
+    farmContractAddress,
+    poolNumber,
+    lpMultiplier
+  } = props
+
   const dowsPrice = useDowsPrice()
   const account = useSelector(getAccount)
   const { providerReady } = useWeb3EnvContext()
   const { quietRefreshFlag } = useRefreshController()
 
-  return useQuery(
-    ['STAKING_POOL_PRIVATE_DATA', dowsPrice, providerReady, lpTokenContractAddress, lpMultiplier, poolNumber, farmContractAddress, quietRefreshFlag],
+  return useQuery<StakingPoolPrivateData>(
+    ['STAKING_POOL_PRIVATE_DATA', account, dowsPrice, providerReady, lpTokenContractAddress, lpMultiplier, poolNumber, farmContractAddress, quietRefreshFlag],
     async () => {
-      if (!providerReady || !dowsPrice) {
-        return
+      if (!providerReady || !dowsPrice || !addressAvailable(account)) {
+        return {}
       }
 
       const [_userLpBalance, _userLockedLp, _dowsEarned, _lpTokenAllowance] = await Promise.all([
         dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, account!),
         dowsJSConnector.dowsJs.Farm.deposited(farmContractAddress, poolNumber, account),
         dowsJSConnector.dowsJs.Farm.pending(farmContractAddress, poolNumber, account),
-        dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account!, farmContractAddress),
+        dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account!, farmContractAddress)
       ])
 
       return {
@@ -138,32 +150,13 @@ const useStakingPoolPrivateData = ({
           .toFixed(2),
         allowanceEnough: isAllowanceEnough(weiToString(_lpTokenAllowance))
       }
-    },
+    }
   )
 }
 
-export const useStakingData = ({
-  lpTokenContractAddress,
-  farmContractAddress,
-  poolNumber,
-  lpMultiplier
-}: PoolDataProps): PoolData => {
-  const { data: stakingPoolPublicData } = useStakingPoolPublicData({
-    lpTokenContractAddress,
-    farmContractAddress,
-    poolNumber,
-    lpMultiplier,
-  })
-
-  const { data: stakingPoolPrivateData } = useStakingPoolPrivateData({
-    lpTokenContractAddress,
-    farmContractAddress,
-    poolNumber,
-    lpMultiplier,
-  })
-
+export const useStakingData = (props: PoolDataProps): PoolData => {
   return {
-    ...stakingPoolPublicData,
-    ...stakingPoolPrivateData
+    ...useStakingPoolPublicData(props).data,
+    ...useStakingPoolPrivateData(props).data
   }
 }

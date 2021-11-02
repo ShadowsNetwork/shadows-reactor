@@ -9,7 +9,9 @@ import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import useTradingDataQuery from '@/queries/useTradingDataQuery'
 import BigNumber from 'bignumber.js'
-import { KeyPair, useCurrencyBalance, useCurrencyPrice } from '@/hooks/data/useTradeData'
+import {
+  BalanceByCurrency, KeyPair, useCurrencyBalance, useCurrencyPrice
+} from '@/hooks/data/useTradeData'
 import { TradeSynth } from '@/types/TransactionHistory'
 import { numberWithCommas } from '@/utils'
 import { appendTransactionHistory } from '@/store/wallet'
@@ -27,7 +29,7 @@ type BuySellPanelProps = {
   type: 'Buy' | 'Sell'
   color: string
   keyPair?: KeyPair,
-  balanceByCurrency: { [key: string]: BigNumber }
+  balanceByCurrency?: BalanceByCurrency
 }
 
 const BuySellPanel: React.FC<BuySellPanelProps> = ({
@@ -54,7 +56,7 @@ const BuySellPanel: React.FC<BuySellPanelProps> = ({
   }
 
   const unit = keyPair?.symbol[type === 'Buy' ? 1 : 0]
-  const available: BigNumber = (unit && balanceByCurrency[unit]) || new BigNumber('0')
+  const available: BigNumber = (unit && balanceByCurrency && balanceByCurrency[unit]) || new BigNumber('0')
 
   const onSliderChange = value => {
     setSliderValue(value)
@@ -387,7 +389,7 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
 const TradePage: React.FC = () => {
   const { state } = useLocation()
 
-  const { balanceByCurrency } = useCurrencyBalance()
+  const { data: balanceByCurrency } = useCurrencyBalance()
 
   const [selectedKeyPair, setSelectedKeyPair] = useState<KeyPair | undefined>((state as any)?.keyPair)
 

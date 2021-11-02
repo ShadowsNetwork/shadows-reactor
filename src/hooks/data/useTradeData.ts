@@ -2,12 +2,13 @@ import { useCallback, useEffect, useState } from 'react'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { useSelector } from 'react-redux'
 import { getAccount } from '@/store/wallet'
-import { bytesToString, weiToBigNumber } from '@/web3/utils'
+import { addressAvailable, bytesToString, weiToBigNumber } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { shadowsSynthsConfig } from '@/config/img.config'
 import { useQuery } from 'react-query'
+import { UseQueryResult } from 'react-query/types/react/types'
 
 export type KeyPair = {
   symbol: SymbolPair,
@@ -20,6 +21,8 @@ export type PairData = {
 }
 
 export type SymbolPair = [string, string]
+
+export type BalanceByCurrency = { [key: string]: BigNumber }
 
 export const useCurrencyData = () => {
   const { networkReady, providerReady } = useWeb3EnvContext()
@@ -85,48 +88,37 @@ export const useCurrencyData = () => {
   })
 }
 
-export const useCurrencyBalance = () => {
+export const useCurrencyBalance = (): UseQueryResult<BalanceByCurrency> => {
   const { data: currencyData } = useCurrencyData()
-
   const account = useSelector(getAccount)
-
   const { fastRefreshFlag } = useRefreshController()
-
   const { networkReady } = useWeb3EnvContext()
 
-  const [balanceByCurrency, setBalanceByCurrency] = useState<{ [key: string]: BigNumber }>({})
+  return useQuery<BalanceByCurrency>(
+    ['CURRENCY_BALANCE', currencyData, fastRefreshFlag, account, networkReady],
+    async () => {
+      if (!networkReady || !addressAvailable(account) || !currencyData) {
+        return {} as BalanceByCurrency
+      }
 
-  const fetchBalance = useCallback(async () => {
-    if (!networkReady || !account || !currencyData) {
-      setBalanceByCurrency({})
-      return
+      const { keyList } = currencyData
+      const balanceByCurrency: BalanceByCurrency = {}
+
+      if (keyList.length > 0 && account) {
+        let balanceList = await Promise.all(
+          keyList.map(key => dowsJSConnector.dowsJs.Synth.balanceOf(key, account))
+        )
+
+        balanceList = balanceList.map(v => weiToBigNumber(v)) as BigNumber[]
+
+        keyList.forEach((key, index) => {
+          balanceByCurrency[key] = balanceList[index]
+        })
+      }
+
+      return balanceByCurrency
     }
-
-    const { keyList } = currencyData
-
-    if (keyList.length > 0 && account) {
-      let balanceList = await Promise.all(
-        keyList.map(key => dowsJSConnector.dowsJs.Synth.balanceOf(key, account))
-      )
-
-      balanceList = balanceList.map(v => weiToBigNumber(v)) as BigNumber[]
-
-      const _balanceByCurrency = {}
-      keyList.forEach((key, index) => {
-        _balanceByCurrency[key] = balanceList[index]
-      })
-
-      setBalanceByCurrency(_balanceByCurrency)
-    }
-  }, [currencyData, fastRefreshFlag, account, networkReady])
-
-  useEffect(() => {
-    fetchBalance()
-  }, [fetchBalance])
-
-  return {
-    balanceByCurrency
-  }
+  )
 }
 
 export const useCurrencyPrice = (name?: string) => {

@@ -29,7 +29,6 @@ class Oracle extends AbstractContractCaller {
   }
 
   async rateForCurrency(currencyKey: string) {
-    console.log('call rateForCurrency')
     return await this.contract!.rateForCurrency(toByte32(currencyKey))
   }
 
