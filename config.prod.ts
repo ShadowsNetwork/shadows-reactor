@@ -9,7 +9,7 @@ const config: ConfigType = {
     supportedPools: [
       {
         poolNumber: 0,
-        poolName: 'Pancake Swap LP',
+        poolName: 'Pancake Swap DOWS LP',
         tokenName: 'LPPair',
         leftCurrency: {
           name: 'DOWS',
@@ -24,23 +24,6 @@ const config: ConfigType = {
         poolType: 'pair',
         lpMultiplier: 50.3698,
       },
-      // {
-      //   poolNumber: 0,
-      //   poolName: 'Pancake Swap LP',
-      //   tokenName: 'LPPair',
-      //   leftCurrency: {
-      //     name: 'DOWS',
-      //     icon: 'https://i.loli.net/2021/05/08/ZP9Xg4LszRTiIcV.png'
-      //   },
-      //   rightCurrency: {
-      //     name: 'BNB',
-      //     icon: 'https://i.loli.net/2021/05/08/34N7vOpUnADeEy2.png'
-      //   },
-      //   lpTokenContractAddress: '0x6d611e5eb40e8a36f97cda481612688025d8cb0e',
-      //   farmContractAddress: '0x51B9234182155287B9311f77cF4077B2EaDA442A',
-      //   poolType: 'pair',
-      //   lpMultiplier: 50.3698,
-      // },
       {
         poolNumber: 1,
         poolName: 'Single Token Yield',
@@ -53,7 +36,24 @@ const config: ConfigType = {
         farmContractAddress: '0x51B9234182155287B9311f77cF4077B2EaDA442A',
         poolType: 'single',
         lpMultiplier: 1,
-      }
+      },
+      {
+        poolNumber: 2,
+        poolName: 'Pancake Swap ShaUsd LP',
+        tokenName: 'LPPair',
+        leftCurrency: {
+          name: 'ShaUsd',
+          icon: 'https://i.loli.net/2021/11/02/NsXY8P4Fhilxj2V.png'
+        },
+        rightCurrency: {
+          name: 'BUSD',
+          icon: 'https://i.loli.net/2021/11/02/1JkT9tV6SzIqhNX.png'
+        },
+        lpTokenContractAddress: '0xe4aa6b01b5c2ca61d78de98f7c0d416b26152665',
+        farmContractAddress: '0x51B9234182155287B9311f77cF4077B2EaDA442A',
+        poolType: 'pair',
+        lpMultiplier: 2,
+      },
     ]
   }
 }
