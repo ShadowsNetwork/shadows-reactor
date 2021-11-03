@@ -67,10 +67,6 @@ export function getTransactionHistoryList(state: State): Array<TransactionHistor
   return state.wallet.transactionHistoryList ?? []
 }
 
-export function getAccount(state: State): string | undefined {
-  return state.wallet.account
-}
-
 export function getSelectedWallet(state: State): string | undefined {
   return state.wallet.selectedWallet
 }

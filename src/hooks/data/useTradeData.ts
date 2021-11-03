@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { useSelector } from 'react-redux'
-import { getAccount } from '@/store/wallet'
 import { addressAvailable, bytesToString, weiToBigNumber } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
@@ -9,6 +7,7 @@ import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { shadowsSynthsConfig } from '@/config/img.config'
 import { useQuery } from 'react-query'
 import { UseQueryResult } from 'react-query/types/react/types'
+import { useWeb3React } from '@web3-react/core'
 
 export type KeyPair = {
   symbol: SymbolPair,
@@ -89,8 +88,8 @@ export const useCurrencyData = () => {
 }
 
 export const useCurrencyBalance = (): UseQueryResult<BalanceByCurrency> => {
+  const { account } = useWeb3React()
   const { data: currencyData } = useCurrencyData()
-  const account = useSelector(getAccount)
   const { fastRefreshFlag } = useRefreshController()
   const { networkReady } = useWeb3EnvContext()
 

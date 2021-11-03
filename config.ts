@@ -1,5 +1,6 @@
 import { PoolConfig } from '@/types/LiquidityProvider'
 import { PolyChain } from '@/types/PolyChain'
+import { EthereumChain } from '@/ShadowsJs/networkHelper'
 
 export type ConfigType = {
   liquidityProvider: {
@@ -7,6 +8,7 @@ export type ConfigType = {
   },
   bridge: BridgeConfig,
   baseUrl: string
+  ethChain: EthereumChain
 }
 
 export type BridgeConfig = {
@@ -16,5 +18,6 @@ export type BridgeConfig = {
   polyChainId: {
     Eth: number,
     Bsc: number
-  }
+  },
+  ethChain: EthereumChain
 }

@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
-import { useSelector } from 'react-redux'
-import { getAccount } from '@/store/wallet'
 import useDowsPrice from '@/queries/useDowsPrice'
 import { addressAvailable, toBigNumber, toByte32, weiToBigNumber } from '@/web3/utils'
 import BN from 'bn.js'
@@ -9,9 +7,10 @@ import BigNumber from 'bignumber.js'
 import { useCurrencyData } from '@/hooks/data/useTradeData'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
+import { useWeb3React } from '@web3-react/core'
 
 const useAssetsBalance = () => {
-  const account = useSelector(getAccount)
+  const { account } = useWeb3React()
 
   const { data: currencyData } = useCurrencyData()
 
@@ -61,7 +60,7 @@ const useAssetsBalance = () => {
 }
 
 const useBalance = () => {
-  const account = useSelector(getAccount)
+  const { account } = useWeb3React()
   const dowsPrice = useDowsPrice()
 
   const [yourBalance, setYourBalance] = useState('')

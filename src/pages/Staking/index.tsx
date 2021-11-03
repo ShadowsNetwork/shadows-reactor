@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  appendTransactionHistory, getAccount, updateTransactionHistoryStatus
-} from '@/store/wallet'
+import { useDispatch } from 'react-redux'
+import { appendTransactionHistory, updateTransactionHistoryStatus } from '@/store/wallet'
 import './index.less'
 import { Button, message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
@@ -15,7 +13,7 @@ import {
   ApproveToken, LockLPToken, RedeemDOWS, TransactionHistory, TransactionStatus, UnlockLPToken
 } from '@/types/TransactionHistory'
 import { TransactionResponse } from '@/ShadowsJs/contracts/type'
-import { useErrorMessage } from '@/hooks'
+import { useErrorMessage } from '@/hooks/useErrorMessage'
 import RedeemModal, { RedeemModalStatus } from '@/pages/Staking/RedeemModal'
 import { useStakingData } from '@/hooks/data/useStakingData'
 import { PoolConfig } from '@/types/LiquidityProvider'
@@ -24,6 +22,7 @@ import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalCont
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useDowsSynthesizerData } from '@/hooks/data/useDowsSynthesizerData'
+import { useWeb3React } from '@web3-react/core'
 
 const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
 
@@ -104,7 +103,7 @@ const StakingPool: React.FC<PoolConfig> = ({
     onClose: undefined
   })
 
-  const account = useSelector(getAccount)
+  const { account } = useWeb3React()
   const dispatch = useDispatch()
   const getErrorMessage = useErrorMessage()
   const { beginTransaction, submitTransaction, rejectTransaction } = useTransactionStatusModal()

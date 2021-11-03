@@ -1,5 +1,3 @@
-import { useSelector } from 'react-redux'
-import { getAccount } from '@/store/wallet'
 import { utc } from 'moment'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { numberWithCommas } from '@/utils'
@@ -9,6 +7,7 @@ import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { useQuery } from 'react-query'
 import { UseQueryResult } from 'react-query/types/react/types'
+import { useWeb3React } from '@web3-react/core'
 
 type FeePoolData = {
   totalFees?: BigNumber
@@ -34,8 +33,8 @@ type ShadowsData = {
 type TradeData = FeePoolData & RatioData & ShadowsData
 
 const useRatioData = (): UseQueryResult<RatioData> => {
+  const { account } = useWeb3React()
   const { slowRefreshFlag } = useRefreshController()
-  const account = useSelector(getAccount)
   const { networkReady, providerReady } = useWeb3EnvContext()
 
   return useQuery<RatioData>(['RATIO_DATA', account, slowRefreshFlag, networkReady, providerReady], async () => {
@@ -74,8 +73,8 @@ const useRatioData = (): UseQueryResult<RatioData> => {
 }
 
 const useShadowsData = (): UseQueryResult<ShadowsData> => {
+  const { account } = useWeb3React()
   const { slowRefreshFlag } = useRefreshController()
-  const account = useSelector(getAccount)
   const { networkReady, providerReady } = useWeb3EnvContext()
 
   return useQuery<ShadowsData>(['SHADOWS_DATA', account, slowRefreshFlag, networkReady, providerReady], async () => {
@@ -98,7 +97,7 @@ const useShadowsData = (): UseQueryResult<ShadowsData> => {
 
 const useFeePoolData = (): UseQueryResult<FeePoolData> => {
   const { slowRefreshFlag } = useRefreshController()
-  const account = useSelector(getAccount)
+  const { account } = useWeb3React()
   const { networkReady, providerReady } = useWeb3EnvContext()
 
   return useQuery<FeePoolData>(['FEE_POOL_DATA', account, slowRefreshFlag, networkReady], async () => {

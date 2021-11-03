@@ -4,7 +4,7 @@ import LimitableNumberInput from '@/components/LimitableNumberInput'
 import {
   createChart, CrosshairMode, IChartApi, ISeriesApi, Time, UTCTimestamp
 } from 'lightweight-charts'
-import { useErrorMessage } from '@/hooks'
+import { useErrorMessage } from '@/hooks/useErrorMessage'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import useTradingDataQuery from '@/queries/useTradingDataQuery'

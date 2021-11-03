@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { appendTransactionHistory, getAccount } from '@/store/wallet'
+import { useDispatch } from 'react-redux'
+import { appendTransactionHistory } from '@/store/wallet'
 import AmountInputModal, { AmountInputModalStatus } from '@/pages/Staking/AmountInputModal'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
@@ -9,10 +9,11 @@ import styled from 'styled-components'
 import { useDowsSynthesizerData } from '@/hooks/data/useDowsSynthesizerData'
 import { BurnXUSD, MintXUSD, RedeemDOWS, RedeemXUSD } from '@/types/TransactionHistory'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
-import { useErrorMessage } from '@/hooks'
+import { useErrorMessage } from '@/hooks/useErrorMessage'
 import { numberWithCommas } from '@/utils'
 
 import { InfoCircleFilled } from '@ant-design/icons'
+import { useWeb3React } from '@web3-react/core'
 
 const DowsInfoContainer = styled.div`
   width: 100%;
@@ -122,9 +123,8 @@ const TipDiv = styled.div`
 `
 
 const DowsSynthesizer: React.FC = () => {
+  const { account } = useWeb3React()
   const dispatch = useDispatch()
-
-  const account = useSelector(getAccount)
 
   const { beginTransaction, rejectTransaction, submitTransaction } = useTransactionStatusModal()
 
@@ -191,6 +191,7 @@ const DowsSynthesizer: React.FC = () => {
           submitTransaction()
         })
         .catch(e => {
+          console.log(e)
           rejectTransaction(errorMessageGetter(e))
         })
     }

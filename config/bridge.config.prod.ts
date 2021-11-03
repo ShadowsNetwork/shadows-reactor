@@ -1,5 +1,5 @@
 import { BridgeConfig } from '../config'
-import { getEthereumChainById } from '../src/ShadowsJs/networkHelper'
+import { EthereumChain, getEthereumChainById } from '../src/ShadowsJs/networkHelper'
 
 const PolyChainId = {
   Eth: 2,
@@ -7,6 +7,7 @@ const PolyChainId = {
 }
 
 const bridge: BridgeConfig = {
+  ethChain: getEthereumChainById('0x1') as EthereumChain,
   apiBaseUrl: 'https://bridge.poly.network/v1',
   polyChainId: PolyChainId,
   polyChainExplorerUrl: 'https://explorer.poly.network',

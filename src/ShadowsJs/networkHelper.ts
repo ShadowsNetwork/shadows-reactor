@@ -60,7 +60,7 @@ export const SUPPORTED_ETHEREUM_CHAINS: EthereumChain[] = [
       symbol: 'eth',
       decimals: 18
     },
-    rpcUrls: ['https://ropsten.infura.io/v3/undefined'],
+    rpcUrls: ['https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
     blockExplorerUrls: ['https://ropsten.etherscan.io']
   },
   {
