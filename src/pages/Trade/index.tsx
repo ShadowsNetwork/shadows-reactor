@@ -257,11 +257,19 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
     }
 
     if (mode === 'price') {
-      series.setData(data.data.map(item => ({
-        ...item,
-        value: Number.parseFloat(weiToString(item.price)),
-        time: (parseInt(item.time)) / 1000
-      })))
+      const _data: any[] = []
+      const _cahce = {}
+      data.data.forEach(item => {
+        if (!_cahce[item.time]) {
+          _data.push({
+            ...item,
+            value: Number.parseFloat(weiToString(item.price)),
+            time: (parseInt(item.time)) / 1000
+          })
+          _cahce[item.time] = true
+        }
+      })
+      series.setData(_data)
 
       chart!.applyOptions({
         handleScroll: true,
