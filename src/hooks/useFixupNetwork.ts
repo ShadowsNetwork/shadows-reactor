@@ -1,7 +1,6 @@
 import useRequiredChain from '@/hooks/useRequiredChain'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import useConnectingWallet from '@/hooks/useConnectingWallet'
 import {
   setupBSCWalletNetwork, setupMetamaskNetwork, setupWalletConnectNetwork
 } from '@/web3/network'
@@ -14,13 +13,12 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 const useFixupNetwork = () => {
   const { providerReady, networkReady } = useWeb3EnvContext()
   const location = useLocation()
-  const requiredChain = useRequiredChain()!
+  const requiredChain = useRequiredChain()
 
-  const { connector } = useWeb3React()
-  const connectingWallet = useConnectingWallet()
+  const { connector, error } = useWeb3React()
 
   useEffect(() => {
-    if (!requiredChain || networkReady || !providerReady) {
+    if (!requiredChain || networkReady || !providerReady || !connector || error) {
       return
     }
 
@@ -37,7 +35,7 @@ const useFixupNetwork = () => {
     if (connector instanceof WalletConnectConnector) {
       setupWalletConnectNetwork(setupArgs)
     }
-  }, [networkReady, providerReady, requiredChain, location, connectingWallet])
+  }, [networkReady, providerReady, requiredChain, location, connector, error])
 }
 
 export default useFixupNetwork

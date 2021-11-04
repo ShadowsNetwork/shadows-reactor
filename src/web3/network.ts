@@ -87,7 +87,7 @@ export async function setupMetamaskNetwork(props: { chain: EthereumChain }): Pro
     .catch(error => {
       // message: May not specify default MetaMask chain.
       if (error.code === -32602) {
-        message.warn(`Please manually switch to the ${chain.chainName} in MetaMask`, 5)
+        message.warn(`Please manually switch the network to the ${chain.chainName} in MetaMask`, 5)
         return false
       }
 
@@ -111,7 +111,7 @@ export async function setupMetamaskNetwork(props: { chain: EthereumChain }): Pro
 export async function setupWalletConnectNetwork(props: { chain: EthereumChain }) {
   const { chain } = props
 
-  message.warn(`Please manually switch to the ${chain.chainName} in your WalletConnect App, and then try to re-connect.`, 5)
+  message.warn(`Please manually switch the network to the ${chain.chainName} in your WalletConnect App, and then try to re-connect.`, 5)
 }
 
 export async function setupBSCWalletNetwork(props: { chain: EthereumChain }) {
@@ -124,7 +124,7 @@ export async function setupBSCWalletNetwork(props: { chain: EthereumChain }) {
     return false
   }
 
-  message.warn(`Please manually switch to the ${chain.chainName} in Binance Chain Wallet`, 5)
+  message.warn(`Please manually switch the network to the ${chain.chainName} in Binance Chain Wallet`, 5)
   return false
 }
 

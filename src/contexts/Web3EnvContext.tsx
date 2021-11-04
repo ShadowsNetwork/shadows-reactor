@@ -1,34 +1,52 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import useRequiredChain from '@/hooks/useRequiredChain'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import ContractSettings from '@/ShadowsJs/ContractSettings'
 import { DEFAULT_PROVIDER } from '@/web3/connectors'
 import { useEagerConnect } from '@/hooks/useEagerConnect'
+import { message } from 'antd'
 
 type Web3EnvContextType = {
   providerReady: boolean,
   networkReady: boolean | undefined,
-  chainId: number | undefined,
 }
 
 const Web3EnvContext = React.createContext<Web3EnvContextType>({
   networkReady: false,
   providerReady: false,
-  chainId: undefined,
 })
 
 const Web3EnvProvider: React.FC = ({ children }) => {
   const requiredChain = useRequiredChain()
-
-  const { chainId, account, library } = useWeb3React()
+  const { chainId, account, library, error, deactivate } = useWeb3React()
   useEagerConnect()
 
-  const networkReady = useMemo(() => {
-    return requiredChain !== undefined && chainId === parseInt(requiredChain.chainId, 16)
-  }, [chainId, requiredChain])
+  useEffect(() => {
+    if (error) {
+      deactivate()
 
-  const providerReady = useMemo(() => {
+      if (requiredChain && error.toString().includes('Error: Invariant failed: chainId Binance-Chain-')) {
+        message.error(`Please manually switch the network to ${requiredChain.chainName} in Binance Chain Wallet`)
+      } else {
+        message.error(error)
+      }
+    }
+  }, [error, requiredChain])
+
+  const networkReady = useMemo<boolean>(() => {
+    if (error) {
+      return false
+    }
+
+    return requiredChain !== undefined && chainId === parseInt(requiredChain.chainId, 16)
+  }, [chainId, requiredChain, error])
+
+  const providerReady = useMemo<boolean>(() => {
+    if (!requiredChain) {
+      return false
+    }
+
     if (networkReady && library && chainId && account) {
       dowsJSConnector.setContractSettings(
         new ContractSettings(
@@ -39,10 +57,6 @@ const Web3EnvProvider: React.FC = ({ children }) => {
       )
 
       return true
-    }
-
-    if (!requiredChain) {
-      return false
     }
 
     dowsJSConnector.setContractSettings(
@@ -57,7 +71,7 @@ const Web3EnvProvider: React.FC = ({ children }) => {
   }, [library, chainId, account, requiredChain, networkReady])
 
   return (
-    <Web3EnvContext.Provider value={{ providerReady, networkReady, chainId }}>
+    <Web3EnvContext.Provider value={{ providerReady, networkReady }}>
       {children}
     </Web3EnvContext.Provider>
   )
