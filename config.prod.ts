@@ -45,7 +45,7 @@ const config: ConfigType = {
         tokenName: 'LPPair',
         leftCurrency: {
           name: 'ShaUsd',
-          icon: 'https://i.loli.net/2021/11/02/NsXY8P4Fhilxj2V.png'
+          icon: 'https://i.loli.net/2021/11/04/AUPMg5xjyTGS9tL.png'
         },
         rightCurrency: {
           name: 'BUSD',

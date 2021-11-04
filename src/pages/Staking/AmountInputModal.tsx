@@ -30,7 +30,7 @@ const AmountInputModal: React.FC<AmountInputModalStatus> = ({
     }
   }, [visible])
 
-  const newMax = Number(maxAvailable.toString()).toFixed(6)
+  const newMax = Number(maxAvailable?.toString()).toFixed(6)
   const handleConfirm = () => {
     let isMax = false
     if (inputValue === newMax) {
@@ -46,7 +46,7 @@ const AmountInputModal: React.FC<AmountInputModalStatus> = ({
         return
       }
     }
-    confirmCallback?.(isMax ? maxAvailable.toString() : inputValue)
+    confirmCallback?.(isMax ? maxAvailable?.toString() : inputValue)
   }
 
   const handleCancel = () => {
