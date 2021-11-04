@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  getAccount, getSelectedWallet, getTransactionHistoryList, setAccount, setSelectedWallet
-} from '@/store/wallet'
+import { useSelector } from 'react-redux'
+import { getTransactionHistoryList } from '@/store/wallet'
 import './index.less'
 import { Button, Modal, Tooltip } from 'antd'
 import {
@@ -13,9 +11,10 @@ import WalletSelectionModal from '@/components/Wallet/WalletSelectionModal'
 import { ReactComponent as LinkIcon } from '@/img/link.svg'
 import Jazzicon from 'jazzicon'
 import { CheckOutlined, CloseOutlined, LoadingOutlined } from '@ant-design/icons'
-import { getWeb3ProviderByWallet, WalletNames } from '@/web3/wallets'
-import WalletConnectProvider from '@walletconnect/web3-provider'
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
+import { useWeb3React } from '@web3-react/core'
+import { connectorsByWallet } from '@/web3/connectors'
+import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 
 type CurrentAccountProps = {
   account: string
@@ -46,18 +45,17 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
   account,
   transactionHistoryList
 }) => {
-  const dispatch = useDispatch()
-  const selectedWallet = useSelector(getSelectedWallet) as WalletNames
-  const disconnect = async () => {
-    dispatch(setSelectedWallet(null))
-    dispatch(setAccount(null))
+  const { deactivate } = useWeb3React()
 
-    if (selectedWallet === 'WalletConnect') {
-      const chainId: number = parseInt(process.env.CHAIN_ID!, 16)
-      const RPCUrl: string = process.env.RPC_URL!
-      const provider = await getWeb3ProviderByWallet({ chainId, RPCUrl }, selectedWallet)
-      const walletConnectProvider = provider?.provider as WalletConnectProvider
-      walletConnectProvider.disconnect()
+  const disconnect = () => {
+    deactivate()
+    // TODO: handle disconnect logic for MetaMask
+
+    // This localStorage key is set by @web3-react/walletconnect-connector
+    if (window.localStorage.getItem('walletconnect')) {
+      const connector = connectorsByWallet.WalletConnect as WalletConnectConnector
+      connector.close()
+      connector.walletConnectProvider = null
     }
   }
 
@@ -100,14 +98,18 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
                     tx.TYPE === TransactionHistoryImplementationClassType.Bridge
                     && (tx as BridgeDows).state !== PolyTransactionStatus.FINISHED
                     && tx.status !== TransactionStatus.Failed
-                      ? <Tooltip title={(tx as BridgeDows).hint}>
+                      ? (
+                        <Tooltip title={(tx as BridgeDows).hint}>
+                          <span className="transaction-history-status">
+                            {icon}
+                          </span>
+                        </Tooltip>
+                      )
+                      : (
                         <span className="transaction-history-status">
                           {icon}
                         </span>
-                      </Tooltip>
-                      : <span className="transaction-history-status">
-                        {icon}
-                      </span>
+                      )
                   }
                   <LinkIcon
                     fill={color}
@@ -126,7 +128,7 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
 
 const MetamaskIcon: React.FC = () => {
   const ref = useRef<HTMLDivElement>()
-  const account = useSelector(getAccount)
+  const { account } = useWeb3React()
 
   useEffect(() => {
     if (account && ref.current) {
@@ -155,6 +157,7 @@ const CurrentAccount: React.FC<CurrentAccountProps> = ({ account }) => {
   const closeModal = () => {
     setIsModalVisible(false)
   }
+
   return (
     <div className="current-account">
       <MetamaskIcon />
@@ -201,7 +204,7 @@ const ConnectToWallet = () => {
 }
 
 const Wallet: React.FC = () => {
-  const account = useSelector(getAccount)
+  const { account } = useWeb3React()
 
   return (
     <div className="wallet">

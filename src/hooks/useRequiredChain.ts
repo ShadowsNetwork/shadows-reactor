@@ -1,6 +1,4 @@
-import {
-  EthereumChain, getEthereumChainById, SupportedEthereumChainId
-} from '@/ShadowsJs/networkHelper'
+import { EthereumChain, SUPPORTED_ETHEREUM_CHAINS, SupportedEthereumChainId } from '@/web3/network'
 import { useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { getSourcePolyChainId } from '@/store/bridge'
@@ -26,7 +24,7 @@ const useRequiredChain = (): EthereumChain | undefined => {
 
       return polyChain.ethereumChain
     } else {
-      return getEthereumChainById(chainIdFromEnv)!
+      return SUPPORTED_ETHEREUM_CHAINS[chainIdFromEnv]
     }
   }, [location, sourcePolyChainId])
 

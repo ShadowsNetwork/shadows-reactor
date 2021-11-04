@@ -2,16 +2,14 @@ import LimitableNumberInput from '@/components/LimitableNumberInput'
 import React, { useMemo, useState } from 'react'
 
 import './index.less'
-import { useErrorMessage } from '@/hooks'
+import { useErrorMessage } from '@/hooks/useErrorMessage'
 import { Button } from 'antd'
 import BigNumber from 'bignumber.js'
 import useBridgeData from '@/hooks/data/useBridgeData'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toWei } from '@/web3/utils'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  appendTransactionHistory, getAccount, updateTransactionHistoryStatus
-} from '@/store/wallet'
+import { appendTransactionHistory, updateTransactionHistoryStatus } from '@/store/wallet'
 import { getSourcePolyChainId, setSourcePolyChainId } from '@/store/bridge'
 import DOWSIcon from '@/img/dows-info/dows.png'
 import switchImg from '@/img/bridge/switch.png'
@@ -21,6 +19,7 @@ import { getPolyChainById, getToPolyChainByFromPolyChain } from '@/utils/bridgeU
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
+import { useWeb3React } from '@web3-react/core'
 
 type BridgeProps = {
   fromPolyChain: PolyChain
@@ -71,7 +70,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
 
   const dispatch = useDispatch()
   const getErrorMessage = useErrorMessage()
-  const account = useSelector(getAccount)
+  const { account } = useWeb3React()
   const [amount, setAmount] = useState<string>('')
 
   const { data } = useBridgeData({ fromPolyChain, toPolyChain })

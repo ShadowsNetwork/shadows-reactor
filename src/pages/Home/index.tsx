@@ -12,7 +12,7 @@ const HomePage: React.FC = () => {
   const onKeyPairItemClicked = (keyPair: KeyPair) => {
     history.push({
       pathname: '/trade',
-      state: { keyPair }
+      state: keyPair
     })
   }
 

@@ -1,10 +1,11 @@
+/*eslint-disable @typescript-eslint/no-var-requires*/
 import { AbstractContractCaller } from '@/ShadowsJs/AbstractContractCaller'
 import { Contract } from 'ethers'
 import BigNumber from 'bignumber.js'
 
 class Bridge extends AbstractContractCaller {
 
-  constructor(signer: any, provider: any) {
+  constructor(signer?: any, provider?: any) {
     super()
     this.signer = signer
     this.provider = provider

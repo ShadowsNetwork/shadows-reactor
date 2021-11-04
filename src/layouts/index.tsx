@@ -15,6 +15,8 @@ import { TransactionStatusModalProvider } from '@/contexts/TransactionStatusModa
 import { RefreshControllerProvider, SLOW_INTERVAL } from '@/contexts/RefreshControllerContext'
 import { Web3EnvProvider } from '@/contexts/Web3EnvContext'
 import { persistor, store } from '@/store'
+import { getLibrary } from '@/web3/connectors'
+import { Web3ReactProvider } from '@web3-react/core'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,23 +29,25 @@ const queryClient = new QueryClient({
 
 const Root: React.FC = () => (
   <Suspense fallback={<div />}>
-    <QueryClientProvider client={queryClient}>
-      <IntlProvider locale={getLocale()}>
-        <Provider store={store}>
-          <PersistGate loading={<LoadingOutlined />} persistor={persistor}>
-            <Router>
-              <RefreshControllerProvider>
-                <Web3EnvProvider>
-                  <TransactionStatusModalProvider>
-                    <App />
-                  </TransactionStatusModalProvider>
-                </Web3EnvProvider>
-              </RefreshControllerProvider>
-            </Router>
-          </PersistGate>
-        </Provider>
-      </IntlProvider>
-    </QueryClientProvider>
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale={getLocale()}>
+          <Provider store={store}>
+            <PersistGate loading={<LoadingOutlined />} persistor={persistor}>
+              <Router>
+                <RefreshControllerProvider>
+                  <Web3EnvProvider>
+                    <TransactionStatusModalProvider>
+                      <App />
+                    </TransactionStatusModalProvider>
+                  </Web3EnvProvider>
+                </RefreshControllerProvider>
+              </Router>
+            </PersistGate>
+          </Provider>
+        </IntlProvider>
+      </QueryClientProvider>
+    </Web3ReactProvider>
   </Suspense>
 )
 

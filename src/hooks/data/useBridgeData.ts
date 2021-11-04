@@ -1,16 +1,14 @@
-import { useSelector } from 'react-redux'
-import { getAccount } from '@/store/wallet'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { addressAvailable, weiToBigNumber, weiToString } from '@/web3/utils'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
-import { ConfigType } from '../../../config'
 import { PolyChain } from '@/types/PolyChain'
 import { useQuery } from 'react-query'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
+import { useWeb3React } from '@web3-react/core'
 
-const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
+import config from '@/config'
 
 type BridgeDataProps = {
   fromPolyChain: PolyChain
@@ -42,9 +40,9 @@ export type BridgeData = {
 }
 
 const useBridgeData = ({ fromPolyChain, toPolyChain }: BridgeDataProps) => {
+  const { account } = useWeb3React()
   const { slowRefreshFlag } = useRefreshController()
   const { providerReady, networkReady, chainId } = useWeb3EnvContext()
-  const account = useSelector(getAccount)
   const { data: fee } = useQueryBridgeFee(fromPolyChain.polyChainId, fromPolyChain.dowsTokenAddress, toPolyChain.polyChainId)
 
   return useQuery<BridgeData>(

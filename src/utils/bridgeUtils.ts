@@ -1,7 +1,6 @@
 import { PolyChain } from '@/types/PolyChain'
-import { ConfigType } from '../../config'
 
-const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
+import config from '@/config'
 
 export function getPolyChainById(polyChainId: number): PolyChain | undefined {
   return config.bridge.polyChains.filter(c => c.polyChainId === polyChainId)?.[0]

@@ -1,8 +1,6 @@
 import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
-
-import { ConfigType } from '../../config'
-const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
+import config from '@/config'
 
 const request = axios.create({
   baseURL: config.baseUrl,

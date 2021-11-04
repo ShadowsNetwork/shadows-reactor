@@ -2,10 +2,9 @@
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
 import { getPolyChainByChainName, getPolyChainById } from '@/utils/bridgeUtils'
 import { PolyChain } from '@/types/PolyChain'
-import { ConfigType } from '../../config'
 import { notifyTransactionFailed, notifyTransactionSuccess } from '@/utils/TransactionNotifycation'
 
-const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
+import config from '@/config'
 
 export enum TransactionStatus {
   /**

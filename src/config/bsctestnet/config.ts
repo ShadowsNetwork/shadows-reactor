@@ -119,6 +119,6 @@ const shadowsSynthsConfig: Array<ShadowsSynth> = [
     symbol: 'ShaXVS',
     address: '0xCfA786C17d6739CBC702693F23cA4417B5945491'
   }
-];
+]
 
-export default shadowsSynthsConfig;
+export default shadowsSynthsConfig

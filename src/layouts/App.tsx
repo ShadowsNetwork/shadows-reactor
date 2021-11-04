@@ -8,10 +8,12 @@ import { useListenBridgeTransactionStatus, useListenBscTransaction } from '@/hoo
 import { Layout } from 'antd'
 import { Content, Header } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
+import useFixupNetwork from '@/hooks/useFixupNetwork'
 
 const App: React.FC = () => {
   useListenBridgeTransactionStatus()
   useListenBscTransaction()
+  useFixupNetwork()
 
   return (
     <Layout

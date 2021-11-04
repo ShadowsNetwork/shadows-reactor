@@ -1,13 +1,12 @@
 import { addressAvailable, weiToBigNumber, weiToString } from '@/web3/utils'
 import BigNumber from 'bignumber.js'
-import { useSelector } from 'react-redux'
-import { getAccount } from '@/store/wallet'
 import useDowsPrice from '@/queries/useDowsPrice'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { useQuery } from 'react-query'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { UseQueryResult } from 'react-query/types/react/types'
+import { useWeb3React } from '@web3-react/core'
 
 type PoolDataProps = {
   lpTokenContractAddress: string,
@@ -125,8 +124,8 @@ const useStakingPoolPrivateData = (props: PoolDataProps): UseQueryResult<Staking
     lpMultiplier
   } = props
 
+  const { account } = useWeb3React()
   const dowsPrice = useDowsPrice()
-  const account = useSelector(getAccount)
   const { providerReady } = useWeb3EnvContext()
   const { quietRefreshFlag } = useRefreshController()
 

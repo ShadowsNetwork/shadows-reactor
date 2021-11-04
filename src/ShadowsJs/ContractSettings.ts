@@ -1,9 +1,9 @@
 import { getDefaultProvider } from 'ethers'
-import { SUPPORTED_NETWORKS } from './networkHelper'
+import { SUPPORTED_ETHEREUM_CHAINS } from '../web3/network'
 
 class ContractSettings {
   networkId: any
-  network: any
+  network?: string
   provider: any
   signer: any
   static SUPPORTED_NETWORKS
@@ -17,7 +17,7 @@ class ContractSettings {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(provider, signer, networkId) {
     this.networkId = networkId
-    this.network = SUPPORTED_NETWORKS[Number(this.networkId)]
+    this.network = SUPPORTED_ETHEREUM_CHAINS[this.networkId]?.key
     this.provider = provider || getDefaultProvider()
     if (!this.provider && networkId) {
       this.provider = getDefaultProvider(this.network)
@@ -25,7 +25,5 @@ class ContractSettings {
     this.signer = signer
   }
 }
-
-ContractSettings.SUPPORTED_NETWORKS = SUPPORTED_NETWORKS
 
 export default ContractSettings

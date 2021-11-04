@@ -1,7 +1,10 @@
-import React, { useContext } from 'react'
-import { useProviderReady } from '@/hooks/useProviderReady'
-import { useNetworkReady } from '@/hooks/useNetworkReady'
-import useFixupNetwork from '@/hooks/useFixupNetwork'
+import React, { useContext, useMemo } from 'react'
+import { useWeb3React } from '@web3-react/core'
+import useRequiredChain from '@/hooks/useRequiredChain'
+import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
+import ContractSettings from '@/ShadowsJs/ContractSettings'
+import { DEFAULT_PROVIDER } from '@/web3/connectors'
+import { useEagerConnect } from '@/hooks/useEagerConnect'
 
 type Web3EnvContextType = {
   providerReady: boolean,
@@ -16,11 +19,42 @@ const Web3EnvContext = React.createContext<Web3EnvContextType>({
 })
 
 const Web3EnvProvider: React.FC = ({ children }) => {
-  const providerReady = useProviderReady()
+  const requiredChain = useRequiredChain()
 
-  const [networkReady, chainId] = useNetworkReady()
+  const { chainId, account, library } = useWeb3React()
+  useEagerConnect()
 
-  useFixupNetwork(networkReady)
+  const networkReady = useMemo(() => {
+    return requiredChain !== undefined && chainId === parseInt(requiredChain.chainId, 16)
+  }, [chainId, requiredChain])
+
+  const providerReady = useMemo(() => {
+    if (networkReady && library && chainId && account) {
+      dowsJSConnector.setContractSettings(
+        new ContractSettings(
+          library,
+          library.getSigner(account),
+          `0x${chainId.toString(16)}`
+        )
+      )
+
+      return true
+    }
+
+    if (!requiredChain) {
+      return false
+    }
+
+    dowsJSConnector.setContractSettings(
+      new ContractSettings(
+        DEFAULT_PROVIDER,
+        undefined,
+        requiredChain.chainId
+      )
+    )
+
+    return true
+  }, [library, chainId, account, requiredChain, networkReady])
 
   return (
     <Web3EnvContext.Provider value={{ providerReady, networkReady, chainId }}>

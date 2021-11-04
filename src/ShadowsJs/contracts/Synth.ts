@@ -5,7 +5,7 @@ import BN from 'bn.js'
 
 class Synth extends AbstractContractCaller {
 
-  constructor(network: string, signer: any, provider: any) {
+  constructor(network?: string, signer?: any, provider?: any) {
     super()
     this.signer = signer
     this.provider = provider
@@ -13,6 +13,10 @@ class Synth extends AbstractContractCaller {
   }
 
   async balanceOf(currencyKey: string, account: string) {
+    if (!this.network) {
+      return new BN(0)
+    }
+
     const json = getContractConfig(this.network, currencyKey)
 
     if (!json) {

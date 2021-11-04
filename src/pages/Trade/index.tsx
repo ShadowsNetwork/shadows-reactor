@@ -4,7 +4,7 @@ import LimitableNumberInput from '@/components/LimitableNumberInput'
 import {
   createChart, CrosshairMode, IChartApi, ISeriesApi, Time, UTCTimestamp
 } from 'lightweight-charts'
-import { useErrorMessage } from '@/hooks'
+import { useErrorMessage } from '@/hooks/useErrorMessage'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toBigNumber, toByte32, toWei, weiToBigNumber, weiToString } from '@/web3/utils'
 import useTradingDataQuery from '@/queries/useTradingDataQuery'
@@ -257,11 +257,19 @@ const TradingView: React.FC<{ keyPair?: KeyPair, mode: string }> = ({ keyPair, m
     }
 
     if (mode === 'price') {
-      series.setData(data.data.map(item => ({
-        ...item,
-        value: Number.parseFloat(weiToString(item.price)),
-        time: (parseInt(item.time)) / 1000
-      })))
+      const _data: any[] = []
+      const _cahce = {}
+      data.data.forEach(item => {
+        if (!_cahce[item.time]) {
+          _data.push({
+            ...item,
+            value: Number.parseFloat(weiToString(item.price)),
+            time: (parseInt(item.time)) / 1000
+          })
+          _cahce[item.time] = true
+        }
+      })
+      series.setData(_data)
 
       chart!.applyOptions({
         handleScroll: true,
@@ -327,7 +335,6 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   return (
     <CandlestickContainer>
       <div className="title">
-
         {
           keyPair?.symbol[0] && (
             <span>
@@ -351,20 +358,6 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
           {data?.usd_24h_change > 0 ? `+${data.usd_24h_change.toFixed(2)}%` : `${data?.usd_24h_change?.toFixed(2) || 0}%`}
         </div>
       </div>
-      {/* <div className="time-select-btn-group">
-        {
-          availableTimeRange.map(time => (
-            <Button
-              className="btn"
-              key={time.key}
-              onClick={() => setSelectedTimeRange(time.key)}
-              style={{ backgroundColor: time.key === selectedTimeRange ? '#63cca9' : 'transparent' }}
-            >
-              {time.key}
-            </Button>
-          ))
-        }
-      </div> */}
       <div className="trading-view-container">
         <TradingView keyPair={keyPair} mode={selectedMode.value} />
       </div>
@@ -387,11 +380,11 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
 }
 
 const TradePage: React.FC = () => {
-  const { state } = useLocation()
+  const { state } = useLocation<KeyPair | undefined>()
 
   const { data: balanceByCurrency } = useCurrencyBalance()
 
-  const [selectedKeyPair, setSelectedKeyPair] = useState<KeyPair | undefined>((state as any)?.keyPair)
+  const [selectedKeyPair, setSelectedKeyPair] = useState<KeyPair | undefined>(state)
 
   const [tradeActive, setTradeActive] = useState<BuySellPanelProps['type']>('Buy')
 

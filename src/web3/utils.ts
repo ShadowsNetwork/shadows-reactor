@@ -4,7 +4,7 @@ import BN from 'bn.js'
 
 export const web3Utils = new Web3().utils
 
-export function addressAvailable(address?: string): boolean {
+export function addressAvailable(address?: string | null): boolean {
   return !!address && web3Utils.isAddress(address)
 }
 

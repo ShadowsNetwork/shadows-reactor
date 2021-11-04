@@ -1,8 +1,10 @@
 import { ConfigType } from './config'
 
 import bridgeConfig from './config/bridge.config.prod'
+import { SUPPORTED_ETHEREUM_CHAINS } from './src/web3/network'
 
 const config: ConfigType = {
+  ethChain: SUPPORTED_ETHEREUM_CHAINS['0x38'],
   baseUrl : 'https://api.shadows.link',
   bridge: bridgeConfig,
   liquidityProvider: {
