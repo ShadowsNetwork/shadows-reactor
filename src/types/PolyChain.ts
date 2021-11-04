@@ -1,4 +1,4 @@
-import { EthereumChain } from '@/ShadowsJs/networkHelper'
+import { EthereumChain } from '@/web3/network'
 
 export type PolyChain = {
   polyChainId: number

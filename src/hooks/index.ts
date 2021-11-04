@@ -8,11 +8,11 @@ import {
 import axios from 'axios'
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
-import { ConfigType } from '../../config'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { TransactionResponse } from '@ethersproject/providers'
 
-const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
+import config from '@/config'
+
 export function useLocation(): Location {
   const [location, setLocation] = useState(window.location)
 

@@ -24,40 +24,37 @@ const Web3EnvProvider: React.FC = ({ children }) => {
   const { chainId, account, library } = useWeb3React()
   useEagerConnect()
 
+  const networkReady = useMemo(() => {
+    return requiredChain !== undefined && chainId === parseInt(requiredChain.chainId, 16)
+  }, [chainId, requiredChain])
+
   const providerReady = useMemo(() => {
-    if (!(library && account) && requiredChain) {
+    if (networkReady && library && chainId && account) {
       dowsJSConnector.setContractSettings(
         new ContractSettings(
-          DEFAULT_PROVIDER,
-          undefined,
-          parseInt(requiredChain.chainId, 16)
+          library,
+          library.getSigner(account),
+          `0x${chainId.toString(16)}`
         )
       )
 
       return true
     }
 
-
-    const provider = library
-    const signer = library.getSigner(account)
-
-    console.log(provider, signer)
+    if (!requiredChain) {
+      return false
+    }
 
     dowsJSConnector.setContractSettings(
       new ContractSettings(
-        provider,
-        signer,
-        chainId
+        DEFAULT_PROVIDER,
+        undefined,
+        requiredChain.chainId
       )
     )
 
     return true
-  }, [library, chainId, account, requiredChain])
-
-  const networkReady = useMemo(() => {
-    return requiredChain && chainId === parseInt(requiredChain.chainId, 16)
-  }, [chainId, requiredChain])
-
+  }, [library, chainId, account, requiredChain, networkReady])
 
   return (
     <Web3EnvContext.Provider value={{ providerReady, networkReady, chainId }}>

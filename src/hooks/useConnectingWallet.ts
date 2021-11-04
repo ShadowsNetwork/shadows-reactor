@@ -1,12 +1,12 @@
 import { useWeb3React } from '@web3-react/core'
 import { useMemo } from 'react'
-import { supportWallets } from '@/web3/connectors'
+import { supportWallets, Wallet } from '@/web3/connectors'
 
-const useConnectingWallet = () => {
+const useConnectingWallet = (): Wallet | undefined => {
   const { connector } = useWeb3React()
 
   return useMemo(() => {
-    return supportWallets.find(o => typeof o.connector === typeof o.connector)
+    return supportWallets.find(o => o.connector === connector)
   }, [connector])
 }
 

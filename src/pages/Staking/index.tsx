@@ -17,16 +17,17 @@ import { useErrorMessage } from '@/hooks/useErrorMessage'
 import RedeemModal, { RedeemModalStatus } from '@/pages/Staking/RedeemModal'
 import { useStakingData } from '@/hooks/data/useStakingData'
 import { PoolConfig } from '@/types/LiquidityProvider'
-import { ConfigType } from '../../../config'
 import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useDowsSynthesizerData } from '@/hooks/data/useDowsSynthesizerData'
 import { useWeb3React } from '@web3-react/core'
 
-const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
+import config from '@/config'
 
-const EmptyStakingPool: React.FC<PoolConfig> = ({ poolName, leftCurrency, rightCurrency, poolType }) => {
+const EmptyStakingPool: React.FC<PoolConfig> = ({
+  poolName, leftCurrency, rightCurrency, poolType
+}) => {
   return (
     <div className="pool">
       <div className="pool-name">
@@ -109,6 +110,7 @@ const StakingPool: React.FC<PoolConfig> = ({
   const { beginTransaction, submitTransaction, rejectTransaction } = useTransactionStatusModal()
   const { forceRefresh } = useRefreshController()
   const { availableDows } = useDowsSynthesizerData()
+  const { networkReady } = useWeb3EnvContext()
 
   const {
     totalLockedLP,
@@ -146,7 +148,8 @@ const StakingPool: React.FC<PoolConfig> = ({
       const transactionHistory = new ApproveToken(approveResult.hash, tokenName, process.env.BLOCK_EXPLORER_URL, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
 
-      approveResult.wait().then(forceRefresh)
+      approveResult.wait()
+        .then(forceRefresh)
     } catch (e) {
       rejectTransaction(getErrorMessage(e))
     }
@@ -171,10 +174,22 @@ const StakingPool: React.FC<PoolConfig> = ({
       const transactionHistory: TransactionHistory = new LockLPToken(depositResult.hash, amount, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
 
-      depositResult.wait().then(forceRefresh)
+      depositResult.wait()
+        .then(forceRefresh)
     } catch (e) {
       rejectTransaction(getErrorMessage(e))
     }
+  }
+
+  const prepareToLock = () => {
+    setAmountInputModalStatus({
+      ...amountInputModalStatus,
+      maxAvailable: tokenName === 'DOWS' ? availableDows! : userLpBalance!,
+      visible: true,
+      title: 'Stake Liquidity',
+      cancelCallback: closeAmountInputModal,
+      confirmCallback: lock
+    })
   }
 
   const unlock = async (amount: string) => {
@@ -189,10 +204,22 @@ const StakingPool: React.FC<PoolConfig> = ({
       const transactionHistory: TransactionHistory = new UnlockLPToken(withdrawResult.hash, amount, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
 
-      withdrawResult.wait().then(forceRefresh)
+      withdrawResult.wait()
+        .then(forceRefresh)
     } catch (e) {
       rejectTransaction(getErrorMessage(e))
     }
+  }
+
+  const prepareToUnlock = () => {
+    setAmountInputModalStatus({
+      ...amountInputModalStatus,
+      maxAvailable: userLockedLp!,
+      visible: true,
+      title: 'Unstake Liquidity',
+      cancelCallback: closeAmountInputModal,
+      confirmCallback: unlock
+    })
   }
 
   const redeem = async () => {
@@ -218,6 +245,16 @@ const StakingPool: React.FC<PoolConfig> = ({
     } catch (e) {
       rejectTransaction(getErrorMessage(e))
     }
+  }
+
+  const prepareToRedeem = () => {
+    setRedeemModalStatus({
+      ...redeemModalStatus,
+      amount: dowsEarned!,
+      visible: true,
+      onConfirm: redeem,
+      onClose: closeRedeemModal
+    })
   }
 
   return (
@@ -253,55 +290,22 @@ const StakingPool: React.FC<PoolConfig> = ({
         </div>
         <div className="button-container">
           {
-            allowanceEnough ?
+            allowanceEnough ? (
               <>
-                <Button
-                  className="lock"
-                  onClick={() => {
-                    setAmountInputModalStatus({
-                      ...amountInputModalStatus,
-                      maxAvailable: tokenName === 'DOWS' ? availableDows! : userLpBalance!,
-                      visible: true,
-                      title: 'Stake Liquidity',
-                      cancelCallback: closeAmountInputModal,
-                      confirmCallback: lock
-                    })
-                  }}
-                >
+                <Button className="lock" onClick={prepareToLock} disabled={!networkReady}>
                   <PlusOutlined style={{ fontSize: '1.1rem', color: '#FFFEFE' }} />
                 </Button>
-                <Button
-                  className="unlock"
-                  onClick={() => {
-                    setAmountInputModalStatus({
-                      ...amountInputModalStatus,
-                      maxAvailable: userLockedLp!,
-                      visible: true,
-                      title: 'Unstake Liquidity',
-                      cancelCallback: closeAmountInputModal,
-                      confirmCallback: unlock
-                    })
-                  }}
-                >
+                <Button className="unlock" onClick={prepareToUnlock} disabled={!networkReady}>
                   Unlock
                 </Button>
-              </> :
-              <Button onClick={approve} className="approve">
+              </>
+            ) : (
+              <Button onClick={approve} className="approve" disabled={!networkReady}>
                 Approve
               </Button>
+            )
           }
-          <Button
-            className="redeem"
-            onClick={() => {
-              setRedeemModalStatus({
-                ...redeemModalStatus,
-                amount: dowsEarned!,
-                visible: true,
-                onConfirm: redeem,
-                onClose: closeRedeemModal
-              })
-            }}
-          >
+          <Button className="redeem" onClick={prepareToRedeem} disabled={!networkReady}>
             Redeem
           </Button>
         </div>

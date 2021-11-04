@@ -13,7 +13,7 @@ import Jazzicon from 'jazzicon'
 import { CheckOutlined, CloseOutlined, LoadingOutlined } from '@ant-design/icons'
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
 import { useWeb3React } from '@web3-react/core'
-import { connectorsByName } from '@/web3/connectors'
+import { connectorsByWallet } from '@/web3/connectors'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 
 type CurrentAccountProps = {
@@ -49,10 +49,11 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
 
   const disconnect = () => {
     deactivate()
+    // TODO: handle disconnect logic for MetaMask
 
     // This localStorage key is set by @web3-react/walletconnect-connector
     if (window.localStorage.getItem('walletconnect')) {
-      const connector = connectorsByName.walletconnect as WalletConnectConnector
+      const connector = connectorsByWallet.WalletConnect as WalletConnectConnector
       connector.close()
       connector.walletConnectProvider = null
     }

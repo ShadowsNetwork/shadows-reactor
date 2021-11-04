@@ -111,14 +111,14 @@ export const useHomeData = () => {
   const { assetsBalanceList } = useAssetsBalance()
   const { yourBalance, assetsBalance, debtPool } = useBalance()
 
-  const totalCurrentKeysBalance = assetsBalanceList.reduce((sum: BigNumber, item: any) => sum.plus(item.value), toBigNumber(0))
+  const totalCurrentBalance = assetsBalanceList.reduce((sum: BigNumber, item: any) => sum.plus(item.value), toBigNumber(0))
 
   return {
-    yourBalance: toBigNumber(yourBalance || 0).plus(totalCurrentKeysBalance.minus(toBigNumber(debtPool || 0))),
+    yourBalance: toBigNumber(yourBalance || 0).plus(totalCurrentBalance.minus(toBigNumber(debtPool || 0))),
     dowsBalance: yourBalance,
     assetsBalance,
     debtPool,
     assetsBalanceList,
-    netTradingBalance: totalCurrentKeysBalance.minus(toBigNumber(debtPool || 0))
+    netTradingBalance: totalCurrentBalance.minus(toBigNumber(debtPool || 0))
   }
 }

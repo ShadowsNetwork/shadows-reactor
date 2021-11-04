@@ -1,6 +1,6 @@
 import { PoolConfig } from '@/types/LiquidityProvider'
 import { PolyChain } from '@/types/PolyChain'
-import { EthereumChain } from '@/ShadowsJs/networkHelper'
+import { EthereumChain } from '@/web3/network'
 
 export type ConfigType = {
   liquidityProvider: {

@@ -5,13 +5,13 @@ import BN from 'bn.js'
 
 class FeePool extends AbstractContractCaller {
 
-  constructor(network: string, signer: any, provider: any) {
+  constructor(network?: string, signer?: any, provider?: any) {
     super()
     this.signer = signer
     this.provider = provider
     this.network = network
 
-    if (!network) {
+    if (!this.network) {
       return
     }
 

@@ -327,7 +327,6 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
   return (
     <CandlestickContainer>
       <div className="title">
-
         {
           keyPair?.symbol[0] && (
             <span>
@@ -351,20 +350,6 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
           {data?.usd_24h_change > 0 ? `+${data.usd_24h_change.toFixed(2)}%` : `${data?.usd_24h_change?.toFixed(2) || 0}%`}
         </div>
       </div>
-      {/* <div className="time-select-btn-group">
-        {
-          availableTimeRange.map(time => (
-            <Button
-              className="btn"
-              key={time.key}
-              onClick={() => setSelectedTimeRange(time.key)}
-              style={{ backgroundColor: time.key === selectedTimeRange ? '#63cca9' : 'transparent' }}
-            >
-              {time.key}
-            </Button>
-          ))
-        }
-      </div> */}
       <div className="trading-view-container">
         <TradingView keyPair={keyPair} mode={selectedMode.value} />
       </div>
@@ -387,11 +372,11 @@ const CurrencyInfo: React.FC<{ keyPair?: KeyPair }> = ({ keyPair }) => {
 }
 
 const TradePage: React.FC = () => {
-  const { state } = useLocation()
+  const { state } = useLocation<KeyPair | undefined>()
 
   const { data: balanceByCurrency } = useCurrencyBalance()
 
-  const [selectedKeyPair, setSelectedKeyPair] = useState<KeyPair | undefined>((state as any)?.keyPair)
+  const [selectedKeyPair, setSelectedKeyPair] = useState<KeyPair | undefined>(state)
 
   const [tradeActive, setTradeActive] = useState<BuySellPanelProps['type']>('Buy')
 

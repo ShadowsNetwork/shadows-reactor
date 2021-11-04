@@ -5,39 +5,33 @@ import { Web3Provider } from '@ethersproject/providers'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import MetamaskIcon from '@/img/wallet/metamask.svg'
 import WalletConnectIcon from '@/img/wallet/walletconnect.svg'
+import BscWalletIcon from '@/img/wallet/bsc.png'
 import { providers } from 'ethers'
 import web3 from 'web3'
-import { ConfigType } from '../../config'
+import { BscConnector } from '@binance-chain/bsc-connector'
 
-const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
+import config from '@/config'
 
-const POLLING_INTERVAL = 12000
+// const POLLING_INTERVAL = 12000
 
-export type Wallet = {
-  name: string
-  connectorName: ConnectorNames,
-  icon: string,
-  connector: AbstractConnector
+export enum WalletKeys {
+  MetaMask = 'MetaMask',
+  BSC = 'BSC',
+  WalletConnect = 'WalletConnect',
 }
 
-export enum ConnectorNames {
-  Injected = 'injected',
-  WalletConnect = 'walletconnect',
+export type Wallet = {
+  key: WalletKeys,
+  name: string
+  icon: string,
+  connector: AbstractConnector
 }
 
 export const DEFAULT_PROVIDER = new providers.Web3Provider(new web3.providers.HttpProvider(config.ethChain.rpcUrls[0]) as any)
 
 export const injected = new InjectedConnector({})
 
-console.log({
-  [parseInt(config.ethChain.chainId, 16)]: config.ethChain.rpcUrls[0],
-  [parseInt(config.bridge.ethChain.chainId, 16)]: config.bridge.ethChain.rpcUrls[0],
-})
-
-console.log({
-  [parseInt(config.ethChain.chainId, 16)]: config.ethChain.rpcUrls[0],
-  [parseInt(config.bridge.ethChain.chainId, 16)]: config.bridge.ethChain.rpcUrls[0],
-})
+const bscConnector = new BscConnector({})
 
 const walletconnect = new WalletConnectConnector({
   rpc: {
@@ -45,26 +39,32 @@ const walletconnect = new WalletConnectConnector({
     [parseInt(config.bridge.ethChain.chainId, 16)]: config.bridge.ethChain.rpcUrls[0],
   },
   qrcode: true,
-  // pollingInterval: POLLING_INTERVAL,
 })
 
-export const connectorsByName: { [connectorName in ConnectorNames]: AbstractConnector } = {
-  [ConnectorNames.Injected]: injected,
-  [ConnectorNames.WalletConnect]: walletconnect,
+export const connectorsByWallet: { [connectorName in WalletKeys]: AbstractConnector } = {
+  [WalletKeys.MetaMask]: injected,
+  [WalletKeys.BSC]: bscConnector,
+  [WalletKeys.WalletConnect]: walletconnect,
 }
 
 export const supportWallets: Wallet[] = [
   {
     name: 'MetaMask',
-    connectorName: ConnectorNames.Injected,
+    key: WalletKeys.MetaMask,
     icon: MetamaskIcon,
     connector: injected
   },
   {
     name: 'WalletConnect',
-    connectorName: ConnectorNames.WalletConnect,
+    key: WalletKeys.WalletConnect,
     icon: WalletConnectIcon,
     connector: walletconnect
+  },
+  {
+    name: 'Binance Chain Wallet',
+    key: WalletKeys.BSC,
+    icon: BscWalletIcon,
+    connector: bscConnector
   }
 ]
 

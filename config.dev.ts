@@ -1,10 +1,10 @@
 import { ConfigType } from './config'
 
 import bridgeConfig from './config/bridge.config.dev'
-import { EthereumChain, getEthereumChainById } from './src/ShadowsJs/networkHelper'
+import { SUPPORTED_ETHEREUM_CHAINS } from './src/web3/network'
 
 const config: ConfigType = {
-  ethChain: getEthereumChainById('0x61') as EthereumChain,
+  ethChain: SUPPORTED_ETHEREUM_CHAINS['0x61'],
   baseUrl : 'http://43.132.155.78:8020',
   bridge: bridgeConfig,
   liquidityProvider: {

@@ -1,25 +1,11 @@
-// import { NETWORK_SPEEDS_TO_KEY, GWEI_UNIT, GAS_LIMIT_BUFFER_PERCENTAGE } from '../constants/network'
-
-import { Web3Provider } from '@ethersproject/providers'
 import { message } from 'antd'
-import WalletConnectProvider from '@walletconnect/web3-provider'
-import { providers } from 'ethers'
-
-export const SUPPORTED_NETWORKS = {
-  1: 'mainnet',
-  3: 'ropsten',
-  4: 'rinkeby',
-  5: 'goerli',
-  42: 'kovan',
-  97: 'bsctestnet',
-  56: 'bsc'
-}
 
 export type SupportedEthereumChainId = '0x1' | '0x38' | '0x3' | '0x61'
 
 export type EthereumChain = {
   chainId: SupportedEthereumChainId,  // hex string
   chainName: string,
+  key: string,
   nativeCurrency?: {
     name: string,
     symbol: string,
@@ -29,10 +15,12 @@ export type EthereumChain = {
   blockExplorerUrls: string[]
 }
 
-export const SUPPORTED_ETHEREUM_CHAINS: EthereumChain[] = [
-  {
+// eslint-disable-next-line no-unused-vars
+export const SUPPORTED_ETHEREUM_CHAINS: { [key in SupportedEthereumChainId]: EthereumChain } = {
+  '0x1': {
     chainId: '0x1',
     chainName: 'Ethereum Mainnet',
+    key: 'mainnet',
     nativeCurrency: {
       name: 'ETH',
       symbol: 'eth',
@@ -41,9 +29,10 @@ export const SUPPORTED_ETHEREUM_CHAINS: EthereumChain[] = [
     rpcUrls: ['https://mainnet.infura.io/v3/undefined'],
     blockExplorerUrls: ['https://etherscan.io']
   },
-  {
+  '0x38': {
     chainId: '0x38',
     chainName: 'BSC Mainnet',
+    key: 'bsc',
     nativeCurrency: {
       name: 'BNB',
       symbol: 'bnb',
@@ -52,9 +41,10 @@ export const SUPPORTED_ETHEREUM_CHAINS: EthereumChain[] = [
     rpcUrls: ['https://bsc-dataseed1.ninicoin.io'],
     blockExplorerUrls: ['https://bscscan.com']
   },
-  {
+  '0x3': {
     chainId: '0x3',
     chainName: 'Ethereum Ropsten',
+    key: 'ropsten',
     nativeCurrency: {
       name: 'ETH',
       symbol: 'eth',
@@ -63,9 +53,10 @@ export const SUPPORTED_ETHEREUM_CHAINS: EthereumChain[] = [
     rpcUrls: ['https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
     blockExplorerUrls: ['https://ropsten.etherscan.io']
   },
-  {
+  '0x61': {
     chainId: '0x61',
     chainName: 'BSC Testnet',
+    key: 'bsctestnet',
     nativeCurrency: {
       name: 'BNB',
       symbol: 'bnb',
@@ -74,29 +65,25 @@ export const SUPPORTED_ETHEREUM_CHAINS: EthereumChain[] = [
     rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
     blockExplorerUrls: ['https://testnet.bscscan.com']
   }
-]
-
-export function getEthereumChainById(id?: SupportedEthereumChainId): EthereumChain | undefined {
-  return SUPPORTED_ETHEREUM_CHAINS.find(o => o.chainId === id)
 }
 
-export async function setupMetamaskNetwork(chain: EthereumChain): Promise<boolean> {
+export async function setupMetamaskNetwork(props: { chain: EthereumChain }): Promise<void> {
+  const { chain } = props
+
   const provider = (window as WindowChain).ethereum
 
   if (!provider) {
     message.error('Can\'t setup network on MetaMask because window.ethereum is undefined. Maybe you can install MetaMask first.')
-    return false
+    return
   }
+
+  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
+  const { key, ...params } = chain
 
   return await provider.request({
     method: 'wallet_addEthereumChain',
-    params: [chain]
+    params: [params]
   })
-    .then(async () => {
-      const { chainId } = await new providers.Web3Provider(provider).ready
-
-      return chainId === parseInt(chain.chainId, 16)
-    })
     .catch(error => {
       // message: May not specify default MetaMask chain.
       if (error.code === -32602) {
@@ -117,36 +104,37 @@ export async function setupMetamaskNetwork(chain: EthereumChain): Promise<boolea
       }
 
       console.log(error)
-      return false
+      return
     })
 }
 
-export async function setupWalletConnectNetwork(params: EthereumChain, web3Provider: Web3Provider) {
-  const provider = web3Provider.provider as WalletConnectProvider
-  if (provider.wc.chainId !== parseInt(params.chainId, 16)) {
-    message.warn(`Please manually switch to the ${params.chainName} in your WalletConnect App, and then try to re-connect.`, 3)
-    provider.wc.killSession()
-    provider.close()
+export async function setupWalletConnectNetwork(props: { chain: EthereumChain }) {
+  const { chain } = props
 
-    setTimeout(() => {
-      window.location.reload()
-    }, 3000)
-
-    return false
-  } else {
-    await provider.enable()
-    return true
-  }
+  message.warn(`Please manually switch to the ${chain.chainName} in your WalletConnect App, and then try to re-connect.`, 5)
 }
 
-export async function setupBinanceWalletNetwork(params: EthereumChain) {
-  const supportChainIdList = [parseInt(process.env.CHAIN_ID!, 16)]
+export async function setupBSCWalletNetwork(props: { chain: EthereumChain }) {
+  const { chain } = props
 
-  if (!supportChainIdList.includes(parseInt(params.chainId, 16))) {
-    message.warn(`Binance Chain Wallet does NOT support for ${params.chainName}`)
+  const supportChainIdList: string[] = ['0x38', '0x61', '0x1']
+
+  if (!supportChainIdList.includes(chain.chainId)) {
+    message.warn(`Binance Chain Wallet does NOT support for ${chain.chainName}`)
     return false
   }
 
-  message.warn(`Please manually switch to the ${params.chainName} in Binance Chain Wallet`, 5)
+  message.warn(`Please manually switch to the ${chain.chainName} in Binance Chain Wallet`, 5)
   return false
 }
+
+// type NetworkFixupMethodProps = {
+//   chain: EthereumChain
+//   connector: AbstractConnector
+// }
+//
+// export const networkFixupMethodByWallet: { [key in WalletKeys]?: (args: NetworkFixupMethodProps) => void} = {
+//   // WalletConnect: setupWalletConnectNetwork,
+//   MetaMask: setupMetamaskNetwork,
+//   BSC: setupBSCWalletNetwork
+// }

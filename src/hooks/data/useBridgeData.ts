@@ -2,14 +2,13 @@ import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { addressAvailable, weiToBigNumber, weiToString } from '@/web3/utils'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
-import { ConfigType } from '../../../config'
 import { PolyChain } from '@/types/PolyChain'
 import { useQuery } from 'react-query'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { useWeb3React } from '@web3-react/core'
 
-const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
+import config from '@/config'
 
 type BridgeDataProps = {
   fromPolyChain: PolyChain
