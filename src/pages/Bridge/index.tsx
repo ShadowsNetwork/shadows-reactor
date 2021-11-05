@@ -20,6 +20,7 @@ import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalCont
 import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3React } from '@web3-react/core'
+import { numberWithCommas } from '@/utils'
 
 type BridgeProps = {
   fromPolyChain: PolyChain
@@ -74,22 +75,22 @@ const BridgeMain: React.FC<BridgeProps> = ({
   const [amount, setAmount] = useState<string>('')
 
   const { data } = useBridgeData({ fromPolyChain, toPolyChain })
-  const { allowance, balance, fee, availableDows, isBsc } = data ?? {}
+  const { allowance, balance, fee } = data ?? {}
 
   const { forceRefresh } = useRefreshController()
 
   const { beginTransaction, rejectTransaction, submitTransaction } = useTransactionStatusModal()
 
-  const allowanceEnough = () => {
-    return allowance && new BigNumber(amount).lt(new BigNumber(allowance))
-  }
+  const allowanceEnough = useMemo<boolean>(() => {
+    return !!allowance && new BigNumber(amount).lt(new BigNumber(allowance))
+  }, [allowance, amount])
 
-  const isAmountLegal = () => {
-    return !amount || (fee && new BigNumber(amount).gt(new BigNumber(fee)))
-  }
+  const isAmountLegal = useMemo<boolean>(() => {
+    return !amount || (!!fee && new BigNumber(amount).gt(new BigNumber(fee)))
+  }, [amount, fee])
 
   const setAmountToMax = () => {
-    setAmount(balance!)
+    balance && setAmount(balance.toString())
   }
 
   const approve = async () => {
@@ -142,7 +143,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
     <div className="bridge-main">
       <div className="balance-row">
         <div className="available">
-          {isBsc ? availableDows?.toString() ?? '-' : balance ?? '-'} DOWS Available
+          {balance ? numberWithCommas(balance) : '-'} DOWS Available
         </div>
       </div>
       <div className="input-row">
@@ -150,7 +151,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
           decimalPlaces={18}
           inputValue={amount}
           setInputValue={setAmount}
-          maximum={isBsc ? availableDows?.toString() : balance}
+          maximum={balance}
         />
         <div className="DOWS">DOWS</div>
         <Button onClick={setAmountToMax}>MAX</Button>
@@ -161,8 +162,8 @@ const BridgeMain: React.FC<BridgeProps> = ({
       <div className="convert-button">
         {
           amount && (
-            allowanceEnough() ?
-              <Button onClick={convert} disabled={!isAmountLegal()}>
+            allowanceEnough ?
+              <Button onClick={convert} disabled={!isAmountLegal}>
                 Convert
               </Button> :
               <Button onClick={approve}>
@@ -178,7 +179,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
           )
         }
         {
-          !isAmountLegal() &&
+          !isAmountLegal &&
           <div className="error-hint">
             The input amount must be greater than the fee.
           </div>

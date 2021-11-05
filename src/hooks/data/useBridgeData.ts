@@ -33,20 +33,19 @@ const useQueryBridgeFee = (SrcChainId, Hash, DstChainId) => {
 
 export type BridgeData = {
   allowance?: string
-  balance?: string
-  isBsc?: boolean
+  balance?: BigNumber
   fee?: string
-  availableDows?: BigNumber
 }
 
 const useBridgeData = ({ fromPolyChain, toPolyChain }: BridgeDataProps) => {
   const { account } = useWeb3React()
   const { slowRefreshFlag } = useRefreshController()
-  const { providerReady, networkReady, chainId } = useWeb3EnvContext()
+  const { providerReady, networkReady } = useWeb3EnvContext()
+  const { chainId } = useWeb3React()
   const { data: fee } = useQueryBridgeFee(fromPolyChain.polyChainId, fromPolyChain.dowsTokenAddress, toPolyChain.polyChainId)
 
   return useQuery<BridgeData>(
-    ['BRIDGE_DATA', account, slowRefreshFlag, fromPolyChain, toPolyChain, providerReady, networkReady, fee],
+    ['BRIDGE_DATA', account, slowRefreshFlag, fromPolyChain, toPolyChain, providerReady, networkReady, fee, chainId],
     async () => {
       if (!addressAvailable(account) || !providerReady || !networkReady) {
         return {
@@ -54,22 +53,16 @@ const useBridgeData = ({ fromPolyChain, toPolyChain }: BridgeDataProps) => {
         }
       }
 
-      const [_allowance, _balance] = await Promise.all([
-        dowsJSConnector.dowsJs.Bridge.allowance(fromPolyChain.dowsTokenAddress, account, fromPolyChain.lockContractAddress),
-        dowsJSConnector.dowsJs.Bridge.balanceOf(fromPolyChain.dowsTokenAddress, account),
-      ])
-
-      let availableDows: BigNumber = new BigNumber(0)
-      if (chainId === 97 || chainId === 56) {
-        const _transferableDows = await dowsJSConnector.dowsJs.Synthesizer.transferableShadows(account)
-        availableDows = weiToBigNumber(_transferableDows)
-      }
+      const balance = weiToBigNumber(
+        chainId === parseInt(config.ethChain.chainId, 16)
+          ? await dowsJSConnector.dowsJs.Synthesizer.transferableShadows(account)
+          : await dowsJSConnector.dowsJs.Bridge.balanceOf(fromPolyChain.dowsTokenAddress, account)
+      )
 
       return {
-        allowance: weiToString(_allowance),
-        balance: weiToString(_balance),
+        allowance: weiToString(await dowsJSConnector.dowsJs.Bridge.allowance(fromPolyChain.dowsTokenAddress, account, fromPolyChain.lockContractAddress)),
+        balance,
         isBsc: chainId === 97 || chainId === 56,
-        availableDows,
         fee
       }
     }
