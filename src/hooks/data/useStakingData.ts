@@ -25,8 +25,10 @@ async function getAPY(
   lpTokenAddress: string,
   farmAddress: string,
   poolNumber: number,
-  lpMultiplier: number
+  lpMultiplier: number,
+  dowsPrice: number
 ): Promise<string> {
+
   const [_rewardPerBlock, _BONUS_MULTIPLIER, _staked, _poolInfo, _totalAllocPoint] = await Promise.all([
     dowsJSConnector.dowsJs.Farm.rewardPerBlock(farmAddress),
     dowsJSConnector.dowsJs.Farm.multiplier(farmAddress),
@@ -53,6 +55,12 @@ async function getAPY(
     .multipliedBy(allocPoint)
     .dividedBy(totalAllocPoint)
     .multipliedBy('10368000')
+
+  if (poolNumber === 2 && dowsPrice) {
+    return rewardPerYear.multipliedBy(dowsPrice.toString()).dividedBy(staked)
+      .multipliedBy(100)
+      .toString(10)
+  }
 
   return rewardPerYear.dividedBy(staked)
     .multipliedBy(100)
@@ -95,13 +103,13 @@ const useStakingPoolPublicData = (props: PoolDataProps): UseQueryResult<StakingP
       }
 
       let priceBase = dowsPrice
-      if (poolNumber===2) {
+      if (poolNumber === 2) {
         priceBase = new BigNumber(1)
       }
 
       const [_totalLockedLP, _apy] = await Promise.all([
         dowsJSConnector.dowsJs.LpERC20Token.balanceOf(lpTokenContractAddress, farmContractAddress),
-        getAPY(lpTokenContractAddress, farmContractAddress, poolNumber, lpMultiplier)
+        getAPY(lpTokenContractAddress, farmContractAddress, poolNumber, lpMultiplier, dowsPrice)
       ])
 
       return {
@@ -142,9 +150,9 @@ const useStakingPoolPrivateData = (props: PoolDataProps): UseQueryResult<Staking
         dowsJSConnector.dowsJs.Farm.pending(farmContractAddress, poolNumber, account),
         dowsJSConnector.dowsJs.LpERC20Token.allowance(lpTokenContractAddress, account!, farmContractAddress)
       ])
-      
+
       let priceBase = dowsPrice
-      if (poolNumber===2) {
+      if (poolNumber === 2) {
         priceBase = new BigNumber(1)
       }
 
