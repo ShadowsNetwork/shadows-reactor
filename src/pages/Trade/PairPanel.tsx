@@ -16,6 +16,7 @@ export const PairsInfoContainer = styled.div`
     display: flex;
     justify-content: space-between;
     margin-bottom: 1.2rem;
+    padding: 0 1.2rem;
   }
 
   .list {
@@ -47,7 +48,7 @@ export const PairsInfoContainer = styled.div`
 
     .content {
       padding: 0 1.2rem;
-      height: 23em;
+      height: fit-content;
       overflow: auto;
     }
   }

@@ -24,16 +24,19 @@ import { useDowsSynthesizerData } from '@/hooks/data/useDowsSynthesizerData'
 import { useWeb3React } from '@web3-react/core'
 
 import config from '@/config'
+import {
+  PoolContainer, PoolContentContainer, PoolTitle, StakingPageContainer
+} from '@/pages/Staking/index.style'
 
 const EmptyStakingPool: React.FC<PoolConfig> = ({
   poolName, leftCurrency, rightCurrency, poolType
 }) => {
   return (
-    <div className="pool">
-      <div className="pool-name">
+    <PoolContainer>
+      <PoolTitle>
         <span>{poolName}</span>
-      </div>
-      <div className="pool-main">
+      </PoolTitle>
+      <PoolContentContainer>
         <div className="info-container-title">
           {leftCurrency && `${leftCurrency.name}/`}{rightCurrency.name}
         </div>
@@ -60,7 +63,6 @@ const EmptyStakingPool: React.FC<PoolConfig> = ({
           </div>
         </div>
         <div className="button-container">
-
           <Button className="lock">
             <PlusOutlined style={{ fontSize: '1.1rem', color: '#FFFEFE' }} />
           </Button>
@@ -71,8 +73,8 @@ const EmptyStakingPool: React.FC<PoolConfig> = ({
             Redeem
           </Button>
         </div>
-      </div>
-    </div>
+      </PoolContentContainer>
+    </PoolContainer>
   )
 }
 
@@ -258,11 +260,11 @@ const StakingPool: React.FC<PoolConfig> = ({
   }
 
   return (
-    <div className="pool">
-      <div className="pool-name">
+    <PoolContainer>
+      <PoolTitle>
         <span>{poolName}</span>
-      </div>
-      <div className="pool-main">
+      </PoolTitle>
+      <PoolContentContainer>
         <div className="info-container-title">
           {unit}
         </div>
@@ -309,10 +311,10 @@ const StakingPool: React.FC<PoolConfig> = ({
             Redeem
           </Button>
         </div>
-      </div>
+      </PoolContentContainer>
       <AmountInputModal {...amountInputModalStatus} />
       <RedeemModal {...redeemModalStatus} />
-    </div>
+    </PoolContainer>
   )
 }
 
@@ -320,7 +322,7 @@ const Staking: React.FC = () => {
   const { providerReady } = useWeb3EnvContext()
 
   return (
-    <div className="liquidity-provider">
+    <StakingPageContainer>
       {
         config.liquidityProvider.supportedPools.map((pool, index) =>
           providerReady
@@ -328,7 +330,7 @@ const Staking: React.FC = () => {
             : <EmptyStakingPool {...pool} key={index} />
         )
       }
-    </div>
+    </StakingPageContainer>
   )
 }
 

@@ -61,7 +61,9 @@ const WalletModalContent: React.FC<WalletModalContentProps> = ({
 
   return (
     <div className="wallet-modal-content">
-      <div className="walletModal-Title">{account}</div>
+      <div className="walletModal-Title">
+        You have been connected to: {`${account.substr(0, 6)}...${account.substr(-6, 6)}`}
+      </div>
       <div className="bscScan">
         <div>
           <span className="text-label">View on BscScan</span>
@@ -172,7 +174,7 @@ const CurrentAccount: React.FC<CurrentAccountProps> = ({ account }) => {
       }
       <Modal
         style={{ top: 20 }}
-        wrapClassName="wallet-modal-wrapper"
+        wrapClassName="your-wallet-modal"
         closable={false}
         maskClosable={false}
         title="Your Wallet"

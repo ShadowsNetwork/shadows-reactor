@@ -5,7 +5,7 @@ import { SUPPORTED_ETHEREUM_CHAINS } from './src/web3/network'
 
 const config: ConfigType = {
   ethChain: SUPPORTED_ETHEREUM_CHAINS['0x61'],
-  baseUrl : 'http://43.132.155.78:8020',
+  baseUrl : 'https://api.shadows.link',
   bridge: bridgeConfig,
   liquidityProvider: {
     supportedPools: [

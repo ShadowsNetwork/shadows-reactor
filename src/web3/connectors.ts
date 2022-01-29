@@ -12,8 +12,6 @@ import { BscConnector } from '@binance-chain/bsc-connector'
 
 import config from '@/config'
 
-// const POLLING_INTERVAL = 12000
-
 export enum WalletKeys {
   MetaMask = 'MetaMask',
   BSC = 'BSC',

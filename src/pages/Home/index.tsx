@@ -1,6 +1,6 @@
 import React from 'react'
 import DowsSynthesizer from '@/components/DowsSynthesizer'
-import { ContentContainer, DivContainer, DowsSynthesizerContainer } from './index.css'
+import { DowsSynthesizerContainer, HomePageContainer } from './index.css'
 import PairPanel from './PairPanel'
 import StatPanel from './StatPanel'
 import { KeyPair } from '@/hooks/data/useTradeData'
@@ -17,21 +17,13 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <div>
-      <ContentContainer>
-        <DivContainer>
-          <StatPanel />
-        </DivContainer>
-        <DivContainer>
-          <DowsSynthesizerContainer>
-            <DowsSynthesizer />
-          </DowsSynthesizerContainer>
-        </DivContainer>
-        <DivContainer>
-          <PairPanel onItemClicked={onKeyPairItemClicked} />
-        </DivContainer>
-      </ContentContainer>
-    </div>
+    <HomePageContainer>
+      <StatPanel />
+      <DowsSynthesizerContainer>
+        <DowsSynthesizer />
+      </DowsSynthesizerContainer>
+      <PairPanel onItemClicked={onKeyPairItemClicked} />
+    </HomePageContainer>
   )
 }
 

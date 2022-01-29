@@ -1,155 +1,3 @@
-.liquidity-provider {
-  display: flex;
-
-  .pool {
-    margin-right: 2.0rem;
-    height: auto;
-
-    &-name {
-      width: 41rem;
-      height: 6.641rem;
-      background: #1B1D21;
-      border-radius: 1rem;
-      display: flex;
-      align-items: center;
-
-      img {
-        width: 2.5rem;
-        margin-left: 3rem;
-      }
-
-      span {
-        font-weight: bold;
-        font-size: 18px;
-        line-height: 23px;
-        letter-spacing: -0.2px;
-        color: #FFFFFF;
-        margin-left: 3rem;
-      }
-    }
-
-    &-main {
-      background: #121725;
-      width: 41rem;
-      margin-top: 1rem;
-      border-radius: 1rem;
-      padding: 2.9rem 0 3.067rem 2.346rem;
-
-      .info-container-title {
-        font-size: 2.8rem;
-        font-weight: bold;
-        color: #fff;
-        letter-spacing: -0.2px;
-      }
-
-      .infoContent-dows {
-        width: 3rem;
-        position: relative;
-        right: 1.5rem;
-        top: 1.5rem;
-      }
-
-      .title {
-        font-weight: bold;
-        letter-spacing: -0.02rem;
-      }
-
-      .value {
-        font-weight: bold;
-        letter-spacing: -0.02rem;
-      }
-
-      .additional {
-        font-size: 1.6rem;
-        letter-spacing: 0.3rem;
-      }
-
-      img {
-        width: 4.4rem;
-        margin-top: 1.4rem;
-      }
-
-      .info-container {
-        display: flex;
-        align-content: flex-start;
-        flex-flow: row wrap;
-
-        .item {
-          color: white;
-          flex: 0 0 50%;
-          margin-bottom: 2.5rem;
-          margin-top: 5.1rem;
-
-          .title {
-            color: #63cca9;
-            font-size: 1.4rem;
-          }
-
-          .value {
-            font-size: 2.8rem;
-          }
-
-          .additional {
-            color: #989898;
-          }
-        }
-      }
-
-      .button-container {
-        display: flex;
-
-        button {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: #63CCA9;
-          border: none;
-        }
-
-        button:active {
-          background: none;
-        }
-
-        .approve {
-          color: #fff;
-          font-weight: bold;
-          width: 9.354rem;
-          height: 3.757rem;
-          border-radius: 3.757rem;
-          margin-left: 0.607rem;
-          margin-right: 3.125rem;
-        }
-
-        .lock {
-          width: 3.492rem;
-          height: 3.757rem;
-          border-radius: 3.492rem;
-          background: #63CCA9;
-          border: none;
-        }
-
-        .unlock {
-          color: #fff;
-          font-weight: bold;
-          width: 10.354rem;
-          height: 3.757rem;
-          border-radius: 3.757rem;
-          margin-left: 0.607rem;
-        }
-
-        .redeem {
-          width: 9.187rem;
-          height: 3.757rem;
-          border-radius: 3.757rem;;
-          color: #fff;
-          font-weight: bold;
-          margin-left: 5.438rem;
-        }
-      }
-    }
-  }
-}
-
 .amount-input-modal, .redeem-modal {
 
   .ant-modal-header {
@@ -187,6 +35,13 @@
 
   .ant-modal-close-x {
     color: #63CCA9;
+  }
+
+  @media screen and (max-width: 1080px) {
+    .ant-modal-content {
+      width: 92.5vw !important;
+      margin: 10rem auto 0 auto !important;
+    }
   }
 }
 

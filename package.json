@@ -39,7 +39,7 @@
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.1.0",
     "jazzicon": "^1.5.0",
-    "lightweight-charts": "^3.3.0",
+    "lightweight-charts": "^3.7.0",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "react": "17.x",

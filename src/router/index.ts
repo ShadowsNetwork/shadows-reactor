@@ -1,6 +1,6 @@
 import Pool from '@/pages/Staking'
 import Bridge from '@/pages/Bridge'
-import TradePage from '@/pages/Trade'
+import TradePageDesktopLayout from '@/pages/Trade'
 import HomePage from '@/pages/Home'
 
 import StakingIcon from '@/img/menu-icons/staking.png'
@@ -30,7 +30,7 @@ const routers: Router[] = [
     path: '/trade',
     key: 'trade',
     title: 'Trade',
-    component: TradePage,
+    component: TradePageDesktopLayout,
     icon: TradeIcon
   },
 

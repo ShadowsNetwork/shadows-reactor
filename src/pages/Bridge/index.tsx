@@ -1,7 +1,6 @@
 import LimitableNumberInput from '@/components/LimitableNumberInput'
 import React, { useMemo, useState } from 'react'
 
-import './index.less'
 import { useErrorMessage } from '@/hooks/useErrorMessage'
 import { Button } from 'antd'
 import BigNumber from 'bignumber.js'
@@ -21,6 +20,9 @@ import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
 import { useRefreshController } from '@/contexts/RefreshControllerContext'
 import { useWeb3React } from '@web3-react/core'
 import { numberWithCommas } from '@/utils'
+import {
+  BridgeContainer, BridgeFormContainer, DirectionSwitcherContainer
+} from '@/pages/Bridge/index.style'
 
 type BridgeProps = {
   fromPolyChain: PolyChain
@@ -33,12 +35,12 @@ type ChainBridgeProps = {
   onSwitch: () => void
 }
 
-const ChainBridge: React.FC<ChainBridgeProps> = ({
+const DirectionSwitcher: React.FC<ChainBridgeProps> = ({
   fromPolyChain,
   toPolyChain,
   onSwitch
 }) => (
-  <div className="chain-container">
+  <DirectionSwitcherContainer>
     <div className="chain">
       <p className="label">From</p>
       <div className="chainContent">
@@ -60,10 +62,10 @@ const ChainBridge: React.FC<ChainBridgeProps> = ({
         <span>{toPolyChain.ethereumChain.chainName}</span>
       </div>
     </div>
-  </div>
+  </DirectionSwitcherContainer>
 )
 
-const BridgeMain: React.FC<BridgeProps> = ({
+const BridgeForm: React.FC<BridgeProps> = ({
   fromPolyChain,
   toPolyChain
 }) => {
@@ -140,7 +142,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
   }
 
   return (
-    <div className="bridge-main">
+    <BridgeFormContainer>
       <div className="balance-row">
         <div className="available">
           {balance ? numberWithCommas(balance) : '-'} DOWS Available
@@ -185,7 +187,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
           </div>
         }
       </div>
-    </div>
+    </BridgeFormContainer>
   )
 }
 
@@ -215,18 +217,18 @@ const Bridge: React.FC = () => {
   }, [networkReady, providerReady])
 
   return (
-    <div className="bridge-container">
+    <BridgeContainer>
       <div className="bridge">
         <div className="title">
           <img className="bridgeImg" src={DOWSIcon} alt="dows" />
           <span>DOWS Bridge</span>
         </div>
-        <ChainBridge
+        <DirectionSwitcher
           fromPolyChain={fromPolyChain}
           toPolyChain={toPolyChain}
           onSwitch={handleSwitch}
         />
-        <BridgeMain
+        <BridgeForm
           fromPolyChain={fromPolyChain}
           toPolyChain={toPolyChain}
         />
@@ -245,7 +247,7 @@ const Bridge: React.FC = () => {
           </span>
         </p>
       </div>
-    </div>
+    </BridgeContainer>
   )
 }
 

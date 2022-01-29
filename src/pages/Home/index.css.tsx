@@ -12,12 +12,25 @@ export const Box = styled.div`
 export const DivContainer = styled.div`
 `
 
-export const ContentContainer = styled.div`
+export const HomePageContainer = styled.div`
   display: flex;
+  height: fit-content;
+
+  @media screen and (max-width: 1080px) {
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    width: 100%;
+  }
 `
 
 export const DowsSynthesizerContainer = styled(Box)`
   width: 29.7rem;
+
+  @media screen and (max-width: 1080px) {
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
 `
 
 export const StatInfoContainer = styled(Box)`
@@ -78,7 +91,28 @@ export const StatInfoContainer = styled(Box)`
         }
       }
     }
+  }
 
+  @media screen and (max-width: 1080px) {
+    width: 100%;
+    margin: 0 0 20px 0;
+    padding: 2rem;
 
+    .summary-row {
+
+      .summary-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
+        .label {
+          font-size: 12px;
+        }
+        
+        .value {
+          font-size: 20px;
+        }
+      }
+    }
   }
 `
