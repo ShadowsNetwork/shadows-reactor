@@ -20,18 +20,9 @@ export const TransactionHistoryTransform = createTransform(
 export const WalletAndAddressTransform = createTransform(
   null,
   (outboundState, _key) => {
-    // const selectedWallet = outboundState.selectedWallet
-    // if (selectedWallet === 'WalletConnect') {
-    //   return {
-    //     ...outboundState,
-    //     account: null,
-    //     selectedWallet: null
-    //   }
-    // } else {
     return {
       ...outboundState,
     }
-    // }
   },
   { whitelist: ['wallet'] }
 )

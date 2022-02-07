@@ -9,7 +9,7 @@ export class AbstractContractCaller {
 
   protected abi?: Array<JsonFragment>
 
-  protected network!: string
+  protected network?: string
 
-  protected contract?: Contract
+  contract?: Contract
 }

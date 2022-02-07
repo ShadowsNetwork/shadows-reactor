@@ -1,4 +1,5 @@
 @import "~antd/dist/antd.css";
+@import "~@/styles/transaction-status-modal.less";
 
 html {
   font-size: 62.5%;
@@ -15,72 +16,6 @@ html {
   overflow-x: auto;
 }
 
-.ant-menu.ant-menu-dark {
-  background: #0E111A !important;
-  color: #fff;
-}
-
-.ant-menu-dark.ant-menu-inline {
-  height: 100vh;
-  width: 23.316rem;
-}
-
-.ant-menu-dark.ant-menu-vertical {
-  height: calc(100vh - 7.3rem);
-  width: 6rem;
-}
-
-.ant-menu-inline-collapsed > .ant-menu-item .ant-menu-item-icon, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .ant-menu-item-icon, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title .ant-menu-item-icon, .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .ant-menu-item-icon, .ant-menu-inline-collapsed > .ant-menu-item .anticon, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .anticon, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title .anticon, .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .anticon {
-  font-size: 1.6rem !important;
-}
-
-.ant-menu-item .ant-menu-item-icon, .ant-menu-submenu-title .ant-menu-item-icon, .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
-  font-size: 1.5rem !important;
-  min-width: 1.4rem !important;
-}
-
-.ant-menu-item a {
-  font-size: 1.4rem;
-  color: #fff;
-  font-weight: bold;
-}
-
-.ant-menu-dark.ant-menu-inline .ant-menu-item {
-  border-radius: 2.5rem;
-  margin-top: 2rem;
-  display: flex;
-  align-items: center;
-}
-
-.ant-menu-dark.ant-menu-inline .ant-menu-item:nth-of-type(5) {
-  margin-top: 5rem;
-}
-
-.ant-menu-dark.ant-menu-inline .ant-menu-item:nth-of-type(7) {
-  margin-bottom: 2.3rem;
-}
-
-.ant-menu-dark.ant-menu-vertical .ant-menu-item {
-  margin-top: 1.5rem;
-  border-radius: 2.5rem;
-}
-
-.ant-menu-dark.ant-menu-vertical .ant-menu-item:nth-of-type(5) {
-  margin-top: 5rem;
-}
-
-.ant-menu-dark.ant-menu-vertical .ant-menu-item:nth-of-type(7) {
-  margin-bottom: 2.3rem;
-}
-
-.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
-  background-color: #292528 !important;
-}
-
-.ant-menu-dark .ant-menu-item-selected .ant-menu-item-icon + span,
-.ant-menu-dark .ant-menu-item-selected .anticon + span {
-  color: #f64b78;
-}
 
 .error-message {
   display: block;
@@ -90,10 +25,4 @@ html {
 .slideIcon {
   width: 2.4rem;
   margin-right: 1.6rem;
-}
-
-@media screen and (max-width: 600px) {
-  .ant-menu {
-    display: none;
-  }
 }

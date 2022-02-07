@@ -1,5 +1,6 @@
-import { WalletNames } from '@/web3/wallets'
 import { TransactionHistory } from '@/types/TransactionHistory'
+import { WalletKeys } from '@/web3/connectors'
+import { SupportedEthereumChainId } from '@/web3/network'
 
 export type State = {
   app: AppState
@@ -15,9 +16,9 @@ export type BridgeState = {
 }
 
 export type WalletState = {
-  selectedWallet?: WalletNames
+  selectedWallet?: WalletKeys
   account?: string
   transactionHistoryList: Array<TransactionHistory>
-  chainId?: number
+  chainId?: SupportedEthereumChainId
   rpcUrl?: string
 }

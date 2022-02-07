@@ -1,14 +1,17 @@
 import { ConfigType } from './config'
 
 import bridgeConfig from './config/bridge.config.prod'
+import { SUPPORTED_ETHEREUM_CHAINS } from './src/web3/network'
 
 const config: ConfigType = {
+  ethChain: SUPPORTED_ETHEREUM_CHAINS['0x38'],
+  baseUrl : 'https://api.shadows.link',
   bridge: bridgeConfig,
   liquidityProvider: {
     supportedPools: [
       {
         poolNumber: 0,
-        poolName: 'Pancake Swap LP',
+        poolName: 'Pancake Swap DOWS LP',
         tokenName: 'LPPair',
         leftCurrency: {
           name: 'DOWS',
@@ -35,7 +38,24 @@ const config: ConfigType = {
         farmContractAddress: '0x51B9234182155287B9311f77cF4077B2EaDA442A',
         poolType: 'single',
         lpMultiplier: 1,
-      }
+      },
+      {
+        poolNumber: 2,
+        poolName: 'Pancake Swap ShaUsd LP',
+        tokenName: 'LPPair',
+        leftCurrency: {
+          name: 'ShaUsd',
+          icon: 'https://i.loli.net/2021/11/04/AUPMg5xjyTGS9tL.png'
+        },
+        rightCurrency: {
+          name: 'BUSD',
+          icon: 'https://i.loli.net/2021/11/02/1JkT9tV6SzIqhNX.png'
+        },
+        lpTokenContractAddress: '0xe4aa6b01b5c2ca61d78de98f7c0d416b26152665',
+        farmContractAddress: '0x51B9234182155287B9311f77cF4077B2EaDA442A',
+        poolType: 'pair',
+        lpMultiplier: 2,
+      },
     ]
   }
 }

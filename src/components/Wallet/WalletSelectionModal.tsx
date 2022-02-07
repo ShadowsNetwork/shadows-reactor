@@ -1,31 +1,27 @@
 import React from 'react'
-import { SUPPORT_WALLETS, Wallet } from '@/web3/wallets'
 import { Modal } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
 import './index.less'
-import { getChainId, getRpcUrl } from '@/store/wallet'
-
-type WalletCardProps = {
-  wallet: Wallet
-}
+import { supportWallets, Wallet } from '@/web3/connectors'
+import { useWeb3React } from '@web3-react/core'
 
 type WalletSelectionModalProps = {
   visible: boolean
   onClose?: () => void
 }
 
-const WalletCard: React.FC<WalletCardProps> = ({ wallet }) => {
-  const { name, icon, handleConnect } = wallet
-  const dispatch = useDispatch()
+const WalletCard: React.FC<{ wallet: Wallet }> = ({ wallet }) => {
+  const { activate } = useWeb3React()
+  const { name, icon, connector } = wallet
 
-  const chainId = useSelector(getChainId)
-  const RPCUrl = useSelector(getRpcUrl)
+  const prepareToConnect = () => {
+    activate(connector)
+  }
 
   return (
     <div className="wallet-card">
       <div
         className="walletItem"
-        onClick={() => chainId && RPCUrl && handleConnect(dispatch, chainId, RPCUrl)}
+        onClick={prepareToConnect}
       >
         <span className="wallet-name">
           {name}
@@ -48,7 +44,7 @@ const WalletSelectionModal: React.FC<WalletSelectionModalProps> = ({
     footer=""
   >
     {
-      SUPPORT_WALLETS.map(wallet => (
+      supportWallets.map(wallet => (
         <WalletCard wallet={wallet} key={wallet.name} />
       ))
     }

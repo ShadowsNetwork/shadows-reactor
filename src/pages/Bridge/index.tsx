@@ -1,27 +1,28 @@
 import LimitableNumberInput from '@/components/LimitableNumberInput'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
-import './index.less'
-import { useErrorMessage, useInitializeProvider, useSetupNetwork } from '@/hooks'
-import { Button, Input } from 'antd'
+import { useErrorMessage } from '@/hooks/useErrorMessage'
+import { Button } from 'antd'
 import BigNumber from 'bignumber.js'
-import useBridgeData from '@/pages/Bridge/useBridgeData'
+import useBridgeData from '@/hooks/data/useBridgeData'
 import dowsJSConnector from '@/ShadowsJs/dowsJSConnector'
 import { toWei } from '@/web3/utils'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  appendTransactionHistory, getAccount, setChainId, setRpcUrl, updateTransactionHistoryStatus
-} from '@/store/wallet'
+import { appendTransactionHistory, updateTransactionHistoryStatus } from '@/store/wallet'
 import { getSourcePolyChainId, setSourcePolyChainId } from '@/store/bridge'
 import DOWSIcon from '@/img/dows-info/dows.png'
-import TransactionStatusModal, { TransactionStatusModalProps } from '@/components/TransactionStatusModal'
-import {
-  beginTransaction, rejectTransaction, submitTransaction
-} from '@/components/TransactionStatusModal/event'
 import switchImg from '@/img/bridge/switch.png'
 import { ApproveToken, BridgeDows, TransactionStatus } from '@/types/TransactionHistory'
 import { PolyChain } from '@/types/PolyChain'
 import { getPolyChainById, getToPolyChainByFromPolyChain } from '@/utils/bridgeUtils'
+import { useTransactionStatusModal } from '@/contexts/TransactionStatusModalContext'
+import { useWeb3EnvContext } from '@/contexts/Web3EnvContext'
+import { useRefreshController } from '@/contexts/RefreshControllerContext'
+import { useWeb3React } from '@web3-react/core'
+import { numberWithCommas } from '@/utils'
+import {
+  BridgeContainer, BridgeFormContainer, DirectionSwitcherContainer
+} from '@/pages/Bridge/index.style'
 
 type BridgeProps = {
   fromPolyChain: PolyChain
@@ -34,12 +35,12 @@ type ChainBridgeProps = {
   onSwitch: () => void
 }
 
-const ChainBridge: React.FC<ChainBridgeProps> = ({
+const DirectionSwitcher: React.FC<ChainBridgeProps> = ({
   fromPolyChain,
   toPolyChain,
   onSwitch
 }) => (
-  <div className="chain-container">
+  <DirectionSwitcherContainer>
     <div className="chain">
       <p className="label">From</p>
       <div className="chainContent">
@@ -61,10 +62,10 @@ const ChainBridge: React.FC<ChainBridgeProps> = ({
         <span>{toPolyChain.ethereumChain.chainName}</span>
       </div>
     </div>
-  </div>
+  </DirectionSwitcherContainer>
 )
 
-const BridgeMain: React.FC<BridgeProps> = ({
+const BridgeForm: React.FC<BridgeProps> = ({
   fromPolyChain,
   toPolyChain
 }) => {
@@ -72,46 +73,33 @@ const BridgeMain: React.FC<BridgeProps> = ({
 
   const dispatch = useDispatch()
   const getErrorMessage = useErrorMessage()
-  const account = useSelector(getAccount)
+  const { account } = useWeb3React()
   const [amount, setAmount] = useState<string>('')
-  const [refreshFlag, setRefreshFlag] = useState(0)
 
-  const { allowance, balance, fee } = useBridgeData({ fromPolyChain, toPolyChain, refreshFlag })
+  const { data } = useBridgeData({ fromPolyChain, toPolyChain })
+  const { allowance, balance, fee } = data ?? {}
 
-  const [transactionStatusModalProps, setTransactionStatusModalProps] = useState<TransactionStatusModalProps>({
-    onClose: undefined,
-    status: undefined,
-    visible: false
-  })
+  const { forceRefresh } = useRefreshController()
 
-  const closeTransactionStatusModal = () => {
-    setTransactionStatusModalProps({
-      ...transactionStatusModalProps,
-      visible: false
-    })
-  }
+  const { beginTransaction, rejectTransaction, submitTransaction } = useTransactionStatusModal()
 
-  const allowanceEnough = () => {
-    return allowance && new BigNumber(amount).lt(new BigNumber(allowance))
-  }
+  const allowanceEnough = useMemo<boolean>(() => {
+    return !!allowance && new BigNumber(amount).lt(new BigNumber(allowance))
+  }, [allowance, amount])
 
-  const isAmountLegal = () => {
-    return !amount || (fee && new BigNumber(amount).gt(new BigNumber(fee)))
-  }
+  const isAmountLegal = useMemo<boolean>(() => {
+    return !amount || (!!fee && new BigNumber(amount).gt(new BigNumber(fee)))
+  }, [amount, fee])
 
   const setAmountToMax = () => {
-    setAmount(balance!)
-  }
-
-  const forceRefreshData = () => {
-    setRefreshFlag(new Date().getMilliseconds())
+    balance && setAmount(balance.toString())
   }
 
   const approve = async () => {
     try {
-      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      beginTransaction()
       const approveResult = await dowsJSConnector.dowsJs.Bridge.approve(dowsTokenAddress, lockContractAddress)
-      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      submitTransaction()
 
       const transactionHistory = new ApproveToken(approveResult.hash, 'DOWS', fromPolyChain.explorerUrl, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
@@ -120,13 +108,10 @@ const BridgeMain: React.FC<BridgeProps> = ({
         .then(() => {
           transactionHistory.complete()
           dispatch(updateTransactionHistoryStatus(transactionHistory))
-          forceRefreshData()
+          forceRefresh()
         })
     } catch (e) {
-      rejectTransaction(transactionStatusModalProps,
-        setTransactionStatusModalProps,
-        getErrorMessage(e)
-      )
+      rejectTransaction(getErrorMessage(e))
     }
     // rejectTransaction(transactionStatusModalProps,
     //   setTransactionStatusModalProps,
@@ -136,7 +121,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
 
   const convert = async () => {
     try {
-      beginTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      beginTransaction()
       const lockResult = await dowsJSConnector.dowsJs.Bridge.lock({
         lockContractAddress,
         fromAsset: dowsTokenAddress,
@@ -145,7 +130,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
         amount: toWei(amount),
         fee: toWei(fee!)
       })
-      submitTransaction(transactionStatusModalProps, setTransactionStatusModalProps)
+      submitTransaction()
 
       const transactionHistory = new BridgeDows(lockResult.hash, amount, fromPolyChain.ethereumChain.chainName, toPolyChain.ethereumChain.chainName, TransactionStatus.Submitted)
       dispatch(appendTransactionHistory(transactionHistory))
@@ -153,13 +138,10 @@ const BridgeMain: React.FC<BridgeProps> = ({
       lockResult.wait()
         .then(() => {
           setAmount('')
-          forceRefreshData()
+          forceRefresh()
         })
     } catch (e) {
-      rejectTransaction(transactionStatusModalProps,
-        setTransactionStatusModalProps,
-        getErrorMessage(e)
-      )
+      rejectTransaction(getErrorMessage(e))
     }
     // rejectTransaction(transactionStatusModalProps,
     //   setTransactionStatusModalProps,
@@ -168,10 +150,10 @@ const BridgeMain: React.FC<BridgeProps> = ({
   }
 
   return (
-    <div className="bridge-main">
+    <BridgeFormContainer>
       <div className="balance-row">
         <div className="available">
-          {balance ?? '-'} DOWS Available
+          {balance ? numberWithCommas(balance) : '-'} DOWS Available
         </div>
       </div>
       <div className="input-row">
@@ -179,7 +161,7 @@ const BridgeMain: React.FC<BridgeProps> = ({
           decimalPlaces={18}
           inputValue={amount}
           setInputValue={setAmount}
-          max={balance}
+          maximum={balance}
         />
         <div className="DOWS">DOWS</div>
         <Button onClick={setAmountToMax}>MAX</Button>
@@ -190,11 +172,11 @@ const BridgeMain: React.FC<BridgeProps> = ({
       <div className="convert-button">
         {
           amount && (
-            allowanceEnough()
-              ? <Button onClick={convert} disabled={!isAmountLegal()}>
+            allowanceEnough ?
+              <Button onClick={convert} disabled={!isAmountLegal}>
                 Convert
-              </Button>
-              : <Button onClick={approve}>
+              </Button> :
+              <Button onClick={approve}>
                 Approve
               </Button>
           )
@@ -207,88 +189,60 @@ const BridgeMain: React.FC<BridgeProps> = ({
           )
         }
         {
-          !isAmountLegal() &&
+          !isAmountLegal &&
           <div className="error-hint">
             The input amount must be greater than the fee.
           </div>
         }
       </div>
-      <TransactionStatusModal
-        {...transactionStatusModalProps}
-        onClose={closeTransactionStatusModal}
-      />
-    </div>
+    </BridgeFormContainer>
   )
 }
 
-const EmptyBridgeMain: React.FC = () => (
-  <div className="bridge-main">
-    <div className="balance-row">
-      <div className="available">
-        - DOWS Available
-      </div>
-    </div>
-    <div className="input-row">
-      <Input />
-      <div className="DOWS">DOWS</div>
-      <Button disabled={true}>MAX</Button>
-    </div>
-    <div className="fee">
-      Fee: -
-    </div>
-    <div className="convert-button">
-      <Button disabled={true}>
-        Convert
-      </Button>
-    </div>
-  </div>
-)
-
 const Bridge: React.FC = () => {
+  const { providerReady, networkReady } = useWeb3EnvContext()
+
   const dispatch = useDispatch()
   const fromPolyChainId = useSelector(getSourcePolyChainId)
 
   const fromPolyChain = getPolyChainById(fromPolyChainId)!
   const toPolyChain = getToPolyChainByFromPolyChain(fromPolyChain)
 
-  dispatch(setChainId(parseInt(fromPolyChain.ethereumChain.chainId, 16)))
-  dispatch(setRpcUrl(fromPolyChain.ethereumChain.rpcUrls[0]))
-
-  const providerInitialized = useInitializeProvider(
-    parseInt(fromPolyChain.ethereumChain.chainId, 16),
-    fromPolyChain.ethereumChain.rpcUrls[0]
-  )
-
-  const networkReady = useSetupNetwork(providerInitialized, fromPolyChain.ethereumChain)
-
-  const onSwitch = () => {
+  const handleSwitch = () => {
     dispatch(setSourcePolyChainId(toPolyChain.polyChainId))
   }
 
+  const errorMessage = useMemo(() => {
+    if (networkReady === undefined) {
+      return 'Please connect to a wallet first'
+    }
+
+    if (!networkReady) {
+      return 'Please make sure your network is setup to correct!'
+    }
+
+    return undefined
+  }, [networkReady, providerReady])
+
   return (
-    <div className="bridge-container">
+    <BridgeContainer>
       <div className="bridge">
         <div className="title">
           <img className="bridgeImg" src={DOWSIcon} alt="dows" />
           <span>DOWS Bridge</span>
         </div>
-        <ChainBridge
+        <DirectionSwitcher
           fromPolyChain={fromPolyChain}
           toPolyChain={toPolyChain}
-          onSwitch={onSwitch}
+          onSwitch={handleSwitch}
+        />
+        <BridgeForm
+          fromPolyChain={fromPolyChain}
+          toPolyChain={toPolyChain}
         />
         {
-          providerInitialized && networkReady ?
-            <BridgeMain
-              fromPolyChain={fromPolyChain}
-              toPolyChain={toPolyChain}
-            /> :
-            <EmptyBridgeMain />
-        }
-        {
-          !networkReady &&
           <div className="error-hint">
-            Please make sure your network is setup to correct!
+            {errorMessage}
           </div>
         }
         <p className="copyright">
@@ -301,7 +255,7 @@ const Bridge: React.FC = () => {
           </span>
         </p>
       </div>
-    </div>
+    </BridgeContainer>
   )
 }
 

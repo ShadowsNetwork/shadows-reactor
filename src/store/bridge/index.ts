@@ -1,8 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { BridgeState, State } from '@/store/type'
-import { ConfigType } from '../../../config'
-
-const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
+import config from '@/config'
 
 const initialState: BridgeState = {
   sourcePolyChainId: config.bridge.polyChains[0].polyChainId

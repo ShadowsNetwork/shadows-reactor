@@ -1,8 +1,11 @@
 import { ConfigType } from './config'
 
 import bridgeConfig from './config/bridge.config.dev'
+import { SUPPORTED_ETHEREUM_CHAINS } from './src/web3/network'
 
 const config: ConfigType = {
+  ethChain: SUPPORTED_ETHEREUM_CHAINS['0x61'],
+  baseUrl : 'https://api.shadows.link',
   bridge: bridgeConfig,
   liquidityProvider: {
     supportedPools: [
@@ -35,7 +38,7 @@ const config: ConfigType = {
         farmContractAddress: '0x5C0b69BeE27f5F4e1eF654c1E5eEc106A33f2eA5',
         poolType: 'single',
         lpMultiplier: 1
-      }
+      },
     ]
   }
 }

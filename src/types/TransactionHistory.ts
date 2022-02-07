@@ -2,10 +2,9 @@
 import { PolyTransactionStatus } from '@/types/PolyTransactionStatus'
 import { getPolyChainByChainName, getPolyChainById } from '@/utils/bridgeUtils'
 import { PolyChain } from '@/types/PolyChain'
-import { ConfigType } from '../../config'
 import { notifyTransactionFailed, notifyTransactionSuccess } from '@/utils/TransactionNotifycation'
 
-const config = process.env.CONTRACT_CONFIG as unknown as ConfigType
+import config from '@/config'
 
 export enum TransactionStatus {
   /**
@@ -36,11 +35,15 @@ export enum TransactionStatus {
 }
 
 export const TransactionHistoryImplementationClassType = {
-  Redeem: 'Redeem',
+  RedeemXUSD: 'RedeemXUSD',
+  RedeemDOWS: 'RedeemDOWS',
   LockLP: 'LockLP',
   UnlockLP: 'UnlockLP',
   Bridge: 'Bridge',
-  Approve: 'Approve'
+  Approve: 'Approve',
+  Mint: 'Mint',
+  Burn: 'Burn',
+  Trade: 'Trade'
 }
 
 export abstract class TransactionHistory {
@@ -49,7 +52,7 @@ export abstract class TransactionHistory {
 
   protected constructor(hash: string, status?: TransactionStatus) {
     this.hash = hash
-    this._status = status !== undefined ? status : TransactionStatus.WaitForConfirmation
+    this._status = status !== undefined ? status : TransactionStatus.Submitted
   }
 
   get status(): TransactionStatus {
@@ -91,15 +94,32 @@ export abstract class TransactionHistory {
   }
 }
 
-export class RedeemDows extends TransactionHistory {
+export class RedeemDOWS extends TransactionHistory {
   constructor(hash: string, public amount: string, status?: TransactionStatus) {
     super(hash, status)
   }
 
-  TYPE = TransactionHistoryImplementationClassType.Redeem
+  TYPE = TransactionHistoryImplementationClassType.RedeemDOWS
 
   toString(): string {
     return `Redeem ${this.amount} DOWS`
+  }
+
+  get url(): string {
+    return `${process.env.BLOCK_EXPLORER_URL}/tx/${this.hash}`
+  }
+
+}
+
+export class RedeemXUSD extends TransactionHistory {
+  constructor(hash: string, public amount: string, status?: TransactionStatus) {
+    super(hash, status)
+  }
+
+  TYPE = TransactionHistoryImplementationClassType.RedeemXUSD
+
+  toString(): string {
+    return `Redeem ${this.amount} ShaUSD`
   }
 
   get url(): string {
@@ -186,7 +206,7 @@ export class BridgeDows extends TransactionHistory {
       return 'Confirmed on source chain, waiting for Poly to handle'
     case PolyTransactionStatus.POLY_CONFIRMED: // 4
       return 'Confirmed on both source chain and Poly, target chain is pending'
-    default :
+    default:
       return 'Pending on source chain'
     }
   }
@@ -214,11 +234,71 @@ export class ApproveToken extends TransactionHistory {
 
 }
 
+export class MintXUSD extends TransactionHistory {
+  constructor(hash: string, public amount: string, status?: TransactionStatus) {
+    super(hash, status)
+  }
+
+  TYPE = TransactionHistoryImplementationClassType.Mint
+
+  toString(): string {
+    return `Mint ${this.amount} ShaUSD`
+  }
+
+  get url(): string {
+    return `${process.env.BLOCK_EXPLORER_URL}/tx/${this.hash}`
+  }
+}
+
+export class BurnXUSD extends TransactionHistory {
+  constructor(hash: string, public amount: string, status?: TransactionStatus) {
+    super(hash, status)
+  }
+
+  TYPE = TransactionHistoryImplementationClassType.Burn
+
+  toString(): string {
+    return `Burn ${this.amount} ShaUSD`
+  }
+
+  get url(): string {
+    return `${process.env.BLOCK_EXPLORER_URL}/tx/${this.hash}`
+  }
+}
+
+type TradeSynthType = 'Buy' | 'Sell'
+
+export class TradeSynth extends TransactionHistory {
+
+  constructor(
+    hash: string,
+    public amount: string,
+    public type: TradeSynthType,
+    public currencyKey: string,
+    public toKey: string,
+    status?: TransactionStatus
+  ) {
+    super(hash, status)
+  }
+
+  TYPE = TransactionHistoryImplementationClassType.Trade
+
+  toString(): string {
+    return `${this.type} ${this.amount} ${this.currencyKey} for ${this.toKey}`
+  }
+
+  get url(): string {
+    return `${process.env.BLOCK_EXPLORER_URL}/tx/${this.hash}`
+  }
+}
+
 TransactionHistory.fromJson = (json: { TYPE: string }): TransactionHistory | undefined => {
   const TYPE = json['TYPE']
   switch (TYPE) {
-  case TransactionHistoryImplementationClassType.Redeem:
-    return new RedeemDows(json['hash'], json['amount'], json['_status'])
+  case TransactionHistoryImplementationClassType.RedeemXUSD:
+    return new RedeemXUSD(json['hash'], json['amount'], json['_status'])
+  case TransactionHistoryImplementationClassType.RedeemDOWS:
+    return new RedeemDOWS(json['hash'], json['amount'], json['_status'])
   case TransactionHistoryImplementationClassType.UnlockLP:
     return new UnlockLPToken(json['hash'], json['amount'], json['_status'])
   case TransactionHistoryImplementationClassType.LockLP:
@@ -227,6 +307,12 @@ TransactionHistory.fromJson = (json: { TYPE: string }): TransactionHistory | und
     return new BridgeDows(json['hash'], json['amount'], json['fromChainName'], json['toChainName'], json['_status'])
   case TransactionHistoryImplementationClassType.Approve:
     return new ApproveToken(json['hash'], json['token'], json['blockExplorer'], json['_status'])
+  case TransactionHistoryImplementationClassType.Mint:
+    return new MintXUSD(json['hash'], json['amount'], json['_status'])
+  case TransactionHistoryImplementationClassType.Burn:
+    return new BurnXUSD(json['hash'], json['amount'], json['_status'])
+  case TransactionHistoryImplementationClassType.Trade:
+    return new TradeSynth(json['hash'], json['amount'], json['type'], json['currencyKey'], json['toKey'], json['_status'])
   }
 
 }

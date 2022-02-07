@@ -1,11 +1,35 @@
-export function numberWithCommas(x: string | number): string {
-  const parts: string[] = x.toString()
-    .split('.')
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  if (parts[1]) {
-    parts[1] = parts[1]?.substring(0, 2)
+import BigNumber from 'bignumber.js'
+
+export function numberWithCommas(x?: string | number | BigNumber, decimalPlace = 2, showSign?: boolean): string {
+  if (x === undefined || !x.toString().length) {
+    return numberWithCommas('0', decimalPlace, showSign)
   }
-  return parts.join('.')
+
+  const trimTrailingZero = (x: string): string => {
+    if (x.length <= decimalPlace) {
+      return x.padEnd(decimalPlace, '0')
+    }
+
+    return x[x.length - 1] !== '0' ? x : trimTrailingZero(x.substring(0, length - 1))
+  }
+
+  const parts: string[] = new BigNumber(x).toFixed(decimalPlace).split('.')
+
+  parts[0] = (parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')) ?? '0'
+
+  if (!parts[1]) {
+    parts[1] = '0'.repeat(decimalPlace)
+  } else {
+    parts[1] = trimTrailingZero(parts[1])
+  }
+
+  if (!decimalPlace) {
+    return parts[0]
+  }
+  return [
+    showSign && new BigNumber(x).gte(0) ? '+' : '',
+    parts.join('.')
+  ].join('')
 }
 
 export function dateFormat(date: Date, format: string): string {

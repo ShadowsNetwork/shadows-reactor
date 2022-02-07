@@ -2,29 +2,25 @@ import { Input, message } from 'antd'
 import { InputProps } from 'antd/lib/input/Input'
 import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
-import assert from 'assert'
 
 interface LimitableNumberInputProp extends InputProps {
-  max?: string
-  min?: string
+  maximum?: BigNumber | string | number
+  minimum?: BigNumber | string | number
   inputValue: string
   setInputValue: Dispatch<SetStateAction<string>>
   decimalPlaces?: number
 }
 
 const LimitableNumberInput: React.FC<LimitableNumberInputProp> = ({
-  min,
-  max,
+  minimum,
+  maximum,
   inputValue,
   setInputValue,
-  decimalPlaces,
+  decimalPlaces = 18,
   ...inputProps
 }) => {
   // ^([0]|([^0]\d*))(\.\d*)?$
   const reg = decimalPlaces ? new RegExp(`^\\d+(\\.\\d{0,${decimalPlaces}})?$`) : /^\d+(.\d+)?$/
-
-  assert(!min || min.length === 0 || reg.test(min))
-  assert(!max || max.length === 0 || reg.test(max))
 
   const onKeyPress = (event: any) => {
     if (!/[.\d]/.test(event.key)) {
@@ -54,14 +50,14 @@ const LimitableNumberInput: React.FC<LimitableNumberInputProp> = ({
   }
 
   useEffect(() => {
-    if (max && new BigNumber(inputValue).gt(new BigNumber(max))) {
-      setInputValue(max)
+    if (maximum && new BigNumber(inputValue).gt(new BigNumber(maximum))) {
+      setInputValue(maximum.toString())
     }
 
-    if (min && new BigNumber(inputValue).lt(new BigNumber(min))) {
-      setInputValue(min)
+    if (minimum && new BigNumber(inputValue).lt(new BigNumber(minimum))) {
+      setInputValue(minimum.toString())
     }
-  }, [max, min, inputValue])
+  }, [maximum, minimum, inputValue])
 
   return (
     <Input

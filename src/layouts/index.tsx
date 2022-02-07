@@ -8,38 +8,46 @@ import { getLocale } from 'umi'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import '@/i18n'
-import { Web3ReactProvider } from '@web3-react/core'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-import configureStore from '@/store'
 import App from '@/layouts/App'
-import { Web3Provider } from '@ethersproject/providers'
+import { TransactionStatusModalProvider } from '@/contexts/TransactionStatusModalContext'
+import { RefreshControllerProvider, SLOW_INTERVAL } from '@/contexts/RefreshControllerContext'
+import { Web3EnvProvider } from '@/contexts/Web3EnvContext'
+import { persistor, store } from '@/store'
+import { getLibrary } from '@/web3/connectors'
+import { Web3ReactProvider } from '@web3-react/core'
 
-const queryClient = new QueryClient()
-
-const { store, persistor } = configureStore()
-
-function getLibrary(provider) {
-  const library = new Web3Provider(provider)
-  library.pollingInterval = 12000
-  return library
-}
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchInterval: SLOW_INTERVAL,
+      keepPreviousData: true
+    }
+  }
+})
 
 const Root: React.FC = () => (
   <Suspense fallback={<div />}>
-    <QueryClientProvider client={queryClient}>
-      <IntlProvider locale={getLocale()}>
-        <Web3ReactProvider getLibrary={getLibrary}>
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale={getLocale()}>
           <Provider store={store}>
             <PersistGate loading={<LoadingOutlined />} persistor={persistor}>
               <Router>
-                <App />
+                <RefreshControllerProvider>
+                  <Web3EnvProvider>
+                    <TransactionStatusModalProvider>
+                      <App />
+                    </TransactionStatusModalProvider>
+                  </Web3EnvProvider>
+                </RefreshControllerProvider>
               </Router>
             </PersistGate>
           </Provider>
-        </Web3ReactProvider>
-      </IntlProvider>
-    </QueryClientProvider>
+        </IntlProvider>
+      </QueryClientProvider>
+    </Web3ReactProvider>
   </Suspense>
 )
 

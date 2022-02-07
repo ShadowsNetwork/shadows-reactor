@@ -14,15 +14,12 @@ export const walletSlice = createSlice({
   name: 'wallet',
   initialState,
   reducers: {
-    setChainId: (state, action) => {
-      state.chainId = action.payload
-    },
     setRpcUrl: (state, action) => {
       state.rpcUrl = action.payload
     },
     setAccount: (state, action) => {
       if (!action.payload) {
-        console.error('set account null')
+        console.error('Account was set to null!')
       }
 
       if (state.account === action.payload) {
@@ -53,7 +50,7 @@ export const walletSlice = createSlice({
 
       const filtered = state.transactionHistoryList.filter(t => t.hash === target.hash)
       if (filtered.length === 0) {
-        console.error('no matched transaction history')
+        console.error('No matched transaction history')
       } else {
         const index = state.transactionHistoryList.indexOf(filtered[0])
 
@@ -70,25 +67,11 @@ export function getTransactionHistoryList(state: State): Array<TransactionHistor
   return state.wallet.transactionHistoryList ?? []
 }
 
-export function getChainId(state: State): number | undefined {
-  return state.wallet.chainId
-}
-
-export function getRpcUrl(state: State): string | undefined {
-  return state.wallet.rpcUrl
-}
-
-export function getAccount(state: State): string | undefined {
-  return state.wallet.account
-}
-
 export function getSelectedWallet(state: State): string | undefined {
   return state.wallet.selectedWallet
 }
 
 export const {
-  setRpcUrl,
-  setChainId,
   setAccount,
   setSelectedWallet,
   appendTransactionHistory,

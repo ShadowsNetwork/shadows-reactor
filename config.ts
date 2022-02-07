@@ -1,11 +1,14 @@
 import { PoolConfig } from '@/types/LiquidityProvider'
 import { PolyChain } from '@/types/PolyChain'
+import { EthereumChain } from '@/web3/network'
 
 export type ConfigType = {
   liquidityProvider: {
     supportedPools: PoolConfig[]
   },
-  bridge: BridgeConfig
+  bridge: BridgeConfig,
+  baseUrl: string
+  ethChain: EthereumChain
 }
 
 export type BridgeConfig = {
@@ -15,5 +18,6 @@ export type BridgeConfig = {
   polyChainId: {
     Eth: number,
     Bsc: number
-  }
+  },
+  ethChain: EthereumChain
 }
