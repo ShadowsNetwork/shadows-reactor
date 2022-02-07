@@ -14,7 +14,7 @@ export const StakingPageContainer = styled.div`
 export const PoolContainer = styled.div`
   margin-right: 2.0rem;
   height: fit-content;
-  width: 41rem;
+  width: fit-content;
 
   @media screen and (max-width: 1080px) {
     margin-right: 0;
@@ -42,7 +42,7 @@ export const PoolTitle = styled.div`
 
 export const PoolContentContainer = styled.div`
   background: #121725;
-  width: 100%;
+  width: fit-content;
   margin-top: 1rem;
   border-radius: 1rem;
   padding: 2.9rem 2.3rem;
@@ -83,15 +83,14 @@ export const PoolContentContainer = styled.div`
   }
 
   .info-container {
-    display: flex;
+    display: grid;
     align-content: flex-start;
-    flex-flow: row wrap;
-
+    grid-template-columns: repeat(2, minmax(17rem, auto));
+    margin: 5.1rem 0 2.5rem 0;
+    grid-gap: 7.6rem 40px;
+    
     .item {
       color: white;
-      flex: 0 0 50%;
-      margin-bottom: 2.5rem;
-      margin-top: 5.1rem;
 
       .title {
         color: #63cca9;
@@ -113,7 +112,9 @@ export const PoolContentContainer = styled.div`
   }
 
   .button-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(17rem, auto));
+    grid-gap: 0 40px;
 
     button {
       display: flex;
@@ -133,8 +134,6 @@ export const PoolContentContainer = styled.div`
       width: 9.354rem;
       height: 3.757rem;
       border-radius: 3.757rem;
-      margin-left: 0.607rem;
-      margin-right: 3.125rem;
     }
 
     .lock {
@@ -160,7 +159,6 @@ export const PoolContentContainer = styled.div`
       border-radius: 3.757rem;;
       color: #fff;
       font-weight: bold;
-      margin-left: 5.438rem;
     }
   }
 

@@ -293,14 +293,14 @@ const StakingPool: React.FC<PoolConfig> = ({
         <div className="button-container">
           {
             allowanceEnough ? (
-              <>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Button className="lock" onClick={prepareToLock} disabled={!networkReady}>
                   <PlusOutlined style={{ fontSize: '1.1rem', color: '#FFFEFE' }} />
                 </Button>
                 <Button className="unlock" onClick={prepareToUnlock} disabled={!networkReady}>
                   Unlock
                 </Button>
-              </>
+              </div>
             ) : (
               <Button onClick={approve} className="approve" disabled={!networkReady}>
                 Approve

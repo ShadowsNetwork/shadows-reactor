@@ -11,6 +11,7 @@ type PairInfoProps = {
 
 export const PairsInfoContainer = styled.div`
   padding: 1.8rem 1.2rem;
+  height: 100%;
 
   .button-group {
     display: flex;
@@ -21,6 +22,8 @@ export const PairsInfoContainer = styled.div`
 
   .list {
     font-weight: bold;
+    overflow-y: auto;
+    height: calc(41rem - 80px);
 
     .item, .header {
       display: flex;
